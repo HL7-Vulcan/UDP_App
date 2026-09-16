@@ -1,6 +1,7 @@
+using Section_02.Models;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Text.Json;
-using Section_02.Models;
 
 namespace Section_02.Services;
 
@@ -55,6 +56,7 @@ public class DataService
         sb.AppendLine("InstanceOf: m11 - research - study - narratives");
         sb.AppendLine("Title: \"Example Narrative Single Composition with a Section for Each M11 Section\"");
         sb.AppendLine("Usage: #example");
+        sb.AppendLine("*status = #final");
         sb.AppendLine("2.1 Purpose of Trial");
         sb.AppendLine(model.C146997 ?? string.Empty);
         sb.AppendLine();
