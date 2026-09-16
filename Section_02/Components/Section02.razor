@@ -139,6 +139,7 @@
 
     <div class="toolbar">
         <button class="btn btn-secondary" @onclick="ClearAll">Clear All</button>
+        <button class="btn btn-secondary" @onclick="LoadSample">Load Sample</button>
         <button class="btn btn-secondary" @onclick="OpenSaveDialog">⬇ Save to File…</button>
         <button class="btn btn-secondary" @onclick="OpenLoadDialog">⬆ Load from File</button>
         <button class="btn btn-primary"   @onclick="SaveToBrowser">Save to Browser</button>
@@ -287,6 +288,22 @@
         ShowValidation = false;
         ErrorMessage   = string.Empty;
         SetStatus("Cleared");
+    }
+
+    // ── Load Sample ───────────────────────────────────────────────
+    private void LoadSample()
+    {
+        var sample = DataSvc.LoadSample();
+        if (sample != null)
+        {
+            Model          = sample;
+            ShowValidation = false;
+            SetStatus("Sample data loaded");
+        }
+        else
+        {
+            ErrorMessage = "Could not load sample file.";
+        }
     }
 
     // ── Save to Browser ───────────────────────────────────────────
