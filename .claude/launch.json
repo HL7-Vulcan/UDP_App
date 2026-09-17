@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "udp-section02",
+      "runtimeExecutable": "dotnet",
+      "runtimeArgs": ["run", "--project", "Section_02", "--urls", "http://localhost:5104"],
+      "port": 5104
+    }
+  ]
+}

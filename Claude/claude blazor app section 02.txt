@@ -67,3 +67,21 @@ in all the code field names with the prefix field_9_xx_Cxx should just be Cxx.  
 --------------------------------------
 When a row is added to the table there should be a context menu for each field in the new row 
 --------------------------------------
+following the pattern in sample 02 add a Load Sample button and associated functionality
+--------------------------------------
+
+--------------------------------------
+
+--------------------------------------
+
+--------------------------------------
+
+--------------------------------------
+
+--------------------------------------
+
+--------------------------------------
+
+--------------------------------------
+
+

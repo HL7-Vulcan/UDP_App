@@ -7,6 +7,12 @@ namespace Section_02.Services;
 public class DataService09
 {
     private static readonly JsonSerializerOptions JsonOpts = new() { WriteIndented = true };
+    private readonly IWebHostEnvironment _env;
+
+    public DataService09(IWebHostEnvironment env)
+    {
+        _env = env;
+    }
 
     public string ToJson(Section09Model model) =>
         JsonSerializer.Serialize(model, JsonOpts);
@@ -61,6 +67,20 @@ public class DataService09
                 sb.AppendLine($"  {k}: {v}");
         }
         return sb.ToString();
+    }
+
+    public Section09Model? LoadSample()
+    {
+        var samplePath = Path.Combine(_env.ContentRootPath, "Data", "section_09_sample.json");
+        try
+        {
+            var json = File.ReadAllText(samplePath);
+            return FromJson(json);
+        }
+        catch
+        {
+            return null;
+        }
     }
 
     public Section09Model? FromJson(string json)

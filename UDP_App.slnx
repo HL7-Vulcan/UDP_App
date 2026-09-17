@@ -1,3 +1,6 @@
 <Solution>
-  <Project Path="Section_02/Section_02.csproj" />
+  <Folder Name="/Claude/">
+    <File Path="Claude/claude blazor app section 02.txt" />
+  </Folder>
+  <Project Path="Section_02/UDP_App.csproj" />
 </Solution>
