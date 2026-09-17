@@ -88,11 +88,7 @@ document.addEventListener('mousedown', function (e) {
 // ── Section 9 popout ─────────────────────────────────────────────
 window.s9ShowPopout = function () {
     const el = document.getElementById('s9-popout');
-    if (el) {
-        el.style.display = 'flex';
-        // Re-attach context menu listeners — textareas moved into popout DOM
-        window.udpInitContextMenus('s9-ctx-menu');
-    }
+    if (el) el.style.display = 'flex';
 };
 window.s9HidePopout = function () {
     const el = document.getElementById('s9-popout');

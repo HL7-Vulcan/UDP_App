@@ -1,0 +1,69 @@
+I want a data entry app using the .NET and Blazor project framework in folder C:\Filing\UDP\UDP_App\UDP_App\Section_02.  
+
+It will have a single page and the layout of the page must match the appearance of a MS Word docx file I have.  
+
+The fixed text is all in black and the data entry fields all have a grey background.
+Any level 4 headings should not be numbered.
+
+I have sample data in the fields in purple text. 
+The first word in the sample data should become the name of the data entry field.
+
+The second word in the sample data is either "required" or "optional" or "conditional".  Where it is "required" the field must have content before data can be saved.
+
+
+The first two words of the sample data should be removed from the sample displayed in the form.
+
+When a user enters data it should be green not purple.
+
+Provide a button to clear all the data entry fields
+Provide a button to save the data to a local file of my choosing in one of JSON, CSV or Plain Text
+Provide a button to reload data that has been saved
+
+When saving data if any required fields are missing provide a dialog box asking if user is sure they want to save and only save if they say yes
+
+--------------------------------------
+
+the block in Section02.razor that reads
+            <label><input type="radio" name="fmt" value="json" @onchange="() => SaveFormat = \"json\"" checked /> JSON</label>
+            <label><input type="radio" name="fmt" value="csv"  @onchange="() => SaveFormat = \"csv\""  /> CSV</label>
+            <label><input type="radio" name="fmt" value="txt"  @onchange="() => SaveFormat = \"txt\""  /> Plain Text</label>
+should read
+            <label><input type="radio" name="fmt" value="json" @onchange="@(() => SaveFormat = "json")" checked /> JSON</label>
+            <label><input type="radio" name="fmt" value="csv"  @onchange="@(() => SaveFormat = "csv")"  /> CSV</label>
+            <label><input type="radio" name="fmt" value="txt"  @onchange="@(() => SaveFormat = "txt")"  /> Plain Text</label>
+
+
+--------------------------------------
+ Change the field names as follows:
+PurposeOfTrial -> C146997
+RiskTrialIntervention -> C218721
+RiskTrialProcedures -> C218722
+RiskOther -> C218723
+BenefitSummary -> C218724
+OverallRiskBenefit -> C218725
+
+--------------------------------------
+
+Add a tooltip with the name of the field for each field and remove the field name from above the field.
+
+--------------------------------------
+The tooltip is not working - nothing shows when hovering
+--------------------------------------
+The buttons are not working
+--------------------------------------
+In the Templates folder is a file "Section 02.Template.fsh".  In this file text between double curly brackets are field names.  When I click the save button and select the FHIR option I want the curly brackets and field name to be replaced with the contents of the field of that name.
+--------------------------------------
+In the data folder is a file "section2_sample.json".  Add a button labelled "Load Sample" that loads the content of this file into the appropriate fields.
+--------------------------------------
+
+--------------------------------------
+I now want to add an option for Section 09.  This should follow the data entry form pattern used in section_9_data_entry.html
+--------------------------------------
+now add the right click context menus as in section_02
+--------------------------------------
+drop the field_9_xx or field_9_tbl_r1_ prefix from the field names
+--------------------------------------
+in all the code field names with the prefix field_9_xx_Cxx should just be Cxx.  Where the pattern is field_9_tbl_rxx_Cxx the pattern should be Cxx_rxx These changes should be made throughout the code 
+--------------------------------------
+When a row is added to the table there should be a context menu for each field in the new row 
+--------------------------------------
