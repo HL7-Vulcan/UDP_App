@@ -1,0 +1,30 @@
+{
+  "C218476": "An adverse event (AE) is any untoward medical occurrence in a clinical trial participant administered a medicinal product, which does not necessarily have a causal relationship with this treatment.",
+  "C218781": "A serious adverse event (SAE) is any untoward medical occurrence that results in death, is life-threatening, requires inpatient hospitalisation or prolongation of existing hospitalisation, results in persistent or significant disability or incapacity, or is a congenital anomaly or birth defect.",
+  "C218782": "A product complaint is any written, electronic, or oral communication that alleges deficiencies related to the identity, quality, durability, reliability, safety, effectiveness, or performance of a medicinal product.",
+  "C218783": "A medical device product complaint is any written, electronic, or oral communication that alleges deficiencies related to the identity, quality, durability, reliability, safety, effectiveness, or performance of a medical device.",
+  "RptRows": 1,
+  "RptTableData": {
+    "C218784_r1": "Adverse Event",
+    "C222263_r1": "",
+    "C218785_r1": "All participants",
+    "C218786_r1": "First dose of investigational product",
+    "C218787_r1": "30 days after last dose",
+    "C218788_r1": "Within 24 hours of awareness",
+    "C218789_r1": "Electronic data capture system",
+    "C218790_r1": "Paper case report form"
+  },
+  "C218791": "All adverse events will be collected from the time of informed consent until the end of the follow-up period as specified in the Schedule of Activities.",
+  "C218792": "Adverse events will be identified through participant self-report, clinician observation, and review of clinical assessments at each visit.",
+  "C25676": "The severity of adverse events will be graded according to the Common Terminology Criteria for Adverse Events (CTCAE) version 5.0.",
+  "C82552": "The causal relationship between each adverse event and the investigational product will be assessed by the investigator as either related or not related.",
+  "C218793": "All adverse events will be recorded in the electronic case report form within 24 hours of the investigator becoming aware of the event.",
+  "C218794": "All adverse events will be followed until resolution, stabilisation, or the event is otherwise explained.",
+  "C218795": "Serious adverse events must be reported to the sponsor within 24 hours of the investigator becoming aware of the event.",
+  "C218796": "The sponsor will report all suspected unexpected serious adverse reactions (SUSARs) to the relevant regulatory authorities in accordance with local requirements.",
+  "C217358": "The following adverse events have been identified as adverse events of special interest (AESI) for this trial based on the known safety profile of the investigational product.",
+  "C218797": "Disease-related events and outcomes that are expected in the study population and do not meet the criteria for adverse events will be recorded as protocol-specified disease assessments.",
+  "C218798": "Female participants who become pregnant during the trial must be withdrawn from investigational product. Pregnancy outcomes will be followed up and reported.",
+  "C218799": "If a male participant's partner becomes pregnant during the trial or within 90 days of the last dose, the participant must notify the investigator who will report the pregnancy to the sponsor.",
+  "C218800": "Special safety situations include overdose, misuse, abuse, off-label use, medication errors, and occupational exposure. These must be reported to the sponsor within 24 hours."
+}

@@ -5,6 +5,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <BlazorDisableThrowNavigationException>true</BlazorDisableThrowNavigationException>
+    <RootNamespace>UDP_App</RootNamespace>
+    <AssemblyName>UDP_App</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

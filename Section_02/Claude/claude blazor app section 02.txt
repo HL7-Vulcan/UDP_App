@@ -51,26 +51,6 @@ The tooltip is not working - nothing shows when hovering
 --------------------------------------
 The buttons are not working
 --------------------------------------
-In the Templates folder is a file "Section 02.Template.fsh".  In this file text between double curly brackets are field names.  When I click the save button and select the FHIR option I want the curly brackets and field name to be replaced with the contents of the field of that name.
---------------------------------------
-In the data folder is a file "section2_sample.json".  Add a button labelled "Load Sample" that loads the content of this file into the appropriate fields.
---------------------------------------
-
---------------------------------------
-I now want to add an option for Section 09.  This should follow the data entry form pattern used in section_9_data_entry.html
---------------------------------------
-now add the right click context menus as in section_02
---------------------------------------
-drop the field_9_xx or field_9_tbl_r1_ prefix from the field names
---------------------------------------
-in all the code field names with the prefix field_9_xx_Cxx should just be Cxx.  Where the pattern is field_9_tbl_rxx_Cxx the pattern should be Cxx_rxx These changes should be made throughout the code 
---------------------------------------
-When a row is added to the table there should be a context menu for each field in the new row 
---------------------------------------
-following the pattern in sample 02 add a Load Sample button and associated functionality
---------------------------------------
-Add a FHIR option to the save to file dialog and implement field substitution using the section_09_Template.fsh file
---------------------------------------
 
 --------------------------------------
 
@@ -78,10 +58,5 @@ Add a FHIR option to the save to file dialog and implement field substitution us
 
 --------------------------------------
 
---------------------------------------
-
---------------------------------------
-
---------------------------------------
 
 
