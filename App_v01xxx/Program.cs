@@ -6,6 +6,7 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 builder.Services.AddScoped<UDP_App.Services.DataService>();
+builder.Services.AddScoped<UDP_App.Services.DataService05>();
 builder.Services.AddScoped<UDP_App.Services.DataService06>();
 builder.Services.AddScoped<UDP_App.Services.DataService07>();
 builder.Services.AddScoped<UDP_App.Services.DataService08>();

@@ -35,6 +35,8 @@
     .rpt-tbl { width:100%; border-collapse:collapse; margin:8px 0; font-size:9pt; table-layout:fixed; }
     .rpt-tbl th { background:#404040; color:#fff; font-family:Arial,sans-serif; font-weight:700; font-size:8.5pt; padding:4px 5px; text-align:left; border:1px solid #555; word-wrap:break-word; }
     .rpt-tbl td { border:1px solid #aaa; padding:2px 3px; vertical-align:top; }
+    select.fb-sel { display:block; width:100%; background:#d0cece; color:#1a7a1a; border:none; border-bottom:1.5px solid #999; font-family:'Calibri',Arial,sans-serif; font-size:9.5pt; padding:4px 6px; outline:none; cursor:pointer; }
+    select.fb-sel:focus { background:#bfbcbc; }
     /* Buttons */
     .add-btn    { background:#00B050; color:#fff; border:none; border-radius:3px; padding:4px 12px; font-size:10pt; cursor:pointer; font-family:'Calibri',Arial,sans-serif; white-space:nowrap; }
     .add-btn:hover { background:#008a3e; }
@@ -150,18 +152,30 @@
             {
                 <tr>
                     <td>
-                        @foreach (var code in new[]{"C218784","C222263"})
-                        {
-                            var fid = $"{code}_r{row}";
+                        <div class="field-wrap">
+                                <select data-ctx="C218784_r@(row)" class="fb-sel"
+                                    value="@GetTbl($"C218784_r{row}")"
+                                    @onchange="@(e => SetTbl($"C218784_r{row}", e.Value?.ToString()))">
+                                    <option value="">-- Select event type --</option>
+                                    <option value="$NCIT#C41331 &quot;Adverse Event&quot;">Adverse Event</option>
+                                    <option value="$NCIT#C41335 &quot;Serious Adverse Event&quot;">Serious Adverse Event</option>
+                                    <option value="$NCIT#C218508 &quot;Trial Intervention Complaint&quot;">Trial Intervention Complaint</option>
+                                    <option value="$NCIT#C222331 &quot;Drug/Device Combination Product Complaint&quot;">Drug/Device Combination Product Complaint</option>
+                                    <option value="$NCIT#C25742 &quot;Pregnancy Event&quot;">Pregnancy Event</option>
+                                    <option value="$NCIT#C218510 &quot;Lactation Event&quot;">Lactation Event</option>
+                                    <option value="$NCIT#C218511 &quot;Post-Partum Event&quot;">Post-Partum Event</option>
+                                    <option value="$NCIT#C218512 &quot;Reportable Adverse Event of Special Interest&quot;">Reportable Adverse Event of Special Interest</option>
+                                    <option value="$NCIT#C218513 &quot;Not Reportable Adverse Event of Special Interest&quot;">Not Reportable Adverse Event of Special Interest</option>
+                                    <option value="$NCIT#C17649 &quot;Other&quot;">Other</option>
+                                </select>
+                            </div>
                             <div class="field-wrap">
-                                <textarea data-ctx="@fid"
-                                    class="@(code == "C222263" ? "fb cond" : "fb")" rows="2"
-                                    placeholder="@RptColPh(code)"
-                                    value="@GetTbl(fid)"
-                                    @oninput="@(e => SetTbl(fid, e.Value?.ToString()))"
+                                <textarea data-ctx="C222263_r@(row)" class="fb cond" rows="2"
+                                    placeholder="@RptColPh("C222263")"
+                                    value="@GetTbl($"C222263_r{row}")"
+                                    @oninput="@(e => SetTbl($"C222263_r{row}", e.Value?.ToString()))"
                                     ></textarea>
                             </div>
-                        }
                     </td>
                     @foreach (var code in new[]{"C218785","C218786","C218787","C218788","C218789","C218790"})
                     {
@@ -314,17 +328,30 @@
                 {
                     <tr>
                         <td>
-                            @foreach (var code in new[]{"C218784","C222263"})
-                            {
-                                var fid = $"{code}_r{row}";
+                            <div class="field-wrap">
+                                    <select data-ctx="C218784_r@(row)" class="fb-sel"
+                                        value="@GetTbl($"C218784_r{row}")"
+                                        @onchange="@(e => SetTbl($"C218784_r{row}", e.Value?.ToString()))">
+                                        <option value="">-- Select event type --</option>
+                                        <option value="$NCIT#C41331 &quot;Adverse Event&quot;">Adverse Event</option>
+                                        <option value="$NCIT#C41335 &quot;Serious Adverse Event&quot;">Serious Adverse Event</option>
+                                        <option value="$NCIT#C218508 &quot;Trial Intervention Complaint&quot;">Trial Intervention Complaint</option>
+                                        <option value="$NCIT#C222331 &quot;Drug/Device Combination Product Complaint&quot;">Drug/Device Combination Product Complaint</option>
+                                        <option value="$NCIT#C25742 &quot;Pregnancy Event&quot;">Pregnancy Event</option>
+                                        <option value="$NCIT#C218510 &quot;Lactation Event&quot;">Lactation Event</option>
+                                        <option value="$NCIT#C218511 &quot;Post-Partum Event&quot;">Post-Partum Event</option>
+                                        <option value="$NCIT#C218512 &quot;Reportable Adverse Event of Special Interest&quot;">Reportable Adverse Event of Special Interest</option>
+                                        <option value="$NCIT#C218513 &quot;Not Reportable Adverse Event of Special Interest&quot;">Not Reportable Adverse Event of Special Interest</option>
+                                        <option value="$NCIT#C17649 &quot;Other&quot;">Other</option>
+                                    </select>
+                                </div>
                                 <div class="field-wrap">
-                                    <textarea data-ctx="@fid" class="@(code == "C222263" ? "fb cond" : "fb")" rows="2"
-                                        placeholder="@RptColPh(code)"
-                                        value="@GetTbl(fid)"
-                                        @oninput="@(e => SetTbl(fid, e.Value?.ToString()))"
+                                    <textarea data-ctx="C222263_r@(row)" class="fb cond" rows="2"
+                                        placeholder="@RptColPh("C222263")"
+                                        value="@GetTbl($"C222263_r{row}")"
+                                        @oninput="@(e => SetTbl($"C222263_r{row}", e.Value?.ToString()))"
                                         ></textarea>
                                 </div>
-                            }
                         </td>
                         @foreach (var code in new[]{"C218785","C218786","C218787","C218788","C218789","C218790"})
                         {

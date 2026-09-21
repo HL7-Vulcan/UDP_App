@@ -35,13 +35,15 @@
     .rpt-tbl { width:100%; border-collapse:collapse; margin:8px 0; font-size:9pt; table-layout:fixed; }
     .rpt-tbl th { background:#404040; color:#fff; font-family:Arial,sans-serif; font-weight:700; font-size:8.5pt; padding:4px 5px; text-align:left; border:1px solid #555; word-wrap:break-word; }
     .rpt-tbl td { border:1px solid #aaa; padding:2px 3px; vertical-align:top; }
+    select.fb-sel { display:block; width:100%; background:#d0cece; color:#1a7a1a; border:none; border-bottom:1.5px solid #999; font-family:'Calibri',Arial,sans-serif; font-size:9.5pt; padding:4px 6px; outline:none; cursor:pointer; }
+    select.fb-sel:focus { background:#bfbcbc; }
     /* Buttons */
     .add-btn    { background:#00B050; color:#fff; border:none; border-radius:3px; padding:4px 12px; font-size:10pt; cursor:pointer; font-family:'Calibri',Arial,sans-serif; white-space:nowrap; }
     .add-btn:hover { background:#008a3e; }
     .popout-btn { background:#5a7abf; color:#fff; border:none; border-radius:3px; padding:4px 12px; font-size:10pt; cursor:pointer; font-family:'Calibri',Arial,sans-serif; white-space:nowrap; }
     .popout-btn:hover { background:#3d5a9e; }
     /* Popout */
-    #s9-popout { display:none; position:fixed; inset:0; background:#fff; z-index:500; flex-direction:column; }
+    .popout-overlay { position:fixed; inset:0; background:#fff; z-index:500; display:flex; flex-direction:column; }
     .popout-hdr { background:#1f3864; color:#fff; padding:10px 18px; display:flex; align-items:center; justify-content:space-between; font-family:'Times New Roman',Times,serif; font-size:13pt; font-weight:700; }
     .popout-body { flex:1; overflow:auto; padding:18px 24px; }
     /* Toolbar */
@@ -128,58 +130,29 @@
     <div class="h2">9.2&nbsp;&nbsp;Timing and Procedures for Collection and Reporting</div>
     <p style="font-size:10.5pt;margin:0 0 8px;">This table describes the timing and procedures for collecting and reporting events.</p>
 
-    <div class="h4">
-        <button class="popout-btn" @onclick="OpenPopout">⤢ Pop-out</button>
-        <button class="add-btn"    @onclick="AddRptRow">+ Add Row</button>
-    </div>
-
-    <table class="rpt-tbl" id="s9-rpt-table">
-        <thead>
-            <tr>
-                <th style="width:13%">Event Type</th>
-                <th style="width:12%">Situational Scope</th>
-                <th style="width:12%">Reportable Period Start</th>
-                <th style="width:12%">Reportable Period End</th>
-                <th style="width:17%">Timing for Reporting to Sponsor or Designee</th>
-                <th style="width:17%">Method for Reporting</th>
-                <th style="width:17%">Back-up Method for Reporting</th>
-            </tr>
-        </thead>
-        <tbody id="s9-rpt-tbody">
-            @foreach (var row in RptRows)
-            {
-                <tr>
-                    <td>
-                        @foreach (var code in new[]{"C218784","C222263"})
-                        {
-                            var fid = $"{code}_r{row}";
-                            <div class="field-wrap">
-                                <textarea data-ctx="@fid"
-                                    class="@(code == "C222263" ? "fb cond" : "fb")" rows="2"
-                                    placeholder="@RptColPh(code)"
-                                    value="@GetTbl(fid)"
-                                    @oninput="@(e => SetTbl(fid, e.Value?.ToString()))"
-                                    ></textarea>
-                            </div>
-                        }
-                    </td>
-                    @foreach (var code in new[]{"C218785","C218786","C218787","C218788","C218789","C218790"})
-                    {
-                        var fid = $"{code}_r{row}";
-                        <td>
-                            <div class="field-wrap">
-                                <textarea data-ctx="@fid" class="fb" rows="2"
-                                    placeholder="@RptColPh(code)"
-                                    value="@GetTbl(fid)"
-                                    @oninput="@(e => SetTbl(fid, e.Value?.ToString()))"
-                                    ></textarea>
-                            </div>
-                        </td>
-                    }
-                </tr>
-            }
-        </tbody>
-    </table>
+    @if (_showPopout)
+    {
+        <div class="popout-overlay">
+            <div class="popout-hdr">
+                <span>Timing and Procedures for Collection and Reporting</span>
+                <div style="display:flex;gap:10px;align-items:center;">
+                    <button class="add-btn" @onclick="AddRptRow">+ Add Row</button>
+                    <button class="btn btn-secondary" @onclick="ClosePopout" style="padding:4px 14px;">✕ Close</button>
+                </div>
+            </div>
+            <div class="popout-body">
+                @RptTable()
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="h4">
+            <button class="popout-btn" @onclick="OpenPopout">⤢ Pop-out</button>
+            <button class="add-btn"    @onclick="AddRptRow">+ Add Row</button>
+        </div>
+        @RptTable()
+    }
 
     <div class="h3">9.2.1&nbsp;&nbsp;Timing</div>
     <div class="field-wrap">
@@ -287,65 +260,6 @@
     </div>
 </div>
 
-<!-- Popout -->
-<div id="s9-popout">
-    <div class="popout-hdr">
-        <span>Timing and Procedures for Collection and Reporting</span>
-        <div style="display:flex;gap:10px;align-items:center;">
-            <button class="add-btn"    @onclick="AddRptRow">+ Add Row</button>
-            <button class="btn btn-secondary" @onclick="ClosePopout" style="padding:4px 14px;">✕ Close</button>
-        </div>
-    </div>
-    <div class="popout-body">
-        <table class="rpt-tbl">
-            <thead>
-                <tr>
-                    <th style="width:13%">Event Type</th>
-                    <th style="width:12%">Situational Scope</th>
-                    <th style="width:12%">Reportable Period Start</th>
-                    <th style="width:12%">Reportable Period End</th>
-                    <th style="width:17%">Timing for Reporting to Sponsor or Designee</th>
-                    <th style="width:17%">Method for Reporting</th>
-                    <th style="width:17%">Back-up Method for Reporting</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var row in RptRows)
-                {
-                    <tr>
-                        <td>
-                            @foreach (var code in new[]{"C218784","C222263"})
-                            {
-                                var fid = $"{code}_r{row}";
-                                <div class="field-wrap">
-                                    <textarea data-ctx="@fid" class="@(code == "C222263" ? "fb cond" : "fb")" rows="2"
-                                        placeholder="@RptColPh(code)"
-                                        value="@GetTbl(fid)"
-                                        @oninput="@(e => SetTbl(fid, e.Value?.ToString()))"
-                                        ></textarea>
-                                </div>
-                            }
-                        </td>
-                        @foreach (var code in new[]{"C218785","C218786","C218787","C218788","C218789","C218790"})
-                        {
-                            var fid = $"{code}_r{row}";
-                            <td>
-                                <div class="field-wrap">
-                                    <textarea data-ctx="@fid" class="fb" rows="2"
-                                        placeholder="@RptColPh(code)"
-                                        value="@GetTbl(fid)"
-                                        @oninput="@(e => SetTbl(fid, e.Value?.ToString()))"
-                                        ></textarea>
-                                </div>
-                            </td>
-                        }
-                    </tr>
-                }
-            </tbody>
-        </table>
-        <p style="font-size:9pt;color:#555;margin-top:8px;">Changes here are reflected on the main page.</p>
-    </div>
-</div>
 
 <!-- Save dialog -->
 <div class="overlay @SaveDialogCss">
@@ -415,6 +329,7 @@
     private bool   ShowValidation = false;
     private bool   ShowSaveDialog = false;
     private bool   ShowReqDialog  = false;
+    private bool   _showPopout    = false;
     private string SaveFileName   = "section9_data";
     private string SaveFormat     = "json";
     private string StatusMessage  = string.Empty;
@@ -454,7 +369,72 @@
     {
         Model.RptTableData[key] = value ?? string.Empty;
         AutoSave();
+        StateHasChanged();
     }
+
+    private RenderFragment RptTable() => __builder =>
+    {
+        <table class="rpt-tbl" id="s9-rpt-table">
+            <thead>
+                <tr>
+                    <th style="width:13%">Event Type</th>
+                    <th style="width:12%">Situational Scope</th>
+                    <th style="width:12%">Reportable Period Start</th>
+                    <th style="width:12%">Reportable Period End</th>
+                    <th style="width:17%">Timing for Reporting to Sponsor or Designee</th>
+                    <th style="width:17%">Method for Reporting</th>
+                    <th style="width:17%">Back-up Method for Reporting</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var row in RptRows)
+                {
+                    var evtKey = $"C218784_r{row}";
+                    if (!Model.RptTableData.ContainsKey(evtKey))
+                        Model.RptTableData[evtKey] = string.Empty;
+                    <tr>
+                        <td>
+                            <div class="field-wrap">
+                                <select data-ctx="@evtKey" class="fb-sel"
+                                    @bind="Model.RptTableData[evtKey]"
+                                    @bind:after="AutoSave">
+                                    <option value="">-- Select event type --</option>
+                                    <option value="$NCIT#C41331 &quot;Adverse Event&quot;">Adverse Event</option>
+                                    <option value="$NCIT#C41335 &quot;Serious Adverse Event&quot;">Serious Adverse Event</option>
+                                    <option value="$NCIT#C218508 &quot;Trial Intervention Complaint&quot;">Trial Intervention Complaint</option>
+                                    <option value="$NCIT#C222331 &quot;Drug/Device Combination Product Complaint&quot;">Drug/Device Combination Product Complaint</option>
+                                    <option value="$NCIT#C25742 &quot;Pregnancy Event&quot;">Pregnancy Event</option>
+                                    <option value="$NCIT#C218510 &quot;Lactation Event&quot;">Lactation Event</option>
+                                    <option value="$NCIT#C218511 &quot;Post-Partum Event&quot;">Post-Partum Event</option>
+                                    <option value="$NCIT#C218512 &quot;Reportable Adverse Event of Special Interest&quot;">Reportable Adverse Event of Special Interest</option>
+                                    <option value="$NCIT#C218513 &quot;Not Reportable Adverse Event of Special Interest&quot;">Not Reportable Adverse Event of Special Interest</option>
+                                    <option value="$NCIT#C17649 &quot;Other&quot;">Other</option>
+                                </select>
+                            </div>
+                            <div class="field-wrap">
+                                <textarea data-ctx="C222263_r@(row)" class="fb cond" rows="2"
+                                    placeholder="@RptColPh("C222263")"
+                                    value="@GetTbl($"C222263_r{row}")"
+                                    @oninput="@(e => SetTbl($"C222263_r{row}", e.Value?.ToString()))"></textarea>
+                            </div>
+                        </td>
+                        @foreach (var col in new[]{"C218785","C218786","C218787","C218788","C218789","C218790"})
+                        {
+                            var fid = $"{col}_r{row}";
+                            <td>
+                                <div class="field-wrap">
+                                    <textarea data-ctx="@fid" class="fb" rows="2"
+                                        placeholder="@RptColPh(col)"
+                                        value="@GetTbl(fid)"
+                                        @oninput="@(e => SetTbl(fid, e.Value?.ToString()))"></textarea>
+                                </div>
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    };
 
     private void AutoSave()
     {
@@ -483,8 +463,8 @@
     };
 
     // ── Popout ────────────────────────────────────────────────────
-    private async Task OpenPopout()  => await JS.InvokeVoidAsync("s9ShowPopout");
-    private async Task ClosePopout() => await JS.InvokeVoidAsync("s9HidePopout");
+    private void OpenPopout()  { _showPopout = true; }
+    private void ClosePopout() { _showPopout = false; }
 
     // ── Validation ────────────────────────────────────────────────
     private bool HasRequiredEmpty() =>

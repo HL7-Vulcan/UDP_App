@@ -103,7 +103,7 @@ public class DataService09
         };
 
         foreach (var (key, value) in fields)
-            mainTemplate = mainTemplate.Replace("{{" + key + "}}", value ?? string.Empty);
+            mainTemplate = mainTemplate.Replace("{{" + key + "}}", Unescape(value ?? string.Empty));
 
         // ── Table row substitutions ────────────────────────────────
         // Build one table instance per row, collect entry references
@@ -124,10 +124,10 @@ public class DataService09
             foreach (var code in rowCodes)
             {
                 var key = $"{code}_r{r}";
-                var val = model.RptTableData.TryGetValue(key, out var v) ? v : string.Empty;
+                var val = Unescape(model.RptTableData.TryGetValue(key, out var v) ? v : string.Empty);
                 rowBlock = rowBlock.Replace("{{" + code + "}}", val);
                 // Table template uses C28784 (typo in template) - also replace that
-                rowBlock = rowBlock.Replace("{{C28784}}", model.RptTableData.TryGetValue($"C218784_r{r}", out var v2) ? v2 : string.Empty);
+                rowBlock = rowBlock.Replace("{{C28784}}", Unescape(model.RptTableData.TryGetValue($"C218784_r{r}", out var v2) ? v2 : string.Empty));
             }
 
             sb.AppendLine();
@@ -167,4 +167,7 @@ public class DataService09
         if (string.IsNullOrEmpty(value)) return "\"\"";
         return "\"" + value.Replace("\"", "\"\"") + "\"";
     }
+
+    private static string Unescape(string v) =>
+        v.Replace("&quot;", "\"").Replace("&amp;", "&").Replace("&lt;", "<").Replace("&gt;", ">");
 }

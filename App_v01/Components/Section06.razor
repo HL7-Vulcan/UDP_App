@@ -27,7 +27,7 @@
     .add-btn:hover { background:#008a3e; }
     .popout-btn { background:#5a7abf; color:#fff; border:none; border-radius:3px; padding:4px 12px; font-size:10pt; cursor:pointer; font-family:'Calibri',Arial,sans-serif; white-space:nowrap; }
     .popout-btn:hover { background:#3d5a9e; }
-    #s6-popout { display:none; position:fixed; inset:0; background:#fff; z-index:500; flex-direction:column; }
+    #s6-popout { position:fixed; inset:0; background:#fff; z-index:500; flex-direction:column; display:flex; }
     .popout-hdr { background:#1f3864; color:#fff; padding:10px 18px; display:flex; align-items:center; justify-content:space-between; font-family:'Times New Roman',Times,serif; font-size:13pt; font-weight:700; }
     .popout-body { flex:1; overflow:auto; padding:18px 24px; }
     .toolbar { display:flex; justify-content:flex-end; gap:10px; margin-top:32px; flex-wrap:wrap; }
@@ -152,6 +152,8 @@
 </div>
 
 <!-- Popout -->
+@if (_showPopout)
+{
 <div id="s6-popout">
     <div class="popout-hdr">
         <span>Intervention Table</span>
@@ -176,6 +178,7 @@
         </table>
     </div>
 </div>
+}
 
 <!-- Context menu -->
 <div id="s6-ctx-menu" class="ctx-menu">
@@ -236,6 +239,7 @@
     private bool   ShowValidation = false;
     private bool   ShowSaveDialog = false;
     private bool   ShowReqDialog  = false;
+    private bool   _showPopout    = false;
     private bool   _reinitCtxMenus = false;
     private string SaveFileName   = "section6_data";
     private string SaveFormat     = "json";
@@ -289,6 +293,7 @@
     {
         Model.TblData[key] = value ?? string.Empty;
         AutoSave();
+        StateHasChanged();
     }
 
     private void AddTblRow()
@@ -299,12 +304,8 @@
         AutoSave();
     }
 
-    private async Task OpenPopout()
-    {
-        await JS.InvokeVoidAsync("s6ShowPopout");
-        await JS.InvokeVoidAsync("udpInitContextMenus", "s6-ctx-menu");
-    }
-    private async Task ClosePopout() => await JS.InvokeVoidAsync("s6HidePopout");
+    private void OpenPopout()  { _showPopout = true; }
+    private void ClosePopout() { _showPopout = false; }
 
     private bool HasRequiredEmpty() =>
         string.IsNullOrWhiteSpace(Model.C218751) || string.IsNullOrWhiteSpace(Model.C218752) ||

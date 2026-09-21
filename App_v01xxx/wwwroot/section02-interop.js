@@ -98,6 +98,32 @@ document.addEventListener('mousedown', function (e) {
     });
 });
 
+// ── Section 5 inclusion popout ────────────────────────────────────
+window.s5ShowInclPopout = function () {
+    const el = document.getElementById('s5-incl-popout');
+    if (el) {
+        el.style.display = 'flex';
+        window.udpInitContextMenus('s5-ctx-menu');
+    }
+};
+window.s5HideInclPopout = function () {
+    const el = document.getElementById('s5-incl-popout');
+    if (el) el.style.display = 'none';
+};
+
+// ── Section 5 exclusion popout ────────────────────────────────────
+window.s5ShowExclPopout = function () {
+    const el = document.getElementById('s5-excl-popout');
+    if (el) {
+        el.style.display = 'flex';
+        window.udpInitContextMenus('s5-ctx-menu');
+    }
+};
+window.s5HideExclPopout = function () {
+    const el = document.getElementById('s5-excl-popout');
+    if (el) el.style.display = 'none';
+};
+
 // ── Section 6 popout ──────────────────────────────────────────────
 window.s6ShowPopout = function () {
     const el = document.getElementById('s6-popout');

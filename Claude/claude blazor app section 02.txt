@@ -76,7 +76,14 @@ Add a FHIR option to the save to file dialog and implement field substitution us
 In the templates folder are templates for section 06, 07 and 08.  Create new sections in the app following the patterns used already
 
 --------------------------------------
-
+In section 09 field C218784 should be a drop down menu with the following options: Adverse Event (C41331), Serious Adverse Event (C41335), Trial Intervention 
+Complaint (C218508), Drug/Device Combination Product Complaint (C222331), 
+Pregnancy Event (C25742), Lactation Event (C218510), Post-Partum Event 
+(C218511), Reportable Adverse Event of Special Interest (C218512), Not 
+Reportable Adverse Event of Special Interest (C218513), Other (C17649) 
+where the value in brackets is the code which should not be displayed.  
+When saving data from this field it should follow this pattern
+"$NCIT#C41335Adverse Event"
 --------------------------------------
 
 --------------------------------------
