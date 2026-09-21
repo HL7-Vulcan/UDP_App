@@ -1,0 +1,456 @@
+@page "/section-06"
+@layout MainLayout
+@using UDP_App.Models
+@using UDP_App.Services
+@inject DataService06 DataSvc
+@inject IJSRuntime JS
+@implements IDisposable
+
+<PageTitle>Section 6 – Data Entry</PageTitle>
+
+<style>
+    .doc-page { background:#fff; width:794px; min-height:1123px; margin:30px auto 80px; padding:72px; box-shadow:0 4px 24px rgba(0,0,0,0.18); font-family:'Calibri',Arial,sans-serif; font-size:11pt; color:#000; }
+    .h1  { font-family:'Times New Roman',Times,serif; font-size:14pt; font-weight:700; margin:0 0 18px; }
+    .h2  { font-family:'Times New Roman',Times,serif; font-size:14pt; font-weight:700; margin:24px 0 10px; }
+    .h3  { font-family:'Times New Roman',Times,serif; font-size:12pt; font-weight:700; margin:18px 0 8px; }
+    .h4  { font-family:'Times New Roman',Times,serif; font-size:12pt; font-weight:700; margin:14px 0 6px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+    .field-wrap { position:relative; margin-bottom:10px; }
+    textarea.fb { display:block; width:100%; background:#d0cece; color:#1a7a1a; border:none; border-bottom:1.5px solid #999; font-family:'Calibri',Arial,sans-serif; font-size:11pt; line-height:1.4; padding:4px 6px; outline:none; resize:vertical; min-height:52px; }
+    textarea.fb:focus { background:#bfbcbc; }
+    textarea.fb::placeholder { color:#9a7ab5; font-style:italic; }
+    textarea.fb.req-empty { border-bottom:2px solid #c00; background:#f5d0d0; }
+    textarea.fb.cond { border-bottom-style:dashed; }
+    .intv-tbl { width:100%; border-collapse:collapse; margin:8px 0; font-size:9pt; table-layout:fixed; }
+    .intv-tbl th { background:#404040; color:#fff; font-weight:700; font-size:8.5pt; padding:4px 5px; text-align:left; border:1px solid #555; word-wrap:break-word; }
+    .intv-tbl td { border:1px solid #aaa; padding:2px 3px; vertical-align:top; }
+    .add-btn    { background:#00B050; color:#fff; border:none; border-radius:3px; padding:4px 12px; font-size:10pt; cursor:pointer; font-family:'Calibri',Arial,sans-serif; white-space:nowrap; }
+    .add-btn:hover { background:#008a3e; }
+    .popout-btn { background:#5a7abf; color:#fff; border:none; border-radius:3px; padding:4px 12px; font-size:10pt; cursor:pointer; font-family:'Calibri',Arial,sans-serif; white-space:nowrap; }
+    .popout-btn:hover { background:#3d5a9e; }
+    #s6-popout { display:none; position:fixed; inset:0; background:#fff; z-index:500; flex-direction:column; }
+    .popout-hdr { background:#1f3864; color:#fff; padding:10px 18px; display:flex; align-items:center; justify-content:space-between; font-family:'Times New Roman',Times,serif; font-size:13pt; font-weight:700; }
+    .popout-body { flex:1; overflow:auto; padding:18px 24px; }
+    .toolbar { display:flex; justify-content:flex-end; gap:10px; margin-top:32px; flex-wrap:wrap; }
+    .btn { padding:7px 20px; border:none; border-radius:3px; font-size:10pt; font-family:inherit; cursor:pointer; }
+    .btn-primary   { background:#1f3864; color:#fff; } .btn-primary:hover { background:#162a4e; }
+    .btn-secondary { background:#eee; color:#333; border:1px solid #ccc; } .btn-secondary:hover { background:#ddd; }
+    .overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:200; align-items:center; justify-content:center; }
+    .overlay.show { display:flex; }
+    .dbox { background:#fff; border-radius:6px; padding:28px 32px; width:400px; box-shadow:0 8px 40px rgba(0,0,0,0.25); }
+    .dbox h3 { font-size:13pt; font-weight:700; color:#1f3864; margin-bottom:12px; }
+    .dbox p  { font-size:10.5pt; margin-bottom:16px; line-height:1.5; }
+    .dbox input[type=text] { width:100%; border:1px solid #aaa; border-radius:3px; padding:6px 8px; font-size:10pt; margin-bottom:14px; outline:none; }
+    .fmt-row { display:flex; gap:14px; margin-bottom:20px; }
+    .fmt-row label { display:flex; align-items:center; gap:5px; font-size:10pt; cursor:pointer; }
+    .dbr { display:flex; justify-content:flex-end; gap:10px; }
+    .sbar { position:fixed; bottom:0; left:0; right:0; background:#1f3864; color:#fff; font-size:9pt; padding:5px 18px; display:flex; justify-content:space-between; align-items:center; z-index:100; }
+    .err  { background:#fff3cd; color:#856404; border:1px solid #ffc107; padding:10px; margin-bottom:10px; border-radius:4px; font-size:10pt; }
+    .ctx-menu { display:none; position:fixed; background:#fff; border:1px solid #ccc; border-radius:4px; box-shadow:0 4px 16px rgba(0,0,0,0.18); z-index:1000; min-width:320px; max-width:420px; font-family:'Calibri',Arial,sans-serif; font-size:10pt; }
+    .ctx-hdr  { background:#1f3864; color:#fff; padding:8px 12px; font-weight:700; font-size:10pt; border-radius:4px 4px 0 0; display:flex; justify-content:space-between; align-items:center; }
+    .ctx-close { background:none; border:none; color:#fff; font-size:14px; cursor:pointer; padding:0 2px; }
+    .ctx-body { padding:10px 12px; }
+    .ctx-row  { display:flex; gap:8px; margin-bottom:6px; font-size:9.5pt; }
+    .ctx-row label { font-weight:700; white-space:nowrap; min-width:100px; color:#333; }
+    .ctx-row span  { color:#555; word-break:break-all; }
+    .ctx-div  { border:none; border-top:1px solid #e0e0e0; margin:8px 0; }
+    .ctx-guide { font-size:9.5pt; color:#444; line-height:1.5; }
+    .ctx-guide strong { color:#1f3864; }
+</style>
+
+@if (!string.IsNullOrEmpty(ErrorMessage))
+{
+    <div class="err">⚠ @ErrorMessage</div>
+}
+
+<div class="doc-page">
+    <div class="h1">6.&nbsp;&nbsp;Trial Intervention and Concomitant Therapy</div>
+
+    <div class="field-wrap">
+        <textarea data-ctx="C218747" class="fb" rows="3" placeholder="Enter Trial Intervention overview"
+            @bind="Model.C218747" @bind:event="oninput"></textarea>
+    </div>
+
+    <!-- Intervention Table -->
+    <div class="h4">
+        Intervention Table
+        <button class="popout-btn" @onclick="OpenPopout">⤢ Pop-out</button>
+        <button class="add-btn"    @onclick="AddTblRow">+ Add Row</button>
+    </div>
+    <table class="intv-tbl">
+        <thead><tr>
+            <th style="width:9%">Arm Name</th><th style="width:8%">Arm Type</th>
+            <th style="width:9%">INN/Proprietary Name</th><th style="width:8%">Type</th>
+            <th style="width:9%">Dose Form</th><th style="width:9%">Strength</th>
+            <th style="width:9%">Dosage Level</th><th style="width:8%">Route</th>
+            <th style="width:10%">Regimen</th><th style="width:7%">Use</th>
+            <th style="width:7%">IMP/NIMP</th><th style="width:7%">Sourcing</th>
+        </tr></thead>
+        <tbody>
+            @foreach (var row in TblRows) { @TblRow(row) }
+        </tbody>
+    </table>
+
+    <div class="h2">6.1&nbsp;&nbsp;Description of Investigational Trial Intervention</div>
+    <div class="field-wrap"><textarea data-ctx="C218751" class="@ReqClass(Model.C218751)" rows="3" placeholder="Enter Description" @bind="Model.C218751" @bind:event="oninput"></textarea></div>
+
+    <div class="h2">6.2&nbsp;&nbsp;Rationale for Investigational Trial Intervention Dose and Regimen</div>
+    <div class="field-wrap"><textarea data-ctx="C218752" class="@ReqClass(Model.C218752)" rows="3" placeholder="Enter Rationale" @bind="Model.C218752" @bind:event="oninput"></textarea></div>
+
+    <div class="h2">6.3&nbsp;&nbsp;Investigational Trial Intervention Administration</div>
+    <div class="field-wrap"><textarea data-ctx="C218753" class="@ReqClass(Model.C218753)" rows="3" placeholder="Enter Administration" @bind="Model.C218753" @bind:event="oninput"></textarea></div>
+
+    <div class="h2">6.4&nbsp;&nbsp;Investigational Trial Intervention Dose Modification</div>
+    <div class="field-wrap"><textarea data-ctx="C218754" class="@ReqClass(Model.C218754)" rows="3" placeholder="Enter Dose Modification" @bind="Model.C218754" @bind:event="oninput"></textarea></div>
+
+    <div class="h2">6.5&nbsp;&nbsp;Management of Investigational Trial Intervention Overdose</div>
+    <div class="field-wrap"><textarea data-ctx="C218755" class="@ReqClass(Model.C218755)" rows="3" placeholder="Enter Overdose Management" @bind="Model.C218755" @bind:event="oninput"></textarea></div>
+
+    <div class="h2">6.6&nbsp;&nbsp;Preparation, Storage, Handling and Accountability</div>
+    <div class="h3">6.6.1&nbsp;&nbsp;Preparation of Investigational Trial Intervention</div>
+    <div class="field-wrap"><textarea data-ctx="C176274" class="@ReqClass(Model.C176274)" rows="3" placeholder="Enter Preparation" @bind="Model.C176274" @bind:event="oninput"></textarea></div>
+    <div class="h3">6.6.2&nbsp;&nbsp;Storage and Handling of Investigational Trial Intervention</div>
+    <div class="field-wrap"><textarea data-ctx="C115525" class="@ReqClass(Model.C115525)" rows="3" placeholder="Enter Storage and Handling" @bind="Model.C115525" @bind:event="oninput"></textarea></div>
+    <div class="h3">6.6.3&nbsp;&nbsp;Accountability of Investigational Trial Intervention</div>
+    <div class="field-wrap"><textarea data-ctx="C176267" class="@ReqClass(Model.C176267)" rows="3" placeholder="Enter Accountability" @bind="Model.C176267" @bind:event="oninput"></textarea></div>
+
+    <div class="h2">6.7&nbsp;&nbsp;Investigational Trial Intervention Assignment, Randomisation and Blinding</div>
+    <div class="h3">6.7.1&nbsp;&nbsp;Participant Assignment to Investigational Trial Intervention</div>
+    <div class="field-wrap"><textarea data-ctx="C218756" class="@ReqClass(Model.C218756)" rows="3" placeholder="Enter Participant Assignment" @bind="Model.C218756" @bind:event="oninput"></textarea></div>
+    <div class="h3">6.7.2&nbsp;&nbsp;Randomisation</div>
+    <div class="field-wrap"><textarea data-ctx="C25196" class="fb cond" rows="3" placeholder="Enter Randomisation" @bind="Model.C25196" @bind:event="oninput"></textarea></div>
+    <div class="h3">6.7.3&nbsp;&nbsp;Measures to Maintain Blinding</div>
+    <div class="field-wrap"><textarea data-ctx="C189349" class="fb cond" rows="3" placeholder="Enter Blinding Measures" @bind="Model.C189349" @bind:event="oninput"></textarea></div>
+    <div class="h3">6.7.4&nbsp;&nbsp;Emergency Unblinding at the Site</div>
+    <div class="field-wrap"><textarea data-ctx="C218757" class="fb cond" rows="3" placeholder="Enter Emergency Unblinding" @bind="Model.C218757" @bind:event="oninput"></textarea></div>
+
+    <div class="h2">6.8&nbsp;&nbsp;Investigational Trial Intervention Adherence</div>
+    <div class="field-wrap"><textarea data-ctx="C218758" class="@ReqClass(Model.C218758)" rows="3" placeholder="Enter Adherence" @bind="Model.C218758" @bind:event="oninput"></textarea></div>
+
+    <div class="h2">6.9&nbsp;&nbsp;Description of Noninvestigational Trial Intervention</div>
+    <div class="field-wrap"><textarea data-ctx="C218759" class="@ReqClass(Model.C218759)" rows="3" placeholder="Enter Noninvestigational Intervention" @bind="Model.C218759" @bind:event="oninput"></textarea></div>
+    <div class="h3">6.9.1&nbsp;&nbsp;Background Trial Intervention</div>
+    <div class="field-wrap"><textarea data-ctx="C222329" class="fb cond" rows="3" placeholder="Enter Background Trial Intervention" @bind="Model.C222329" @bind:event="oninput"></textarea></div>
+    <div class="h3">6.9.2&nbsp;&nbsp;Rescue Therapy</div>
+    <div class="field-wrap"><textarea data-ctx="C222330" class="fb cond" rows="3" placeholder="Enter Rescue Therapy" @bind="Model.C222330" @bind:event="oninput"></textarea></div>
+    <div class="h3">6.9.3&nbsp;&nbsp;Other Noninvestigational Trial Intervention</div>
+    <div class="field-wrap"><textarea data-ctx="C218761" class="fb cond" rows="3" placeholder="Enter Other Noninvestigational Intervention" @bind="Model.C218761" @bind:event="oninput"></textarea></div>
+
+    <div class="h2">6.10&nbsp;&nbsp;Concomitant Therapy</div>
+    <div class="field-wrap"><textarea data-ctx="C53630" class="@ReqClass(Model.C53630)" rows="3" placeholder="Enter Concomitant Therapy" @bind="Model.C53630" @bind:event="oninput"></textarea></div>
+    <div class="h3">6.10.1&nbsp;&nbsp;Prohibited Concomitant Therapy</div>
+    <div class="field-wrap"><textarea data-ctx="C218762" class="fb cond" rows="3" placeholder="Enter Prohibited Concomitant Therapy" @bind="Model.C218762" @bind:event="oninput"></textarea></div>
+    <div class="h3">6.10.2&nbsp;&nbsp;Permitted Concomitant Therapy</div>
+    <div class="field-wrap"><textarea data-ctx="C218763" class="fb cond" rows="3" placeholder="Enter Permitted Concomitant Therapy" @bind="Model.C218763" @bind:event="oninput"></textarea></div>
+
+    <div class="toolbar">
+        <button class="btn btn-secondary" @onclick="ClearAll">Clear All</button>
+        <button class="btn btn-secondary" @onclick="LoadSample">Load Sample</button>
+        <button class="btn btn-secondary" @onclick="OpenSaveDialog">⬇ Save to File…</button>
+        <button class="btn btn-secondary" @onclick="OpenLoadDialog">⬆ Load from File</button>
+        <button class="btn btn-primary"   @onclick="SaveToBrowser">Save to Browser</button>
+    </div>
+</div>
+
+<!-- Popout -->
+<div id="s6-popout">
+    <div class="popout-hdr">
+        <span>Intervention Table</span>
+        <div style="display:flex;gap:10px;align-items:center;">
+            <button class="add-btn" @onclick="AddTblRow">+ Add Row</button>
+            <button class="btn btn-secondary" @onclick="ClosePopout" style="padding:4px 14px;">✕ Close</button>
+        </div>
+    </div>
+    <div class="popout-body">
+        <table class="intv-tbl">
+            <thead><tr>
+                <th style="width:9%">Arm Name</th><th style="width:8%">Arm Type</th>
+                <th style="width:9%">INN/Proprietary Name</th><th style="width:8%">Type</th>
+                <th style="width:9%">Dose Form</th><th style="width:9%">Strength</th>
+                <th style="width:9%">Dosage Level</th><th style="width:8%">Route</th>
+                <th style="width:10%">Regimen</th><th style="width:7%">Use</th>
+                <th style="width:7%">IMP/NIMP</th><th style="width:7%">Sourcing</th>
+            </tr></thead>
+            <tbody>
+                @foreach (var row in TblRows) { @TblRow(row) }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Context menu -->
+<div id="s6-ctx-menu" class="ctx-menu">
+    <div class="ctx-hdr">
+        <span>Field Information</span>
+        <button class="ctx-close" @onclick="CloseCtxMenu">✕</button>
+    </div>
+    <div class="ctx-body">
+        <div class="ctx-row"><label>Field name:</label><span>@CtxFieldName</span></div>
+        <div class="ctx-row"><label>Original name:</label><span>@CtxOriginalName</span></div>
+        <hr class="ctx-div" />
+        <div class="ctx-guide"><strong>Guidance:</strong><br />@CtxGuidance</div>
+    </div>
+</div>
+
+<!-- Save dialog -->
+<div class="overlay @SaveDialogCss">
+    <div class="dbox">
+        <h3>Save Data to File</h3>
+        <label style="display:block;font-weight:700;margin-bottom:6px;">File name</label>
+        <input type="text" @bind="SaveFileName" @bind:event="oninput" />
+        <label style="display:block;font-weight:700;margin:10px 0 6px;">Format</label>
+        <div class="fmt-row">
+            <label><input type="radio" name="s6fmt" checked="@IsJson" @onchange="SetFmtJson" /> JSON</label>
+            <label><input type="radio" name="s6fmt" checked="@IsCsv"  @onchange="SetFmtCsv"  /> CSV</label>
+            <label><input type="radio" name="s6fmt" checked="@IsTxt"  @onchange="SetFmtTxt"  /> Plain Text</label>
+            <label><input type="radio" name="s6fmt" checked="@IsFhir" @onchange="SetFmtFhir" /> FHIR</label>
+        </div>
+        <div class="dbr">
+            <button class="btn btn-secondary" @onclick="CloseSaveDialog">Cancel</button>
+            <button class="btn btn-primary"   @onclick="DoSaveToFile">Download</button>
+        </div>
+    </div>
+</div>
+
+<!-- Required fields dialog -->
+<div class="overlay @ReqDialogCss">
+    <div class="dbox">
+        <h3 style="color:#c00;">Incomplete Required Fields</h3>
+        <p>@ReqDialogMsg</p>
+        <div class="dbr">
+            <button class="btn btn-secondary" @onclick="CloseReqDialog">Cancel</button>
+            <button class="btn btn-primary" style="background:#c00;" @onclick="ForceConfirm">Save Anyway</button>
+        </div>
+    </div>
+</div>
+
+<div class="sbar">
+    <span>Section 6 – Data Entry &nbsp;|&nbsp; Grey = data entry &nbsp;|&nbsp; Red = required &nbsp;|&nbsp; Dashed = conditional</span>
+    <span>@StatusMessage</span>
+</div>
+
+@code {
+    private Section06Model Model   = new();
+    private List<int>       TblRows = new() { 1 };
+    private int             NextRow = 2;
+
+    private bool   ShowValidation = false;
+    private bool   ShowSaveDialog = false;
+    private bool   ShowReqDialog  = false;
+    private bool   _reinitCtxMenus = false;
+    private string SaveFileName   = "section6_data";
+    private string SaveFormat     = "json";
+    private string StatusMessage  = string.Empty;
+    private string ReqDialogMsg   = string.Empty;
+    private string ErrorMessage   = string.Empty;
+    private string? PendingAction = null;
+    private string CtxFieldName    = string.Empty;
+    private string CtxOriginalName = string.Empty;
+    private string CtxGuidance     = string.Empty;
+
+    private System.Threading.Timer?           _statusTimer;
+    private DotNetObjectReference<Section06>? _objRef;
+
+    private static readonly string[] TblCodes = { "C93729","C172457","C177930","C98747","C42636","C142517","C94394","C38114","C15697","C218748","C218749","C218750" };
+
+    private RenderFragment TblRow(int row) => __builder =>
+    {
+        <tr>
+            @foreach (var col in TblCodes)
+            {
+                var fid = $"{col}_r{row}";
+                <td><div class="field-wrap">
+                    <textarea data-ctx="@fid" class="fb" rows="2"
+                        placeholder="@col"
+                        value="@GetTbl(fid)"
+                        @oninput="@(e => SetTbl(fid, e.Value?.ToString()))"></textarea>
+                </div></td>
+            }
+        </tr>;
+    };
+
+    private string SaveDialogCss => ShowSaveDialog ? "overlay show" : "overlay";
+    private string ReqDialogCss  => ShowReqDialog  ? "overlay show" : "overlay";
+    private bool IsJson => SaveFormat == "json";
+    private bool IsCsv  => SaveFormat == "csv";
+    private bool IsTxt  => SaveFormat == "txt";
+    private bool IsFhir => SaveFormat == "fhir";
+    private void SetFmtJson(ChangeEventArgs e) => SaveFormat = "json";
+    private void SetFmtCsv(ChangeEventArgs e)  => SaveFormat = "csv";
+    private void SetFmtTxt(ChangeEventArgs e)  => SaveFormat = "txt";
+    private void SetFmtFhir(ChangeEventArgs e) => SaveFormat = "fhir";
+
+    private string ReqClass(string? val) =>
+        ShowValidation && string.IsNullOrWhiteSpace(val) ? "fb req-empty" : "fb";
+
+    private string GetTbl(string key) =>
+        Model.TblData.TryGetValue(key, out var v) ? v : string.Empty;
+
+    private void SetTbl(string key, string? value)
+    {
+        Model.TblData[key] = value ?? string.Empty;
+        AutoSave();
+    }
+
+    private void AddTblRow()
+    {
+        TblRows.Add(NextRow++);
+        Model.TblRows = TblRows.Count;
+        _reinitCtxMenus = true;
+        AutoSave();
+    }
+
+    private async Task OpenPopout()
+    {
+        await JS.InvokeVoidAsync("s6ShowPopout");
+        await JS.InvokeVoidAsync("udpInitContextMenus", "s6-ctx-menu");
+    }
+    private async Task ClosePopout() => await JS.InvokeVoidAsync("s6HidePopout");
+
+    private bool HasRequiredEmpty() =>
+        string.IsNullOrWhiteSpace(Model.C218751) || string.IsNullOrWhiteSpace(Model.C218752) ||
+        string.IsNullOrWhiteSpace(Model.C218753) || string.IsNullOrWhiteSpace(Model.C218754) ||
+        string.IsNullOrWhiteSpace(Model.C218755) || string.IsNullOrWhiteSpace(Model.C176274) ||
+        string.IsNullOrWhiteSpace(Model.C115525) || string.IsNullOrWhiteSpace(Model.C176267) ||
+        string.IsNullOrWhiteSpace(Model.C218756) || string.IsNullOrWhiteSpace(Model.C218758) ||
+        string.IsNullOrWhiteSpace(Model.C218759) || string.IsNullOrWhiteSpace(Model.C53630);
+
+    private int RequiredEmptyCount() => new[]
+    {
+        Model.C218751, Model.C218752, Model.C218753, Model.C218754, Model.C218755,
+        Model.C176274, Model.C115525, Model.C176267, Model.C218756, Model.C218758,
+        Model.C218759, Model.C53630
+    }.Count(string.IsNullOrWhiteSpace);
+
+    private void ClearAll()
+    {
+        Model = new Section06Model(); TblRows = new List<int>{1}; NextRow = 2;
+        ShowValidation = false; ErrorMessage = string.Empty;
+        _ = JS.InvokeVoidAsync("localStorage.removeItem", "s6data");
+        SetStatus("Cleared");
+    }
+
+    private void LoadSample()
+    {
+        var s = DataSvc.LoadSample();
+        if (s != null)
+        {
+            Model = s;
+            TblRows = Enumerable.Range(1, Math.Max(1, s.TblRows)).ToList();
+            NextRow = TblRows.Count + 1;
+            ShowValidation = false; _reinitCtxMenus = true;
+            SetStatus("Sample data loaded");
+        }
+        else ErrorMessage = "Could not load sample file.";
+    }
+
+    private async Task SaveToBrowser()
+    {
+        ShowValidation = true;
+        if (HasRequiredEmpty()) { ReqDialogMsg = $"{RequiredEmptyCount()} required field(s) empty. Save anyway?"; PendingAction = "browser"; ShowReqDialog = true; return; }
+        await DoBrowserSave();
+    }
+
+    private async Task DoBrowserSave()
+    {
+        try { await JS.InvokeVoidAsync("localStorage.setItem", "s6data", DataSvc.ToJson(Model)); SetStatus("✓ Saved " + DateTime.Now.ToShortTimeString()); }
+        catch (Exception ex) { ErrorMessage = "Save error: " + ex.Message; }
+    }
+
+    private void OpenSaveDialog()
+    {
+        ShowValidation = true;
+        if (HasRequiredEmpty()) { ReqDialogMsg = $"{RequiredEmptyCount()} required field(s) empty. Save anyway?"; PendingAction = "file"; ShowReqDialog = true; return; }
+        SaveFileName = "section6_data_" + DateTime.Now.ToString("yyyy-MM-dd"); ShowSaveDialog = true;
+    }
+
+    private void CloseSaveDialog() => ShowSaveDialog = false;
+    private void CloseReqDialog()  { ShowReqDialog = false; PendingAction = null; }
+
+    private async Task ForceConfirm()
+    {
+        ShowReqDialog = false;
+        if (PendingAction == "browser") await DoBrowserSave();
+        else if (PendingAction == "file") { SaveFileName = "section6_data_" + DateTime.Now.ToString("yyyy-MM-dd"); ShowSaveDialog = true; }
+        PendingAction = null;
+    }
+
+    private async Task DoSaveToFile()
+    {
+        ShowSaveDialog = false;
+        var (content, mime, ext) = SaveFormat switch
+        {
+            "csv"  => (DataSvc.ToCsv(Model),      "text/csv",         ".csv"),
+            "txt"  => (DataSvc.ToPlainText(Model), "text/plain",       ".txt"),
+            "fhir" => (DataSvc.ToFsh(Model),       "text/plain",       ".fsh"),
+            _      => (DataSvc.ToJson(Model),      "application/json", ".json"),
+        };
+        var fn = (SaveFileName.Trim().Length > 0 ? SaveFileName.Trim() : "section6_data") + ext;
+        await JS.InvokeVoidAsync("udpDownload", fn, content, mime);
+        SetStatus("⬇ Downloaded " + fn);
+    }
+
+    private async Task OpenLoadDialog() => await JS.InvokeVoidAsync("udpOpenFilePicker");
+
+    [JSInvokable]
+    public void ReceiveFileContent(string json)
+    {
+        var loaded = DataSvc.FromJson(json);
+        if (loaded != null)
+        {
+            Model = loaded;
+            TblRows = Enumerable.Range(1, Math.Max(1, loaded.TblRows)).ToList();
+            NextRow = TblRows.Count + 1;
+            ShowValidation = false; SetStatus("⬆ Loaded from file");
+            InvokeAsync(StateHasChanged);
+        }
+    }
+
+    [JSInvokable]
+    public async Task OnContextMenuJS(string code, double x, double y)
+    {
+        CtxFieldName    = code;
+        CtxOriginalName = "guidance text goes here";
+        CtxGuidance     = "guidance text goes here";
+        StateHasChanged();
+        await JS.InvokeVoidAsync("udpShowCtxMenu", "s6-ctx-menu", x, y);
+    }
+
+    [JSInvokable] public void OnCtxMenuClosed() { }
+    private void CloseCtxMenu() => _ = JS.InvokeVoidAsync("udpHideCtxMenu", "s6-ctx-menu");
+
+    private void AutoSave() =>
+        _ = JS.InvokeVoidAsync("localStorage.setItem", "s6data", DataSvc.ToJson(Model));
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+        {
+            if (_reinitCtxMenus) { _reinitCtxMenus = false; await JS.InvokeVoidAsync("udpInitContextMenus", "s6-ctx-menu"); }
+            return;
+        }
+        try
+        {
+            _objRef = DotNetObjectReference.Create(this);
+            await JS.InvokeVoidAsync("udpSetDotNetRef", _objRef, "s6-ctx-menu");
+            await JS.InvokeVoidAsync("udpInitContextMenus", "s6-ctx-menu");
+            var json = await JS.InvokeAsync<string?>("localStorage.getItem", "s6data");
+            if (!string.IsNullOrEmpty(json))
+            {
+                var loaded = DataSvc.FromJson(json);
+                if (loaded != null) { Model = loaded; TblRows = Enumerable.Range(1, Math.Max(1, loaded.TblRows)).ToList(); NextRow = TblRows.Count + 1; StateHasChanged(); }
+            }
+        }
+        catch (JSDisconnectedException) { }
+        catch (TaskCanceledException)   { }
+        catch (Exception ex) { ErrorMessage = "Init error: " + ex.Message; StateHasChanged(); }
+    }
+
+    private void SetStatus(string msg)
+    {
+        StatusMessage = msg;
+        _statusTimer?.Dispose();
+        _statusTimer = new System.Threading.Timer(_ => { StatusMessage = string.Empty; InvokeAsync(StateHasChanged); }, null, 4000, System.Threading.Timeout.Infinite);
+    }
+
+    public void Dispose() { _objRef?.Dispose(); _statusTimer?.Dispose(); }
+}
