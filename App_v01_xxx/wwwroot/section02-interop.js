@@ -1,4 +1,4 @@
-// ── File download ──────────────────────────────────────────────────
+// ── File download ─────────────────────────────────────────────────
 window.udpDownload = function (filename, content, mimeType) {
     const encoded = 'data:' + mimeType + ';charset=utf-8,' + encodeURIComponent(content);
     const a = document.createElement('a');
@@ -9,26 +9,13 @@ window.udpDownload = function (filename, content, mimeType) {
     document.body.removeChild(a);
 };
 
-// ── DotNet references — one per section key ────────────────────────
-// _dotNetRefs maps menuId -> DotNetObjectReference for that section.
-// udpSetDotNetRef(ref, menuId) registers the ref for a specific menu.
-// Falls back to legacy single-ref behaviour if menuId is omitted.
-const _dotNetRefs = {};
-let _dotNetRef = null;   // legacy single ref (Section02 / Section09 etc.)
+// ── File picker (load JSON) ────────────────────────────────────────
+let _dotNetRef = null;
 
-window.udpSetDotNetRef = function (ref, menuId) {
-    if (menuId) {
-        _dotNetRefs[menuId] = ref;
-    } else {
-        _dotNetRef = ref;
-    }
+window.udpSetDotNetRef = function (ref) {
+    _dotNetRef = ref;
 };
 
-function _refForMenu(menuId) {
-    return _dotNetRefs[menuId] || _dotNetRef;
-}
-
-// ── File picker (load JSON) ────────────────────────────────────────
 window.udpOpenFilePicker = function () {
     const input = document.createElement('input');
     input.type = 'file';
@@ -41,26 +28,27 @@ window.udpOpenFilePicker = function () {
         const reader = new FileReader();
         reader.onload = function (e) {
             document.body.removeChild(input);
-            // Try the active menu's ref first, fall back to global
-            const ref = Object.values(_dotNetRefs).slice(-1)[0] || _dotNetRef;
-            if (ref) ref.invokeMethodAsync('ReceiveFileContent', e.target.result);
+            if (_dotNetRef) {
+                _dotNetRef.invokeMethodAsync('ReceiveFileContent', e.target.result);
+            }
         };
         reader.readAsText(file);
     });
     input.click();
 };
 
-// ── Context menus ─────────────────────────────────────────────────
+// ── Context menu — JS-driven (bypasses Blazor event system) ──────
 window.udpInitContextMenus = function (menuId) {
+    // Attach native contextmenu listeners to all textareas with data-ctx attribute
     document.querySelectorAll('textarea[data-ctx]').forEach(function (ta) {
+        // Remove any previous listener to avoid duplicates
         ta.removeEventListener('contextmenu', ta._ctxHandler);
         ta._ctxHandler = function (e) {
             e.preventDefault();
             const code = ta.getAttribute('data-ctx');
-            // Walk up to find which popout or page this textarea lives in,
-            // then pick the right ref via its associated menu.
-            const ref = _refForMenu(menuId);
-            if (ref) ref.invokeMethodAsync('OnContextMenuJS', code, e.clientX, e.clientY);
+            if (_dotNetRef) {
+                _dotNetRef.invokeMethodAsync('OnContextMenuJS', code, e.clientX, e.clientY);
+            }
         };
         ta.addEventListener('contextmenu', ta._ctxHandler);
     });
@@ -68,6 +56,7 @@ window.udpInitContextMenus = function (menuId) {
 
 // ── Position and show context menu ────────────────────────────────
 window.udpShowCtxMenu = function (menuId, x, y) {
+    // Hide any open context menu first
     document.querySelectorAll('.ctx-menu').forEach(m => m.style.display = 'none');
     const menu = document.getElementById(menuId || 'ctx-menu');
     if (!menu) return;
@@ -91,31 +80,17 @@ document.addEventListener('mousedown', function (e) {
     document.querySelectorAll('.ctx-menu').forEach(function (menu) {
         if (!menu.contains(e.target) && menu.style.display === 'block') {
             menu.style.display = 'none';
-            // Notify whichever section owns this menu
-            const ref = _refForMenu(menu.id);
-            if (ref) ref.invokeMethodAsync('OnCtxMenuClosed');
+            if (_dotNetRef) _dotNetRef.invokeMethodAsync('OnCtxMenuClosed');
         }
     });
 });
 
-// ── Section 6 popout ──────────────────────────────────────────────
-window.s6ShowPopout = function () {
-    const el = document.getElementById('s6-popout');
-    if (el) {
-        el.style.display = 'flex';
-        window.udpInitContextMenus('s6-ctx-menu');
-    }
-};
-window.s6HidePopout = function () {
-    const el = document.getElementById('s6-popout');
-    if (el) el.style.display = 'none';
-};
-
-// ── Section 9 popout ──────────────────────────────────────────────
+// ── Section 9 popout ─────────────────────────────────────────────
 window.s9ShowPopout = function () {
     const el = document.getElementById('s9-popout');
     if (el) {
         el.style.display = 'flex';
+        // Re-attach context menu listeners — textareas moved into popout DOM
         window.udpInitContextMenus('s9-ctx-menu');
     }
 };

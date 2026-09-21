@@ -72,7 +72,8 @@ following the pattern in sample 02 add a Load Sample button and associated funct
 Add a FHIR option to the save to file dialog and implement field substitution using the section_09_Template.fsh file
 --------------------------------------
 
---------------------------------------
+=======================================================================================================
+In the templates folder are templates for section 06, 07 and 08.  Create new sections in the app following the patterns used already
 
 --------------------------------------
 

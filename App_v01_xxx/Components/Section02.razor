@@ -285,7 +285,6 @@
         Model          = new Section02Model();
         ShowValidation = false;
         ErrorMessage   = string.Empty;
-        _ = JS.InvokeVoidAsync("localStorage.removeItem", "s2data");
         SetStatus("Cleared");
     }
 
