@@ -1,0 +1,59 @@
+{
+  "resourceType": "Group",
+  "id": "eligibility-group-inclusion-age-weight",
+  "characteristic": [
+    {
+      "valueRange": {
+        "low": {
+          "value": 18,
+          "code": "a",
+          "system": "http://unitsofmeasure.org",
+          "unit": "years"
+        },
+        "high": {
+          "value": 75,
+          "code": "a",
+          "system": "http://unitsofmeasure.org",
+          "unit": "years"
+        }
+      },
+      "code": {
+        "coding": [
+          {
+            "code": "397669002",
+            "system": "http://snomed.info/sct",
+            "display": "Age"
+          }
+        ]
+      },
+      "exclude": false,
+      "description": "aged 18 to 75 years"
+    },
+    {
+      "code": {
+        "coding": [
+          {
+            "code": "27113001",
+            "system": "http://snomed.info/sct",
+            "display": "Body weight"
+          }
+        ]
+      },
+      "valueQuantity": {
+        "value": 40,
+        "code": "kg",
+        "system": "http://unitsofmeasure.org",
+        "unit": "kilograms"
+      },
+      "exclude": false,
+      "description": "body weight at least 40 kg"
+    }
+  ],
+  "name": "inclusion-age-weight",
+  "title": "Age and Weight Inclusion Criteria",
+  "status": "active",
+  "description": "Participants must be aged 18 to 75 years and weigh at least 40 kg.",
+  "type": "person",
+  "membership": "definitional",
+  "combinationMethod": "all-of"
+}

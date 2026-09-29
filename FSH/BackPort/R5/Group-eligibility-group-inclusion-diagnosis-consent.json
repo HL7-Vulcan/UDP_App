@@ -1,0 +1,88 @@
+{
+  "resourceType": "Group",
+  "id": "eligibility-group-inclusion-diagnosis-consent",
+  "meta": {
+    "profile": [
+      "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-r5-group"
+    ]
+  },
+  "extension": [
+    {
+      "extension": [
+        {
+          "url": "title",
+          "valueString": "Diagnosis and Consent Inclusion Criteria"
+        },
+        {
+          "url": "status",
+          "valueCode": "active"
+        },
+        {
+          "url": "combinationMethod",
+          "valueCode": "all-of"
+        }
+      ],
+      "url": "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-r5-group-ext"
+    }
+  ],
+  "characteristic": [
+    {
+      "extension": [
+        {
+          "extension": [
+            {
+              "url": "description",
+              "valueString": "confirmed moderate-to-severe plaque psoriasis"
+            }
+          ],
+          "url": "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-r5-groupCharacteristic-ext"
+        }
+      ],
+      "code": {
+        "coding": [
+          {
+            "code": "9014002",
+            "system": "http://snomed.info/sct",
+            "display": "Psoriasis"
+          }
+        ]
+      },
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "code": "ModerateSeverePlaquePsoriasis"
+          }
+        ]
+      },
+      "exclude": false
+    },
+    {
+      "extension": [
+        {
+          "extension": [
+            {
+              "url": "description",
+              "valueString": "written informed consent obtained"
+            }
+          ],
+          "url": "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-r5-groupCharacteristic-ext"
+        }
+      ],
+      "code": {
+        "coding": [
+          {
+            "code": "182777000",
+            "system": "http://snomed.info/sct",
+            "display": "Informed consent"
+          }
+        ]
+      },
+      "valueBoolean": true,
+      "exclude": false
+    }
+  ],
+  "name": "inclusion-diagnosis-consent",
+  "description": "Participants must have a confirmed diagnosis of moderate-to-severe plaque psoriasis and have provided written informed consent.",
+  "type": "person",
+  "membership": "definitional"
+}

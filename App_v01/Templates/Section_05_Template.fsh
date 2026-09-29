@@ -49,7 +49,7 @@ Description: """Example Narrative Single Composition with a contained section fo
 {{C25532}}
         </div>
       """
- {{REPEAT * entry[+] = Reference(eligibility-group-{{TABLE_ROW_X}})}}
+ {{REPEAT  * entry[+] = Reference({{TABLE_ROW_X}})}}
 //  * extension[order].valueInteger = {{n}}
 
 // * section[+]

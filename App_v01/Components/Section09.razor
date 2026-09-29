@@ -35,6 +35,8 @@
     .rpt-tbl { width:100%; border-collapse:collapse; margin:8px 0; font-size:9pt; table-layout:fixed; }
     .rpt-tbl th { background:#404040; color:#fff; font-family:Arial,sans-serif; font-weight:700; font-size:8.5pt; padding:4px 5px; text-align:left; border:1px solid #555; word-wrap:break-word; }
     .rpt-tbl td { border:1px solid #aaa; padding:2px 3px; vertical-align:top; }
+    input.fb-date { display:block; width:100%; background:#d0cece; color:#1a7a1a; border:none; border-bottom:1.5px solid #999; font-family:'Calibri',Arial,sans-serif; font-size:9.5pt; padding:4px 6px; outline:none; cursor:pointer; box-sizing:border-box; }
+    input.fb-date:focus { background:#bfbcbc; }
     select.fb-sel { display:block; width:100%; background:#d0cece; color:#1a7a1a; border:none; border-bottom:1.5px solid #999; font-family:'Calibri',Arial,sans-serif; font-size:9.5pt; padding:4px 6px; outline:none; cursor:pointer; }
     select.fb-sel:focus { background:#bfbcbc; }
     /* Buttons */
@@ -418,7 +420,29 @@
                                     @oninput="@(e => SetTbl($"C222263_r{row}", e.Value?.ToString()))"></textarea>
                             </div>
                         </td>
-                        @foreach (var col in new[]{"C218785","C218786","C218787","C218788","C218789","C218790"})
+                        @foreach (var col in new[]{"C218785"})
+                        {
+                            var fid = $"{col}_r{row}";
+                            <td>
+                                <div class="field-wrap">
+                                    <textarea data-ctx="@fid" class="fb" rows="2"
+                                        placeholder="@RptColPh(col)"
+                                        value="@GetTbl(fid)"
+                                        @oninput="@(e => SetTbl(fid, e.Value?.ToString()))"></textarea>
+                                </div>
+                            </td>
+                        }
+                        <td>
+                            <input type="date" class="fb-date"
+                                value="@GetTbl($"C218786_r{row}")"
+                                @onchange="@(e => SetTbl($"C218786_r{row}", e.Value?.ToString()))" />
+                        </td>
+                        <td>
+                            <input type="date" class="fb-date"
+                                value="@GetTbl($"C218787_r{row}")"
+                                @onchange="@(e => SetTbl($"C218787_r{row}", e.Value?.ToString()))" />
+                        </td>
+                        @foreach (var col in new[]{"C218788","C218789","C218790"})
                         {
                             var fid = $"{col}_r{row}";
                             <td>

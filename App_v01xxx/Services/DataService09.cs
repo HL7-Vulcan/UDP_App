@@ -1,6 +1,7 @@
 using UDP_App.Models;
 using System.Text;
 using System.Text.Json;
+using System.Linq;
 
 namespace UDP_App.Services;
 
@@ -71,8 +72,8 @@ public class DataService09
 
     public string ToFsh(Section09Model model)
     {
-        var mainTemplatePath  = Path.Combine(_env.ContentRootPath, "Templates", "Section_09.Template.fsh");
-        var tableTemplatePath = Path.Combine(_env.ContentRootPath, "Templates", "Section_09_Table.Template.fsh");
+        var mainTemplatePath  = Path.Combine(_env.ContentRootPath, "Templates", "Section_09_Template.fsh");
+        var tableTemplatePath = Path.Combine(_env.ContentRootPath, "Templates", "Section_09_Table_Template.fsh");
 
         string mainTemplate, tableTemplate;
         try { mainTemplate  = File.ReadAllText(mainTemplatePath);  }
@@ -103,18 +104,16 @@ public class DataService09
         };
 
         foreach (var (key, value) in fields)
-            mainTemplate = mainTemplate.Replace("{{" + key + "}}", value ?? string.Empty);
+            mainTemplate = mainTemplate.Replace("{{" + key + "}}", Unescape(value ?? string.Empty));
 
         // ── Table row substitutions ────────────────────────────────
         // Build one table instance per row, collect entry references
         var rowCount     = Math.Max(1, model.RptRows);
         var sb           = new System.Text.StringBuilder();
-        var entryLines   = new System.Text.StringBuilder();
 
         for (int r = 1; r <= rowCount; r++)
         {
             var rowId = $"ReportingTable-Row{r}";
-            entryLines.AppendLine($"  * entry[+] = Reference({rowId})");
 
             // Substitute {{TABLE_ROW_X}} with the row instance id
             var rowBlock = tableTemplate.Replace("{{TABLE_ROW_X}}", rowId);
@@ -124,19 +123,24 @@ public class DataService09
             foreach (var code in rowCodes)
             {
                 var key = $"{code}_r{r}";
-                var val = model.RptTableData.TryGetValue(key, out var v) ? v : string.Empty;
+                var val = Unescape(model.RptTableData.TryGetValue(key, out var v) ? v : string.Empty);
                 rowBlock = rowBlock.Replace("{{" + code + "}}", val);
                 // Table template uses C28784 (typo in template) - also replace that
-                rowBlock = rowBlock.Replace("{{C28784}}", model.RptTableData.TryGetValue($"C218784_r{r}", out var v2) ? v2 : string.Empty);
+                rowBlock = rowBlock.Replace("{{C28784}}", Unescape(model.RptTableData.TryGetValue($"C218784_r{r}", out var v2) ? v2 : string.Empty));
             }
 
             sb.AppendLine();
             sb.Append(rowBlock);
         }
 
-        // Replace the REPEAT block in the main template with actual entry lines
-        var repeatPattern = "{{REPEAT  * entry[+] = Reference({{TABLE_ROW_X}})}}";
-        mainTemplate = mainTemplate.Replace(repeatPattern, entryLines.ToString().TrimEnd());
+        // Expand {{REPEAT...}} using bracket-matched parser
+        var rowIds09 = Enumerable.Range(1, rowCount).Select(ri => $"ReportingTable-Row{ri}");
+        var repeatResult09 = TokenParser.FindAndExpandRepeat(mainTemplate, rowIds09);
+        if (repeatResult09.HasValue)
+        {
+            var (expanded09, ms09, ml09) = repeatResult09.Value;
+            mainTemplate = mainTemplate.Remove(ms09, ml09).Insert(ms09, expanded09);
+        }
 
         // Append all row instances at the end
         return mainTemplate + sb.ToString();
@@ -167,4 +171,7 @@ public class DataService09
         if (string.IsNullOrEmpty(value)) return "\"\"";
         return "\"" + value.Replace("\"", "\"\"") + "\"";
     }
+
+    private static string Unescape(string v) =>
+        v.Replace("&quot;", "\"").Replace("&amp;", "&").Replace("&lt;", "<").Replace("&gt;", ">");
 }

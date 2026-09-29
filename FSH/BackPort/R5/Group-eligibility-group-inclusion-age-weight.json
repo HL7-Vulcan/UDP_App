@@ -1,0 +1,100 @@
+{
+  "resourceType": "Group",
+  "id": "eligibility-group-inclusion-age-weight",
+  "meta": {
+    "profile": [
+      "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-r5-group"
+    ]
+  },
+  "extension": [
+    {
+      "extension": [
+        {
+          "url": "title",
+          "valueString": "Age and Weight Inclusion Criteria"
+        },
+        {
+          "url": "status",
+          "valueCode": "active"
+        },
+        {
+          "url": "combinationMethod",
+          "valueCode": "all-of"
+        }
+      ],
+      "url": "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-r5-group-ext"
+    }
+  ],
+  "characteristic": [
+    {
+      "valueRange": {
+        "low": {
+          "value": 18,
+          "code": "a",
+          "system": "http://unitsofmeasure.org",
+          "unit": "years"
+        },
+        "high": {
+          "value": 75,
+          "code": "a",
+          "system": "http://unitsofmeasure.org",
+          "unit": "years"
+        }
+      },
+      "extension": [
+        {
+          "extension": [
+            {
+              "url": "description",
+              "valueString": "aged 18 to 75 years"
+            }
+          ],
+          "url": "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-r5-groupCharacteristic-ext"
+        }
+      ],
+      "code": {
+        "coding": [
+          {
+            "code": "397669002",
+            "system": "http://snomed.info/sct",
+            "display": "Age"
+          }
+        ]
+      },
+      "exclude": false
+    },
+    {
+      "extension": [
+        {
+          "extension": [
+            {
+              "url": "description",
+              "valueString": "body weight at least 40 kg"
+            }
+          ],
+          "url": "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-r5-groupCharacteristic-ext"
+        }
+      ],
+      "code": {
+        "coding": [
+          {
+            "code": "27113001",
+            "system": "http://snomed.info/sct",
+            "display": "Body weight"
+          }
+        ]
+      },
+      "valueQuantity": {
+        "value": 40,
+        "code": "kg",
+        "system": "http://unitsofmeasure.org",
+        "unit": "kilograms"
+      },
+      "exclude": false
+    }
+  ],
+  "name": "inclusion-age-weight",
+  "description": "Participants must be aged 18 to 75 years and weigh at least 40 kg.",
+  "type": "person",
+  "membership": "definitional"
+}

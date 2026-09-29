@@ -1,6 +1,7 @@
 using UDP_App.Models;
 using System.Text;
 using System.Text.Json;
+using System.Linq;
 
 namespace UDP_App.Services;
 
@@ -87,14 +88,12 @@ public class DataService06
             main = main.Replace("{{" + k + "}}", v ?? string.Empty);
 
         var rowCount   = Math.Max(1, model.TblRows);
-        var entries    = new StringBuilder();
         var rowBlocks  = new StringBuilder();
         var tblCodes   = new[] {"C93729","C172457","C177930","C98747","C42636","C142517","C94394","C38114","C15697","C218748","C218749","C218750"};
 
         for (int r = 1; r <= rowCount; r++)
         {
             var rowId = $"InterventionTable-Row{r}";
-            entries.AppendLine($"  * entry[+] = Reference({rowId})");
             var rowBlock = tbl.Replace("{{TABLE_ROW_X}}", rowId);
             foreach (var code in tblCodes)
             {
@@ -103,7 +102,14 @@ public class DataService06
             }
             rowBlocks.AppendLine(); rowBlocks.Append(rowBlock);
         }
-        main = main.Replace("{{REPEAT  * entry[+] = Reference({{TABLE_ROW_X}})}}", entries.ToString().TrimEnd());
+        // Expand {{REPEAT...}} using bracket-matched parser
+        var rowIds06 = Enumerable.Range(1, rowCount).Select(ri => $"InterventionTable-Row{ri}");
+        var repeatResult06 = TokenParser.FindAndExpandRepeat(main, rowIds06);
+        if (repeatResult06.HasValue)
+        {
+            var (expanded06, ms06, ml06) = repeatResult06.Value;
+            main = main.Remove(ms06, ml06).Insert(ms06, expanded06);
+        }
         return main + rowBlocks.ToString();
     }
 

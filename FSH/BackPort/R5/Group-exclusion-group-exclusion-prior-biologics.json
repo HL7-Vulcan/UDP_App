@@ -1,0 +1,101 @@
+{
+  "resourceType": "Group",
+  "id": "exclusion-group-exclusion-prior-biologics",
+  "meta": {
+    "profile": [
+      "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-r5-group"
+    ]
+  },
+  "extension": [
+    {
+      "extension": [
+        {
+          "url": "title",
+          "valueString": "Prior Biologic Therapy Exclusion"
+        },
+        {
+          "url": "status",
+          "valueCode": "active"
+        },
+        {
+          "url": "combinationMethod",
+          "valueCode": "any-of"
+        }
+      ],
+      "url": "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-r5-group-ext"
+    }
+  ],
+  "characteristic": [
+    {
+      "extension": [
+        {
+          "extension": [
+            {
+              "url": "description",
+              "valueString": "prior IL-17 inhibitor within 24 weeks"
+            }
+          ],
+          "url": "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-r5-groupCharacteristic-ext"
+        }
+      ],
+      "code": {
+        "coding": [
+          {
+            "code": "416897000",
+            "system": "http://snomed.info/sct",
+            "display": "IL-17 inhibitor"
+          }
+        ]
+      },
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "code": "BiologicTherapy"
+          }
+        ]
+      },
+      "exclude": true
+    },
+    {
+      "valueRange": {
+        "low": {
+          "value": 0,
+          "code": "wk",
+          "system": "http://unitsofmeasure.org",
+          "unit": "weeks"
+        },
+        "high": {
+          "value": 24,
+          "code": "wk",
+          "system": "http://unitsofmeasure.org",
+          "unit": "weeks"
+        }
+      },
+      "extension": [
+        {
+          "extension": [
+            {
+              "url": "description",
+              "valueString": "within 24-week washout period"
+            }
+          ],
+          "url": "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-r5-groupCharacteristic-ext"
+        }
+      ],
+      "code": {
+        "coding": [
+          {
+            "code": "787021000",
+            "system": "http://snomed.info/sct",
+            "display": "Washout period"
+          }
+        ]
+      },
+      "exclude": true
+    }
+  ],
+  "name": "exclusion-prior-biologics",
+  "description": "Participants who have received any biologic agent targeting IL-17, IL-23, or TNF-alpha within 24 weeks prior to randomisation are not eligible.",
+  "type": "person",
+  "membership": "definitional"
+}

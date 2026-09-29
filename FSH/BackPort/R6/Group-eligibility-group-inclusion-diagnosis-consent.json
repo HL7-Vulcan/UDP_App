@@ -1,0 +1,47 @@
+{
+  "resourceType": "Group",
+  "id": "eligibility-group-inclusion-diagnosis-consent",
+  "characteristic": [
+    {
+      "code": {
+        "coding": [
+          {
+            "code": "9014002",
+            "system": "http://snomed.info/sct",
+            "display": "Psoriasis"
+          }
+        ]
+      },
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "code": "ModerateSeverePlaquePsoriasis"
+          }
+        ]
+      },
+      "exclude": false,
+      "description": "confirmed moderate-to-severe plaque psoriasis"
+    },
+    {
+      "code": {
+        "coding": [
+          {
+            "code": "182777000",
+            "system": "http://snomed.info/sct",
+            "display": "Informed consent"
+          }
+        ]
+      },
+      "valueBoolean": true,
+      "exclude": false,
+      "description": "written informed consent obtained"
+    }
+  ],
+  "name": "inclusion-diagnosis-consent",
+  "title": "Diagnosis and Consent Inclusion Criteria",
+  "status": "active",
+  "description": "Participants must have a confirmed diagnosis of moderate-to-severe plaque psoriasis and have provided written informed consent.",
+  "type": "person",
+  "membership": "definitional",
+  "combinationMethod": "all-of"
+}

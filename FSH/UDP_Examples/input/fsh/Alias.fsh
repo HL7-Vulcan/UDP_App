@@ -1,0 +1,50 @@
+//-----------------------------------------------------------------------------
+// From UDP
+Alias: $AmdID = https://example.org/amendment-identifier
+Alias: $AmdSite = https://example.org/site-identifier
+Alias: $ebm-study = study-design
+Alias: $identifier-type-vs = udp-identifier-type-vs
+Alias: $iso3166 = urn:iso:std:iso:3166
+//http://hl7.org/fhir/ValueSet/iso3166-1-2  //urn:iso:std:iso:3166:2
+Alias: $iso3166-2 = urn:iso:std:iso:3166:-2
+Alias: $narrative-elements-cs = narrative-elements-cs
+Alias: $NCIT = http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl
+Alias: $NCITURL = http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl
+Alias: $phase-vs = m11-phase-vs
+Alias: $Pub = http://hl7.org/fhir/publication-status
+Alias: $Comp = http://hl7.org/fhir/composition-status
+Alias: $RegID = https://example.org/regulatory-agency-identifier
+Alias: $EMA_CTREG = https://exemplarEMA.org/registry-identifier
+Alias: $ERA_REG = https://exemplarRegulator.org/registry-identifier
+Alias: $SCT = http://snomed.info/sct
+Alias: $SpID = https://exemplarSponsor.com/sponsor-identifier
+Alias: $study-role-vs = m11-blinded-roles-vs
+Alias: $party-role-vs = udp-party-role-type-vs
+Alias: $study-title-type-vs = udp-study-title-type-vs
+Alias: $TitleType = http://hl7.org/fhir/title-type
+Alias: $YesNoUnknownVS = m11-yes-no-vs
+Alias: $ID-EligibilityCriteria = https://example.org/ID-EligibilityCriteria
+Alias: $UDP_Target = https://HL7Vulcan.org/UDP/target
+
+
+
+
+// R4
+Alias: $SigType = http://uri.etsi.org/01903/v1.2.2
+
+//-----------------------------------------------------------------------------
+// From EBM
+Alias: $ext-author = http://hl7.org/fhir/StructureDefinition/artifact-author|5.2.0
+Alias: $ext-fmm = http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm
+Alias: $ext-standards-status = http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status
+Alias: $ext-wg = http://hl7.org/fhir/StructureDefinition/structuredefinition-wg
+
+//-----------------------------------------------------------------------------
+// Development
+//Alias: $cited-artifact-status-type = http://terminology.hl7.org/CodeSystem/cited-artifact-status-type
+Alias: $v2-0203 = http://terminology.hl7.org/CodeSystem/v2-0203
+Alias: $LOINC = http://loinc.org
+Alias: $UCUM = http://unitsofmeasure.org
+Alias: $fhir-types = http://hl7.org/fhir/fhir-types
+
+Alias: $UDP_Term = https://HL7Vulcan.org/UDP/Terminology

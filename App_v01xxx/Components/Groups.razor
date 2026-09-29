@@ -1,0 +1,276 @@
+@using UDP_App.Models
+@inject IJSRuntime JS
+
+<style>
+    .groups-wrap { background:#fffde7; }
+    .groups-toolbar { display:flex; align-items:center; gap:10px; padding:10px 14px; background:#2e4a7a; flex-wrap:wrap; }
+    .groups-toolbar span { color:#fff; font-family:'Times New Roman',Times,serif; font-size:13pt; font-weight:700; flex:1; }
+    .elig-group { border:1px solid #c0c8d8; border-radius:4px; margin-bottom:14px; }
+    .elig-group-hdr { background:#1f3864; color:#fff; padding:7px 12px; display:flex; align-items:center; justify-content:space-between; font-weight:700; font-size:10.5pt; border-radius:3px 3px 0 0; flex-wrap:wrap; gap:6px; }
+    .elig-group-hdr-btns { display:flex; gap:5px; flex-wrap:wrap; align-items:center; }
+    .elig-group-body { padding:10px 14px; background:#fffde7; }
+    .elig-row { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-bottom:6px; }
+    .elig-field label { font-size:9pt; font-weight:700; color:#333; display:block; margin-bottom:2px; }
+    .elig-field input[type=text], .elig-field textarea.fb-sm { width:100%; border:1px solid #aaa; border-radius:2px; padding:3px 6px; font-size:9.5pt; font-family:inherit; background:#d0cece; color:#1a7a1a; outline:none; }
+    .elig-field textarea.fb-sm { resize:vertical; min-height:38px; }
+    .char-tbl { width:100%; border-collapse:collapse; margin:6px 0 4px; font-size:9pt; }
+    .char-tbl th { background:#2e4a7a; color:#fff; padding:4px 6px; text-align:left; font-size:8.5pt; border:1px solid #3a5a9a; }
+    .char-tbl td { border:1px solid #bbb; padding:2px 3px; vertical-align:top; }
+    .char-tbl td.td-del { border:none; padding:2px 4px; vertical-align:middle; text-align:center; width:28px; }
+    .char-tbl textarea.fb { display:block; width:100%; background:#d0cece; color:#1a7a1a; border:none; border-bottom:1.5px solid #999; font-family:'Calibri',Arial,sans-serif; font-size:9pt; padding:3px 5px; outline:none; resize:vertical; min-height:30px; }
+    select.fb-sel { display:block; width:100%; background:#d0cece; color:#1a7a1a; border:none; border-bottom:1.5px solid #999; font-family:'Calibri',Arial,sans-serif; font-size:9.5pt; padding:3px 5px; outline:none; cursor:pointer; }
+    select.fb-sel:focus { background:#bfbcbc; }
+    .add-btn       { background:#00B050; color:#fff; border:none; border-radius:3px; padding:3px 10px; font-size:9pt; cursor:pointer; white-space:nowrap; }
+    .add-btn:hover { background:#008a3e; }
+    .del-btn { background:none; border:none; color:#c00; font-size:14px; cursor:pointer; padding:0 2px; line-height:1; }
+    .fb-req  { border-bottom:2px solid #c00 !important; background:#f5d0d0 !important; }
+    select.fb-req { border-bottom:2px solid #c00 !important; background:#f5d0d0 !important; }
+    .del-btn:hover { color:#900; }
+    .groups-body { padding:14px; }
+</style>
+
+<div class="groups-wrap">
+    <div class="groups-toolbar">
+        <span>@Title</span>
+        <button class="add-btn" @onclick="AddRow">+ Add Group</button>
+    </div>
+    <div class="groups-body">
+        @foreach (var row in Rows)
+        {
+            var r = row;
+            var charList = GetCharList(r);
+            <div class="elig-group">
+                <div class="elig-group-hdr">
+                    <span>@GroupLabel @r</span>
+                    <div class="elig-group-hdr-btns">
+                        <button class="add-btn"            @onclick="@(() => AddChar(r, "range"))">+ Range</button>
+                        <button class="add-btn" @onclick="@(() => AddChar(r, "type"))">+ Type</button>
+                        <button class="add-btn" @onclick="@(() => AddChar(r, "bool"))">+ Boolean</button>
+                        <button class="add-btn"  @onclick="@(() => AddChar(r, "qty"))">+ Quantity</button>
+                    </div>
+                </div>
+                <div class="elig-group-body">
+                    <div class="elig-row">
+                        <div class="elig-field">
+                            <label>Name (id)</label>
+                            <input type="text" placeholder="e.g. inclusion-age"
+                                value="@Get($"name_r{r}")"
+                                @oninput="@(e => Set($"name_r{r}", e.Value?.ToString()))" />
+                        </div>
+                        <div class="elig-field">
+                            <label>Title</label>
+                            <input type="text" placeholder="e.g. Age Criterion"
+                                value="@Get($"title_r{r}")"
+                                @oninput="@(e => Set($"title_r{r}", e.Value?.ToString()))" />
+                        </div>
+                        <div class="elig-field">
+                            <label>Type</label>
+                            <input type="text" placeholder="#person"
+                                value="@Get($"type_r{r}")"
+                                @oninput="@(e => Set($"type_r{r}", e.Value?.ToString()))" />
+                        </div>
+                    </div>
+                    <div class="elig-row">
+                        <div class="elig-field">
+                            <label>Membership</label>
+                            <input type="text" placeholder="#definitional"
+                                value="@Get($"membership_r{r}")"
+                                @oninput="@(e => Set($"membership_r{r}", e.Value?.ToString()))" />
+                        </div>
+                        <div class="elig-field">
+                            <label>Combination Method</label>
+                            <input type="text" placeholder="#all-of"
+                                value="@Get($"combinationMethod_r{r}")"
+                                @oninput="@(e => Set($"combinationMethod_r{r}", e.Value?.ToString()))" />
+                        </div>
+                        <div class="elig-field"></div>
+                    </div>
+                    <div class="elig-field" style="margin-bottom:8px;">
+                        <label>Description</label>
+                        <textarea class="fb-sm" rows="2" placeholder="Group description"
+                            value="@Get($"description_r{r}")"
+                            @oninput="@(e => Set($"description_r{r}", e.Value?.ToString()))"></textarea>
+                    </div>
+
+                    @if (charList.Any())
+                    {
+                    <table class="char-tbl">
+                        <tbody>
+                            @foreach (var c in charList)
+                            {
+                                var fmt = Get($"char_fmt_r{r}_c{c}");
+                                <tr>
+                                    <td class="td-del">
+                                        <button class="del-btn" title="Delete row" @onclick="@(() => DeleteChar(r, c))">✕</button>
+                                    </td>
+                                    <td>
+                                        <div style="font-size:7.5pt;color:#666;margin-bottom:2px;font-weight:700;">
+                                            @(fmt switch { "type"=>"TYPE","bool"=>"BOOL","qty"=>"QTY",_=>"RANGE" })
+                                        </div>
+                                        <textarea class="fb" rows="2" placeholder='$SCT#000000 "Code"'
+                                            value="@Get($"char_code_r{r}_c{c}")"
+                                            @oninput="@(e => Set($"char_code_r{r}_c{c}", e.Value?.ToString()))"></textarea>
+                                    </td>
+                                    @if (fmt == "range")
+                                    {
+                                        <td>
+                                            <div style="font-size:7.5pt;color:#666;margin-bottom:2px;font-weight:700;">RANGE LOW</div>
+                                            <textarea class="fb" rows="2" placeholder="18 'a' &quot;years&quot;"
+                                                value="@Get($"char_low_r{r}_c{c}")"
+                                                @oninput="@(e => Set($"char_low_r{r}_c{c}", e.Value?.ToString()))"></textarea>
+                                        </td>
+                                        <td>
+                                            <div style="font-size:7.5pt;color:#666;margin-bottom:2px;font-weight:700;">RANGE HIGH</div>
+                                            <textarea class="fb" rows="2" placeholder="75 'a' &quot;years&quot;"
+                                                value="@Get($"char_high_r{r}_c{c}")"
+                                                @oninput="@(e => Set($"char_high_r{r}_c{c}", e.Value?.ToString()))"></textarea>
+                                        </td>
+                                    }
+                                    else if (fmt == "type")
+                                    {
+                                        <td colspan="2">
+                                            <div style="font-size:7.5pt;color:#666;margin-bottom:2px;font-weight:700;">TYPE</div>
+                                            <textarea class="fb" rows="2" placeholder="e.g. #Person"
+                                                value="@Get($"char_type_r{r}_c{c}")"
+                                                @oninput="@(e => Set($"char_type_r{r}_c{c}", e.Value?.ToString()))"></textarea>
+                                        </td>
+                                    }
+                                    else if (fmt == "bool")
+                                    {
+                                        <td colspan="2">
+                                            <div style="font-size:7.5pt;color:#666;margin-bottom:2px;font-weight:700;">BOOLEAN</div>
+                                            <select class="@ReqSel($"char_bool_r{r}_c{c}")"
+                                                value="@Get($"char_bool_r{r}_c{c}")"
+                                                @onchange="@(e => Set($"char_bool_r{r}_c{c}", e.Value?.ToString()))">
+                                                <option value="">--</option>
+                                                <option value="true">true</option>
+                                                <option value="false">false</option>
+                                            </select>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td colspan="2">
+                                            <div style="font-size:7.5pt;color:#666;margin-bottom:2px;font-weight:700;">QUANTITY</div>
+                                            <textarea class="fb" rows="2" placeholder="e.g. 5 'mg' &quot;milligrams&quot;"
+                                                value="@Get($"char_qty_r{r}_c{c}")"
+                                                @oninput="@(e => Set($"char_qty_r{r}_c{c}", e.Value?.ToString()))"></textarea>
+                                        </td>
+                                    }
+                                    <td>
+                                        <div style="font-size:7.5pt;color:#666;margin-bottom:2px;font-weight:700;">EXCLUDE</div>
+                                        <select class="fb-sel"
+                                            value="@GetExclude($"char_exclude_r{r}_c{c}")"
+                                            @onchange="@(e => Set($"char_exclude_r{r}_c{c}", e.Value?.ToString()))">
+                                            <option value="false">false</option>
+                                            <option value="true">true</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <div style="font-size:7.5pt;color:#666;margin-bottom:2px;font-weight:700;">DESCRIPTION</div>
+                                        <textarea class="fb" rows="2" placeholder="Description"
+                                            value="@Get($"char_desc_r{r}_c{c}")"
+                                            @oninput="@(e => Set($"char_desc_r{r}_c{c}", e.Value?.ToString()))"></textarea>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    public enum GroupTableFormat { Range, Type, Boolean, Quantity }
+
+    [Parameter] public GroupTableFormat TableFormat { get; set; } = GroupTableFormat.Range;
+    [Parameter] public string Title      { get; set; } = "Groups";
+    [Parameter] public string GroupLabel { get; set; } = "Group";
+    [Parameter] public Dictionary<string, string> Data { get; set; } = new();
+    [Parameter] public EventCallback    OnDataChanged { get; set; }
+    [Parameter] public List<int>        Rows          { get; set; } = new() { 1 };
+    [Parameter] public EventCallback<int> OnRowAdded  { get; set; }
+
+    /// <summary>When true, empty required fields within characteristics are highlighted.</summary>
+    [Parameter] public bool ShowValidation { get; set; } = false;
+
+    private int _nextRow = -1;
+
+    // Returns CSS class adding red border when validation is on and the value is empty
+    private string Req(string key) =>
+        ShowValidation && string.IsNullOrWhiteSpace(Get(key)) ? "fb fb-req" : "fb";
+
+    private string ReqSel(string key) =>
+        ShowValidation && string.IsNullOrWhiteSpace(Get(key)) ? "fb-sel fb-req" : "fb-sel";
+
+    protected override void OnParametersSet()
+    {
+        if (_nextRow < 0)
+            _nextRow = (Rows.Count > 0 ? Rows.Max() : 0) + 1;
+    }
+
+    // Returns value for a key, defaulting to "false" for exclude fields
+    private string GetExclude(string key) =>
+        Data.TryGetValue(key, out var v) && !string.IsNullOrEmpty(v) ? v : "false";
+
+    private string Get(string key) =>
+        Data.TryGetValue(key, out var v) ? v : string.Empty;
+
+    private async Task Set(string key, string? value)
+    {
+        Data[key] = value ?? string.Empty;
+        await OnDataChanged.InvokeAsync();
+    }
+
+    // Returns ordered list of active characteristic indices for a group row.
+    // Stored as a comma-separated list in CharOrder_r{row}.
+    private List<int> GetCharList(int row)
+    {
+        if (Data.TryGetValue($"CharOrder_r{row}", out var v) && !string.IsNullOrEmpty(v))
+            return v.Split(',').Select(int.Parse).ToList();
+        // Fallback: legacy CharCount_r{row} key
+        if (Data.TryGetValue($"CharCount_r{row}", out var cv) && int.TryParse(cv, out var n) && n > 0)
+            return Enumerable.Range(1, n).ToList();
+        return new List<int>();
+    }
+
+    private int GetNextCharIdx(int row)
+    {
+        var list = GetCharList(row);
+        return list.Count > 0 ? list.Max() + 1 : 1;
+    }
+
+    private async Task AddRow()
+    {
+        var newRow = _nextRow++;
+        Rows.Add(newRow);
+        Data[$"CharOrder_r{newRow}"] = "";
+        await OnRowAdded.InvokeAsync(newRow);
+        await OnDataChanged.InvokeAsync();
+    }
+
+    private async Task AddChar(int row, string fmt)
+    {
+        var idx  = GetNextCharIdx(row);
+        var list = GetCharList(row);
+        list.Add(idx);
+        Data[$"CharOrder_r{row}"]     = string.Join(",", list);
+        Data[$"char_fmt_r{row}_c{idx}"]     = fmt;
+        Data[$"char_exclude_r{row}_c{idx}"] = "false";
+        await OnDataChanged.InvokeAsync();
+    }
+
+    private async Task DeleteChar(int row, int idx)
+    {
+        var list = GetCharList(row);
+        list.Remove(idx);
+        Data[$"CharOrder_r{row}"] = string.Join(",", list);
+        // Remove all data keys for this characteristic
+        var keysToRemove = Data.Keys.Where(k => k.EndsWith($"_r{row}_c{idx}")).ToList();
+        foreach (var k in keysToRemove) Data.Remove(k);
+        await OnDataChanged.InvokeAsync();
+    }
+}

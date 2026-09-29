@@ -18,28 +18,12 @@
     textarea.fb { display:block; width:100%; background:#d0cece; color:#1a7a1a; border:none; border-bottom:1.5px solid #999; font-family:'Calibri',Arial,sans-serif; font-size:11pt; line-height:1.4; padding:4px 6px; outline:none; resize:vertical; min-height:52px; }
     textarea.fb:focus { background:#bfbcbc; } textarea.fb::placeholder { color:#9a7ab5; font-style:italic; }
     textarea.fb.req-empty { border-bottom:2px solid #c00; background:#f5d0d0; }
-    /* Inclusion / Exclusion group tables */
-    .elig-group { border:1px solid #c0c8d8; border-radius:4px; margin-bottom:14px; }
-    .elig-group-hdr { background:#1f3864; color:#fff; padding:7px 12px; display:flex; align-items:center; justify-content:space-between; font-weight:700; font-size:10.5pt; border-radius:3px 3px 0 0; }
-    .elig-group-body { padding:10px 14px; }
-    .elig-row { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-bottom:6px; }
-    .elig-field label { font-size:9pt; font-weight:700; color:#333; display:block; margin-bottom:2px; }
-    .elig-field input[type=text], .elig-field textarea.fb-sm { width:100%; border:1px solid #aaa; border-radius:2px; padding:3px 6px; font-size:9.5pt; font-family:inherit; background:#d0cece; color:#1a7a1a; outline:none; }
-    .elig-field textarea.fb-sm { resize:vertical; min-height:38px; }
-    .char-tbl { width:100%; border-collapse:collapse; margin:6px 0 4px; font-size:9pt; }
-    .char-tbl th { background:#2e4a7a; color:#fff; padding:4px 6px; text-align:left; font-size:8.5pt; border:1px solid #3a5a9a; }
-    .char-tbl td { border:1px solid #bbb; padding:2px 3px; vertical-align:top; }
-    .char-tbl textarea.fb { min-height:30px; font-size:9pt; }
     .popout-btn { background:#5a7abf; color:#fff; border:none; border-radius:3px; padding:4px 12px; font-size:10pt; cursor:pointer; white-space:nowrap; }
     .popout-btn:hover { background:#3d5a9e; }
-    .add-btn    { background:#00B050; color:#fff; border:none; border-radius:3px; padding:3px 10px; font-size:9.5pt; cursor:pointer; white-space:nowrap; }
-    .add-btn:hover { background:#008a3e; }
-    .add-btn-lg { background:#00B050; color:#fff; border:none; border-radius:3px; padding:5px 14px; font-size:10pt; cursor:pointer; white-space:nowrap; margin-bottom:10px; }
-    .add-btn-lg:hover { background:#008a3e; }
-    .toolbar { display:flex; justify-content:flex-end; gap:10px; margin-top:32px; flex-wrap:wrap; }
     .btn { padding:7px 20px; border:none; border-radius:3px; font-size:10pt; font-family:inherit; cursor:pointer; }
     .btn-primary   { background:#1f3864; color:#fff; } .btn-primary:hover { background:#162a4e; }
     .btn-secondary { background:#eee; color:#333; border:1px solid #ccc; } .btn-secondary:hover { background:#ddd; }
+    .toolbar { display:flex; justify-content:flex-end; gap:10px; margin-top:32px; flex-wrap:wrap; }
     .overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:200; align-items:center; justify-content:center; }
     .overlay.show { display:flex; }
     .dbox { background:#fff; border-radius:6px; padding:28px 32px; width:400px; box-shadow:0 8px 40px rgba(0,0,0,0.25); }
@@ -51,10 +35,10 @@
     .dbr { display:flex; justify-content:flex-end; gap:10px; }
     .sbar { position:fixed; bottom:0; left:0; right:0; background:#1f3864; color:#fff; font-size:9pt; padding:5px 18px; display:flex; justify-content:space-between; align-items:center; z-index:100; }
     .err  { background:#fff3cd; color:#856404; border:1px solid #ffc107; padding:10px; margin-bottom:10px; border-radius:4px; font-size:10pt; }
-    #s5-incl-popout { display:none; position:fixed; inset:0; background:#fffde7; z-index:500; flex-direction:column; }
-    #s5-excl-popout { display:none; position:fixed; inset:0; background:#fffde7; z-index:500; flex-direction:column; }
-    .popout-hdr { background:#1f3864; color:#fff; padding:10px 18px; display:flex; align-items:center; justify-content:space-between; font-family:'Times New Roman',Times,serif; font-size:13pt; font-weight:700; }
-    .popout-body { flex:1; overflow:auto; padding:18px 24px; background:#fffde7; }
+    #s5-incl-popout { display:none; position:fixed; inset:0; background:#fffde7; z-index:500; flex-direction:column; overflow:auto; }
+    #s5-excl-popout { display:none; position:fixed; inset:0; background:#fffde7; z-index:500; flex-direction:column; overflow:auto; }
+    .popout-hdr { background:#1f3864; color:#fff; padding:10px 18px; display:flex; align-items:center; justify-content:space-between; font-family:'Times New Roman',Times,serif; font-size:13pt; font-weight:700; flex-shrink:0; }
+    .popout-body { flex:1; overflow:auto; }
     .ctx-menu { display:none; position:fixed; background:#fff; border:1px solid #ccc; border-radius:4px; box-shadow:0 4px 16px rgba(0,0,0,0.18); z-index:1000; min-width:320px; max-width:420px; font-family:'Calibri',Arial,sans-serif; font-size:10pt; }
     .ctx-hdr  { background:#1f3864; color:#fff; padding:8px 12px; font-weight:700; font-size:10pt; border-radius:4px 4px 0 0; display:flex; justify-content:space-between; align-items:center; }
     .ctx-close { background:none; border:none; color:#fff; font-size:14px; cursor:pointer; padding:0 2px; }
@@ -62,6 +46,8 @@
     .ctx-row label { font-weight:700; white-space:nowrap; min-width:100px; color:#333; } .ctx-row span { color:#555; word-break:break-all; }
     .ctx-div { border:none; border-top:1px solid #e0e0e0; margin:8px 0; }
     .ctx-guide { font-size:9.5pt; color:#444; line-height:1.5; } .ctx-guide strong { color:#1f3864; }
+    .close-btn { background:#c00; color:#fff; border:none; border-radius:3px; padding:4px 14px; font-size:10pt; cursor:pointer; }
+    .close-btn:hover { background:#900; }
 </style>
 
 @if (!string.IsNullOrEmpty(ErrorMessage)) { <div class="err">⚠ @ErrorMessage</div> }
@@ -120,99 +106,16 @@
 <div id="s5-incl-popout">
     <div class="popout-hdr">
         <span>5.2 Inclusion Groups</span>
-        <div style="display:flex;gap:10px;align-items:center;">
-            <button class="add-btn" @onclick="AddInclRow">+ Add Group</button>
-            <button class="btn btn-secondary" @onclick="CloseInclPopout" style="padding:4px 14px;">✕ Close</button>
-        </div>
+        <button class="close-btn" @onclick="CloseInclPopout">✕ Close</button>
     </div>
     <div class="popout-body">
-        @foreach (var row in InclRows)
-        {
-            var r = row;
-            var charCount = DataSvc.GetInclCharCount(Model, r);
-            var charRows  = Enumerable.Range(1, charCount).ToList();
-            <div class="elig-group">
-                <div class="elig-group-hdr">
-                    <span>Inclusion Group @r</span>
-                    <button class="add-btn" @onclick="@(() => AddInclChar(r))">+ Add Characteristic</button>
-                </div>
-                <div class="elig-group-body">
-                    <div class="elig-row">
-                        <div class="elig-field">
-                            <label>Name (id)</label>
-                            <input type="text" data-ctx="@($"name_r{r}")" placeholder="e.g. inclusion-age"
-                                value="@GetIncl($"name_r{r}")"
-                                @oninput="@(e => SetIncl($"name_r{r}", e.Value?.ToString()))" />
-                        </div>
-                        <div class="elig-field">
-                            <label>Title</label>
-                            <input type="text" data-ctx="@($"title_r{r}")" placeholder="e.g. Age Inclusion Criterion"
-                                value="@GetIncl($"title_r{r}")"
-                                @oninput="@(e => SetIncl($"title_r{r}", e.Value?.ToString()))" />
-                        </div>
-                        <div class="elig-field">
-                            <label>Type</label>
-                            <input type="text" data-ctx="@($"type_r{r}")" placeholder="#person"
-                                value="@GetIncl($"type_r{r}")"
-                                @oninput="@(e => SetIncl($"type_r{r}", e.Value?.ToString()))" />
-                        </div>
-                    </div>
-                    <div class="elig-row">
-                        <div class="elig-field">
-                            <label>Membership</label>
-                            <input type="text" data-ctx="@($"membership_r{r}")" placeholder="#definitional"
-                                value="@GetIncl($"membership_r{r}")"
-                                @oninput="@(e => SetIncl($"membership_r{r}", e.Value?.ToString()))" />
-                        </div>
-                        <div class="elig-field">
-                            <label>Combination Method</label>
-                            <input type="text" data-ctx="@($"combinationMethod_r{r}")" placeholder="#all-of"
-                                value="@GetIncl($"combinationMethod_r{r}")"
-                                @oninput="@(e => SetIncl($"combinationMethod_r{r}", e.Value?.ToString()))" />
-                        </div>
-                        <div class="elig-field"></div>
-                    </div>
-                    <div class="elig-field" style="margin-bottom:8px;">
-                        <label>Description</label>
-                        <textarea class="fb-sm" data-ctx="@($"description_r{r}")" rows="2" placeholder="Group description"
-                            value="@GetIncl($"description_r{r}")"
-                            @oninput="@(e => SetIncl($"description_r{r}", e.Value?.ToString()))"></textarea>
-                    </div>
-                    <table class="char-tbl">
-                        <thead><tr>
-                            <th style="width:22%">Code</th>
-                            <th style="width:16%">Range Low</th>
-                            <th style="width:16%">Range High</th>
-                            <th style="width:10%">Exclude</th>
-                            <th style="width:36%">Description</th>
-                        </tr></thead>
-                        <tbody>
-                            @foreach (var col in charRows)
-                            {
-                                var c = col;
-                                <tr>
-                                    <td><textarea data-ctx="@($"char_code_r{r}_c{c}")" class="fb" rows="2" placeholder='$SCT#000000 "Code"'
-                                        value="@GetIncl($"char_code_r{r}_c{c}")"
-                                        @oninput="@(e => SetIncl($"char_code_r{r}_c{c}", e.Value?.ToString()))"></textarea></td>
-                                    <td><textarea data-ctx="@($"char_low_r{r}_c{c}")" class="fb" rows="2" placeholder="18 'a' &quot;years&quot;"
-                                        value="@GetIncl($"char_low_r{r}_c{c}")"
-                                        @oninput="@(e => SetIncl($"char_low_r{r}_c{c}", e.Value?.ToString()))"></textarea></td>
-                                    <td><textarea data-ctx="@($"char_high_r{r}_c{c}")" class="fb" rows="2" placeholder="75 'a' &quot;years&quot;"
-                                        value="@GetIncl($"char_high_r{r}_c{c}")"
-                                        @oninput="@(e => SetIncl($"char_high_r{r}_c{c}", e.Value?.ToString()))"></textarea></td>
-                                    <td><textarea data-ctx="@($"char_exclude_r{r}_c{c}")" class="fb" rows="2" placeholder="false"
-                                        value="@GetIncl($"char_exclude_r{r}_c{c}")"
-                                        @oninput="@(e => SetIncl($"char_exclude_r{r}_c{c}", e.Value?.ToString()))"></textarea></td>
-                                    <td><textarea data-ctx="@($"char_desc_r{r}_c{c}")" class="fb" rows="2" placeholder="Description"
-                                        value="@GetIncl($"char_desc_r{r}_c{c}")"
-                                        @oninput="@(e => SetIncl($"char_desc_r{r}_c{c}", e.Value?.ToString()))"></textarea></td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        }
+        <Groups Title="Inclusion Groups"
+                GroupLabel="Inclusion Group"
+                Data="@Model.InclData"
+                Rows="@InclRows"
+                ShowValidation="@ShowValidation"
+                OnDataChanged="@OnInclChanged"
+                OnRowAdded="@OnInclRowAdded" />
     </div>
 </div>
 
@@ -220,102 +123,18 @@
 <div id="s5-excl-popout">
     <div class="popout-hdr">
         <span>5.3 Exclusion Groups</span>
-        <div style="display:flex;gap:10px;align-items:center;">
-            <button class="add-btn" @onclick="AddExclRow">+ Add Group</button>
-            <button class="btn btn-secondary" @onclick="CloseExclPopout" style="padding:4px 14px;">✕ Close</button>
-        </div>
+        <button class="close-btn" @onclick="CloseExclPopout">✕ Close</button>
     </div>
     <div class="popout-body">
-        @foreach (var row in ExclRows)
-        {
-            var r = row;
-            var charCount = DataSvc.GetExclCharCount(Model, r);
-            var charRows  = Enumerable.Range(1, charCount).ToList();
-            <div class="elig-group">
-                <div class="elig-group-hdr">
-                    <span>Exclusion Group @r</span>
-                    <button class="add-btn" @onclick="@(() => AddExclChar(r))">+ Add Characteristic</button>
-                </div>
-                <div class="elig-group-body">
-                    <div class="elig-row">
-                        <div class="elig-field">
-                            <label>Name (id)</label>
-                            <input type="text" data-ctx="@($"excl_name_r{r}")" placeholder="e.g. exclusion-pregnancy"
-                                value="@GetExcl($"name_r{r}")"
-                                @oninput="@(e => SetExcl($"name_r{r}", e.Value?.ToString()))" />
-                        </div>
-                        <div class="elig-field">
-                            <label>Title</label>
-                            <input type="text" data-ctx="@($"excl_title_r{r}")" placeholder="e.g. Pregnancy Exclusion"
-                                value="@GetExcl($"title_r{r}")"
-                                @oninput="@(e => SetExcl($"title_r{r}", e.Value?.ToString()))" />
-                        </div>
-                        <div class="elig-field">
-                            <label>Type</label>
-                            <input type="text" data-ctx="@($"excl_type_r{r}")" placeholder="#person"
-                                value="@GetExcl($"type_r{r}")"
-                                @oninput="@(e => SetExcl($"type_r{r}", e.Value?.ToString()))" />
-                        </div>
-                    </div>
-                    <div class="elig-row">
-                        <div class="elig-field">
-                            <label>Membership</label>
-                            <input type="text" data-ctx="@($"excl_membership_r{r}")" placeholder="#definitional"
-                                value="@GetExcl($"membership_r{r}")"
-                                @oninput="@(e => SetExcl($"membership_r{r}", e.Value?.ToString()))" />
-                        </div>
-                        <div class="elig-field">
-                            <label>Combination Method</label>
-                            <input type="text" data-ctx="@($"excl_combinationMethod_r{r}")" placeholder="#any-of"
-                                value="@GetExcl($"combinationMethod_r{r}")"
-                                @oninput="@(e => SetExcl($"combinationMethod_r{r}", e.Value?.ToString()))" />
-                        </div>
-                        <div class="elig-field"></div>
-                    </div>
-                    <div class="elig-field" style="margin-bottom:8px;">
-                        <label>Description</label>
-                        <textarea class="fb-sm" data-ctx="@($"excl_description_r{r}")" rows="2" placeholder="Group description"
-                            value="@GetExcl($"description_r{r}")"
-                            @oninput="@(e => SetExcl($"description_r{r}", e.Value?.ToString()))"></textarea>
-                    </div>
-                    <table class="char-tbl">
-                        <thead><tr>
-                            <th style="width:22%">Code</th>
-                            <th style="width:16%">Range Low</th>
-                            <th style="width:16%">Range High</th>
-                            <th style="width:10%">Exclude</th>
-                            <th style="width:36%">Description</th>
-                        </tr></thead>
-                        <tbody>
-                            @foreach (var col in charRows)
-                            {
-                                var c = col;
-                                <tr>
-                                    <td><textarea data-ctx="@($"excl_char_code_r{r}_c{c}")" class="fb" rows="2" placeholder='$SCT#000000 "Code"'
-                                        value="@GetExcl($"char_code_r{r}_c{c}")"
-                                        @oninput="@(e => SetExcl($"char_code_r{r}_c{c}", e.Value?.ToString()))"></textarea></td>
-                                    <td><textarea data-ctx="@($"excl_char_low_r{r}_c{c}")" class="fb" rows="2" placeholder=""
-                                        value="@GetExcl($"char_low_r{r}_c{c}")"
-                                        @oninput="@(e => SetExcl($"char_low_r{r}_c{c}", e.Value?.ToString()))"></textarea></td>
-                                    <td><textarea data-ctx="@($"excl_char_high_r{r}_c{c}")" class="fb" rows="2" placeholder=""
-                                        value="@GetExcl($"char_high_r{r}_c{c}")"
-                                        @oninput="@(e => SetExcl($"char_high_r{r}_c{c}", e.Value?.ToString()))"></textarea></td>
-                                    <td><textarea data-ctx="@($"excl_char_exclude_r{r}_c{c}")" class="fb" rows="2" placeholder="true"
-                                        value="@GetExcl($"char_exclude_r{r}_c{c}")"
-                                        @oninput="@(e => SetExcl($"char_exclude_r{r}_c{c}", e.Value?.ToString()))"></textarea></td>
-                                    <td><textarea data-ctx="@($"excl_char_desc_r{r}_c{c}")" class="fb" rows="2" placeholder="Description"
-                                        value="@GetExcl($"char_desc_r{r}_c{c}")"
-                                        @oninput="@(e => SetExcl($"char_desc_r{r}_c{c}", e.Value?.ToString()))"></textarea></td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        }
+        <Groups Title="Exclusion Groups"
+                GroupLabel="Exclusion Group"
+                Data="@Model.ExclData"
+                Rows="@ExclRows"
+                ShowValidation="@ShowValidation"
+                OnDataChanged="@OnExclChanged"
+                OnRowAdded="@OnExclRowAdded" />
     </div>
 </div>
-
 
 <div id="s5-ctx-menu" class="ctx-menu">
     <div class="ctx-hdr"><span>Field Information</span><button class="ctx-close" @onclick="CloseCtxMenu">✕</button></div>
@@ -363,16 +182,13 @@
 </div>
 
 @code {
-    private Section05Model Model    = new();
+    private Section05Model Model = new();
     private List<int> InclRows = new() { 1 };
-    private int NextInclRow = 2;
     private List<int> ExclRows = new() { 1 };
-    private int NextExclRow = 2;
 
     private bool   ShowValidation = false;
     private bool   ShowSaveDialog = false;
     private bool   ShowReqDialog  = false;
-    private bool   _reinitCtxMenus = false;
     private string SaveFileName   = "section5_data";
     private string SaveFormat     = "json";
     private string StatusMessage  = string.Empty;
@@ -393,33 +209,28 @@
     private void SetFmtFhir(ChangeEventArgs e) => SaveFormat = "fhir";
     private string ReqClass(string? v) => ShowValidation && string.IsNullOrWhiteSpace(v) ? "fb req-empty" : "fb";
 
-    private string GetIncl(string key) =>
-        Model.InclData.TryGetValue(key, out var v) ? v : string.Empty;
-
-    private void SetIncl(string key, string? value)
+    // Groups callbacks — Inclusion
+    private void OnInclChanged()
     {
-        Model.InclData[key] = value ?? string.Empty;
-        AutoSave();
-    }
-
-    private void AddInclRow()
-    {
-        InclRows.Add(NextInclRow);
-        // Initialise default characteristic count for the new row
-        Model.InclData[$"CharCount_r{NextInclRow}"] = "1";
-        NextInclRow++;
         Model.InclRows = InclRows.Count;
-        _reinitCtxMenus = true;
         AutoSave();
     }
-
-    private void AddInclChar(int row)
+    private void OnInclRowAdded(int row)
     {
-        var current = DataSvc.GetInclCharCount(Model, row);
-        var next = current + 1;
-        Model.InclData[$"CharCount_r{row}"] = next.ToString();
-        _reinitCtxMenus = true;
+        if (!InclRows.Contains(row)) InclRows.Add(row);
+        Model.InclRows = InclRows.Count;
+    }
+
+    // Groups callbacks — Exclusion
+    private void OnExclChanged()
+    {
+        Model.ExclRows = ExclRows.Count;
         AutoSave();
+    }
+    private void OnExclRowAdded(int row)
+    {
+        if (!ExclRows.Contains(row)) ExclRows.Add(row);
+        Model.ExclRows = ExclRows.Count;
     }
 
     private bool HasRequiredEmpty() => new[]
@@ -437,8 +248,8 @@
     private void ClearAll()
     {
         Model = new();
-        InclRows = new List<int> { 1 }; NextInclRow = 2;
-        ExclRows = new List<int> { 1 }; NextExclRow = 2;
+        InclRows = new List<int> { 1 };
+        ExclRows = new List<int> { 1 };
         ShowValidation = false; ErrorMessage = string.Empty;
         _ = JS.InvokeVoidAsync("localStorage.removeItem", "s5data");
         SetStatus("Cleared");
@@ -451,10 +262,8 @@
         {
             Model    = s;
             InclRows = Enumerable.Range(1, Math.Max(1, s.InclRows)).ToList();
-            NextInclRow = InclRows.Count + 1;
             ExclRows = Enumerable.Range(1, Math.Max(1, s.ExclRows)).ToList();
-            NextExclRow  = ExclRows.Count + 1;
-            ShowValidation = false; _reinitCtxMenus = true;
+            ShowValidation = false;
             SetStatus("Sample data loaded");
         }
         else ErrorMessage = "Could not load sample file.";
@@ -493,14 +302,26 @@
         {
             "csv"  => (DataSvc.ToCsv(Model),      "text/csv",         ".csv"),
             "txt"  => (DataSvc.ToPlainText(Model), "text/plain",       ".txt"),
-            "fhir" => (DataSvc.ToFsh(Model),       "text/plain",       ".fsh"),
+            "fhir" => (null, null, null),  // handled separately below
             _      => (DataSvc.ToJson(Model),      "application/json", ".json"),
         };
         var fn = (SaveFileName.Trim().Length > 0 ? SaveFileName.Trim() : "section5_data") + ext;
-        await JS.InvokeVoidAsync("udpDownload", fn, content, mime);
-        SetStatus("⬇ Downloaded " + fn);
+        if (SaveFormat == "fhir")
+        {
+            var (std, r5) = DataSvc.ToFsh(Model);
+            var baseName  = SaveFileName.Trim().Length > 0 ? SaveFileName.Trim() : "section5_data";
+            await JS.InvokeVoidAsync("udpDownload", baseName + ".fsh",       std, "text/plain");
+            await JS.InvokeVoidAsync("udpDownload", baseName + "_R5" + ".fsh", r5, "text/plain");
+            SetStatus("⬇ Downloaded standard + R5 FHIR files");
+        }
+        else
+        {
+            await JS.InvokeVoidAsync("udpDownload", fn, content, mime);
+            SetStatus("⬇ Downloaded " + fn);
+        }
     }
     private async Task OpenLoadDialog() => await JS.InvokeVoidAsync("udpOpenFilePicker");
+
     [JSInvokable] public void ReceiveFileContent(string json)
     {
         var l = DataSvc.FromJson(json);
@@ -508,13 +329,12 @@
         {
             Model    = l;
             InclRows = Enumerable.Range(1, Math.Max(1, l.InclRows)).ToList();
-            NextInclRow = InclRows.Count + 1;
             ExclRows = Enumerable.Range(1, Math.Max(1, l.ExclRows)).ToList();
-            NextExclRow  = ExclRows.Count + 1;
-            ShowValidation = false; _reinitCtxMenus = true;
+            ShowValidation = false;
             SetStatus("⬆ Loaded from file"); InvokeAsync(StateHasChanged);
         }
     }
+
     [JSInvokable] public async Task OnContextMenuJS(string fieldId, double x, double y)
     {
         CtxFieldName = fieldId; CtxOriginalName = "guidance text goes here"; CtxGuidance = "guidance text goes here";
@@ -522,56 +342,17 @@
     }
     [JSInvokable] public void OnCtxMenuClosed() { }
     private void CloseCtxMenu() => _ = JS.InvokeVoidAsync("udpHideCtxMenu", "s5-ctx-menu");
-    private async Task OpenInclPopout()
-    {
-        await JS.InvokeVoidAsync("s5ShowInclPopout");
-        await JS.InvokeVoidAsync("udpInitContextMenus", "s5-ctx-menu");
-    }
+
+    private async Task OpenInclPopout() => await JS.InvokeVoidAsync("s5ShowInclPopout");
     private async Task CloseInclPopout() => await JS.InvokeVoidAsync("s5HideInclPopout");
-
-    private string GetExcl(string key) =>
-        Model.ExclData.TryGetValue(key, out var v) ? v : string.Empty;
-
-    private void SetExcl(string key, string? value)
-    {
-        Model.ExclData[key] = value ?? string.Empty;
-        AutoSave();
-    }
-
-    private void AddExclRow()
-    {
-        ExclRows.Add(NextExclRow);
-        Model.ExclData[$"CharCount_r{NextExclRow}"] = "1";
-        NextExclRow++;
-        Model.ExclRows = ExclRows.Count;
-        _reinitCtxMenus = true;
-        AutoSave();
-    }
-
-    private void AddExclChar(int row)
-    {
-        var current = DataSvc.GetExclCharCount(Model, row);
-        Model.ExclData[$"CharCount_r{row}"] = (current + 1).ToString();
-        _reinitCtxMenus = true;
-        AutoSave();
-    }
-
-    private async Task OpenExclPopout()
-    {
-        await JS.InvokeVoidAsync("s5ShowExclPopout");
-        await JS.InvokeVoidAsync("udpInitContextMenus", "s5-ctx-menu");
-    }
+    private async Task OpenExclPopout() => await JS.InvokeVoidAsync("s5ShowExclPopout");
     private async Task CloseExclPopout() => await JS.InvokeVoidAsync("s5HideExclPopout");
 
     private void AutoSave() => _ = JS.InvokeVoidAsync("localStorage.setItem", "s5data", DataSvc.ToJson(Model));
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (!firstRender)
-        {
-            if (_reinitCtxMenus) { _reinitCtxMenus = false; await JS.InvokeVoidAsync("udpInitContextMenus", "s5-ctx-menu"); }
-            return;
-        }
+        if (!firstRender) return;
         try
         {
             _objRef = DotNetObjectReference.Create(this);
@@ -581,12 +362,19 @@
             if (!string.IsNullOrEmpty(json))
             {
                 var l = DataSvc.FromJson(json);
-                if (l != null) { Model = l; InclRows = Enumerable.Range(1, Math.Max(1, l.InclRows)).ToList(); NextInclRow = InclRows.Count + 1; ExclRows = Enumerable.Range(1, Math.Max(1, l.ExclRows)).ToList(); NextExclRow = ExclRows.Count + 1; StateHasChanged(); }
+                if (l != null)
+                {
+                    Model    = l;
+                    InclRows = Enumerable.Range(1, Math.Max(1, l.InclRows)).ToList();
+                    ExclRows = Enumerable.Range(1, Math.Max(1, l.ExclRows)).ToList();
+                    StateHasChanged();
+                }
             }
         }
         catch (JSDisconnectedException) { } catch (TaskCanceledException) { }
         catch (Exception ex) { ErrorMessage = "Init error: " + ex.Message; StateHasChanged(); }
     }
+
     private void SetStatus(string msg) { StatusMessage = msg; _statusTimer?.Dispose(); _statusTimer = new System.Threading.Timer(_ => { StatusMessage = string.Empty; InvokeAsync(StateHasChanged); }, null, 4000, System.Threading.Timeout.Infinite); }
     public void Dispose() { _objRef?.Dispose(); _statusTimer?.Dispose(); }
 }

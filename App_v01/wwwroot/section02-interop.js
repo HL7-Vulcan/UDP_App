@@ -52,7 +52,7 @@ window.udpOpenFilePicker = function () {
 
 // ── Context menus ─────────────────────────────────────────────────
 window.udpInitContextMenus = function (menuId) {
-    document.querySelectorAll('textarea[data-ctx]').forEach(function (ta) {
+    document.querySelectorAll('textarea[data-ctx], input[data-ctx]').forEach(function (ta) {
         ta.removeEventListener('contextmenu', ta._ctxHandler);
         ta._ctxHandler = function (e) {
             e.preventDefault();
@@ -149,3 +149,12 @@ window.s9HidePopout = function () {
     const el = document.getElementById('s9-popout');
     if (el) el.style.display = 'none';
 };
+
+function s1ShowDesignPopout() {
+    var el = document.getElementById('s1-design-popout');
+    if (el) el.style.display = 'flex';
+}
+function s1HideDesignPopout() {
+    var el = document.getElementById('s1-design-popout');
+    if (el) el.style.display = 'none';
+}

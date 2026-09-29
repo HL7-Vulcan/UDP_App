@@ -1,0 +1,491 @@
+@page "/section-01"
+@layout MainLayout
+@using UDP_App.Models
+@using UDP_App.Services
+@inject DataService01 DataSvc
+@inject IJSRuntime JS
+@implements IDisposable
+
+<PageTitle>Section 1 – Data Entry</PageTitle>
+
+<style>
+    .doc-page { background:#fff; width:794px; min-height:1123px; margin:30px auto 80px; padding:72px; box-shadow:0 4px 24px rgba(0,0,0,0.18); font-family:'Calibri',Arial,sans-serif; font-size:11pt; color:#000; }
+    .h1  { font-family:'Times New Roman',Times,serif; font-size:14pt; font-weight:700; margin:0 0 4px; }
+    .h2  { font-family:'Times New Roman',Times,serif; font-size:12pt; font-weight:700; margin:20px 0 6px; }
+    .h3  { font-family:'Times New Roman',Times,serif; font-size:11pt; font-weight:700; margin:14px 0 5px; }
+    .field-wrap { position:relative; margin-bottom:10px; }
+    textarea.fb { display:block; width:100%; background:#d0cece; color:#1a7a1a; border:none; border-bottom:1.5px solid #999; font-family:'Calibri',Arial,sans-serif; font-size:11pt; line-height:1.4; padding:4px 6px; outline:none; resize:vertical; min-height:52px; }
+    textarea.fb:focus { background:#bfbcbc; } textarea.fb::placeholder { color:#9a7ab5; font-style:italic; }
+    textarea.fb.req-empty { border-bottom:2px solid #c00; background:#f5d0d0; }
+    input.fb { background:#d0cece; color:#1a7a1a; border:none; border-bottom:1.5px solid #999; font-family:'Calibri',Arial,sans-serif; font-size:10.5pt; padding:2px 5px; outline:none; vertical-align:baseline; }
+    input.fb:focus { background:#bfbcbc; }
+    input.fb.w100 { display:block; width:100%; }
+    input.fb.wnum { width:52px; }
+    input.fb.wmed { width:180px; }
+    input.fb.wlg  { width:260px; }
+    input.fb.wfull { width:100%; }
+    /* 4-column design table */
+    .dtbl { width:100%; border-collapse:collapse; font-size:10pt; margin:8px 0 12px; }
+    .dtbl td { border:1px solid #bbb; padding:4px 7px; vertical-align:top; }
+    .dtbl td.lbl { font-weight:700; white-space:nowrap; width:18%; background:#f5f5f5; color:#1f3864; }
+    .dtbl td.val { width:32%; }
+    .dtbl td.val input.fb { display:block; width:100%; }
+    .dtbl td.val textarea.fb { min-height:36px; }
+    .age-wrap { display:flex; align-items:baseline; gap:5px; }
+    .age-wrap input.fb { width:52px; }
+    /* Inline paragraph fields */
+    p.doc { margin-bottom:8px; line-height:1.8; }
+    .lbl-inline { font-weight:700; }
+    .toolbar { display:flex; justify-content:flex-end; gap:10px; margin-top:32px; flex-wrap:wrap; }
+    .btn { padding:7px 20px; border:none; border-radius:3px; font-size:10pt; font-family:inherit; cursor:pointer; }
+    .btn-primary   { background:#1f3864; color:#fff; } .btn-primary:hover { background:#162a4e; }
+    .btn-secondary { background:#eee; color:#333; border:1px solid #ccc; } .btn-secondary:hover { background:#ddd; }
+    .overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:200; align-items:center; justify-content:center; }
+    .overlay.show { display:flex; }
+    .dbox { background:#fff; border-radius:6px; padding:28px 32px; width:400px; box-shadow:0 8px 40px rgba(0,0,0,0.25); }
+    .dbox h3 { font-size:13pt; font-weight:700; color:#1f3864; margin-bottom:12px; }
+    .dbox p  { font-size:10.5pt; margin-bottom:16px; line-height:1.5; }
+    .dbox input[type=text] { width:100%; border:1px solid #aaa; border-radius:3px; padding:6px 8px; font-size:10pt; margin-bottom:14px; outline:none; }
+    .fmt-row { display:flex; gap:14px; margin-bottom:20px; }
+    .fmt-row label { display:flex; align-items:center; gap:5px; font-size:10pt; cursor:pointer; }
+    .dbr { display:flex; justify-content:flex-end; gap:10px; }
+    .sbar { position:fixed; bottom:0; left:0; right:0; background:#1f3864; color:#fff; font-size:9pt; padding:5px 18px; display:flex; justify-content:space-between; align-items:center; z-index:100; }
+    .err  { background:#fff3cd; color:#856404; border:1px solid #ffc107; padding:10px; margin-bottom:10px; border-radius:4px; font-size:10pt; }
+    .popout-btn { background:#5a7abf; color:#fff; border:none; border-radius:3px; padding:3px 10px; font-size:10pt; cursor:pointer; white-space:nowrap; margin-left:8px; }
+    .popout-btn:hover { background:#3d5a9e; }
+    #s1-design-popout { display:none; position:fixed; inset:0; z-index:500; flex-direction:column; overflow:auto; background:#fff; }
+    .popout-hdr { background:#1f3864; color:#fff; padding:10px 18px; display:flex; align-items:center; justify-content:space-between; font-family:'Times New Roman',Times,serif; font-size:13pt; font-weight:700; flex-shrink:0; }
+    .popout-body { flex:1; overflow:auto; padding:24px 32px; }
+    .close-btn { background:#c00; color:#fff; border:none; border-radius:3px; padding:4px 14px; font-size:10pt; cursor:pointer; }
+    .close-btn:hover { background:#900; }
+    .ctx-menu { display:none; position:fixed; background:#fff; border:1px solid #ccc; border-radius:4px; box-shadow:0 4px 16px rgba(0,0,0,0.18); z-index:1000; min-width:320px; max-width:420px; font-family:'Calibri',Arial,sans-serif; font-size:10pt; }
+    .ctx-hdr  { background:#1f3864; color:#fff; padding:8px 12px; font-weight:700; font-size:10pt; border-radius:4px 4px 0 0; display:flex; justify-content:space-between; align-items:center; }
+    .ctx-close { background:none; border:none; color:#fff; font-size:14px; cursor:pointer; padding:0 2px; }
+    .ctx-body { padding:10px 12px; }
+    .ctx-row  { display:flex; gap:8px; margin-bottom:6px; font-size:9.5pt; }
+    .ctx-row label { font-weight:700; white-space:nowrap; min-width:100px; color:#333; }
+    .ctx-row span  { color:#555; word-break:break-all; }
+    .ctx-div  { border:none; border-top:1px solid #e0e0e0; margin:8px 0; }
+    .ctx-guide { font-size:9.5pt; color:#444; line-height:1.5; }
+    .ctx-guide strong { color:#1f3864; }
+</style>
+
+@if (!string.IsNullOrEmpty(ErrorMessage)) { <div class="err">⚠ @ErrorMessage</div> }
+
+<div class="doc-page">
+    <div class="h1">1.&nbsp;&nbsp;Protocol Summary</div>
+    <div class="h2">1.1&nbsp;&nbsp;Protocol Synopsis</div>
+
+    <div class="h3">1.1.1&nbsp;&nbsp;Primary and Secondary Objectives and Estimands</div>
+    <div class="field-wrap">
+        <textarea class="@ReqClass(Model.C218839)" rows="5"
+            placeholder="Enter primary and secondary objectives and estimands"
+            data-ctx="C218839" @bind="Model.C218839" @bind:event="oninput"></textarea>
+    </div>
+
+    <div class="h3">1.1.2&nbsp;&nbsp;Overall Design <button class="popout-btn" @onclick="OpenDesignPopout">⤢ Pop Out</button></div>
+    <p class="doc">Key aspects of the trial design are summarised below.</p>
+
+    <table class="dtbl">
+        <tr>
+            <td class="lbl">Intervention:</td>
+            <td class="val" colspan="3">
+                <textarea class="fb" rows="2"
+                    placeholder='https://sponsor.com/id | EX2015/03 "exoticillin 100micrograms/dose dry powder inhaler"'
+                    data-ctx="C218675" @bind="Model.C218675" @bind:event="oninput"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td class="lbl">Intervention Model:</td>
+            <td class="val"><input class="fb" type="text" placeholder='$NCIT#C82639 "Parallel Study"' data-ctx="C98746"  @bind="Model.C98746" @bind:event="oninput" /></td>
+            <td class="lbl">Population Type:</td>
+            <td class="val"><input class="fb" type="text" placeholder='$NCIT#C98596 "Patient"' data-ctx="C218703" @bind="Model.C218703" @bind:event="oninput" /></td>
+        </tr>
+        <tr>
+            <td class="lbl">Control Type:</td>
+            <td class="val"><input class="fb" type="text" placeholder='$NCIT#C49648 "Placebo Control"' data-ctx="C49647"  @bind="Model.C49647" @bind:event="oninput" /></td>
+            <td class="lbl">Condition:</td>
+            <td class="val"><input class="fb" type="text" placeholder='$SCT#9014002 "Psoriasis"' data-ctx="C112038" @bind="Model.C112038" @bind:event="oninput" /></td>
+        </tr>
+        <tr>
+            <td class="lbl">Control Description:</td>
+            <td class="val">
+                <textarea class="fb" rows="2" placeholder="Nonproprietary name / description of comparator"
+                    data-ctx="C97054"  @bind="Model.C97054" @bind:event="oninput"></textarea>
+            </td>
+            <td class="lbl">Population Age:</td>
+            <td class="val">
+                <div class="age-wrap">
+                    <input class="fb" type="text" placeholder="18" data-ctx="C49693"  @bind="Model.C49693" @bind:event="oninput" />
+                    <span>years –</span>
+                    <input class="fb" type="text" placeholder="75" data-ctx="C49694"  @bind="Model.C49694" @bind:event="oninput" />
+                    <span>years</span>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="lbl">Intervention Assignment Method:</td>
+            <td class="val"><input class="fb" type="text" placeholder='$NCIT#C25196 "Randomisation"' data-ctx="C218475" @bind="Model.C218475" @bind:event="oninput" /></td>
+            <td class="lbl">Site Distribution:</td>
+            <td class="val"><input class="fb" type="text" placeholder='$NCIT#C217005 "Multicentre"' data-ctx="C218704" @bind="Model.C218704" @bind:event="oninput" /></td>
+        </tr>
+        <tr>
+            <td class="lbl">Randomisation Type:</td>
+            <td class="val"><input class="fb" type="text" placeholder="block randomisation" data-ctx="C223137" @bind="Model.C223137" @bind:event="oninput" /></td>
+            <td class="lbl">Geographic Scope:</td>
+            <td class="val"><input class="fb" type="text" placeholder='$NCIT#C217007 "Multiple Countries"' data-ctx="C218705" @bind="Model.C218705" @bind:event="oninput" /></td>
+        </tr>
+        <tr>
+            <td class="lbl">Stratification:</td>
+            <td class="val"><input class="fb" type="text" placeholder='$NCIT#C49488 "Yes"' data-ctx="C223136" @bind="Model.C223136" @bind:event="oninput" /></td>
+            <td class="lbl">Master Protocol:</td>
+            <td class="val"><input class="fb" type="text" placeholder='$NCIT#C49487 "No"' data-ctx="C218707" @bind="Model.C218707" @bind:event="oninput" /></td>
+        </tr>
+        <tr>
+            <td class="lbl">Adaptive Trial Design:</td>
+            <td class="val"><input class="fb" type="text" placeholder='$NCIT#C49487 "No"' data-ctx="C218706" @bind="Model.C218706" @bind:event="oninput" /></td>
+            <td class="lbl"></td>
+            <td class="val"></td>
+        </tr>
+    </table>
+
+    <p class="doc">
+        <span class="lbl-inline">Number of Arms:</span>&nbsp;
+        <input class="fb wnum" type="text" placeholder="2" data-ctx="C98771"  @bind="Model.C98771" @bind:event="oninput" />
+    </p>
+
+    <p class="doc">
+        <span class="lbl-inline">Trial Blind Schema:</span>&nbsp;
+        <input class="fb wlg" type="text" placeholder='$NCIT#C187674 "Observer Blind"' data-ctx="C49658"  @bind="Model.C49658" @bind:event="oninput" />
+    </p>
+
+    <p class="doc">
+        <span class="lbl-inline">Blinded Roles:</span> The following roles will not be made aware of the treatment group assignment:&nbsp;
+        <input class="fb wlg" type="text" placeholder='$NCIT#C142710 "Participant"' data-ctx="C218709" @bind="Model.C218709" @bind:event="oninput" />
+    </p>
+
+    <p class="doc">
+        <span class="lbl-inline">Number of Participants:</span> A&nbsp;
+        <input class="fb wmed" type="text" placeholder='$UDP_Target#T "Target"' data-ctx="C218710" @bind="Model.C218710" @bind:event="oninput" />
+        &nbsp;of&nbsp;
+        <input class="fb wnum" type="text" placeholder="200" data-ctx="C49692"  @bind="Model.C49692" @bind:event="oninput" />
+        &nbsp;participants.
+    </p>
+
+    <p class="doc">
+        <span class="lbl-inline">Duration:</span> Total planned duration of trial <em>participation</em> for each participant:&nbsp;
+        <input class="fb wmed" type="text" placeholder='9 $NCIT#C29846 "Months"' data-ctx="C218715" @bind="Model.C218715" @bind:event="oninput" />.
+    </p>
+
+    @if (!string.IsNullOrWhiteSpace(Model.C218714))
+    {
+        <p class="doc">
+            <span class="lbl-inline">Alternate Duration Description:</span>&nbsp;
+            <input class="fb wlg" type="text" data-ctx="C218714" @bind="Model.C218714" @bind:event="oninput" />
+        </p>
+    }
+    else
+    {
+        <p class="doc">
+            <span class="lbl-inline">Alternate Duration Description:</span>&nbsp;
+            <input class="fb wlg" type="text" placeholder="(if duration will vary)" data-ctx="C218714" @bind="Model.C218714" @bind:event="oninput" />
+        </p>
+    }
+
+    <p class="doc"><span class="lbl-inline">Committees:</span></p>
+    <p class="doc">
+        Independent Committees:&nbsp;
+        <input class="fb wlg" type="text" placeholder='$NCIT#C142578 "IDMC"' data-ctx="C218718" @bind="Model.C218718" @bind:event="oninput" />.
+    </p>
+    <p class="doc">
+        Other Committees:&nbsp;
+        <input class="fb wmed" type="text" placeholder="(other committee name)" data-ctx="C218719" @bind="Model.C218719" @bind:event="oninput" />.
+    </p>
+
+    <div class="h3">1.2&nbsp;&nbsp;Trial Schema</div>
+    <div class="field-wrap">
+        <textarea class="@ReqClass(Model.C218720)" rows="4"
+            placeholder="Enter trial schema description"
+            data-ctx="C218720" @bind="Model.C218720" @bind:event="oninput"></textarea>
+    </div>
+
+    <div class="h3">1.3&nbsp;&nbsp;Schedule of Activities</div>
+    <div class="field-wrap">
+        <textarea class="@ReqClass(Model.C132349)" rows="4"
+            placeholder="Enter schedule of activities"
+            data-ctx="C132349" @bind="Model.C132349" @bind:event="oninput"></textarea>
+    </div>
+
+    <div class="toolbar">
+        <button class="btn btn-secondary" @onclick="ClearAll">Clear All</button>
+        <button class="btn btn-secondary" @onclick="LoadSample">Load Sample</button>
+        <button class="btn btn-secondary" @onclick="OpenSaveDialog">⬇ Save to File…</button>
+        <button class="btn btn-secondary" @onclick="OpenLoadDialog">⬆ Load from File</button>
+        <button class="btn btn-primary"   @onclick="SaveToBrowser">Save to Browser</button>
+    </div>
+</div>
+
+<!-- Design Table popout -->
+<div id="s1-design-popout">
+    <div class="popout-hdr">
+        <span>1.1.2 Overall Design Table</span>
+        <button class="close-btn" @onclick="CloseDesignPopout">✕ Close</button>
+    </div>
+    <div class="popout-body">
+
+        <table class="dtbl">
+            <tr>
+                <td class="lbl">Intervention:</td>
+                <td class="val" colspan="3">
+                    <textarea class="fb" rows="2"
+                        placeholder='https://sponsor.com/id | EX2015/03 "exoticillin 100micrograms/dose dry powder inhaler"'
+                        data-ctx="C218675" @bind="Model.C218675" @bind:event="oninput"></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td class="lbl">Intervention Model:</td>
+                <td class="val"><input class="fb" type="text" placeholder='$NCIT#C82639 "Parallel Study"' data-ctx="C98746"  @bind="Model.C98746" @bind:event="oninput" /></td>
+                <td class="lbl">Population Type:</td>
+                <td class="val"><input class="fb" type="text" placeholder='$NCIT#C98596 "Patient"' data-ctx="C218703" @bind="Model.C218703" @bind:event="oninput" /></td>
+            </tr>
+            <tr>
+                <td class="lbl">Control Type:</td>
+                <td class="val"><input class="fb" type="text" placeholder='$NCIT#C49648 "Placebo Control"' data-ctx="C49647"  @bind="Model.C49647" @bind:event="oninput" /></td>
+                <td class="lbl">Condition:</td>
+                <td class="val"><input class="fb" type="text" placeholder='$SCT#9014002 "Psoriasis"' data-ctx="C112038" @bind="Model.C112038" @bind:event="oninput" /></td>
+            </tr>
+            <tr>
+                <td class="lbl">Control Description:</td>
+                <td class="val">
+                    <textarea class="fb" rows="2" placeholder="Nonproprietary name / description of comparator"
+                        data-ctx="C97054"  @bind="Model.C97054" @bind:event="oninput"></textarea>
+                </td>
+                <td class="lbl">Population Age:</td>
+                <td class="val">
+                    <div class="age-wrap">
+                        <input class="fb" type="text" placeholder="18" data-ctx="C49693"  @bind="Model.C49693" @bind:event="oninput" />
+                        <span>years –</span>
+                        <input class="fb" type="text" placeholder="75" data-ctx="C49694"  @bind="Model.C49694" @bind:event="oninput" />
+                        <span>years</span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="lbl">Intervention Assignment Method:</td>
+                <td class="val"><input class="fb" type="text" placeholder='$NCIT#C25196 "Randomisation"' data-ctx="C218475" @bind="Model.C218475" @bind:event="oninput" /></td>
+                <td class="lbl">Site Distribution:</td>
+                <td class="val"><input class="fb" type="text" placeholder='$NCIT#C217005 "Multicentre"' data-ctx="C218704" @bind="Model.C218704" @bind:event="oninput" /></td>
+            </tr>
+            <tr>
+                <td class="lbl">Randomisation Type:</td>
+                <td class="val"><input class="fb" type="text" placeholder="block randomisation" data-ctx="C223137" @bind="Model.C223137" @bind:event="oninput" /></td>
+                <td class="lbl">Geographic Scope:</td>
+                <td class="val"><input class="fb" type="text" placeholder='$NCIT#C217007 "Multiple Countries"' data-ctx="C218705" @bind="Model.C218705" @bind:event="oninput" /></td>
+            </tr>
+            <tr>
+                <td class="lbl">Stratification:</td>
+                <td class="val"><input class="fb" type="text" placeholder='$NCIT#C49488 "Yes"' data-ctx="C223136" @bind="Model.C223136" @bind:event="oninput" /></td>
+                <td class="lbl">Master Protocol:</td>
+                <td class="val"><input class="fb" type="text" placeholder='$NCIT#C49487 "No"' data-ctx="C218707" @bind="Model.C218707" @bind:event="oninput" /></td>
+            </tr>
+            <tr>
+                <td class="lbl">Adaptive Trial Design:</td>
+                <td class="val"><input class="fb" type="text" placeholder='$NCIT#C49487 "No"' data-ctx="C218706" @bind="Model.C218706" @bind:event="oninput" /></td>
+                <td class="lbl"></td><td class="val"></td>
+            </tr>
+        </table>
+
+        <p class="doc"><span class="lbl-inline">Number of Arms:</span>&nbsp;<input class="fb wnum" type="text" placeholder="2" data-ctx="C98771"  @bind="Model.C98771" @bind:event="oninput" /></p>
+        <p class="doc"><span class="lbl-inline">Trial Blind Schema:</span>&nbsp;<input class="fb wlg" type="text" placeholder='$NCIT#C187674 "Observer Blind"' data-ctx="C49658"  @bind="Model.C49658" @bind:event="oninput" /></p>
+        <p class="doc"><span class="lbl-inline">Blinded Roles:</span> The following roles will not be made aware of the treatment group assignment:&nbsp;<input class="fb wlg" type="text" placeholder='$NCIT#C142710 "Participant"' data-ctx="C218709" @bind="Model.C218709" @bind:event="oninput" /></p>
+        <p class="doc"><span class="lbl-inline">Number of Participants:</span> A&nbsp;<input class="fb wmed" type="text" placeholder='$UDP_Target#T "Target"' data-ctx="C218710" @bind="Model.C218710" @bind:event="oninput" />&nbsp;of&nbsp;<input class="fb wnum" type="text" placeholder="200" data-ctx="C49692"  @bind="Model.C49692" @bind:event="oninput" />&nbsp;participants.</p>
+        <p class="doc"><span class="lbl-inline">Duration:</span> Total planned duration of trial <em>participation</em> for each participant:&nbsp;<input class="fb wmed" type="text" placeholder='9 $NCIT#C29846 "Months"' data-ctx="C218715" @bind="Model.C218715" @bind:event="oninput" />.</p>
+        <p class="doc"><span class="lbl-inline">Alternate Duration Description:</span>&nbsp;<input class="fb wlg" type="text" placeholder="(if duration will vary)" data-ctx="C218714" @bind="Model.C218714" @bind:event="oninput" /></p>
+        <p class="doc"><span class="lbl-inline">Committees:</span></p>
+        <p class="doc">Independent Committees:&nbsp;<input class="fb wlg" type="text" placeholder='$NCIT#C142578 "IDMC"' data-ctx="C218718" @bind="Model.C218718" @bind:event="oninput" />.</p>
+        <p class="doc">Other Committees:&nbsp;<input class="fb wmed" type="text" placeholder="(other committee name)" data-ctx="C218719" @bind="Model.C218719" @bind:event="oninput" />.</p>
+
+    </div>
+</div>
+
+<div id="s1-ctx-menu" class="ctx-menu">
+    <div class="ctx-hdr"><span>Field Information</span><button class="ctx-close" @onclick="CloseCtxMenu">✕</button></div>
+    <div class="ctx-body">
+        <div class="ctx-row"><label>Field name:</label><span>@CtxFieldName</span></div>
+        <div class="ctx-row"><label>Original name:</label><span>@CtxOriginalName</span></div>
+        <hr class="ctx-div" />
+        <div class="ctx-guide"><strong>Guidance:</strong><br />@CtxGuidance</div>
+    </div>
+</div>
+
+<div class="overlay @SaveDialogCss">
+    <div class="dbox">
+        <h3>Save Data to File</h3>
+        <label style="display:block;font-weight:700;margin-bottom:6px;">File name</label>
+        <input type="text" @bind="SaveFileName" @bind:event="oninput" />
+        <label style="display:block;font-weight:700;margin:10px 0 6px;">Format</label>
+        <div class="fmt-row">
+            <label><input type="radio" name="s1fmt" checked="@IsJson" @onchange="SetFmtJson" /> JSON</label>
+            <label><input type="radio" name="s1fmt" checked="@IsCsv"  @onchange="SetFmtCsv"  /> CSV</label>
+            <label><input type="radio" name="s1fmt" checked="@IsTxt"  @onchange="SetFmtTxt"  /> Plain Text</label>
+            <label><input type="radio" name="s1fmt" checked="@IsFhir" @onchange="SetFmtFhir" /> FHIR</label>
+        </div>
+        <div class="dbr">
+            <button class="btn btn-secondary" @onclick="CloseSaveDialog">Cancel</button>
+            <button class="btn btn-primary"   @onclick="DoSaveToFile">Download</button>
+        </div>
+    </div>
+</div>
+
+<div class="overlay @ReqDialogCss">
+    <div class="dbox">
+        <h3 style="color:#c00;">Incomplete Required Fields</h3>
+        <p>@ReqDialogMsg</p>
+        <div class="dbr">
+            <button class="btn btn-secondary" @onclick="CloseReqDialog">Cancel</button>
+            <button class="btn btn-primary" style="background:#c00;" @onclick="ForceConfirm">Save Anyway</button>
+        </div>
+    </div>
+</div>
+
+<div class="sbar">
+    <span>Section 1 – Data Entry &nbsp;|&nbsp; Grey = data entry &nbsp;|&nbsp; Red border = required</span>
+    <span>@StatusMessage</span>
+</div>
+
+@code {
+    private Section01Model Model = new();
+    private bool   ShowValidation = false;
+    private bool   ShowSaveDialog = false;
+    private bool   ShowReqDialog  = false;
+    private string SaveFileName   = "section1_data";
+    private string SaveFormat     = "json";
+    private string StatusMessage  = string.Empty;
+    private string ReqDialogMsg   = string.Empty;
+    private string ErrorMessage   = string.Empty;
+    private string? PendingAction = null;
+    private string CtxFieldName = string.Empty, CtxOriginalName = string.Empty, CtxGuidance = string.Empty;
+    private System.Threading.Timer? _statusTimer;
+    private DotNetObjectReference<Section01>? _objRef;
+
+    private string SaveDialogCss => ShowSaveDialog ? "overlay show" : "overlay";
+    private string ReqDialogCss  => ShowReqDialog  ? "overlay show" : "overlay";
+    private bool IsJson => SaveFormat == "json"; private bool IsCsv  => SaveFormat == "csv";
+    private bool IsTxt  => SaveFormat == "txt";  private bool IsFhir => SaveFormat == "fhir";
+    private void SetFmtJson(ChangeEventArgs e) => SaveFormat = "json";
+    private void SetFmtCsv(ChangeEventArgs e)  => SaveFormat = "csv";
+    private void SetFmtTxt(ChangeEventArgs e)  => SaveFormat = "txt";
+    private void SetFmtFhir(ChangeEventArgs e) => SaveFormat = "fhir";
+    private string ReqClass(string? v) => ShowValidation && string.IsNullOrWhiteSpace(v) ? "fb req-empty" : "fb";
+
+    private bool HasRequiredEmpty() =>
+        new[] { Model.C218839, Model.C218720, Model.C132349 }.Any(string.IsNullOrWhiteSpace);
+    private int RequiredEmptyCount() =>
+        new[] { Model.C218839, Model.C218720, Model.C132349 }.Count(string.IsNullOrWhiteSpace);
+
+    private void ClearAll()
+    {
+        Model = new(); ShowValidation = false; ErrorMessage = string.Empty;
+        _ = JS.InvokeVoidAsync("localStorage.removeItem", "s1data");
+        SetStatus("Cleared");
+    }
+
+    private void LoadSample()
+    {
+        var s = DataSvc.LoadSample();
+        if (s != null) { Model = s; ShowValidation = false; SetStatus("Sample data loaded"); }
+        else ErrorMessage = "Could not load sample file.";
+    }
+
+    private async Task SaveToBrowser()
+    {
+        ShowValidation = true;
+        if (HasRequiredEmpty()) { ReqDialogMsg = $"{RequiredEmptyCount()} required field(s) empty."; PendingAction = "browser"; ShowReqDialog = true; return; }
+        await DoBrowserSave();
+    }
+
+    private async Task DoBrowserSave()
+    {
+        try { await JS.InvokeVoidAsync("localStorage.setItem", "s1data", DataSvc.ToJson(Model)); SetStatus("✓ Saved " + DateTime.Now.ToShortTimeString()); }
+        catch (Exception ex) { ErrorMessage = ex.Message; }
+    }
+
+    private void OpenSaveDialog()
+    {
+        ShowValidation = true;
+        if (HasRequiredEmpty()) { ReqDialogMsg = $"{RequiredEmptyCount()} required field(s) empty."; PendingAction = "file"; ShowReqDialog = true; return; }
+        SaveFileName = "section1_data_" + DateTime.Now.ToString("yyyy-MM-dd"); ShowSaveDialog = true;
+    }
+
+    private void CloseSaveDialog() => ShowSaveDialog = false;
+    private void CloseReqDialog()  { ShowReqDialog = false; PendingAction = null; }
+
+    private async Task ForceConfirm()
+    {
+        ShowReqDialog = false;
+        if (PendingAction == "browser") await DoBrowserSave();
+        else if (PendingAction == "file") { SaveFileName = "section1_data_" + DateTime.Now.ToString("yyyy-MM-dd"); ShowSaveDialog = true; }
+        PendingAction = null;
+    }
+
+    private async Task DoSaveToFile()
+    {
+        ShowSaveDialog = false;
+        var (content, mime, ext) = SaveFormat switch
+        {
+            "csv"  => (DataSvc.ToCsv(Model),      "text/csv",         ".csv"),
+            "txt"  => (DataSvc.ToPlainText(Model), "text/plain",       ".txt"),
+            "fhir" => (DataSvc.ToFsh(Model),       "text/plain",       ".fsh"),
+            _      => (DataSvc.ToJson(Model),      "application/json", ".json"),
+        };
+        var fn = (SaveFileName.Trim().Length > 0 ? SaveFileName.Trim() : "section1_data") + ext;
+        await JS.InvokeVoidAsync("udpDownload", fn, content, mime);
+        SetStatus("⬇ Downloaded " + fn);
+    }
+
+    private async Task OpenLoadDialog() => await JS.InvokeVoidAsync("udpOpenFilePicker");
+
+    [JSInvokable] public void ReceiveFileContent(string json)
+    {
+        var l = DataSvc.FromJson(json);
+        if (l != null) { Model = l; ShowValidation = false; SetStatus("⬆ Loaded from file"); InvokeAsync(StateHasChanged); }
+    }
+
+    [JSInvokable] public async Task OnContextMenuJS(string fieldId, double x, double y)
+    {
+        CtxFieldName = fieldId; CtxOriginalName = string.Empty; CtxGuidance = string.Empty;
+        StateHasChanged(); await JS.InvokeVoidAsync("udpShowCtxMenu", "s1-ctx-menu", x, y);
+    }
+    [JSInvokable] public void OnCtxMenuClosed() { }
+    private void CloseCtxMenu() => _ = JS.InvokeVoidAsync("udpHideCtxMenu", "s1-ctx-menu");
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender) return;
+        try
+        {
+            _objRef = DotNetObjectReference.Create(this);
+            await JS.InvokeVoidAsync("udpSetDotNetRef", _objRef, "s1-ctx-menu");
+            await JS.InvokeVoidAsync("udpInitContextMenus", "s1-ctx-menu");
+            var json = await JS.InvokeAsync<string?>("localStorage.getItem", "s1data");
+            if (!string.IsNullOrEmpty(json))
+            {
+                var l = DataSvc.FromJson(json);
+                if (l != null) { Model = l; StateHasChanged(); }
+            }
+        }
+        catch (JSDisconnectedException) { } catch (TaskCanceledException) { }
+        catch (Exception ex) { ErrorMessage = "Init error: " + ex.Message; StateHasChanged(); }
+    }
+
+    private void SetStatus(string msg)
+    {
+        StatusMessage = msg; _statusTimer?.Dispose();
+        _statusTimer = new System.Threading.Timer(_ => { StatusMessage = string.Empty; InvokeAsync(StateHasChanged); }, null, 4000, System.Threading.Timeout.Infinite);
+    }
+
+    private async Task OpenDesignPopout()  => await JS.InvokeVoidAsync("s1ShowDesignPopout");
+    private async Task CloseDesignPopout() => await JS.InvokeVoidAsync("s1HideDesignPopout");
+
+    public void Dispose() { _objRef?.Dispose(); _statusTimer?.Dispose(); }
+}

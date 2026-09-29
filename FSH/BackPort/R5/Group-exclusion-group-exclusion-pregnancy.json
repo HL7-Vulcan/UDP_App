@@ -1,0 +1,87 @@
+{
+  "resourceType": "Group",
+  "id": "exclusion-group-exclusion-pregnancy",
+  "meta": {
+    "profile": [
+      "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-r5-group"
+    ]
+  },
+  "extension": [
+    {
+      "extension": [
+        {
+          "url": "title",
+          "valueString": "Pregnancy and Infection Exclusion"
+        },
+        {
+          "url": "status",
+          "valueCode": "active"
+        },
+        {
+          "url": "combinationMethod",
+          "valueCode": "any-of"
+        }
+      ],
+      "url": "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-r5-group-ext"
+    }
+  ],
+  "characteristic": [
+    {
+      "extension": [
+        {
+          "extension": [
+            {
+              "url": "description",
+              "valueString": "currently pregnant"
+            }
+          ],
+          "url": "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-r5-groupCharacteristic-ext"
+        }
+      ],
+      "code": {
+        "coding": [
+          {
+            "code": "77386006",
+            "system": "http://snomed.info/sct",
+            "display": "Pregnant"
+          }
+        ]
+      },
+      "valueBoolean": true,
+      "exclude": true
+    },
+    {
+      "extension": [
+        {
+          "extension": [
+            {
+              "url": "description",
+              "valueString": "active systemic infection at screening"
+            }
+          ],
+          "url": "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-r5-groupCharacteristic-ext"
+        }
+      ],
+      "code": {
+        "coding": [
+          {
+            "code": "40733004",
+            "system": "http://snomed.info/sct",
+            "display": "Infectious disease"
+          }
+        ]
+      },
+      "valueQuantity": {
+        "value": 1,
+        "code": "{episode}",
+        "system": "http://unitsofmeasure.org",
+        "unit": "episode"
+      },
+      "exclude": true
+    }
+  ],
+  "name": "exclusion-pregnancy",
+  "description": "Participants who are pregnant or have an active systemic infection are not eligible.",
+  "type": "person",
+  "membership": "definitional"
+}

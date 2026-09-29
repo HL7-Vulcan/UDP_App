@@ -1,6 +1,8 @@
 using UDP_App.Models;
 using System.Text;
 using System.Text.Json;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace UDP_App.Services;
 
@@ -16,15 +18,51 @@ public class DataService05
 
     private static readonly Dictionary<string, string> CharTemplateKeys = new()
     {
-        { "char_code",    "\"code\""        },
-        { "char_low",     "\"low\""         },
-        { "char_high",    "\"high\""        },
-        { "char_exclude", "exclude"         },
-        { "char_desc",    "\"description\"" },
+        { "char_code",    "code"        },
+        { "char_low",     "low"         },
+        { "char_high",    "high"        },
+        { "char_type",    "type"        },
+        { "char_bool",    "boolean"     },
+        { "char_qty",     "quantity"    },
+        { "char_exclude", "exclude"     },
+        { "char_desc",    "description" },
     };
 
     public int GetCharCount(Dictionary<string, string> data, int row) =>
         data.TryGetValue($"CharCount_r{row}", out var v) && int.TryParse(v, out var n) ? Math.Max(1, n) : 1;
+
+    // Returns ordered characteristic indices from CharOrder_r{row} (new) or falls back to CharCount (legacy)
+    private static List<int> GetCharOrderList(Dictionary<string, string> data, int row)
+    {
+        if (data.TryGetValue($"CharOrder_r{row}", out var order) && !string.IsNullOrEmpty(order))
+            return order.Split(',').Select(int.Parse).ToList();
+        if (data.TryGetValue($"CharCount_r{row}", out var cv) && int.TryParse(cv, out var n) && n > 0)
+            return Enumerable.Range(1, n).ToList();
+        return new List<int>();
+    }
+
+    // Remove all REPEAT{{...}} blocks from a template string, leaving only fixed lines
+    private static string StripRepeatBlocks(string tpl)
+    {
+        var sb  = new System.Text.StringBuilder();
+        int pos = 0;
+        while (pos < tpl.Length)
+        {
+            int ri = tpl.IndexOf("REPEAT{{", pos, StringComparison.Ordinal);
+            if (ri < 0) { sb.Append(tpl, pos, tpl.Length - pos); break; }
+            // Append everything before this REPEAT block (strip the line it's on)
+            int lineStart = ri;
+            while (lineStart > 0 && tpl[lineStart - 1] != '\n') lineStart--;
+            sb.Append(tpl, pos, lineStart - pos);
+            int outerOpen  = ri + "REPEAT".Length;
+            int outerClose = TokenParser.FindTokenEnd(tpl, outerOpen);
+            if (outerClose < 0) break;
+            pos = outerClose;
+            if (pos < tpl.Length && tpl[pos] == '\r') pos++;
+            if (pos < tpl.Length && tpl[pos] == '\n') pos++;
+        }
+        return sb.ToString();
+    }
 
     // Convenience overloads used by the razor (incl / excl)
     public int GetInclCharCount(Section05Model model, int row) => GetCharCount(model.InclData, row);
@@ -91,17 +129,19 @@ public class DataService05
         }
     }
 
-    public string ToFsh(Section05Model model)
+    /// <summary>Returns (fshStandard, fshR5) — both FHIR outputs from the same model.</summary>
+    public (string Standard, string R5) ToFsh(Section05Model model)
     {
-        var mainPath = Path.Combine(_env.ContentRootPath, "Templates", "Section_05_Template.fsh");
-        var eligPath = Path.Combine(_env.ContentRootPath, "Templates", "Section_05_Eligibility_Template.fsh");
-        string main, eligTpl;
-        try { main    = File.ReadAllText(mainPath); }
-        catch { return $"Error: could not read {mainPath}"; }
-        try { eligTpl = File.ReadAllText(eligPath); }
-        catch { return $"Error: could not read {eligPath}"; }
+        var mainPath  = Path.Combine(_env.ContentRootPath, "Templates", "Section_05_Template.fsh");
+        var eligPath  = Path.Combine(_env.ContentRootPath, "Templates", "Section_05_Eligibility_Template.fsh");
+        var eligR5Path = Path.Combine(_env.ContentRootPath, "Templates", "Section_05_R5_Eligibility_Template.fsh");
 
-        // Fixed fields
+        string main, eligTpl, eligR5Tpl;
+        try { main      = File.ReadAllText(mainPath);   } catch { main      = $"Error: could not read {mainPath}";   }
+        try { eligTpl   = File.ReadAllText(eligPath);   } catch { eligTpl   = $"Error: could not read {eligPath}";   }
+        try { eligR5Tpl = File.ReadAllText(eligR5Path); } catch { eligR5Tpl = $"Error: could not read {eligR5Path}"; }
+
+        // Fixed fields — applied to main template
         var fields = new Dictionary<string, string?>
         {
             {"C218739",model.C218739},{"C25532",model.C25532},  {"C25370",model.C25370},
@@ -112,66 +152,73 @@ public class DataService05
         foreach (var (k, v) in fields)
             main = main.Replace("{{" + k + "}}", v ?? string.Empty);
 
-        // Build inclusion group entries + instances
-        var (inclEntries, inclBlocks) = BuildGroupBlocks(eligTpl, model.InclData,
-            Math.Max(1, model.InclRows), "eligibility-group");
+        // Collect row ids
+        var inclRowIds = Enumerable.Range(1, Math.Max(1, model.InclRows)).Select(r =>
+        {
+            var name = Get(model.InclData, $"name_r{r}").Replace(" ", "-").ToLowerInvariant();
+            return string.IsNullOrWhiteSpace(name) ? $"eligibility-group-row{r}" : $"eligibility-group-{name}";
+        }).ToList();
+        var exclRowIds = Enumerable.Range(1, Math.Max(1, model.ExclRows)).Select(r =>
+        {
+            var name = Get(model.ExclData, $"name_r{r}").Replace(" ", "-").ToLowerInvariant();
+            return string.IsNullOrWhiteSpace(name) ? $"exclusion-group-row{r}" : $"exclusion-group-{name}";
+        }).ToList();
 
-        // Build exclusion group entries + instances (reuse same template)
-        var (exclEntries, exclBlocks) = BuildGroupBlocks(eligTpl, model.ExclData,
-            Math.Max(1, model.ExclRows), "exclusion-group");
+        // Expand REPEAT in main template (shared by both outputs)
+        var repeatResult = TokenParser.FindAndExpandRepeat(main, inclRowIds.Concat(exclRowIds));
+        if (repeatResult.HasValue)
+        {
+            var (expanded, mStart, mLen) = repeatResult.Value;
+            main = main.Remove(mStart, mLen).Insert(mStart, expanded);
+        }
 
-        // Replace the single REPEAT block in main template with inclusion entries
-        const string mainRepeat = "{{REPEAT * entry[+] = Reference(eligibility-group-{{TABLE_ROW_X}})}}";
-        var allEntries = inclEntries.ToString().TrimEnd() + "\n" + exclEntries.ToString().TrimEnd();
-        main = main.Replace(mainRepeat, allEntries);
+        // Build group instance blocks for both eligibility templates
+        var inclBlocks   = BuildGroupBlocks(eligTpl,   model.InclData, Math.Max(1, model.InclRows), inclRowIds);
+        var exclBlocks   = BuildGroupBlocks(eligTpl,   model.ExclData, Math.Max(1, model.ExclRows), exclRowIds);
+        var inclBlocksR5 = BuildGroupBlocks(eligR5Tpl, model.InclData, Math.Max(1, model.InclRows), inclRowIds);
+        var exclBlocksR5 = BuildGroupBlocks(eligR5Tpl, model.ExclData, Math.Max(1, model.ExclRows), exclRowIds);
 
-        return main + inclBlocks.ToString() + exclBlocks.ToString();
+        return (main + inclBlocks + exclBlocks,
+                main + inclBlocksR5 + exclBlocksR5);
     }
 
-    private (StringBuilder entries, StringBuilder blocks) BuildGroupBlocks(
-        string eligTpl, Dictionary<string, string> data, int rowCount, string prefix)
+    private string BuildGroupBlocks(
+        string eligTpl, Dictionary<string, string> data, int rowCount, List<string> rowIds)
     {
-        var entries = new StringBuilder();
-        var blocks  = new StringBuilder();
+        var blocks = new System.Text.StringBuilder();
 
         for (int r = 1; r <= rowCount; r++)
         {
-            var name = Get(data, $"name_r{r}").Replace(" ", "-").ToLowerInvariant();
-            var rowId = string.IsNullOrWhiteSpace(name) ? $"{prefix}-row{r}" : $"{prefix}-{name}";
+            var rowId = rowIds[r - 1];
 
-            entries.AppendLine($" * entry[+] = Reference({rowId})");
-
-            var block = eligTpl.Replace("{{TABLE_ROW_X}}", rowId);
-            foreach (var f in RowFields)
-                block = block.Replace("{{" + f + "}}", Get(data, $"{f}_r{r}"));
-
-            // Expand REPEAT{{ ... }} characteristic block
-            const string repeatOpen  = "REPEAT{{\n";
-            const string repeatClose = "\n}}";
-            var repStart = block.IndexOf(repeatOpen);
-            var repEnd   = block.IndexOf(repeatClose, repStart >= 0 ? repStart : 0);
-            if (repStart >= 0 && repEnd >= 0)
+            // Step 1: Build the characteristic lines by expanding each characteristic
+            // using the correct REPEAT{{FMT{{...}}}} block from the template.
+            var charList = GetCharOrderList(data, r);
+            var charSb   = new System.Text.StringBuilder();
+            foreach (var ci in charList)
             {
-                var charTpl = block.Substring(repStart + repeatOpen.Length,
-                                              repEnd - repStart - repeatOpen.Length);
-                var charSb = new StringBuilder();
-                var charCount = GetCharCount(data, r);
-                for (int c = 1; c <= charCount; c++)
-                {
-                    var cb = charTpl;
-                    foreach (var (sk, tk) in CharTemplateKeys)
-                        cb = cb.Replace("{{" + tk + "}}", Get(data, $"{sk}_r{r}_c{c}"));
-                    if (c > 1) charSb.AppendLine();
-                    charSb.Append(cb);
-                }
-                block = block.Substring(0, repStart)
-                       + charSb
-                       + block.Substring(repEnd + repeatClose.Length);
+                var fmt = Get(data, $"char_fmt_r{r}_c{ci}");
+                var charVals = new Dictionary<string, string>();
+                foreach (var (sk, tk) in CharTemplateKeys)
+                    charVals[tk] = Get(data, $"{sk}_r{r}_c{ci}");
+
+                charSb.Append(TokenParser.ExpandCharacteristic(eligTpl, fmt, key =>
+                    charVals.TryGetValue(key, out var v) ? v : null));
             }
+
+            // Step 2: Strip all REPEAT{{...}} blocks from the template, then substitute
+            // the remaining simple tokens and splice the expanded characteristics in.
+            var block = StripRepeatBlocks(eligTpl);
+            block = block.TrimEnd() + "\r\n" + charSb;
+
+            block = TokenParser.Substitute(block, key =>
+                key == "TABLE_ROW_X" ? rowId :
+                RowFields.Contains(key) ? Get(data, $"{key}_r{r}") :
+                null);
 
             blocks.AppendLine(); blocks.Append(block);
         }
-        return (entries, blocks);
+        return blocks.ToString();
     }
 
     public Section05Model? LoadSample()
