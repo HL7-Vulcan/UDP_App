@@ -49,6 +49,7 @@ public class TitlePageModel
     [JsonPropertyName("C218694")]  public string? C218694  { get; set; }  // Amendment Status (conditional picklist)
     [JsonPropertyName("C218478")]  public string? C218478  { get; set; }  // Approx Enrolled (conditional)
     [JsonPropertyName("C218695")]  public string? C218695  { get; set; }  // Scope Enrollment Definition (conditional picklist)
+    [JsonPropertyName("C218874")]  public string? C218874  { get; set; }  // Number Impacted (conditional)
     [JsonPropertyName("C218696")]  public string? C218696  { get; set; }  // Primary Reason (conditional picklist)
     [JsonPropertyName("C218697")]  public string? C218697  { get; set; }  // Secondary Reason (conditional picklist)
     [JsonPropertyName("C17649")]   public string? C17649   { get; set; }  // Other Reason Text (conditional)

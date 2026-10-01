@@ -58,6 +58,8 @@ public class DataService05
             int outerClose = TokenParser.FindTokenEnd(tpl, outerOpen);
             if (outerClose < 0) break;
             pos = outerClose;
+            while (pos < tpl.Length && (tpl[pos] == ' ' || tpl[pos] == '\t'))
+                pos++;
             if (pos < tpl.Length && tpl[pos] == '\r') pos++;
             if (pos < tpl.Length && tpl[pos] == '\n') pos++;
         }

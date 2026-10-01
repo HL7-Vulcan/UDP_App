@@ -109,6 +109,8 @@ public static class TokenParser
 
                 // Consume the newline that follows the closing }} so we don't leave a blank line
                 int blockEnd = close;
+                while (blockEnd < template.Length && (template[blockEnd] == ' ' || template[blockEnd] == '\t'))
+                    blockEnd++;
                 if (blockEnd < template.Length && template[blockEnd] == '\r') blockEnd++;
                 if (blockEnd < template.Length && template[blockEnd] == '\n') blockEnd++;
 
@@ -182,6 +184,8 @@ public static class TokenParser
             }
 
             pos = outerClose;
+            while (pos < eligTpl.Length && (eligTpl[pos] == ' ' || eligTpl[pos] == '\t'))
+                pos++;
             if (pos < eligTpl.Length && eligTpl[pos] == '\r') pos++;
             if (pos < eligTpl.Length && eligTpl[pos] == '\n') pos++;
         }
