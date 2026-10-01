@@ -52,7 +52,7 @@ window.udpOpenFilePicker = function () {
 
 // ── Context menus ─────────────────────────────────────────────────
 window.udpInitContextMenus = function (menuId) {
-    document.querySelectorAll('textarea[data-ctx], input[data-ctx]').forEach(function (ta) {
+    document.querySelectorAll('textarea[data-ctx], input[data-ctx], select[data-ctx]').forEach(function (ta) {
         ta.removeEventListener('contextmenu', ta._ctxHandler);
         ta._ctxHandler = function (e) {
             e.preventDefault();

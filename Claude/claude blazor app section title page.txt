@@ -1,0 +1,118 @@
+Add Title Page to the options in the App - it comes before Section 01 on the navigation menu.  The layout of the data entry form is as shown in the word document.  This follows the same conventions as previous sections except that in each data entry field the third word shows the data type for that field.  The content for the picklists is as follows:
+
+field C218672
+picklist
+Yes (C49488), 
+No (C49487)
+
+field C218673
+picklist
+Global (C68846),  
+Not Global (C217026)
+
+field C20108
+picklist
+UK (country1)
+France (country2)
+Germany (country3)
+India (country4)
+Australia (country5)
+
+field C218674
+picklist
+Wales (region1)
+Normandy (region2)
+Bavaria (region3)
+Uttar Pradesh (region4)
+New South Wales (region5)
+
+field C48281
+picklist
+Early Phase 1 (C54721); 
+Phase 1 (C15600); 
+Phase 1/Phase 2 (C15693); 
+Phase 1/Phase 2/Phase 3 (C198366); 
+Phase 1/Phase 3 (C198367); 
+Phase 2 (C15601); 
+Phase 2/Phase 3 (C15694); 
+Phase 2/Phase 3/Phase 4 (C217024); 
+Phase 3 (C15602); 
+Phase 3/Phase 4 (C217025); 
+Phase 4 (C15603) 
+
+field C218694
+picklist
+This protocol has not been amended (U101) 
+This is the first protocol amendment (U102)
+This protocol has been amended previously. Details of prior amendments are presented in Section 12.3 Prior Protocol Amendment(s). (U103)
+
+field C218695
+picklist
+Globally (C68846); 
+Locally (C41065); 
+By Cohort (C218489) 
+
+field C218696
+picklist
+Regulatory Agency Request To Amend (C218490) 
+New Regulatory Guidance (C218491) 
+IRB/IEC Feedback (C218492) 
+New Safety Information Available (C218493) 
+Manufacturing Change (C218494) 
+IMP Addition (C218495) 
+Change In Strategy (C218496) 
+Change In Standard Of Care (C218497) 
+New Data Available (Other Than Safety Data) (C218498) 
+Investigator/Site Feedback (C218499) 
+Recruitment Difficulty (C218500) 
+Inconsistency And/Or Error In The Protocol (C218501) 
+Protocol Design Error (C218502) 
+Other (C17649) 
+Not Applicable (C48660) 
+
+field C218697
+picklist
+Regulatory Agency Request To Amend (C218490) 
+New Regulatory Guidance (C218491) 
+IRB/IEC Feedback (C218492) 
+New Safety Information Available (C218493) 
+Manufacturing Change (C218494) 
+IMP Addition (C218495) 
+Change In Strategy (C218496) 
+Change In Standard Of Care (C218497) 
+New Data Available (Other Than Safety Data) (C218498) 
+Investigator/Site Feedback (C218499) 
+Recruitment Difficulty (C218500) 
+Inconsistency And/Or Error In The Protocol (C218501) 
+Protocol Design Error (C218502) 
+Other (C17649) 
+Not Applicable (C48660) 
+
+field C218698
+picklist
+Yes (C49488), 
+No (C49487)
+
+field C218700
+picklist
+Yes (C49488), 
+No (C49487)
+
+field C218479 
+picklist
+C217342 Section 1 
+C217343 Section 2 
+C217344 Section 3 
+C217345 Section 4 
+C217346 Section 5 
+C217347 Section 6 
+C217348 Section 7 
+C217349 Section 8 
+C217350 Section 9 
+C217351 Section 10 
+C217352 Section 11 
+C217353 Section 12 
+C217354 Section 13 
+C217355 Section 14 
+C217356 Section Title Page 
+C217357 Section Amendment Details 

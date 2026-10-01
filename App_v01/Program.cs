@@ -5,6 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
+builder.Services.AddScoped<UDP_App.Services.DataServiceTP>();
 builder.Services.AddScoped<UDP_App.Services.DataService01>();
 builder.Services.AddScoped<UDP_App.Services.DataService>();
 builder.Services.AddScoped<UDP_App.Services.DataService05>();

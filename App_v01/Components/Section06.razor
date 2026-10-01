@@ -256,6 +256,66 @@
 
     private static readonly string[] TblCodes = { "C93729","C172457","C177930","C98747","C42636","C142517","C94394","C38114","C15697","C218748","C218749","C218750" };
 
+    private static readonly Dictionary<string, (string value, string label)[]> ColOptions = new()
+    {
+        ["C172457"] = new[]
+        {
+            ("$NCIT#C174267 \"Active Comparator Arm\"",  "Active Comparator Arm"),
+            ("$NCIT#C174226 \"Control Arm\"",            "Control Arm"),
+            ("$NCIT#C174266 \"Experimental Arm\"",       "Experimental Arm"),
+            ("$NCIT#C174270 \"No Intervention Arm\"",    "No Intervention Arm"),
+            ("$NCIT#C174268 \"Placebo Comparator Arm\"", "Placebo Comparator Arm"),
+            ("$NCIT#C174269 \"Sham Comparator Arm\"",    "Sham Comparator Arm"),
+        },
+        ["C98747"] = new[]
+        {
+            ("$NCIT#C1909 \"Drug\"",                    "Drug"),
+            ("$NCIT#C16830 \"Medical Device\"",         "Medical Device"),
+            ("$NCIT#C307 \"Biologic\"",                 "Biologic"),
+            ("$NCIT#C923 \"Vaccine\"",                  "Vaccine"),
+            ("$NCIT#C218507 \"Non Surgical Procedure\"","Non Surgical Procedure"),
+            ("$NCIT#C15329 \"Surgery\"",                "Surgery"),
+            ("$NCIT#C15313 \"Radiation\"",              "Radiation"),
+            ("$NCIT#C15184 \"Behavioral\"",             "Behavioral"),
+            ("$NCIT#C15238 \"Genetic\"",                "Genetic"),
+            ("$NCIT#C1505 \"Dietary Supplement\"",      "Dietary Supplement"),
+            ("$NCIT#C54696 \"Combination Product\"",    "Combination Product"),
+            ("$NCIT#C18020 \"Diagnostic\"",             "Diagnostic"),
+        },
+        ["C42636"] = new[]
+        {
+            ("$IDMP_DUMMY#f1 \"tablet\"",               "tablet"),
+            ("$IDMP_DUMMY#f2 \"capsule\"",              "capsule"),
+            ("$IDMP_DUMMY#f3 \"solution for injection\"","solution for injection"),
+        },
+        ["C38114"] = new[]
+        {
+            ("$IDMP_DUMMY#R1 \"oral\"",                  "oral"),
+            ("$IDMP_DUMMY#R2 \"subcutaneous injection\"","subcutaneous injection"),
+            ("$IDMP_DUMMY#R3 \"topical\"",               "topical"),
+        },
+        ["C218748"] = new[]
+        {
+            ("$NCIT#C41161 \"Experimental Intervention\"","Experimental Intervention"),
+            ("$NCIT#C753 \"Placebo\"",                   "Placebo"),
+            ("$NCIT#C165835 \"Rescue Medicine\"",        "Rescue Medicine"),
+            ("$NCIT#C165822 \"Background Treatment\"",   "Background Treatment"),
+            ("$NCIT#C158128 \"Challenge Agent\"",        "Challenge Agent"),
+            ("$NCIT#C18020 \"Diagnostic\"",              "Diagnostic"),
+            ("$NCIT#C207614 \"Additional Required Treatment\"","Additional Required Treatment"),
+        },
+        ["C218749"] = new[]
+        {
+            ("$NCIT#C202579 \"MP\"",   "MP"),
+            ("$NCIT#C156473 \"NIMP\"", "NIMP"),
+        },
+        ["C218750"] = new[]
+        {
+            ("$NCIT#C215659 \"Centrally Sourced\"", "Centrally Sourced"),
+            ("$NCIT#C215660 \"Locally Sourced\"",   "Locally Sourced"),
+        },
+    };
+
     private RenderFragment TblRow(int row) => __builder =>
     {
         <tr>
@@ -263,10 +323,25 @@
             {
                 var fid = $"{col}_r{row}";
                 <td><div class="field-wrap">
-                    <textarea data-ctx="@fid" class="fb" rows="2"
-                        placeholder="@col"
-                        value="@GetTbl(fid)"
-                        @oninput="@(e => SetTbl(fid, e.Value?.ToString()))"></textarea>
+                    @if (ColOptions.TryGetValue(col, out var opts))
+                    {
+                        <select data-ctx="@fid" class="tbl-sel"
+                            value="@GetTbl(fid)"
+                            @onchange="@(e => SetTbl(fid, e.Value?.ToString()))">
+                            <option value="">-- select --</option>
+                            @foreach (var opt in opts)
+                            {
+                                <option value="@opt.value">@opt.label</option>
+                            }
+                        </select>
+                    }
+                    else
+                    {
+                        <textarea data-ctx="@fid" class="fb" rows="2"
+                            placeholder="@col"
+                            value="@GetTbl(fid)"
+                            @oninput="@(e => SetTbl(fid, e.Value?.ToString()))"></textarea>
+                    }
                 </div></td>
             }
         </tr>;

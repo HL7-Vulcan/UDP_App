@@ -14,8 +14,17 @@ Alias: $phase-vs = m11-phase-vs
 Alias: $Pub = http://hl7.org/fhir/publication-status
 Alias: $Comp = http://hl7.org/fhir/composition-status
 Alias: $RegID = https://example.org/regulatory-agency-identifier
-Alias: $EMA_CTREG = https://exemplarEMA.org/registry-identifier
+Alias: $EMA_CTREG = https://exemplarEMARegulator.org/registry-identifier
+Alias: $FDA_REG = https://exemplarFDARegulator.org/registry-identifier
+Alias: $NCT_REG = https://exemplarNCTRegulator.org/registry-identifier
+Alias: $IDE_REG = https://exemplarIDERegulator.org/registry-identifier
+Alias: $jRCT_REG = https://exemplarJRCTRegulator.org/registry-identifier
+Alias: $NPMA_REG = https://exemplarNPMARegulator.org/registry-identifier
+Alias: $WHO_REG = https://exemplarWHORegulator.org/registry-identifier
 Alias: $ERA_REG = https://exemplarRegulator.org/registry-identifier
+
+
+
 Alias: $SCT = http://snomed.info/sct
 Alias: $SpID = https://exemplarSponsor.com/sponsor-identifier
 Alias: $study-role-vs = m11-blinded-roles-vs
@@ -48,3 +57,4 @@ Alias: $UCUM = http://unitsofmeasure.org
 Alias: $fhir-types = http://hl7.org/fhir/fhir-types
 
 Alias: $UDP_Term = https://HL7Vulcan.org/UDP/Terminology
+Alias: $IDMP_DUMMY = https://HL7Vulcan.org/UDP/Terminology/IDMP

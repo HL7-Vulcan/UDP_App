@@ -1,0 +1,36 @@
+In section 06 field C172457 should be a drop down menu with following options:
+Active Comparator Arm (C174267), Control Arm (C174226), Experimental Arm (C174266), No Intervention Arm (C174270), Placebo Comparator Arm (C174268), Sham Comparator Arm (C174269)
+The format of the data in the sample file should be $NCIT#CXXXXX "Label"
+
+In section 06 field C98747 should be a drop down menu with following options:
+Drug (C1909), Medical Device (C16830), Biologic (C307), Vaccine (C923), Non
+Surgical Procedure (C218507), Surgery (C15329), Radiation (C15313), 
+Behavioral (C15184), Genetic (C15238), Dietary Supplement (C1505), 
+Combination Product (C54696), Diagnostic (C18020) 
+The format of the data in the sample file should be $NCIT#CXXXXX "Label"
+
+
+In section 06 field C42636 should be a drop down menu with following options:
+tablet (f1), capsule (f2), solution for injection (f3)
+The format of the data in the sample file should be $IDMP_DUMMY#fXXXXX "Label"
+
+
+In section 06 field C38114 should be a drop down menu with following options:
+oral (R1), subcutaneous injection (R2), topical (R3)
+The format of the data in the sample file should be $IDMP_DUMMY#RXXXXX "Label"
+
+
+In section 06 field C218748 should be a drop down menu with following options:
+Experimental Intervention (C41161), Placebo (C753), Rescue Medicine 
+(C165835), Background Treatment (C165822), Challenge Agent (C158128), 
+Diagnostic (C18020), Additional Required Treatment (C207614) 
+The format of the data in the sample file should be $NCIT#CXXXXX "Label"
+
+In section 06 field C218749 should be a drop down menu with following options:
+MP (C202579), NIMP (C156473) 
+The format of the data in the sample file should be $NCIT#CXXXXX "Label"
+
+In section 06 field C218750 should be a drop down menu with following options:
+Centrally Sourced (C215659), Locally Sourced (C215660) 
+The format of the data in the sample file should be $NCIT#CXXXXX "Label"
+

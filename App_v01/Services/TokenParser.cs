@@ -97,24 +97,33 @@ public static class TokenParser
             string content = template.Substring(open + 2, close - open - 4);
             if (content.StartsWith("REPEAT", StringComparison.Ordinal))
             {
-                // Find start of line (position after preceding newline) to capture leading whitespace
+                // Walk back to the start of the line so we remove the whole {{REPEAT...}} line,
+                // but preserve any leading whitespace that is INSIDE the content (after REPEAT).
                 int lineStart = open;
                 while (lineStart > 0 && template[lineStart - 1] != '\n' && template[lineStart - 1] != '\r')
                     lineStart--;
 
-                // Content after "REPEAT" is the per-row line pattern
+                // Content after "REPEAT" is the per-row line pattern.
+                // Any leading whitespace in rowPattern is part of the intended output — preserve it.
                 string rowPattern = content.Substring("REPEAT".Length);
+
+                // Consume the newline that follows the closing }} so we don't leave a blank line
+                int blockEnd = close;
+                if (blockEnd < template.Length && template[blockEnd] == '\r') blockEnd++;
+                if (blockEnd < template.Length && template[blockEnd] == '\n') blockEnd++;
+
                 var sb = new System.Text.StringBuilder();
                 bool first = true;
                 foreach (var rowId in rowIds)
                 {
                     if (!first) sb.AppendLine();
                     first = false;
-                    // Substitute {{TABLE_ROW_X}} within the pattern
+                    // Preserve leading whitespace by wrapping pattern in {{ }} for Substitute
                     sb.Append(Substitute("{{" + rowPattern + "}}", key =>
                         key == "TABLE_ROW_X" ? rowId : key));
                 }
-                return (sb.ToString(), lineStart, close - lineStart);
+
+                return (sb.ToString(), lineStart, blockEnd - lineStart);
             }
 
             i = close;

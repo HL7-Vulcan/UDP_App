@@ -56,7 +56,7 @@ public class DataService
     public string ToFsh(Section02Model model)
     {
         // Load the template file from the Templates folder
-        var templatePath = Path.Combine(_env.ContentRootPath, "Templates", "UDP_App.Template.fsh");
+        var templatePath = Path.Combine(_env.ContentRootPath, "Templates", "Section_02_Template.fsh");
 
         string template;
         try
