@@ -16,4 +16,17 @@
     <None Remove="Claude\**" />
   </ItemGroup>
 
+  <ItemGroup>
+    <!-- .fsh files are not recognised by the SDK so must be explicitly included -->
+    <None Include="Templates\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
+    <!-- .json sample files: Update sets publish flag on items SDK already knows -->
+    <Content Update="Data\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>
