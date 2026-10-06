@@ -1,4 +1,4 @@
-// ── File download ──────────────────────────────────────────────────
+// ── File download (text) ───────────────────────────────────────────
 window.udpDownload = function (filename, content, mimeType) {
     const encoded = 'data:' + mimeType + ';charset=utf-8,' + encodeURIComponent(content);
     const a = document.createElement('a');
@@ -7,6 +7,50 @@ window.udpDownload = function (filename, content, mimeType) {
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
+};
+
+// ── File download (base-64 binary, e.g. JSON from SUSHI) ──────────
+window.udpDownloadBase64 = function (filename, base64) {
+    const byteChars = atob(base64);
+    const bytes = new Uint8Array(byteChars.length);
+    for (let i = 0; i < byteChars.length; i++) bytes[i] = byteChars.charCodeAt(i);
+    const blob = new Blob([bytes], { type: 'application/json' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href     = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+};
+
+// ── Scroll element to bottom (used by SUSHI live log) ─────────────
+window.udpScrollBottom = function (elementId) {
+    const el = document.getElementById(elementId);
+    if (el) el.scrollTop = el.scrollHeight;
+};
+
+// ── FSH file picker (import into Examples folder) ─────────────────
+window.udpOpenFshPicker = function (dotNetRef) {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.fsh';
+    input.style.display = 'none';
+    document.body.appendChild(input);
+    input.addEventListener('change', function () {
+        const file = input.files[0];
+        document.body.removeChild(input);
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            // result is a data URL: "data:...;base64,<content>"
+            const base64 = e.target.result.split(',')[1];
+            dotNetRef.invokeMethodAsync('ReceiveFshFile', file.name, base64);
+        };
+        reader.readAsDataURL(file);
+    });
+    input.click();
 };
 
 // ── DotNet references — one per section key ────────────────────────

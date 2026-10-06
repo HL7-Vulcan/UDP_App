@@ -3,6 +3,7 @@
 @using UDP_App.Models
 @using UDP_App.Services
 @inject DataService08 DataSvc
+@inject SushiService SushiSvc
 @inject IJSRuntime JS
 @implements IDisposable
 
@@ -229,6 +230,7 @@
             _      => (DataSvc.ToJson(Model),      "application/json", ".json"),
         };
         var fn = (SaveFileName.Trim().Length > 0 ? SaveFileName.Trim() : "section8_data") + ext;
+        if (SaveFormat == "fhir") SushiSvc.SaveToExamples(fn, content);
         await JS.InvokeVoidAsync("udpDownload", fn, content, mime);
         SetStatus("⬇ Downloaded " + fn);
     }

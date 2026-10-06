@@ -1,0 +1,696 @@
+@page "/title-page"
+@layout MainLayout
+@using UDP_App.Models
+@using UDP_App.Services
+@inject DataServiceTP DataSvc
+@inject IJSRuntime JS
+@implements IDisposable
+
+<PageTitle>Title Page – Data Entry</PageTitle>
+
+<style>
+    .doc-page { background:#fff; width:794px; min-height:1123px; margin:30px auto 80px; padding:56px 72px; box-shadow:0 4px 24px rgba(0,0,0,0.18); font-family:'Calibri',Arial,sans-serif; font-size:11pt; color:#000; }
+    .h1  { font-family:'Times New Roman',Times,serif; font-size:14pt; font-weight:700; margin:0 0 18px; }
+    .h2  { font-family:'Times New Roman',Times,serif; font-size:12pt; font-weight:700; margin:22px 0 8px; border-bottom:1px solid #ccc; padding-bottom:3px; }
+    .tp-tbl { width:100%; border-collapse:collapse; margin-bottom:12px; font-size:10.5pt; }
+    .tp-tbl td { border:1px solid #bbb; padding:5px 8px; vertical-align:top; }
+    .tp-tbl td.lbl { font-weight:700; white-space:nowrap; width:36%; background:#f0f4ff; color:#1f3864; font-size:10pt; }
+    .tp-tbl td.req::after { content:" *"; color:#c00; font-size:9pt; }
+    .tp-tbl td.cond { background:#f5f0ff; }
+    textarea.fb { display:block; width:100%; background:#d0cece; color:#1a7a1a; border:none; border-bottom:1.5px solid #999; font-family:'Calibri',Arial,sans-serif; font-size:10.5pt; line-height:1.4; padding:3px 5px; outline:none; resize:vertical; min-height:36px; }
+    textarea.fb:focus { background:#bfbcbc; }
+    textarea.fb::placeholder { color:#9a7ab5; font-style:italic; }
+    textarea.fb.req-empty { border-bottom:2px solid #c00; background:#f5d0d0; }
+    input.fb { display:block; width:100%; background:#d0cece; color:#1a7a1a; border:none; border-bottom:1.5px solid #999; font-family:'Calibri',Arial,sans-serif; font-size:10.5pt; padding:3px 5px; outline:none; }
+    input.fb:focus { background:#bfbcbc; }
+    input.fb.req-empty { border-bottom:2px solid #c00; background:#f5d0d0; }
+    select.fb-sel { display:block; width:100%; background:#d0cece; color:#1a7a1a; border:none; border-bottom:1.5px solid #999; font-family:'Calibri',Arial,sans-serif; font-size:10.5pt; padding:3px 5px; outline:none; cursor:pointer; }
+    select.fb-sel:focus { background:#bfbcbc; }
+    select.fb-sel.req-empty { border-bottom:2px solid #c00; background:#f5d0d0; }
+    .type-badge { font-size:8pt; color:#888; font-style:italic; margin-bottom:3px; }
+    /* Change overview table */
+    .chg-tbl { width:100%; border-collapse:collapse; font-size:10pt; margin-top:8px; }
+    .chg-tbl th { background:#1f3864; color:#fff; padding:5px 8px; text-align:left; font-size:9.5pt; }
+    .chg-tbl td { border:1px solid #bbb; padding:3px 5px; vertical-align:top; }
+    .chg-tbl textarea.fb { min-height:32px; }
+    .add-btn { background:#00B050; color:#fff; border:none; border-radius:3px; padding:4px 12px; font-size:10pt; cursor:pointer; margin-top:6px; }
+    .add-btn:hover { background:#008a3e; }
+    .del-btn { background:none; border:none; color:#c00; font-size:14px; cursor:pointer; padding:0 3px; }
+    .del-btn:hover { color:#900; }
+    .toolbar { display:flex; justify-content:flex-end; gap:10px; margin-top:32px; flex-wrap:wrap; }
+    .btn { padding:7px 20px; border:none; border-radius:3px; font-size:10pt; font-family:inherit; cursor:pointer; }
+    .btn-primary   { background:#1f3864; color:#fff; } .btn-primary:hover { background:#162a4e; }
+    .btn-secondary { background:#eee; color:#333; border:1px solid #ccc; } .btn-secondary:hover { background:#ddd; }
+    .overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:200; align-items:center; justify-content:center; }
+    .overlay.show { display:flex; }
+    .dbox { background:#fff; border-radius:6px; padding:28px 32px; width:400px; box-shadow:0 8px 40px rgba(0,0,0,0.25); }
+    .dbox h3 { font-size:13pt; font-weight:700; color:#1f3864; margin-bottom:12px; }
+    .dbox p  { font-size:10.5pt; margin-bottom:16px; }
+    .dbox input[type=text] { width:100%; border:1px solid #aaa; border-radius:3px; padding:6px 8px; font-size:10pt; margin-bottom:14px; outline:none; }
+    .fmt-row { display:flex; gap:14px; margin-bottom:20px; }
+    .fmt-row label { display:flex; align-items:center; gap:5px; font-size:10pt; cursor:pointer; }
+    .dbr { display:flex; justify-content:flex-end; gap:10px; }
+    .sbar { position:fixed; bottom:0; left:0; right:0; background:#1f3864; color:#fff; font-size:9pt; padding:5px 18px; display:flex; justify-content:space-between; align-items:center; z-index:100; }
+    .err  { background:#fff3cd; color:#856404; border:1px solid #ffc107; padding:10px; margin-bottom:10px; border-radius:4px; font-size:10pt; }
+    .ctx-menu { display:none; position:fixed; background:#fff; border:1px solid #ccc; border-radius:4px; box-shadow:0 4px 16px rgba(0,0,0,0.18); z-index:1000; min-width:320px; max-width:420px; font-family:'Calibri',Arial,sans-serif; font-size:10pt; }
+    .ctx-hdr  { background:#1f3864; color:#fff; padding:8px 12px; font-weight:700; font-size:10pt; border-radius:4px 4px 0 0; display:flex; justify-content:space-between; align-items:center; }
+    .ctx-close { background:none; border:none; color:#fff; font-size:14px; cursor:pointer; }
+    .ctx-body { padding:10px 12px; }
+    .ctx-row  { display:flex; gap:8px; margin-bottom:6px; font-size:9.5pt; }
+    .ctx-row label { font-weight:700; white-space:nowrap; min-width:100px; color:#333; }
+    .ctx-row span  { color:#555; word-break:break-all; }
+    .ctx-div  { border:none; border-top:1px solid #e0e0e0; margin:8px 0; }
+    .ctx-guide { font-size:9.5pt; color:#444; line-height:1.5; }
+</style>
+
+@if (!string.IsNullOrEmpty(ErrorMessage)) { <div class="err">⚠ @ErrorMessage</div> }
+
+<div class="doc-page">
+    <div class="h1">Title Page</div>
+
+    <table class="tp-tbl">
+        <tr>
+            <td class="lbl">Sponsor Confidentiality Statement:</td>
+            <td><div class="type-badge">optional string</div>
+                <textarea data-ctx="C181236" class="fb" rows="2" placeholder="Enter Sponsor Confidentiality Statement"
+                    @bind="Model.C181236" @bind:event="oninput"></textarea></td>
+        </tr>
+        <tr>
+            <td class="lbl req">Full Title</td>
+            <td><div class="type-badge">required string</div>
+                <textarea data-ctx="C132346" class="@ReqClass(Model.C132346)" rows="3" placeholder="Enter Full Title"
+                    @bind="Model.C132346" @bind:event="oninput"></textarea></td>
+        </tr>
+        <tr>
+            <td class="lbl">Trial Acronym</td>
+            <td><div class="type-badge">optional string</div>
+                <input data-ctx="C94108" class="fb" type="text" placeholder="Enter Trial Acronym"
+                    @bind="Model.C94108" @bind:event="oninput" /></td>
+        </tr>
+        <tr>
+            <td class="lbl req">Sponsor Protocol Identifier:</td>
+            <td><div class="type-badge">required string</div>
+                <input data-ctx="C132351" class="@ReqInputClass(Model.C132351)" type="text" placeholder="Enter Sponsor Protocol Identifier"
+                    @bind="Model.C132351" @bind:event="oninput" /></td>
+        </tr>
+        <tr>
+            <td class="lbl req">Original Protocol:</td>
+            <td><div class="type-badge">required picklist</div>
+                <select data-ctx="C218672" class="@SelReqClass(Model.C218672)"
+                    value="@Model.C218672" @onchange="@(e => { Model.C218672 = e.Value?.ToString(); })">
+                    <option value="">-- select --</option>
+                    <option value='$NCIT#C49488 "Yes"'>Yes</option>
+                    <option value='$NCIT#C49487 "No"'>No</option>
+                </select></td>
+        </tr>
+        <tr>
+            <td class="lbl">Version Number:</td>
+            <td><div class="type-badge">optional string</div>
+                <input data-ctx="C181232" class="fb" type="text" placeholder="Enter Version Number"
+                    @bind="Model.C181232" @bind:event="oninput" /></td>
+        </tr>
+        <tr>
+            <td class="lbl">Version Date:</td>
+            <td><div class="type-badge">optional date</div>
+                <input data-ctx="C93813" class="fb" type="text" placeholder="yyyy-mm-dd"
+                    @bind="Model.C93813" @bind:event="oninput" /></td>
+        </tr>
+        <tr>
+            <td class="lbl cond">Amendment Identifier:</td>
+            <td><div class="type-badge">conditional string</div>
+                <input data-ctx="C218477" class="fb" type="text" placeholder="Enter Amendment Identifier"
+                    @bind="Model.C218477" @bind:event="oninput" /></td>
+        </tr>
+        <tr>
+            <td class="lbl cond">Amendment Scope:</td>
+            <td><div class="type-badge">conditional picklist</div>
+                <select data-ctx="C218673" class="fb-sel"
+                    value="@Model.C218673" @onchange="@(e => { Model.C218673 = e.Value?.ToString(); })">
+                    <option value="">-- select --</option>
+                    <option value='$NCIT#C68846 "Global"'>Global</option>
+                    <option value='$NCIT#C217026 "Not Global"'>Not Global</option>
+                </select>
+                <div style="margin-top:6px;">
+                    <div class="type-badge">Country (conditional picklist)</div>
+                    <select data-ctx="C20108" class="fb-sel"
+                        value="@Model.C20108" @onchange="@(e => { Model.C20108 = e.Value?.ToString(); })">
+                        <option value="">-- select --</option>
+                        <option value="$iso3166#GB \"UK\"">UK</option>
+                        <option value="$iso3166#FR \"France\"">France</option>
+                        <option value="$iso3166#DE \"Germany\"">Germany</option>
+                        <option value="$iso3166#IN \"India\"">India</option>
+                        <option value="$iso3166#AU \"Australia\"">Australia</option>
+                    </select>
+                </div>
+                <div style="margin-top:6px;">
+                    <div class="type-badge">Region (conditional picklist)</div>
+                    <select data-ctx="C218674" class="fb-sel"
+                        value="@Model.C218674" @onchange="@(e => { Model.C218674 = e.Value?.ToString(); })">
+                        <option value="">-- select --</option>
+                        <option value="$iso3166-2#GB-WLS \"Wales\"">Wales</option>
+                        <option value="$iso3166-2#FR-NOR \"Normandy\"">Normandy</option>
+                        <option value="$iso3166-2#DE-BY \"Bavaria\"">Bavaria</option>
+                        <option value="$iso3166-2#IN-UP \"Uttar Pradesh\"">Uttar Pradesh</option>
+                        <option value="$iso3166-2#AU-NSW \"New South Wales\"">New South Wales</option>
+                    </select>
+                </div>
+                <div style="margin-top:6px;">
+                    <div class="type-badge">Site Identifier (conditional string)</div>
+                    <input data-ctx="C83081" class="fb" type="text" placeholder="Enter Site Identifier"
+                        @bind="Model.C83081" @bind:event="oninput" />
+                </div></td>
+        </tr>
+        <tr>
+            <td class="lbl">Sponsor's Investigational Product Code(s):</td>
+            <td><div class="type-badge">optional string</div>
+                <input data-ctx="C218675" class="fb" type="text" placeholder="Enter Sponsor IP Code(s)"
+                    @bind="Model.C218675" @bind:event="oninput" /></td>
+        </tr>
+        <tr>
+            <td class="lbl">Investigational Product Name(s):</td>
+            <td>
+                <div class="type-badge">Nonproprietary Name (optional string)</div>
+                <input data-ctx="C97054" class="fb" type="text" placeholder="Enter Nonproprietary Name(s)"
+                    @bind="Model.C97054" @bind:event="oninput" />
+                <div class="type-badge" style="margin-top:6px;">Proprietary Name (optional string)</div>
+                <input data-ctx="C71898" class="fb" type="text" placeholder="Enter Proprietary Name(s)"
+                    @bind="Model.C71898" @bind:event="oninput" /></td>
+        </tr>
+        <tr>
+            <td class="lbl req">Trial Phase</td>
+            <td><div class="type-badge">required picklist</div>
+                <select data-ctx="C48281" class="@SelReqClass(Model.C48281)"
+                    value="@Model.C48281" @onchange="@(e => { Model.C48281 = e.Value?.ToString(); })">
+                    <option value="">-- select --</option>
+                    <option value='$NCIT#C54721 "Early Phase 1"'>Early Phase 1</option>
+                    <option value='$NCIT#C15600 "Phase 1"'>Phase 1</option>
+                    <option value='$NCIT#C15693 "Phase 1/Phase 2"'>Phase 1/Phase 2</option>
+                    <option value='$NCIT#C198366 "Phase 1/Phase 2/Phase 3"'>Phase 1/Phase 2/Phase 3</option>
+                    <option value='$NCIT#C198367 "Phase 1/Phase 3"'>Phase 1/Phase 3</option>
+                    <option value='$NCIT#C15601 "Phase 2"'>Phase 2</option>
+                    <option value='$NCIT#C15694 "Phase 2/Phase 3"'>Phase 2/Phase 3</option>
+                    <option value='$NCIT#C217024 "Phase 2/Phase 3/Phase 4"'>Phase 2/Phase 3/Phase 4</option>
+                    <option value='$NCIT#C15602 "Phase 3"'>Phase 3</option>
+                    <option value='$NCIT#C217025 "Phase 3/Phase 4"'>Phase 3/Phase 4</option>
+                    <option value='$NCIT#C15603 "Phase 4"'>Phase 4</option>
+                </select></td>
+        </tr>
+        <tr>
+            <td class="lbl">Short Title</td>
+            <td><div class="type-badge">optional string</div>
+                <textarea data-ctx="C94105" class="fb" rows="2" placeholder="Enter Short Title"
+                    @bind="Model.C94105" @bind:event="oninput"></textarea></td>
+        </tr>
+        <tr>
+            <td class="lbl req">Sponsor Name and Address:</td>
+            <td>
+                <div class="type-badge">Sponsor Name (required string)</div>
+                <input data-ctx="C222495" class="@ReqInputClass(Model.C222495)" type="text" placeholder="Enter Sponsor Name"
+                    @bind="Model.C222495" @bind:event="oninput" />
+                <div class="type-badge" style="margin-top:6px;">Sponsor Legal Address (required string)</div>
+                <textarea data-ctx="C218677" class="@ReqClass(Model.C218677)" rows="2" placeholder="Enter Sponsor Legal Address"
+                    @bind="Model.C218677" @bind:event="oninput"></textarea></td>
+        </tr>
+        <tr>
+            <td class="lbl">Co-Sponsor Name and Address:</td>
+            <td>
+                <div class="type-badge">Co-Sponsor Name (optional string)</div>
+                <input data-ctx="C218678" class="fb" type="text" placeholder="Enter Co-Sponsor Name"
+                    @bind="Model.C218678" @bind:event="oninput" />
+                <div class="type-badge" style="margin-top:6px;">Co-Sponsor Legal Address (optional string)</div>
+                <textarea data-ctx="C218679" class="fb" rows="2" placeholder="Enter Co-Sponsor Legal Address"
+                    @bind="Model.C218679" @bind:event="oninput"></textarea></td>
+        </tr>
+        <tr>
+            <td class="lbl">Local Sponsor Name and Address:</td>
+            <td>
+                <div class="type-badge">Local Sponsor Name (optional string)</div>
+                <input data-ctx="C218680" class="fb" type="text" placeholder="Enter Local Sponsor Name"
+                    @bind="Model.C218680" @bind:event="oninput" />
+                <div class="type-badge" style="margin-top:6px;">Local Sponsor Legal Address (optional string)</div>
+                <textarea data-ctx="C218681" class="fb" rows="2" placeholder="Enter Local Sponsor Legal Address"
+                    @bind="Model.C218681" @bind:event="oninput"></textarea></td>
+        </tr>
+        <tr>
+            <td class="lbl">Device Manufacturer Name and Address:</td>
+            <td>
+                <div class="type-badge">Device Manufacturer Name (optional string)</div>
+                <input data-ctx="C218682" class="fb" type="text" placeholder="Enter Device Manufacturer Name"
+                    @bind="Model.C218682" @bind:event="oninput" />
+                <div class="type-badge" style="margin-top:6px;">Device Manufacturer Address (optional string)</div>
+                <textarea data-ctx="C218683" class="fb" rows="2" placeholder="Enter Device Manufacturer Address"
+                    @bind="Model.C218683" @bind:event="oninput"></textarea></td>
+        </tr>
+        <tr>
+            <td class="lbl">Regulatory or Clinical Trial Identifier(s):</td>
+            <td>
+                <div class="type-badge">EU CT Number (optional string)</div>
+                <input data-ctx="C218684" class="fb" type="text" placeholder="EU CT Number"   @bind="Model.C218684" @bind:event="oninput" />
+                <div class="type-badge" style="margin-top:4px;">FDA IND Number (optional string)</div>
+                <input data-ctx="C218685" class="fb" type="text" placeholder="FDA IND Number" @bind="Model.C218685" @bind:event="oninput" />
+                <div class="type-badge" style="margin-top:4px;">IDE Number (optional string)</div>
+                <input data-ctx="C218686" class="fb" type="text" placeholder="IDE Number"     @bind="Model.C218686" @bind:event="oninput" />
+                <div class="type-badge" style="margin-top:4px;">jRCT Number (optional string)</div>
+                <input data-ctx="C218687" class="fb" type="text" placeholder="jRCT Number"    @bind="Model.C218687" @bind:event="oninput" />
+                <div class="type-badge" style="margin-top:4px;">NCT Number (optional string)</div>
+                <input data-ctx="C172240" class="fb" type="text" placeholder="NCT Number"     @bind="Model.C172240" @bind:event="oninput" />
+                <div class="type-badge" style="margin-top:4px;">NMPA IND Number (optional string)</div>
+                <input data-ctx="C218688" class="fb" type="text" placeholder="NMPA IND Number" @bind="Model.C218688" @bind:event="oninput" />
+                <div class="type-badge" style="margin-top:4px;">WHO/UTN Number (optional string)</div>
+                <input data-ctx="C218689" class="fb" type="text" placeholder="WHO/UTN Number"  @bind="Model.C218689" @bind:event="oninput" />
+                <div class="type-badge" style="margin-top:4px;">Other Regulatory Identifier (optional string)</div>
+                <input data-ctx="C218690" class="fb" type="text" placeholder="Other Identifier" @bind="Model.C218690" @bind:event="oninput" /></td>
+        </tr>
+        <tr>
+            <td class="lbl cond">Sponsor Approval:</td>
+            <td>
+                <div class="type-badge">Approval Date (conditional date)</div>
+                <input data-ctx="C132352" class="fb" type="text" placeholder="yyyy-mm-dd" @bind="Model.C132352" @bind:event="oninput" />
+                <div class="type-badge" style="margin-top:6px;">Signature Location (conditional string)</div>
+                <input data-ctx="C218484" class="fb" type="text" placeholder="State location of sponsor approval information"
+                    @bind="Model.C218484" @bind:event="oninput" /></td>
+        </tr>
+    </table>
+
+    <p style="font-weight:700;margin:14px 0 4px;">Sponsor Signatory</p>
+    <table class="tp-tbl">
+        <tr>
+            <td class="lbl">Sponsor Signatory:</td>
+            <td>
+                <div class="type-badge">optional string</div>
+                <textarea data-ctx="C222014" class="fb" rows="2" placeholder="Enter sponsor signatory (name, title, signature and date)"
+                    @bind="Model.C222014" @bind:event="oninput"></textarea>
+                <div class="type-badge" style="margin-top:6px;">Location (optional string)</div>
+                <input data-ctx="C222064" class="fb" type="text" placeholder="State location where signatory information can be found"
+                    @bind="Model.C222064" @bind:event="oninput" /></td>
+        </tr>
+    </table>
+
+    <p style="font-weight:700;margin:14px 0 4px;">Medical Expert Contact</p>
+    <table class="tp-tbl">
+        <tr>
+            <td class="lbl">Medical Expert Contact:</td>
+            <td>
+                <div class="type-badge">optional string</div>
+                <textarea data-ctx="C218693" class="fb" rows="2" placeholder="Enter Medical Expert contact information"
+                    @bind="Model.C218693" @bind:event="oninput"></textarea>
+                <div class="type-badge" style="margin-top:6px;">Location (optional string)</div>
+                <input data-ctx="C222063" class="fb" type="text" placeholder="State location where Medical Expert contact information can be found"
+                    @bind="Model.C222063" @bind:event="oninput" /></td>
+        </tr>
+    </table>
+
+    <div class="h2">Amendment Details</div>
+    <table class="tp-tbl">
+        <tr>
+            <td class="lbl cond">Amendment Status:</td>
+            <td><div class="type-badge">conditional picklist</div>
+                <select data-ctx="C218694" class="fb-sel"
+                    value="@Model.C218694" @onchange="@(e => { Model.C218694 = e.Value?.ToString(); })">
+                    <option value="">-- select --</option>
+                    <option value="U101">This protocol has not been amended</option>
+                    <option value="U102">This is the first protocol amendment</option>
+                    <option value="U103">This protocol has been amended previously. Details of prior amendments are presented in Section 12.3 Prior Protocol Amendment(s).</option>
+                </select></td>
+        </tr>
+    </table>
+
+    <p style="font-style:italic;font-size:10pt;color:#555;margin:6px 0 12px;">The table below describes the current amendment. Complete only if an amendment applies.</p>
+
+    <table class="tp-tbl">
+        <tr>
+            <td class="lbl cond">Approx. Enrolled at Time of Sponsor Approval:</td>
+            <td>
+                <div class="type-badge">conditional quantity</div>
+                <input data-ctx="C218478" class="fb" type="text" placeholder="Approximately #/% enrolled"
+                    @bind="Model.C218478" @bind:event="oninput" />
+                <div class="type-badge" style="margin-top:6px;">Amendment Scope Enrollment Definition (conditional picklist)</div>
+                <select data-ctx="C218695" class="fb-sel"
+                    value="@Model.C218695" @onchange="@(e => { Model.C218695 = e.Value?.ToString(); })">
+                    <option value="">-- select --</option>
+                    <option value='$NCIT#C68846 "Globally"'>Globally</option>
+                    <option value='$NCIT#C41065 "Locally"'>Locally</option>
+                    <option value='$NCIT#C218489 "By Cohort"'>By Cohort</option>
+                </select></td>
+        </tr>
+        <tr>
+            <td class="lbl cond">Primary Reason for Amendment:</td>
+            <td><div class="type-badge">conditional picklist</div>
+                @ReasonSelect("C218696", Model.C218696, v => Model.C218696 = v)
+                <div class="type-badge" style="margin-top:6px;">Other reason text (conditional string)</div>
+                <input data-ctx="C17649" class="fb" type="text" placeholder="Enter other reason"
+                    @bind="Model.C17649" @bind:event="oninput" /></td>
+        </tr>
+        <tr>
+            <td class="lbl cond">Secondary Reason for Amendment:</td>
+            <td><div class="type-badge">conditional picklist</div>
+                @ReasonSelect("C218697", Model.C218697, v => Model.C218697 = v)</td>
+        </tr>
+        <tr>
+            <td class="lbl cond">Amendment Summary:</td>
+            <td><div class="type-badge">conditional string</div>
+                <textarea data-ctx="C42581" class="fb" rows="3" placeholder="Briefly describe key changes"
+                    @bind="Model.C42581" @bind:event="oninput"></textarea></td>
+        </tr>
+        <tr>
+            <td class="lbl cond">Substantial Impact on Safety or Rights?</td>
+            <td>
+                <div class="type-badge">conditional picklist</div>
+                <select data-ctx="C218698" class="fb-sel"
+                    value="@Model.C218698" @onchange="@(e => { Model.C218698 = e.Value?.ToString(); })">
+                    <option value="">-- select --</option>
+                    <option value='$NCIT#C49488 "Yes"'>Yes</option>
+                    <option value='$NCIT#C49487 "No"'>No</option>
+                </select>
+                <div class="type-badge" style="margin-top:6px;">If yes, briefly explain (conditional string)</div>
+                <textarea data-ctx="C218699" class="fb" rows="2" placeholder="If yes, briefly explain"
+                    @bind="Model.C218699" @bind:event="oninput"></textarea></td>
+        </tr>
+        <tr>
+            <td class="lbl cond">Substantial Impact on Reliability and Robustness?</td>
+            <td>
+                <div class="type-badge">conditional picklist</div>
+                <select data-ctx="C218700" class="fb-sel"
+                    value="@Model.C218700" @onchange="@(e => { Model.C218700 = e.Value?.ToString(); })">
+                    <option value="">-- select --</option>
+                    <option value='$NCIT#C49488 "Yes"'>Yes</option>
+                    <option value='$NCIT#C49487 "No"'>No</option>
+                </select>
+                <div class="type-badge" style="margin-top:6px;">If yes, briefly explain (conditional string)</div>
+                <textarea data-ctx="C218701" class="fb" rows="2" placeholder="If yes, briefly explain"
+                    @bind="Model.C218701" @bind:event="oninput"></textarea></td>
+        </tr>
+    </table>
+
+    <div class="h2">Overview of Changes in the Current Amendment</div>
+    <table class="chg-tbl">
+        <thead><tr>
+            <th style="width:5%"></th>
+            <th style="width:38%">Description of Change</th>
+            <th style="width:32%">Brief Rationale for Change</th>
+            <th style="width:25%">Section # and Name</th>
+        </tr></thead>
+        <tbody>
+            @foreach (var row in ChgRows)
+            {
+                var r = row;
+                <tr>
+                    <td style="text-align:center;vertical-align:middle;">
+                        <button class="del-btn" @onclick="@(() => DeleteChgRow(r))">✕</button>
+                    </td>
+                    <td><textarea class="fb" rows="2" placeholder="Description of Change"
+                        value="@GetChg($"C218483_r{r}")"
+                        @oninput="@(e => SetChg($"C218483_r{r}", e.Value?.ToString()))"></textarea></td>
+                    <td><textarea class="fb" rows="2" placeholder="Brief Rationale for Change"
+                        value="@GetChg($"C181233_r{r}")"
+                        @oninput="@(e => SetChg($"C181233_r{r}", e.Value?.ToString()))"></textarea></td>
+                    <td>
+                        <select class="fb-sel"
+                            value="@GetChg($"C218479_r{r}")"
+                            @onchange="@(e => SetChg($"C218479_r{r}", e.Value?.ToString()))">
+                            <option value="">-- select --</option>
+                            <option value='$NCIT#C217342 "Section 1"'>Section 1</option>
+                            <option value='$NCIT#C217343 "Section 2"'>Section 2</option>
+                            <option value='$NCIT#C217344 "Section 3"'>Section 3</option>
+                            <option value='$NCIT#C217345 "Section 4"'>Section 4</option>
+                            <option value='$NCIT#C217346 "Section 5"'>Section 5</option>
+                            <option value='$NCIT#C217347 "Section 6"'>Section 6</option>
+                            <option value='$NCIT#C217348 "Section 7"'>Section 7</option>
+                            <option value='$NCIT#C217349 "Section 8"'>Section 8</option>
+                            <option value='$NCIT#C217350 "Section 9"'>Section 9</option>
+                            <option value='$NCIT#C217351 "Section 10"'>Section 10</option>
+                            <option value='$NCIT#C217352 "Section 11"'>Section 11</option>
+                            <option value='$NCIT#C217353 "Section 12"'>Section 12</option>
+                            <option value='$NCIT#C217354 "Section 13"'>Section 13</option>
+                            <option value='$NCIT#C217355 "Section 14"'>Section 14</option>
+                            <option value='$NCIT#C217356 "Section Title Page"'>Section Title Page</option>
+                            <option value='$NCIT#C217357 "Section Amendment Details"'>Section Amendment Details</option>
+                        </select>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <button class="add-btn" @onclick="AddChgRow">+ Add Row</button>
+
+    <div class="toolbar">
+        <button class="btn btn-secondary" @onclick="ClearAll">Clear All</button>
+        <button class="btn btn-secondary" @onclick="LoadSample">Load Sample</button>
+        <button class="btn btn-secondary" @onclick="OpenSaveDialog">⬇ Save to File…</button>
+        <button class="btn btn-secondary" @onclick="OpenLoadDialog">⬆ Load from File</button>
+        <button class="btn btn-primary"   @onclick="SaveToBrowser">Save to Browser</button>
+    </div>
+</div>
+
+<div id="tp-ctx-menu" class="ctx-menu">
+    <div class="ctx-hdr"><span>Field Information</span><button class="ctx-close" @onclick="CloseCtxMenu">✕</button></div>
+    <div class="ctx-body">
+        <div class="ctx-row"><label>Field name:</label><span>@CtxFieldName</span></div>
+        <hr class="ctx-div" />
+        <div class="ctx-guide"><strong>Guidance:</strong><br />@CtxGuidance</div>
+    </div>
+</div>
+
+<div class="overlay @SaveDialogCss">
+    <div class="dbox">
+        <h3>Save Data to File</h3>
+        <label style="display:block;font-weight:700;margin-bottom:6px;">File name</label>
+        <input type="text" @bind="SaveFileName" @bind:event="oninput" />
+        <label style="display:block;font-weight:700;margin:10px 0 6px;">Format</label>
+        <div class="fmt-row">
+            <label><input type="radio" name="tpfmt" checked="@IsJson" @onchange="SetFmtJson" /> JSON</label>
+            <label><input type="radio" name="tpfmt" checked="@IsCsv"  @onchange="SetFmtCsv"  /> CSV</label>
+            <label><input type="radio" name="tpfmt" checked="@IsTxt"  @onchange="SetFmtTxt"  /> Plain Text</label>
+            <label><input type="radio" name="tpfmt" checked="@IsFhir" @onchange="SetFmtFhir" /> FHIR</label>
+        </div>
+        <div class="dbr">
+            <button class="btn btn-secondary" @onclick="CloseSaveDialog">Cancel</button>
+            <button class="btn btn-primary"   @onclick="DoSaveToFile">Download</button>
+        </div>
+    </div>
+</div>
+
+<div class="overlay @ReqDialogCss">
+    <div class="dbox">
+        <h3 style="color:#c00;">Incomplete Required Fields</h3>
+        <p>@ReqDialogMsg</p>
+        <div class="dbr">
+            <button class="btn btn-secondary" @onclick="CloseReqDialog">Cancel</button>
+            <button class="btn btn-primary" style="background:#c00;" @onclick="ForceConfirm">Save Anyway</button>
+        </div>
+    </div>
+</div>
+
+<div class="sbar">
+    <span>Title Page – Data Entry &nbsp;|&nbsp; Grey = data entry &nbsp;|&nbsp; Blue label = required &nbsp;|&nbsp; Purple label = conditional</span>
+    <span>@StatusMessage</span>
+</div>
+
+@code {
+    private TitlePageModel Model = new();
+    private List<int> ChgRows = new() { 1 };
+    private int _nextChgRow = 2;
+    private bool   ShowValidation = false;
+    private bool   ShowSaveDialog = false;
+    private bool   ShowReqDialog  = false;
+    private string SaveFileName   = "title_page_data";
+    private string SaveFormat     = "json";
+    private string StatusMessage  = string.Empty;
+    private string ReqDialogMsg   = string.Empty;
+    private string ErrorMessage   = string.Empty;
+    private string? PendingAction = null;
+    private string CtxFieldName = string.Empty, CtxGuidance = string.Empty;
+    private System.Threading.Timer? _statusTimer;
+    private DotNetObjectReference<TitlePage>? _objRef;
+
+    private string SaveDialogCss => ShowSaveDialog ? "overlay show" : "overlay";
+    private string ReqDialogCss  => ShowReqDialog  ? "overlay show" : "overlay";
+    private bool IsJson => SaveFormat == "json"; private bool IsCsv  => SaveFormat == "csv";
+    private bool IsTxt  => SaveFormat == "txt";  private bool IsFhir => SaveFormat == "fhir";
+    private void SetFmtJson(ChangeEventArgs e) => SaveFormat = "json";
+    private void SetFmtCsv(ChangeEventArgs e)  => SaveFormat = "csv";
+    private void SetFmtTxt(ChangeEventArgs e)  => SaveFormat = "txt";
+    private void SetFmtFhir(ChangeEventArgs e) => SaveFormat = "fhir";
+
+    private string ReqClass(string? v)      => ShowValidation && string.IsNullOrWhiteSpace(v) ? "fb req-empty" : "fb";
+    private string ReqInputClass(string? v) => ShowValidation && string.IsNullOrWhiteSpace(v) ? "fb req-empty" : "fb";
+    private string SelReqClass(string? v)   => ShowValidation && string.IsNullOrWhiteSpace(v) ? "fb-sel req-empty" : "fb-sel";
+
+    private string GetChg(string key) => Model.ChgData.TryGetValue(key, out var v) ? v : string.Empty;
+    private void SetChg(string key, string? val) { Model.ChgData[key] = val ?? string.Empty; }
+
+    private void AddChgRow()
+    {
+        var r = _nextChgRow++;
+        ChgRows.Add(r);
+        Model.ChgRows = ChgRows.Count;
+    }
+
+    private void DeleteChgRow(int r)
+    {
+        ChgRows.Remove(r);
+        var keys = Model.ChgData.Keys.Where(k => k.EndsWith($"_r{r}")).ToList();
+        foreach (var k in keys) Model.ChgData.Remove(k);
+        Model.ChgRows = ChgRows.Count;
+    }
+
+    private RenderFragment ReasonSelect(string ctxId, string? current, Action<string?> setter) => __builder =>
+    {
+        var opts = new[]
+        {
+            ("$NCIT#C218490 \"Regulatory Agency Request To Amend\"", "Regulatory Agency Request To Amend"),
+            ("$NCIT#C218491 \"New Regulatory Guidance\"",           "New Regulatory Guidance"),
+            ("$NCIT#C218492 \"IRB/IEC Feedback\"",                  "IRB/IEC Feedback"),
+            ("$NCIT#C218493 \"New Safety Information Available\"",   "New Safety Information Available"),
+            ("$NCIT#C218494 \"Manufacturing Change\"",              "Manufacturing Change"),
+            ("$NCIT#C218495 \"IMP Addition\"",                      "IMP Addition"),
+            ("$NCIT#C218496 \"Change In Strategy\"",                "Change In Strategy"),
+            ("$NCIT#C218497 \"Change In Standard Of Care\"",        "Change In Standard Of Care"),
+            ("$NCIT#C218498 \"New Data Available (Other Than Safety Data)\"", "New Data Available (Other Than Safety Data)"),
+            ("$NCIT#C218499 \"Investigator/Site Feedback\"",        "Investigator/Site Feedback"),
+            ("$NCIT#C218500 \"Recruitment Difficulty\"",            "Recruitment Difficulty"),
+            ("$NCIT#C218501 \"Inconsistency And/Or Error In The Protocol\"", "Inconsistency And/Or Error In The Protocol"),
+            ("$NCIT#C218502 \"Protocol Design Error\"",             "Protocol Design Error"),
+            ("$NCIT#C17649 \"Other\"",                              "Other"),
+            ("$NCIT#C48660 \"Not Applicable\"",                     "Not Applicable"),
+        };
+        <select data-ctx="@ctxId" class="fb-sel" value="@current"
+            @onchange="@(e => setter(e.Value?.ToString()))">
+            <option value="">-- select --</option>
+            @foreach (var (val, lbl) in opts)
+            {
+                <option value="@val">@lbl</option>
+            }
+        </select>;
+    };
+
+    private bool HasRequiredEmpty() =>
+        new[] { Model.C132346, Model.C132351, Model.C218672, Model.C48281, Model.C222495, Model.C218677 }
+            .Any(string.IsNullOrWhiteSpace);
+
+    private int RequiredEmptyCount() =>
+        new[] { Model.C132346, Model.C132351, Model.C218672, Model.C48281, Model.C222495, Model.C218677 }
+            .Count(string.IsNullOrWhiteSpace);
+
+    private void ClearAll()
+    {
+        Model = new(); ChgRows = new List<int> { 1 }; _nextChgRow = 2;
+        ShowValidation = false; ErrorMessage = string.Empty;
+        _ = JS.InvokeVoidAsync("localStorage.removeItem", "tpdata");
+        SetStatus("Cleared");
+    }
+
+    private void LoadSample()
+    {
+        var s = DataSvc.LoadSample();
+        if (s != null)
+        {
+            Model = s;
+            ChgRows = Enumerable.Range(1, Math.Max(1, s.ChgRows)).ToList();
+            _nextChgRow = ChgRows.Max() + 1;
+            ShowValidation = false; SetStatus("Sample data loaded");
+        }
+        else ErrorMessage = "Could not load sample file.";
+    }
+
+    private async Task SaveToBrowser()
+    {
+        ShowValidation = true;
+        if (HasRequiredEmpty()) { ReqDialogMsg = $"{RequiredEmptyCount()} required field(s) empty."; PendingAction = "browser"; ShowReqDialog = true; return; }
+        await DoBrowserSave();
+    }
+
+    private async Task DoBrowserSave()
+    {
+        try { await JS.InvokeVoidAsync("localStorage.setItem", "tpdata", DataSvc.ToJson(Model)); SetStatus("✓ Saved " + DateTime.Now.ToShortTimeString()); }
+        catch (Exception ex) { ErrorMessage = ex.Message; }
+    }
+
+    private void OpenSaveDialog()
+    {
+        ShowValidation = true;
+        if (HasRequiredEmpty()) { ReqDialogMsg = $"{RequiredEmptyCount()} required field(s) empty."; PendingAction = "file"; ShowReqDialog = true; return; }
+        SaveFileName = "title_page_data_" + DateTime.Now.ToString("yyyy-MM-dd"); ShowSaveDialog = true;
+    }
+
+    private void CloseSaveDialog() => ShowSaveDialog = false;
+    private void CloseReqDialog()  { ShowReqDialog = false; PendingAction = null; }
+
+    private async Task ForceConfirm()
+    {
+        ShowReqDialog = false;
+        if (PendingAction == "browser") await DoBrowserSave();
+        else if (PendingAction == "file") { SaveFileName = "title_page_data_" + DateTime.Now.ToString("yyyy-MM-dd"); ShowSaveDialog = true; }
+        PendingAction = null;
+    }
+
+    private async Task DoSaveToFile()
+    {
+        ShowSaveDialog = false;
+        var (content, mime, ext) = SaveFormat switch
+        {
+            "csv"  => (DataSvc.ToCsv(Model),      "text/csv",         ".csv"),
+            "txt"  => (DataSvc.ToPlainText(Model), "text/plain",       ".txt"),
+            "fhir" => (DataSvc.ToFsh(Model),       "text/plain",       ".fsh"),
+            _      => (DataSvc.ToJson(Model),      "application/json", ".json"),
+        };
+        var fn = (SaveFileName.Trim().Length > 0 ? SaveFileName.Trim() : "title_page_data") + ext;
+        await JS.InvokeVoidAsync("udpDownload", fn, content, mime);
+        SetStatus("⬇ Downloaded " + fn);
+    }
+
+    private async Task OpenLoadDialog() => await JS.InvokeVoidAsync("udpOpenFilePicker");
+
+    [JSInvokable] public void ReceiveFileContent(string json)
+    {
+        var l = DataSvc.FromJson(json);
+        if (l != null)
+        {
+            Model = l;
+            ChgRows = Enumerable.Range(1, Math.Max(1, l.ChgRows)).ToList();
+            _nextChgRow = ChgRows.Max() + 1;
+            ShowValidation = false; SetStatus("⬆ Loaded from file"); InvokeAsync(StateHasChanged);
+        }
+    }
+
+    [JSInvokable] public async Task OnContextMenuJS(string fieldId, double x, double y)
+    {
+        CtxFieldName = fieldId; CtxGuidance = string.Empty;
+        StateHasChanged(); await JS.InvokeVoidAsync("udpShowCtxMenu", "tp-ctx-menu", x, y);
+    }
+    [JSInvokable] public void OnCtxMenuClosed() { }
+    private void CloseCtxMenu() => _ = JS.InvokeVoidAsync("udpHideCtxMenu", "tp-ctx-menu");
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender) return;
+        try
+        {
+            _objRef = DotNetObjectReference.Create(this);
+            await JS.InvokeVoidAsync("udpSetDotNetRef", _objRef, "tp-ctx-menu");
+            await JS.InvokeVoidAsync("udpInitContextMenus", "tp-ctx-menu");
+            var json = await JS.InvokeAsync<string?>("localStorage.getItem", "tpdata");
+            if (!string.IsNullOrEmpty(json))
+            {
+                var l = DataSvc.FromJson(json);
+                if (l != null)
+                {
+                    Model = l;
+                    ChgRows = Enumerable.Range(1, Math.Max(1, l.ChgRows)).ToList();
+                    _nextChgRow = ChgRows.Max() + 1;
+                    StateHasChanged();
+                }
+            }
+        }
+        catch (JSDisconnectedException) { } catch (TaskCanceledException) { }
+        catch (Exception ex) { ErrorMessage = "Init error: " + ex.Message; StateHasChanged(); }
+    }
+
+    private void SetStatus(string msg)
+    {
+        StatusMessage = msg; _statusTimer?.Dispose();
+        _statusTimer = new System.Threading.Timer(_ => { StatusMessage = string.Empty; InvokeAsync(StateHasChanged); }, null, 4000, System.Threading.Timeout.Infinite);
+    }
+
+    public void Dispose() { _objRef?.Dispose(); _statusTimer?.Dispose(); }
+}

@@ -3,6 +3,7 @@
 @using UDP_App.Models
 @using UDP_App.Services
 @inject DataService05 DataSvc
+@inject SushiService SushiSvc
 @inject IJSRuntime JS
 @implements IDisposable
 
@@ -310,6 +311,8 @@
         {
             var (std, r5) = DataSvc.ToFsh(Model);
             var baseName  = SaveFileName.Trim().Length > 0 ? SaveFileName.Trim() : "section5_data";
+            SushiSvc.SaveToExamples(baseName + ".fsh", std);
+            SushiSvc.SaveToExamples(baseName + "_R5.fsh", r5);
             await JS.InvokeVoidAsync("udpDownload", baseName + ".fsh",       std, "text/plain");
             await JS.InvokeVoidAsync("udpDownload", baseName + "_R5" + ".fsh", r5, "text/plain");
             SetStatus("⬇ Downloaded standard + R5 FHIR files");

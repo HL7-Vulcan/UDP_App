@@ -1,0 +1,479 @@
+@page "/sushi"
+@inject SushiService SushiSvc
+@inject IJSRuntime JS
+@implements IDisposable
+
+<PageTitle>SUSHI Runner</PageTitle>
+
+<div class="container-fluid mt-3">
+    <h4 class="mb-3">SUSHI Runner</h4>
+    <p class="text-muted small mb-3">
+        Compiles the FSH project using the locally installed <code>fsh-sushi</code> CLI and makes
+        the generated JSON resources available for download.
+        SUSHI must be installed via <code>npm install -g fsh-sushi</code>.
+    </p>
+
+    @* ── Tabs ─────────────────────────────────────────────────────────── *@
+    <ul class="nav nav-tabs mb-3" id="sushiTabs">
+        <li class="nav-item">
+            <a class="nav-link @(ActiveTab == "run" ? "active" : "")"
+               href="#" @onclick='() => ActiveTab = "run"' @onclick:preventDefault>Run</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link @(ActiveTab == "config" ? "active" : "")"
+               href="#" @onclick='() => ActiveTab = "config"' @onclick:preventDefault>sushi-config.yaml</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link @(ActiveTab == "files" ? "active" : "")"
+               href="#" @onclick='() => ActiveTab = "files"' @onclick:preventDefault>Static FSH Files</a>
+        </li>
+    </ul>
+
+    @* ── Run tab ──────────────────────────────────────────────────────── *@
+    @if (ActiveTab == "run")
+    {
+        <div class="row g-3 mb-4">
+
+            @* ── Left: Examples folder ────────────────────────────────── *@
+            <div class="col-md-4">
+                <div class="d-flex align-items-center mb-2 gap-2">
+                    <label class="form-label fw-semibold mb-0">Examples Folder</label>
+                    <button class="btn btn-outline-primary btn-sm ms-auto text-nowrap"
+                            @onclick="ImportExample" disabled="@Running">
+                        ⬆ Import
+                    </button>
+                </div>
+                @if (!string.IsNullOrEmpty(ExamplesMessage))
+                {
+                    <div class="alert @ExamplesMessageCss py-1 mb-2 small">@ExamplesMessage</div>
+                }
+                <div class="border rounded" style="min-height:60px;max-height:320px;overflow-y:auto;">
+                    @if (ExampleFiles.Count == 0)
+                    {
+                        <p class="text-muted small p-2 mb-0">
+                            No .fsh files yet. Save a section as FHIR or use Import.
+                        </p>
+                    }
+                    else
+                    {
+                        <table class="table table-sm table-hover mb-0">
+                            <tbody>
+                                @foreach (var f in ExampleFiles)
+                                {
+                                    <tr class="@(SelectedExample == f ? "table-primary" : "")">
+                                        <td class="font-monospace small align-middle"
+                                            style="cursor:pointer" @onclick="() => SelectExample(f)">
+                                            @f
+                                        </td>
+                                        <td style="width:36px;" class="text-end pe-2">
+                                            <button class="btn btn-link btn-sm text-danger p-0"
+                                                    title="Delete" disabled="@Running"
+                                                    @onclick="() => DeleteExample(f)"
+                                                    @onclick:stopPropagation>
+                                                🗑
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                </div>
+                <div class="form-text">
+                    Click a file to load it into the editor. SUSHI compiles all files in this folder.
+                </div>
+            </div>
+
+            @* ── Right: FSH editor ────────────────────────────────────── *@
+            <div class="col-md-8">
+                <div class="d-flex align-items-center mb-2 gap-2">
+                    <label class="form-label fw-semibold mb-0">
+                        FSH content
+                        @if (!string.IsNullOrWhiteSpace(SelectedExample))
+                        {
+                            <span class="text-muted fw-normal ms-2 small">— @SelectedExample</span>
+                        }
+                    </label>
+                    @if (!string.IsNullOrWhiteSpace(FshContent) && !string.IsNullOrWhiteSpace(SelectedExample))
+                    {
+                        <button class="btn btn-outline-success btn-sm ms-auto"
+                                @onclick="SaveSelectedExample" disabled="@Running">
+                            💾 Save
+                        </button>
+                    }
+                </div>
+                <textarea class="form-control font-monospace" rows="14"
+                          @bind="FshContent" style="font-size:0.78rem;"></textarea>
+                <div class="form-text">
+                    Edit and save changes to a file, or paste new FSH then use Save As below.
+                </div>
+                @if (!string.IsNullOrWhiteSpace(FshContent) && string.IsNullOrWhiteSpace(SelectedExample))
+                {
+                    <div class="input-group mt-2" style="max-width:340px;">
+                        <span class="input-group-text small">Save as</span>
+                        <input class="form-control form-control-sm font-monospace"
+                               @bind="FshFileName" placeholder="my_study.fsh" />
+                        <button class="btn btn-outline-secondary btn-sm"
+                                @onclick="SaveAsNewExample" disabled="@Running">
+                            Save to folder
+                        </button>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="d-flex gap-2 mb-3">
+            <button class="btn btn-primary" @onclick="RunSushi" disabled="@Running">
+                @if (Running)
+                {
+                    <span class="spinner-border spinner-border-sm me-1"></span>
+                    <span>Running SUSHI…</span>
+                }
+                else
+                {
+                    <span>▶ Run SUSHI</span>
+                }
+            </button>
+            <button class="btn btn-outline-secondary" @onclick="ClearAll" disabled="@Running">
+                Clear
+            </button>
+        </div>
+
+        @* Live console log — visible while running and after *@
+        @if (LogLines.Count > 0 || Running)
+        {
+            <div class="mb-3">
+                <label class="form-label fw-semibold">
+                    Console output
+                    @if (Running)
+                    {
+                        <span class="spinner-border spinner-border-sm ms-2 text-secondary" style="width:0.85rem;height:0.85rem;"></span>
+                    }
+                </label>
+                <pre id="sushi-log" class="border rounded p-2 bg-light"
+                     style="font-size:0.75rem;max-height:300px;overflow-y:auto;white-space:pre-wrap;">@string.Join("\n", LogLines)</pre>
+            </div>
+        }
+
+        @if (RunResult != null)
+        {
+            @* Status banner *@
+            <div class="alert @(RunResult.Success ? "alert-success" : "alert-danger") py-2 mb-3">
+                @if (RunResult.Success)
+                {
+                    <strong>✓ SUSHI completed successfully.</strong>
+                    <span class="ms-2">@RunResult.Files.Count resource file(s) generated.</span>
+                }
+                else
+                {
+                    <strong>✗ SUSHI failed.</strong>
+                    @if (!string.IsNullOrWhiteSpace(RunResult.Error))
+                    {
+                        <span class="ms-2">@RunResult.Error</span>
+                    }
+                }
+            </div>
+
+            @* Study-specific generated files *@
+            @if (RunResult.GeneratedFiles.Any())
+            {
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">
+                        Generated resources
+                        <span class="badge bg-primary ms-1">@RunResult.GeneratedFiles.Count</span>
+                    </label>
+                    <div class="border rounded p-2" style="max-height:320px;overflow-y:auto;">
+                        <table class="table table-sm table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>File</th>
+                                    <th style="width:100px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var f in RunResult.GeneratedFiles)
+                                {
+                                    <tr>
+                                        <td class="font-monospace small">@f.FileName</td>
+                                        <td>
+                                            <button class="btn btn-outline-primary btn-sm py-0"
+                                                    @onclick="() => DownloadFile(f.FileName)">
+                                                ⬇ Download
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            }
+            else if (RunResult.Success)
+            {
+                <div class="alert alert-warning py-2 mb-3">
+                    No study-specific resources were generated. All output files are support files.
+                </div>
+            }
+
+            @* Support files — collapsed by default *@
+            @if (RunResult.SupportFiles.Any())
+            {
+                <div class="mb-3">
+                    <button class="btn btn-outline-secondary btn-sm"
+                            @onclick="() => ShowSupportFiles = !ShowSupportFiles">
+                        @(ShowSupportFiles ? "▲ Hide" : "▼ Show") Support Files List
+                        <span class="badge bg-secondary ms-1">@RunResult.SupportFiles.Count</span>
+                    </button>
+
+                    @if (ShowSupportFiles)
+                    {
+                        <div class="border rounded p-2 mt-2" style="max-height:320px;overflow-y:auto;">
+                            <p class="text-muted small mb-2">
+                                These files are generated from the static FSH definitions (profiles,
+                                value sets, code systems). They are the same for every run.
+                            </p>
+                            <table class="table table-sm table-hover mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>File</th>
+                                        <th style="width:100px;"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var f in RunResult.SupportFiles)
+                                    {
+                                        <tr>
+                                            <td class="font-monospace small">@f.FileName</td>
+                                            <td>
+                                                <button class="btn btn-outline-secondary btn-sm py-0"
+                                                        @onclick="() => DownloadFile(f.FileName)">
+                                                    ⬇ Download
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            }
+        }
+    }
+
+    @* ── Config tab ───────────────────────────────────────────────────── *@
+    @if (ActiveTab == "config")
+    {
+        <div class="mb-2 d-flex gap-2 align-items-center">
+            <span class="fw-semibold">SushiProject/sushi-config.yaml</span>
+            <button class="btn btn-sm btn-success ms-auto" @onclick="SaveConfig">💾 Save</button>
+        </div>
+        @if (ConfigSaved)
+        {
+            <div class="alert alert-success py-1 mb-2">Saved.</div>
+        }
+        <textarea class="form-control font-monospace" rows="28"
+                  @bind="ConfigContent" style="font-size:0.78rem;"></textarea>
+    }
+
+    @* ── Static files tab ─────────────────────────────────────────────── *@
+    @if (ActiveTab == "files")
+    {
+        <p class="text-muted small">
+            These are the static FSH files bundled with the app in
+            <code>SushiProject/input/fsh/</code>. To update them, replace the files on disk and
+            redeploy.
+        </p>
+        <ul class="list-group font-monospace" style="font-size:0.82rem;">
+            @foreach (var f in StaticFiles)
+            {
+                <li class="list-group-item py-1">@f</li>
+            }
+        </ul>
+    }
+
+</div>
+
+@code {
+    private string ActiveTab = "run";
+    private string FshFileName = "generated.fsh";
+    private string FshContent = "";
+    private string SelectedExample = "";   // filename currently loaded in editor
+    private bool Running = false;
+    private SushiRunResult? RunResult;
+    private List<string> LogLines = new();
+    private bool ShowSupportFiles = false;
+    private string ConfigContent = "";
+    private bool ConfigSaved = false;
+    private List<string> StaticFiles = new();
+    private List<string> ExampleFiles = new();
+    private string ExamplesMessage = "";
+    private bool ExamplesSuccess = true;
+    private string ExamplesMessageCss => ExamplesSuccess ? "alert-success" : "alert-danger";
+
+    protected override void OnInitialized()
+    {
+        ConfigContent = SushiSvc.ReadConfig();
+        StaticFiles   = SushiSvc.ListStaticFshFiles();
+        ExampleFiles  = SushiSvc.ListExampleFiles();
+    }
+
+    private async Task RunSushi()
+    {
+        Running          = true;
+        RunResult        = null;
+        LogLines         = new();
+        ShowSupportFiles = false;
+        StateHasChanged();
+
+        // If there is content in the editor, save it to the Examples folder first
+        // (either update the selected file or write to FshFileName if content is new)
+        if (!string.IsNullOrWhiteSpace(FshContent))
+        {
+            var target = !string.IsNullOrWhiteSpace(SelectedExample)
+                ? SelectedExample
+                : (FshFileName.Trim().Length > 0 ? FshFileName.Trim() : "generated.fsh");
+            SushiSvc.SaveToExamples(target, FshContent);
+            ExampleFiles = SushiSvc.ListExampleFiles();
+        }
+
+        // Stream each line of sushi output into the log panel in real time
+        void OnLine(string line)
+        {
+            LogLines.Add(line);
+            _ = InvokeAsync(async () =>
+            {
+                StateHasChanged();
+                try { await JS.InvokeVoidAsync("udpScrollBottom", "sushi-log"); } catch { }
+            });
+        }
+
+        // Run SUSHI — no filename/content needed; it compiles the whole project
+        RunResult = await SushiSvc.RunAsync(null, null, OnLine);
+        Running   = false;
+        ExampleFiles = SushiSvc.ListExampleFiles();
+        StateHasChanged();
+    }
+
+    private async Task DownloadFile(string fileName)
+    {
+        var bytes = SushiSvc.ReadGeneratedFile(fileName);
+        if (bytes == null) return;
+        var b64 = Convert.ToBase64String(bytes);
+        await JS.InvokeVoidAsync("udpDownloadBase64", fileName, b64);
+    }
+
+    // ── Examples file selection / editing ───────────────────────────────────
+
+    private void SelectExample(string fileName)
+    {
+        SelectedExample = fileName;
+        try
+        {
+            var path = Path.Combine(SushiSvc.ExamplesFolder, fileName);
+            FshContent = File.Exists(path) ? File.ReadAllText(path) : "";
+        }
+        catch { FshContent = ""; }
+    }
+
+    private void SaveSelectedExample()
+    {
+        if (string.IsNullOrWhiteSpace(SelectedExample) || string.IsNullOrWhiteSpace(FshContent)) return;
+        SushiSvc.SaveToExamples(SelectedExample, FshContent);
+        ShowExamplesToast("✓ Saved " + SelectedExample);
+    }
+
+    private void SaveAsNewExample()
+    {
+        if (string.IsNullOrWhiteSpace(FshContent)) return;
+        var saved = SushiSvc.SaveToExamples(
+            FshFileName.Trim().Length > 0 ? FshFileName.Trim() : "generated.fsh",
+            FshContent);
+        ExampleFiles    = SushiSvc.ListExampleFiles();
+        SelectedExample = saved;
+        ShowExamplesToast("✓ Saved " + saved);
+    }
+
+    private void ShowExamplesToast(string msg)
+    {
+        ExamplesSuccess = true;
+        ExamplesMessage = msg;
+        _ = Task.Delay(3000).ContinueWith(_ => { ExamplesMessage = ""; InvokeAsync(StateHasChanged); });
+    }
+
+    private void ClearAll()
+    {
+        FshContent       = "";
+        SelectedExample  = "";
+        RunResult        = null;
+        LogLines         = new();
+        ShowSupportFiles = false;
+    }
+
+    private void SaveConfig()
+    {
+        SushiSvc.SaveConfig(ConfigContent);
+        ConfigSaved = true;
+        _ = Task.Delay(2000).ContinueWith(_ => { ConfigSaved = false; InvokeAsync(StateHasChanged); });
+    }
+
+    // ── Examples tab ────────────────────────────────────────────────────────
+
+    private void OpenExamplesTab()
+    {
+        ExampleFiles = SushiSvc.ListExampleFiles(); // refresh on every visit
+        ExamplesMessage = "";
+        ActiveTab = "examples";
+    }
+
+    private void DeleteExample(string fileName)
+    {
+        var ok = SushiSvc.DeleteExampleFile(fileName);
+        ExampleFiles = SushiSvc.ListExampleFiles();
+        if (SelectedExample == fileName) { SelectedExample = ""; FshContent = ""; }
+        if (ok)
+        {
+            ExamplesSuccess = true;
+            ExamplesMessage = $"✓ Deleted {fileName}";
+        }
+        else
+        {
+            ExamplesSuccess = false;
+            ExamplesMessage = $"Could not delete {fileName}.";
+        }
+        _ = Task.Delay(3000).ContinueWith(_ => { ExamplesMessage = ""; InvokeAsync(StateHasChanged); });
+    }
+
+    private async Task ImportExample()
+    {
+        // Open a file picker restricted to .fsh files via JS, then receive bytes back
+        _dotNetRef ??= DotNetObjectReference.Create(this);
+        await JS.InvokeVoidAsync("udpOpenFshPicker", _dotNetRef);
+    }
+
+    private DotNetObjectReference<SushiRunner>? _dotNetRef;
+
+    [Microsoft.JSInterop.JSInvokable]
+    public void ReceiveFshFile(string fileName, string base64Content)
+    {
+        try
+        {
+            var bytes = Convert.FromBase64String(base64Content);
+            var saved = SushiSvc.ImportExampleFile(fileName, bytes);
+            ExampleFiles = SushiSvc.ListExampleFiles();
+            ExamplesSuccess = true;
+            ExamplesMessage = $"✓ Imported {saved}";
+            // Auto-load the imported file into the editor
+            SelectExample(saved);
+        }
+        catch (Exception ex)
+        {
+            ExamplesSuccess = false;
+            ExamplesMessage = $"Import failed: {ex.Message}";
+        }
+        _ = InvokeAsync(StateHasChanged);
+        _ = Task.Delay(4000).ContinueWith(_ => { ExamplesMessage = ""; InvokeAsync(StateHasChanged); });
+    }
+
+    public void Dispose() => _dotNetRef?.Dispose();
+}

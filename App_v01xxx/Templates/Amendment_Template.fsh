@@ -11,15 +11,15 @@ xxx
 // Title Page
 * identifier[+].type.coding[+] = $NCIT#C132351 "Sponsor Protocol Identifier"
 * identifier[=].system = $SpID
-* identifier[=].value = {{C132351}} // "ABC-Exemplar"
+* identifier[=].value = "{{C132351}}" // "ABC-Exemplar"
 
 * identifier[+].type.text = "Amendment Identifier"
 * identifier[=].type.coding[+].system = $NCIT
 * identifier[=].type.coding[=].code = #C218477
 * identifier[=].system = $AmdID
-* identifier[=].value = {{C218477}} "ABC-Exemplar(a)"
+* identifier[=].value = "{{C218477}}" //"ABC-Exemplar(a)"
 
-* version = {{C181232}} //"(a)"
+* version = "{{C181232}}" //"(a)"
 * extension[m11-research-study].extension[versionDate].valueDate = {{C93813}} //2017-10-01
 
 //----------------------------------
@@ -28,7 +28,7 @@ xxx
 // Title Page Amemndment Summary
 //
 
-* extension[m11-protocol-amendment][=].extension[previous].valueCodeableConcept = $NCIT#C218488	"Protocol Previously Amended See Summary of Changes Before the Table of Contents"
+* extension[m11-protocol-amendment][+].extension[previous].valueCodeableConcept = $NCIT#C218488	"Protocol Previously Amended See Summary of Changes Before the Table of Contents"
 
 * extension[m11-protocol-amendment][=].extension[scope].valueCodeableConcept = {{C218673}} //$NCIT#C217026	"Not Global"
 * extension[m11-protocol-amendment][=].extension[region].valueCodeableConcept = {{C218674}} //$iso3166-2#AU-NSW "New South Wales"
@@ -45,19 +45,19 @@ xxx
 //* extension[m11-protocol-amendment][=].extension[scopeImpact][=].extension[number].valuePositiveInt = 983
 
 * extension[m11-protocol-amendment][=].extension[primaryReason].valueCodeableConcept = {{C218696}} //$NCIT#C218490  "Regulatory Agency Request to Amend Amendment Reason"
-* extension[m11-protocol-amendment][=].extension[primaryReason][=].valueCodeableConcept.text = {{C17649}} //"Packaging revision"
+* extension[m11-protocol-amendment][=].extension[primaryReason][=].valueCodeableConcept.text = "{{C17649}}" //"Packaging revision"
 * extension[m11-protocol-amendment][=].extension[secondaryReason][+].valueCodeableConcept = {{C218697}} //$NCIT#C218494  "Manufacturing Change Amendment Reason"
-* extension[m11-protocol-amendment][=].extension[secondaryReason][=].valueCodeableConcept.text = {{C17649}} //"Packaging revision"
-* extension[m11-protocol-amendment][=].extension[summary].valueString = {{C42581}} //"Manufacturing chanage to enable packaging change to recyclable materials."
+* extension[m11-protocol-amendment][=].extension[secondaryReason][=].valueCodeableConcept.text = "{{C17649}}" //"Packaging revision"
+* extension[m11-protocol-amendment][=].extension[summary].valueString = "{{C42581}}" //"Manufacturing chanage to enable packaging change to recyclable materials."
 
 * extension[m11-protocol-amendment][=].extension[substantialImpactSafety].valueCodeableConcept = {{C218698}} // $NCIT#C49488  "Yes"
-* extension[m11-protocol-amendment][=].extension[substantialImpactSafetyComment].valueString = {{C218699}} // "Specifically implemented to decrease safety risks."
+* extension[m11-protocol-amendment][=].extension[substantialImpactSafetyComment].valueString = "{{C218699}}" // "Specifically implemented to decrease safety risks."
 * extension[m11-protocol-amendment][=].extension[substantialImpactReliability].valueCodeableConcept = {{C218700}} //$NCIT#C49487  "No"
-* extension[m11-protocol-amendment][=].extension[substantialImpactReliabilityComment].valueString = {{C218701}} // "Specifically implemented to decrease compliance risks."
+* extension[m11-protocol-amendment][=].extension[substantialImpactReliabilityComment].valueString = "{{C218701}}" // "Specifically implemented to decrease compliance risks."
 
 {{REPEAT
-* extension[m11-protocol-amendment][=].extension[details][+].extension[detail].valueString = {{C218483}} //"Clarification"
-* extension[m11-protocol-amendment][=].extension[details][=].extension[rationale].valueString = {{C181233}} //"Clarification of synopsis at request of regulator"
+* extension[m11-protocol-amendment][=].extension[details][+].extension[detail].valueString = "{{C218483}}" //"Clarification"
+* extension[m11-protocol-amendment][=].extension[details][=].extension[rationale].valueString = "{{C181233}}" //"Clarification of synopsis at request of regulator"
 * extension[m11-protocol-amendment][=].extension[details][=].extension[section].valueCodeableConcept = {{C218479}} //$NCIT#C218515  "ICH M11 Protocol Section 1.1 Protocol Synopsis"
 }}
 
