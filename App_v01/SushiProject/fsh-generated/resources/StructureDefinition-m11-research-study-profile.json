@@ -1,0 +1,200 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "m11-research-study-profile",
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm",
+      "valueInteger": 2
+    }
+  ],
+  "url": "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-research-study-profile",
+  "name": "M11_ResearchStudyProfile",
+  "title": "M11 Research Study Profile",
+  "status": "active",
+  "description": "Constraint of ResearchStudy to M11 Guidance\nAn instance of this profile represents a single version of the protocol definition. Previous amendments are represented\nby further instances of ResearchStudy linked through the relatesTo attribute. ",
+  "copyright": "Portions of this material derives from the ICH M11 Harmonised Guideline CeSHarP. \nThe ICH M11 Harmonised Guideline CeSHarP is copyright ©2025+ International Committee on Harmonisation and is made available under license. \n\nCDISC publishes semantics for the ICH M11 protocol data elements and valid \nvalue sets. This terminology set is published and stored in the NCI Thesaurus \nSubset C217023 - ICH M11 Terminology \n(https://evsexplore.semantics.cancer.gov/evsexplore/subset/ncit/C217023) \n\nThe NCI Thesaurus is released under the CC BY 4.0 license\n\nCDISC also publishes the USDM reference architecture which is covered by the CC-BY-4.0 license\n\nFor more licensing information and links see: [licenses.html](licenses.html)",
+  "fhirVersion": "6.0.0-ballot3",
+  "kind": "resource",
+  "abstract": false,
+  "type": "ResearchStudy",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/ResearchStudy",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "ResearchStudy",
+        "path": "ResearchStudy",
+        "constraint": [
+          {
+            "key": "identifier-required",
+            "severity": "error",
+            "human": "The identifier MUST be populated with at least a Sponsor identifier",
+            "expression": "identifier.exists()",
+            "source": "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-research-study-profile"
+          }
+        ]
+      },
+      {
+        "id": "ResearchStudy.extension",
+        "path": "ResearchStudy.extension",
+        "slicing": {
+          "discriminator": [
+            {
+              "type": "value",
+              "path": "url"
+            }
+          ],
+          "ordered": false,
+          "rules": "open"
+        },
+        "min": 1
+      },
+      {
+        "id": "ResearchStudy.extension:narrative",
+        "path": "ResearchStudy.extension",
+        "sliceName": "narrative",
+        "min": 0,
+        "max": "*",
+        "type": [
+          {
+            "code": "Extension",
+            "profile": [
+              "http://HL7Vulcan/UDP/IG/StructureDefinition/narrative-elements"
+            ]
+          }
+        ],
+        "mustSupport": true
+      },
+      {
+        "id": "ResearchStudy.extension:amendment",
+        "path": "ResearchStudy.extension",
+        "sliceName": "amendment",
+        "min": 0,
+        "max": "1",
+        "type": [
+          {
+            "code": "Extension",
+            "profile": [
+              "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-protocol-amendment"
+            ]
+          }
+        ],
+        "mustSupport": true
+      },
+      {
+        "id": "ResearchStudy.extension:confidentialityStatement",
+        "path": "ResearchStudy.extension",
+        "sliceName": "confidentialityStatement",
+        "min": 0,
+        "max": "1",
+        "type": [
+          {
+            "code": "Extension",
+            "profile": [
+              "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-confidentiality-statement"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "ResearchStudy.extension:approval",
+        "path": "ResearchStudy.extension",
+        "sliceName": "approval",
+        "min": 0,
+        "max": "1",
+        "type": [
+          {
+            "code": "Extension",
+            "profile": [
+              "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-approval"
+            ]
+          }
+        ],
+        "mustSupport": true
+      },
+      {
+        "id": "ResearchStudy.extension:m11-research-study",
+        "path": "ResearchStudy.extension",
+        "sliceName": "m11-research-study",
+        "min": 1,
+        "max": "1",
+        "type": [
+          {
+            "code": "Extension",
+            "profile": [
+              "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-research-study"
+            ]
+          }
+        ],
+        "mustSupport": true
+      },
+      {
+        "id": "ResearchStudy.identifier",
+        "path": "ResearchStudy.identifier",
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "ResearchStudy.identifier.type",
+        "path": "ResearchStudy.identifier.type",
+        "min": 1,
+        "mustSupport": true,
+        "isModifier": true,
+        "isModifierReason": "Protocols may have multiple business identifers from a given system - only with a type can they be distinguished.",
+        "binding": {
+          "strength": "extensible",
+          "valueSet": "http://HL7Vulcan/UDP/IG/ValueSet/udp-identifier-type-vs"
+        }
+      },
+      {
+        "id": "ResearchStudy.identifier.type.coding.code",
+        "path": "ResearchStudy.identifier.type.coding.code",
+        "min": 1
+      },
+      {
+        "id": "ResearchStudy.title",
+        "path": "ResearchStudy.title",
+        "comment": "The protocol should have a descriptive title that identifies the scientific aspects of the trial sufficiently to ensure it is immediately evident what the trial is investigating and on whom, and to allow retrieval from literature or internet searches.",
+        "mustSupport": true
+      },
+      {
+        "id": "ResearchStudy.label.type",
+        "path": "ResearchStudy.label.type",
+        "comment": "The value set used here is defined by CDISC/DDF",
+        "binding": {
+          "strength": "extensible",
+          "valueSet": "http://HL7Vulcan/UDP/IG/ValueSet/udp-study-title-type-vs"
+        }
+      },
+      {
+        "id": "ResearchStudy.phase",
+        "path": "ResearchStudy.phase",
+        "comment": "M11 has specified its own preferred terms rather than NCI terms and these should be provided in the display element of the coding.",
+        "mustSupport": true,
+        "binding": {
+          "strength": "required",
+          "valueSet": "http://HL7Vulcan/UDP/IG/ValueSet/m11-phase-vs"
+        }
+      },
+      {
+        "id": "ResearchStudy.focus",
+        "path": "ResearchStudy.focus",
+        "comment": "Expect MedicinalProductDefinition.name.type.code to be one of C71898 Proprietary name or C97054 Non-proprietary name"
+      },
+      {
+        "id": "ResearchStudy.associatedParty.role",
+        "path": "ResearchStudy.associatedParty.role",
+        "comment": "NCI has study roles defined - M11 only requires a limited set of these",
+        "binding": {
+          "strength": "extensible",
+          "valueSet": "http://HL7Vulcan/UDP/IG/ValueSet/udp-party-role-type-vs"
+        }
+      },
+      {
+        "id": "ResearchStudy.associatedParty.party.reference",
+        "path": "ResearchStudy.associatedParty.party.reference",
+        "mustSupport": true
+      }
+    ]
+  }
+}

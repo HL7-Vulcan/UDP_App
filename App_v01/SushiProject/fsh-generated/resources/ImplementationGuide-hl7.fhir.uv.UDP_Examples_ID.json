@@ -1,0 +1,547 @@
+{
+  "resourceType": "ImplementationGuide",
+  "id": "hl7.fhir.uv.UDP_Examples_ID",
+  "url": "http://HL7Vulcan/UDP/IG/ImplementationGuide/hl7.fhir.uv.UDP_Examples_ID",
+  "version": "0.1.0",
+  "name": "UDP_Examples",
+  "title": "UDP Examples",
+  "status": "active",
+  "publisher": "Vulcan",
+  "contact": [
+    {
+      "name": "Vulcan",
+      "telecom": [
+        {
+          "system": "url",
+          "value": "http://HL7Vulcan.org"
+        },
+        {
+          "system": "email",
+          "value": "UDP@HL7Vulcan.org"
+        }
+      ]
+    }
+  ],
+  "jurisdiction": [
+    {
+      "coding": [
+        {
+          "code": "001",
+          "system": "http://unstats.un.org/unsd/methods/m49/m49.htm",
+          "display": "World"
+        }
+      ]
+    }
+  ],
+  "packageId": "hl7.fhir.uv.UDP_Examples_ID",
+  "fhirVersion": [
+    "6.0.0-ballot3"
+  ],
+  "definition": {
+    "resource": [
+      {
+        "reference": {
+          "reference": "Composition/Narrative-Composition-M11Section07"
+        },
+        "name": "Example Narrative Single Composition with a Section for Each M11 Section",
+        "description": "Example Narrative Single Composition with a contained section for e part of M11 Section 07.",
+        "isExample": true,
+        "profile": [
+          "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-research-study-narratives"
+        ]
+      },
+      {
+        "reference": {
+          "reference": "CodeSystem/ncit-cs"
+        },
+        "name": "Fragment of NCIT Code System",
+        "description": "This is a fragment from the NCI Thesaurus covering codes used by ICH M11 Value Sets.\nThese should all be moved into tx.fhir.org but are included here in FHIR format for testing and validation.",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "ValueSet/m11-populationType-vs"
+        },
+        "name": "ICH M11 ...",
+        "description": "Terminology associated with the ... value set codelist of the ICH M11 protocol template.\nThis is ICH M11 Value Set ... drawn from the NCI Thesaurus and represented here in FHIR format.",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "ValueSet/m11-controlType-vs"
+        },
+        "name": "ICH M11 ...",
+        "description": "Terminology associated with the ... value set codelist of the ICH M11 protocol template.\nThis is ICH M11 Value Set ... drawn from the NCI Thesaurus and represented here in FHIR format.",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "ValueSet/m11-interventionAssignmentMethod-vs"
+        },
+        "name": "ICH M11 ...",
+        "description": "Terminology associated with the ... value set codelist of the ICH M11 protocol template.\nThis is ICH M11 Value Set ... drawn from the NCI Thesaurus and represented here in FHIR format.",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "ValueSet/m11-siteDistribution-vs"
+        },
+        "name": "ICH M11 ...",
+        "description": "Terminology associated with the ... value set codelist of the ICH M11 protocol template.\nThis is ICH M11 Value Set ... drawn from the NCI Thesaurus and represented here in FHIR format.",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "ValueSet/m11-siteGeographicscope-vs"
+        },
+        "name": "ICH M11 ...",
+        "description": "Terminology associated with the ... value set codelist of the ICH M11 protocol template.\nThis is ICH M11 Value Set ... drawn from the NCI Thesaurus and represented here in FHIR format.",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "ValueSet/m11-trialBlindSchema-vs"
+        },
+        "name": "ICH M11 ...",
+        "description": "Terminology associated with the ... value set codelist of the ICH M11 protocol template.\nThis is ICH M11 Value Set ... drawn from the NCI Thesaurus and represented here in FHIR format.",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "ValueSet/m11-blindedRoles-vs"
+        },
+        "name": "ICH M11 ...",
+        "description": "Terminology associated with the ... value set codelist of the ICH M11 protocol template.\nThis is ICH M11 Value Set ... drawn from the NCI Thesaurus and represented here in FHIR format.",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "ValueSet/m11-independentCommittees-vs"
+        },
+        "name": "ICH M11 ...",
+        "description": "Terminology associated with the ... value set codelist of the ICH M11 protocol template.\nThis is ICH M11 Value Set ... drawn from the NCI Thesaurus and represented here in FHIR format.",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "ValueSet/m11-amendment-details-statement-vs"
+        },
+        "name": "ICH M11 Amendment Details Statement Value Set Terminology",
+        "description": "Terminology associated with whether or not a protocol has been amended.\nThis is ICH M11 Value Set C217274 drawn from the NCI Thesaurus and represented here in FHIR format.",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "ValueSet/m11-amendment-scope-enrollment-vs"
+        },
+        "name": "ICH M11 Amendment Scope Enrollment Description Value Set Terminology",
+        "description": "Terminology associated with the amendment scope enrollment description value set codelist of the ICH M11 protocol template.\nThis is ICH M11 Value Set C217275 drawn from the NCI Thesaurus and represented here in FHIR format.",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "ValueSet/m11-study-amendment-scope-vs"
+        },
+        "name": "ICH M11 Amendment Scope Value Set Terminology",
+        "description": "Terminology associated with the amendment scope value set codelist of the ICH M11 protocol template.\nThis is ICH M11 Value Set C217047 drawn from the NCI Thesaurus and represented here in FHIR format.\n\nThe M11 guidance to \"leave blank\" if not applicable has to be replaced by an explicit \"Not Applicable\"",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "ValueSet/m11-interventionModel-vs"
+        },
+        "name": "ICH M11 Intervention Model Value Set Terminology",
+        "description": "Terminology associated with the |Intervention Model value set codelist of the ICH M11 protocol template.\nThis is ICH M11 Value Set C217277 drawn from the NCI Thesaurus and represented here in FHIR format.",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "ValueSet/m11-yes-no-vs"
+        },
+        "name": "ICH M11 No Yes Value Set Terminology",
+        "description": "Terminology associated with the no yes value set codelist of the ICH M11 protocol template.\nThis is ICH M11 Value Set C217046 drawn from the NCI Thesaurus and represented here in FHIR format.",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "ValueSet/m11-study-amendment-reason-vs"
+        },
+        "name": "ICH M11 Reason for Amendment Value Set Terminology",
+        "description": "Terminology associated with the reason for amendment value set codelist of the ICH M11 protocol template.\nThis is ICH M11 Value Set C217276 drawn from the NCI Thesaurus and represented here in FHIR format.",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "ValueSet/m11-country-region-vs"
+        },
+        "name": "ICH M11 Study Amendment Country Value Set",
+        "description": "Codes drawn from \nISO 3166 Country Codes, Alpha 3; \nISO 3166 Country Codes, Alpha 2; \ncountry/region codes. This is ICH M11 Value Set represented here in FHIR format.",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "ValueSet/m11-blinded-roles-vs"
+        },
+        "name": "ICH M11 Trial Blinding Role Value Set Terminology",
+        "description": "Terminology associated with the trial blinding role value set codelist of the ICH M11 protocol template.\nThis is ICH M11 Value Set C217281 drawn from the NCI Thesaurus and represented here in FHIR format.",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "ValueSet/m11-phase-vs"
+        },
+        "name": "ICH M11 Trial Phase Value Set Terminology",
+        "description": "Terminology associated with the trial phase value set codelist of the ICH M11 protocol template.\nThis is ICH M11 Value Set C217045 drawn from the NCI Thesaurus and represented here in FHIR format.",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "ValueSet/m11-arm-type-vs"
+        },
+        "name": "M11 Arm Type Elements Value Set using NCIT codes to create a FHIR value set.",
+        "description": "Arm Type elements for describing trial interventions. This is an M11 specific value set.\nCode List C217283: ICH OID 2.16.840.1.113883.3.989.2.3.1.15",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "ValueSet/m11-event-type-vs"
+        },
+        "name": "M11 Event Type Elements Value Set using NCIT codes to create a FHIR value set.",
+        "description": "Event Type elements for describing trial reportings. This is an M11 specific value set.\nCode List C217287: ICH OID 2.16.840.1.113883.3.989.2.3.1.22 ",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "StructureDefinition/m11-r5-groupCharacteristic-ext"
+        },
+        "name": "M11 Extension of FHIR R5 Group Characteristic for use as backport of r6 group TO r5",
+        "description": "Add attributes present in R6 Group that are not in R5\n\ncharacteristic\n  description\n",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "StructureDefinition/m11-r5-group-ext"
+        },
+        "name": "M11 Extension of FHIR R5 Group for use as backport of r6 group TO r5",
+        "description": "Add attributes present in R6 Group that are not in R5\n\ntitle\nstatus\ncombinationMethod\n",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "ValueSet/m11-imp-nimp-type-vs"
+        },
+        "name": "M11 imp-nimp Elements Value Set using NCIT codes to create a FHIR value set.",
+        "description": "imp-nimp elements for describing trial interventions. This is an M11 specific value set.\n- Code List C217286: ICH OID 2.16.840.1.113883.3.989.2.3.1.10",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "ValueSet/m11-intervention-type-vs"
+        },
+        "name": "M11 Intervention Type Elements Value Set using NCIT codes to create a FHIR value set.",
+        "description": "Intervention Type elements for describing trial interventions. This is an M11 specific value set.\n- Code List C217284: ICH OID 2.16.840.1.113883.3.989.2.3.1.7",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "StructureDefinition/m11-research-study"
+        },
+        "name": "M11 Research Study Extension",
+        "description": "Additions for M11 not otherwise dealt with",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "StructureDefinition/m11-research-study-profile"
+        },
+        "name": "M11 Research Study Profile",
+        "description": "Constraint of ResearchStudy to M11 Guidance\nAn instance of this profile represents a single version of the protocol definition. Previous amendments are represented\nby further instances of ResearchStudy linked through the relatesTo attribute. ",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "StructureDefinition/m11-estimands"
+        },
+        "name": "M11 Section 03 - Estimands Table",
+        "description": "Fixed structure for use in Section 03\n\nEstimand[]\n    population\n    treatment[]\n        usdm\n    frequency\n    route\n",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "StructureDefinition/m11-intercurrent-events"
+        },
+        "name": "M11 Section 03 - Intercurrent Events Table Row",
+        "description": "Intercurrent Event and associated Strategy \n\nICE\n    event\n    strategy\n\n",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "StructureDefinition/usdm-estimand-treatment"
+        },
+        "name": "M11 Section 03 - USDM Treatment",
+        "description": "Fixed structure for USDM representation of administerable product in Estimand table.\n\ntreatment\nusdm-product\nusdm-quantity\nusdm-frequency\nusdm-route\n",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "StructureDefinition/m11-objective"
+        },
+        "name": "M11 Section 03.01.01, 03.02.01 and 03.03.01",
+        "description": "Fixed structure for use in Section 03 Objectives\n\nObjective[]\n    Estimand[]\n        population\n        treatment[]\n            usdm\n        frequency\n        route\n    ICE[]\n        event\n        strategy\n",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "ValueSet/m11-source-code-vs"
+        },
+        "name": "M11 Source Code Elements Value Set using NCIT codes to create a FHIR value set.",
+        "description": "Source Code  elements for describing trial interventions. This is an M11 specific value set.\n- Code List C217052: ICH OID 2.16.840.1.113883.3.989.2.3.1.9",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "ValueSet/m11-use-code-vs"
+        },
+        "name": "M11 Use Code Elements Value Set using NCIT codes to create a FHIR value set.",
+        "description": "Use Code elements for describing trial interventions. This is an M11 specific value set.\nCode List C217285: ICH OID 2.16.840.1.113883.3.989.2.3.1.8",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "StructureDefinition/m11-design-table"
+        },
+        "name": "M11-design-table",
+        "description": "Profile of Basic resource to be used as Reporting details  according to M11 Table of reportings ",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "StructureDefinition/m11-intervention-table"
+        },
+        "name": "M11-Intervention-Table",
+        "description": "Profile of ActivityDefinition to be used as an Arm definition according to M11 Table of interventions ",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "StructureDefinition/m11-objective-table"
+        },
+        "name": "M11-objective-table",
+        "description": "Profile of Basic resource to be used as Reporting details  according to M11 Table of reportings ",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "StructureDefinition/m11-r5-group"
+        },
+        "name": "M11-R5-group",
+        "description": "Profile of FHIR R5 Group resource to be used for backport of FHIR R6 Group for M11",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "StructureDefinition/m11-reporting-table"
+        },
+        "name": "M11-reporting-Table",
+        "description": "Profile of Basic resource to be used as Reporting details  according to M11 Table of reportings ",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "StructureDefinition/m11-amendment-detail"
+        },
+        "name": "M11_AmendmentDetails",
+        "description": "Provides detail of a single amendment - repeats within the overal amendment report",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "StructureDefinition/m11-amendment-scope-impact"
+        },
+        "name": "M11_AmendmentScopeImpact",
+        "description": "Provides number or percentage of each group affected by a single amendment",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "StructureDefinition/m11-approval"
+        },
+        "name": "M11_Approval",
+        "description": "Approval and sign off",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "StructureDefinition/m11-composition-order"
+        },
+        "name": "M11_CompositionOrder",
+        "description": "Addition of an order value to composition sections",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "StructureDefinition/m11-confidentiality-statement"
+        },
+        "name": "M11_ConfidentialityStatement",
+        "description": "Sponsor Confidentiality Statement.  This is a replica of EBM ResearchStudySponsorConfidentialityStatement",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "StructureDefinition/m11-intervention"
+        },
+        "name": "M11_Intervention",
+        "description": "M11 Table of interventions",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "StructureDefinition/m11-protocol-amendment"
+        },
+        "name": "M11_ProtocolAmendment",
+        "description": "Amendment to a protocol. This is originally from EBM.",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "StructureDefinition/m11-protocol-design"
+        },
+        "name": "M11_ProtocolDesign",
+        "description": "Design of a protocol.",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "StructureDefinition/m11-reporting"
+        },
+        "name": "M11_reporting",
+        "description": "M11 AE Reporting Table",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "StructureDefinition/narrative-elements"
+        },
+        "name": "Narrative Elements",
+        "description": "Narrative content for the ResearchStudy.",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "StructureDefinition/m11-research-study-narratives"
+        },
+        "name": "Research Study Narratives",
+        "description": "Narrative elements associated with a research study following the ICH M11 CeSHarP template.\nThe ICH M11 CeSHarP template for a study protocol specifies the headings to be used to organize protocol content.\nFor a FHIR representation of the protocol to be compliant with this template each of the narrative sections must \nbe organized using these headings. Only if there is material that does not properly belong under one of the M11 \nheadings can additional codes be created.",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "ValueSet/m11-target-Maximum-vs"
+        },
+        "name": "UDP ...",
+        "description": "Terminology associated with the ... value set codelist of the ICH M11 protocol template.",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "ValueSet/udp-address-purpose-type-vs"
+        },
+        "name": "UDP Address Purpose Type Value Set",
+        "description": "These codes represent intended use of an address.  There is an HL7 value set \nfor Contact entity type - this has \"prefered\" binding and must therefore be included in this value set\nThis is a UDP specific value set using NCIT codes to extend a required HL7 value set.\n\nNeither HL7 nor NCIT have the simple concept of a \"legal address\".  HL7 has the concept of an Administrative address\nwhich is not precise enough and NCIT has Sponsor Legal Address, Co-SPonsor Legal Address etc\nFor the present we shall use the HL7 ADMIN address as the designation of the legal address.",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "ValueSet/udp-identifier-type-vs"
+        },
+        "name": "UDP Identifier Type Value Set",
+        "description": "These codes represent the types of identifier used ina study.\nThis is a UDP specific value set.\nThese are codes used in M11 but in the M11 Specification each code is associated with a distinct M11 attribute \nrather than being a classifier for a more general attribute.  FHIR structures are designed to work with a repeating\nidentifier attribute classified by an approriate terminology. This value set enables that by using NCIT codes to create a FHIR value set.",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "ValueSet/udp-narrative-elements-vs"
+        },
+        "name": "UDP Narrative Elements Value Set using NCIT codes to create a FHIR value set.",
+        "description": "Composition Types to Manage Protocol Narrative Elements. This is a UDP specific value set.",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "ValueSet/udp-party-role-type-vs"
+        },
+        "name": "UDP Party Role Type Value Set",
+        "description": "These codes represent the types of role ResearchStudy.AssociatedParty can play. This is required for the\nmechanism used by FHIR for associating one entity with another. This is a UDP specific value set and uses NCIT codes to \ncreate an appropriate FHIR value set.",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "ValueSet/udp-related-artifact-type-vs"
+        },
+        "name": "UDP Related Artifact Type Value Set",
+        "description": "These codes represent the relationship between an artifact and it related target.\nThere is an HL7 value set for Related Artifact type - this has \"extensible\" binding.  This will \nbe included in this value set.\nThis is a UDP specific value set using NCIT codes to extend a required HL7 value set.\n\nThe HL7 value set does not have the concept of information that is a summary of an amendment that has been applied.\nThe amends and amended-with concepts talk of content that must be applied to get the final version.  M11 only\nwants to know what has been done - it is more of an amendment trail than an actual amendment.  M11 uses a concept\nfrom the NCI Thesaurus which is suitable for use here.",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "ValueSet/udp-section-codes-vs"
+        },
+        "name": "UDP Section Codes Value Set",
+        "description": "Codes representing sections of M11.\nThis value set is not identified in the M11 specification but is in the NCI Thesaurus and was \noriginally specified for M11.  It is NCI Value Set C217272 drawn from the NCI Thesaurus and represented here in FHIR format.\nThese codes are present in UDP to allow granularity in narrative compositions.",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "ValueSet/udp-section-codes-03-vs"
+        },
+        "name": "UDP Section Codes Value Set - section 3 only",
+        "description": "Codes representing parts of section 3 of M11.",
+        "isExample": false
+      },
+      {
+        "reference": {
+          "reference": "ValueSet/udp-study-title-type-vs"
+        },
+        "name": "UDP Study Title Type Value Set",
+        "description": "These codes represent the types of title or name a study can have \nThis is a UDP specific value set using NCIT codes to extend an HL7 value set.\n\nThese are codes used in M11 but in the M11 Specification each code is associated with a distinct M11 attribute \nrather than being a classifier for a more general attribute.  FHIR structures are designed to work with a repeating\nattribute classified by an approriate terminology. This value set enables that.\nNote that the NCI Thesaurus holds separate codes for protocol name (C132300) that are separate from study title (C49802)",
+        "isExample": false
+      }
+    ],
+    "page": {
+      "title": "Table of Contents",
+      "generation": "html",
+      "page": [
+        {
+          "title": "Home",
+          "generation": "html",
+          "name": "index.html",
+          "sourceUrl": "index.html"
+        },
+        {
+          "title": "Read Me",
+          "generation": "markdown",
+          "name": "ReadMe.html",
+          "sourceUrl": "ReadMe.html"
+        }
+      ],
+      "name": "toc.html",
+      "sourceUrl": "toc.html"
+    },
+    "parameter": [
+      {
+        "code": {
+          "code": "copyrightyear",
+          "system": "http://hl7.org/fhir/tools/CodeSystem/ig-parameters"
+        },
+        "value": "2026+"
+      },
+      {
+        "code": {
+          "code": "releaselabel",
+          "system": "http://hl7.org/fhir/tools/CodeSystem/ig-parameters"
+        },
+        "value": "ci-build"
+      }
+    ]
+  }
+}

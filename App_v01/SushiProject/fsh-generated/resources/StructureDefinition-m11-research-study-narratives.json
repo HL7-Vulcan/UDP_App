@@ -1,0 +1,93 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "m11-research-study-narratives",
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm",
+      "valueInteger": 2
+    }
+  ],
+  "url": "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-research-study-narratives",
+  "name": "M11ResearchStudyNarratives",
+  "title": "Research Study Narratives",
+  "status": "active",
+  "description": "Narrative elements associated with a research study following the ICH M11 CeSHarP template.\nThe ICH M11 CeSHarP template for a study protocol specifies the headings to be used to organize protocol content.\nFor a FHIR representation of the protocol to be compliant with this template each of the narrative sections must \nbe organized using these headings. Only if there is material that does not properly belong under one of the M11 \nheadings can additional codes be created.",
+  "copyright": "Portions of this material derives from the ICH M11 Harmonised Guideline CeSHarP. \nThe ICH M11 Harmonised Guideline CeSHarP is copyright ©2025+ International Committee on Harmonisation and is made available under license. \n\nCDISC publishes semantics for the ICH M11 protocol data elements and valid \nvalue sets. This terminology set is published and stored in the NCI Thesaurus \nSubset C217023 - ICH M11 Terminology \n(https://evsexplore.semantics.cancer.gov/evsexplore/subset/ncit/C217023) \n\nThe NCI Thesaurus is released under the CC BY 4.0 license\n\nCDISC also publishes the USDM reference architecture which is covered by the CC-BY-4.0 license\n\nFor more licensing information and links see: [licenses.html](licenses.html)",
+  "fhirVersion": "6.0.0-ballot3",
+  "kind": "resource",
+  "abstract": false,
+  "type": "Composition",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Composition",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "Composition.type",
+        "path": "Composition.type",
+        "mustSupport": true,
+        "binding": {
+          "strength": "required",
+          "valueSet": "http://HL7Vulcan/UDP/IG/ValueSet/udp-narrative-elements-vs"
+        }
+      },
+      {
+        "id": "Composition.subject",
+        "path": "Composition.subject",
+        "short": "Reference to the protocol that the narrative refers to",
+        "comment": "This reference provides a rapid means of relating a specific narrative instnace to\r\nthe protocol to which it belongs."
+      },
+      {
+        "id": "Composition.author",
+        "path": "Composition.author",
+        "type": [
+          {
+            "code": "Reference",
+            "targetProfile": [
+              "http://hl7.org/fhir/StructureDefinition/Organization"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "Composition.section.extension",
+        "path": "Composition.section.extension",
+        "slicing": {
+          "discriminator": [
+            {
+              "type": "value",
+              "path": "url"
+            }
+          ],
+          "ordered": false,
+          "rules": "open"
+        }
+      },
+      {
+        "id": "Composition.section.extension:order",
+        "path": "Composition.section.extension",
+        "sliceName": "order",
+        "min": 0,
+        "max": "1",
+        "type": [
+          {
+            "code": "Extension",
+            "profile": [
+              "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-composition-order"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "Composition.section.code",
+        "path": "Composition.section.code",
+        "short": "Identifies the section of the narrative according to M11 codes",
+        "definition": "A code from a value set that identifies the narrative section.  The value set is description\r\nconstructed from one or more code systems that define the required structure",
+        "binding": {
+          "strength": "extensible",
+          "valueSet": "http://HL7Vulcan/UDP/IG/ValueSet/udp-section-codes-vs",
+          "description": "The value set can only be extended if narrative content falls outside any identified M11 section."
+        }
+      }
+    ]
+  }
+}

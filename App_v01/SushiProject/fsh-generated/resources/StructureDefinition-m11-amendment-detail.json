@@ -1,0 +1,127 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "m11-amendment-detail",
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-type-characteristics",
+      "valueCode": "can-bind"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm",
+      "valueInteger": 2
+    }
+  ],
+  "url": "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-amendment-detail",
+  "name": "M11_AmendmentDetails",
+  "status": "active",
+  "description": "Provides detail of a single amendment - repeats within the overal amendment report",
+  "copyright": "Portions of this material derives from the ICH M11 Harmonised Guideline CeSHarP. \nThe ICH M11 Harmonised Guideline CeSHarP is copyright ©2025+ International Committee on Harmonisation and is made available under license. \n\nCDISC publishes semantics for the ICH M11 protocol data elements and valid \nvalue sets. This terminology set is published and stored in the NCI Thesaurus \nSubset C217023 - ICH M11 Terminology \n(https://evsexplore.semantics.cancer.gov/evsexplore/subset/ncit/C217023) \n\nThe NCI Thesaurus is released under the CC BY 4.0 license\n\nCDISC also publishes the USDM reference architecture which is covered by the CC-BY-4.0 license\n\nFor more licensing information and links see: [licenses.html](licenses.html)",
+  "fhirVersion": "6.0.0-ballot3",
+  "kind": "complex-type",
+  "abstract": false,
+  "context": [
+    {
+      "expression": "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-protocol-amendment",
+      "type": "extension"
+    }
+  ],
+  "type": "Extension",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Extension",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "Extension",
+        "path": "Extension",
+        "definition": "Provides detail of a single amendment - repeats within the overal amendment report"
+      },
+      {
+        "id": "Extension.extension",
+        "path": "Extension.extension",
+        "min": 3
+      },
+      {
+        "id": "Extension.extension:detail",
+        "path": "Extension.extension",
+        "sliceName": "detail",
+        "min": 1,
+        "max": "1"
+      },
+      {
+        "id": "Extension.extension:detail.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "detail"
+      },
+      {
+        "id": "Extension.extension:rationale",
+        "path": "Extension.extension",
+        "sliceName": "rationale",
+        "min": 1,
+        "max": "1"
+      },
+      {
+        "id": "Extension.extension:rationale.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:rationale.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "rationale"
+      },
+      {
+        "id": "Extension.extension:rationale.value[x]",
+        "path": "Extension.extension.value[x]",
+        "short": "Rationale",
+        "definition": "Rationale.",
+        "type": [
+          {
+            "code": "string"
+          }
+        ]
+      },
+      {
+        "id": "Extension.extension:section",
+        "path": "Extension.extension",
+        "sliceName": "section",
+        "min": 1,
+        "max": "1"
+      },
+      {
+        "id": "Extension.extension:section.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:section.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "section"
+      },
+      {
+        "id": "Extension.extension:section.value[x]",
+        "path": "Extension.extension.value[x]",
+        "short": "Section where the amendment was made",
+        "definition": "M11 Section where the amendment was made e.g. 1.2 Trial Schema.",
+        "type": [
+          {
+            "code": "CodeableConcept"
+          }
+        ],
+        "binding": {
+          "strength": "required",
+          "valueSet": "http://HL7Vulcan/UDP/IG/ValueSet/udp-section-codes-vs"
+        }
+      },
+      {
+        "id": "Extension.url",
+        "path": "Extension.url",
+        "fixedUri": "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-amendment-detail"
+      },
+      {
+        "id": "Extension.value[x]",
+        "path": "Extension.value[x]",
+        "max": "0"
+      }
+    ]
+  }
+}

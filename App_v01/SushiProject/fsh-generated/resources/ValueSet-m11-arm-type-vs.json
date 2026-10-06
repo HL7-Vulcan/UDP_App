@@ -1,0 +1,51 @@
+{
+  "resourceType": "ValueSet",
+  "status": "active",
+  "name": "M11ArmTypeVS",
+  "id": "m11-arm-type-vs",
+  "title": "M11 Arm Type Elements Value Set using NCIT codes to create a FHIR value set.",
+  "description": "Arm Type elements for describing trial interventions. This is an M11 specific value set.\nCode List C217283: ICH OID 2.16.840.1.113883.3.989.2.3.1.15",
+  "url": "http://HL7Vulcan/UDP/IG/ValueSet/m11-arm-type-vs",
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm",
+      "valueInteger": 2
+    }
+  ],
+  "copyright": "Portions of this material derives from the ICH M11 Harmonised Guideline CeSHarP. \nThe ICH M11 Harmonised Guideline CeSHarP is copyright ©2025+ International Committee on Harmonisation and is made available under license. \n\nCDISC publishes semantics for the ICH M11 protocol data elements and valid \nvalue sets. This terminology set is published and stored in the NCI Thesaurus \nSubset C217023 - ICH M11 Terminology \n(https://evsexplore.semantics.cancer.gov/evsexplore/subset/ncit/C217023) \n\nThe NCI Thesaurus is released under the CC BY 4.0 license\n\nFor more licensing information and links see: [licenses.html](licenses.html)",
+  "experimental": false,
+  "publisher": "ICH M11",
+  "compose": {
+    "include": [
+      {
+        "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+        "concept": [
+          {
+            "code": "C174267",
+            "display": "Active Comparator Arm"
+          },
+          {
+            "code": "C174226",
+            "display": "Control Arm"
+          },
+          {
+            "code": "C174266",
+            "display": "Experimental Arm"
+          },
+          {
+            "code": "C174270",
+            "display": "No Intervention Arm"
+          },
+          {
+            "code": "C174268",
+            "display": "Placebo Comparator Arm"
+          },
+          {
+            "code": "C174269",
+            "display": "Sham Comparator Arm"
+          }
+        ]
+      }
+    ]
+  }
+}

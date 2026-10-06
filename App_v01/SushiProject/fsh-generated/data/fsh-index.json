@@ -1,0 +1,466 @@
+[
+  {
+    "outputFile": "CodeSystem-ncit-cs.json",
+    "fshName": "NCIT",
+    "fshType": "CodeSystem",
+    "fshFile": "M11Terminology\\NCITCodeSystem.fsh",
+    "startLine": 1,
+    "endLine": 431
+  },
+  {
+    "outputFile": "Composition-Narrative-Composition-M11Section07.json",
+    "fshName": "Narrative-Composition-M11Section07",
+    "fshType": "Instance",
+    "fshFile": "Examples\\section7_data_2026-10-06.fsh",
+    "startLine": 1,
+    "endLine": 66
+  },
+  {
+    "outputFile": "StructureDefinition-m11-amendment-detail.json",
+    "fshName": "M11_AmendmentDetails",
+    "fshType": "Extension",
+    "fshFile": "ext-m11-protocol-amendment.fsh",
+    "startLine": 24,
+    "endLine": 49
+  },
+  {
+    "outputFile": "StructureDefinition-m11-amendment-scope-impact.json",
+    "fshName": "M11_AmendmentScopeImpact",
+    "fshType": "Extension",
+    "fshFile": "ext-m11-protocol-amendment.fsh",
+    "startLine": 2,
+    "endLine": 19
+  },
+  {
+    "outputFile": "StructureDefinition-m11-approval.json",
+    "fshName": "M11_Approval",
+    "fshType": "Extension",
+    "fshFile": "ext-m11-approval.fsh",
+    "startLine": 1,
+    "endLine": 26
+  },
+  {
+    "outputFile": "StructureDefinition-m11-composition-order.json",
+    "fshName": "M11_CompositionOrder",
+    "fshType": "Extension",
+    "fshFile": "ext-m11-composition-order.fsh",
+    "startLine": 1,
+    "endLine": 12
+  },
+  {
+    "outputFile": "StructureDefinition-m11-confidentiality-statement.json",
+    "fshName": "M11_ConfidentialityStatement",
+    "fshType": "Extension",
+    "fshFile": "ext-m11-confidentiality-statement.fsh",
+    "startLine": 1,
+    "endLine": 14
+  },
+  {
+    "outputFile": "StructureDefinition-m11-design-table.json",
+    "fshName": "M11-design-table",
+    "fshType": "Profile",
+    "fshFile": "ext-m11-protocol-summary.fsh",
+    "startLine": 3,
+    "endLine": 12
+  },
+  {
+    "outputFile": "StructureDefinition-m11-estimands.json",
+    "fshName": "M11Estimands",
+    "fshType": "Extension",
+    "fshFile": "ext-m11-objectives.fsh",
+    "startLine": 55,
+    "endLine": 84
+  },
+  {
+    "outputFile": "StructureDefinition-m11-intercurrent-events.json",
+    "fshName": "M11IntercurrentEvents",
+    "fshType": "Extension",
+    "fshFile": "ext-m11-objectives.fsh",
+    "startLine": 124,
+    "endLine": 144
+  },
+  {
+    "outputFile": "StructureDefinition-m11-intervention-table.json",
+    "fshName": "M11-Intervention-Table",
+    "fshType": "Profile",
+    "fshFile": "ext-m11-intervention.fsh",
+    "startLine": 52,
+    "endLine": 61
+  },
+  {
+    "outputFile": "StructureDefinition-m11-intervention.json",
+    "fshName": "M11_Intervention",
+    "fshType": "Extension",
+    "fshFile": "ext-m11-intervention.fsh",
+    "startLine": 3,
+    "endLine": 43
+  },
+  {
+    "outputFile": "StructureDefinition-m11-objective-table.json",
+    "fshName": "M11-objective-table",
+    "fshType": "Profile",
+    "fshFile": "ext-m11-objectives.fsh",
+    "startLine": 3,
+    "endLine": 12
+  },
+  {
+    "outputFile": "StructureDefinition-m11-objective.json",
+    "fshName": "M11Objective",
+    "fshType": "Extension",
+    "fshFile": "ext-m11-objectives.fsh",
+    "startLine": 17,
+    "endLine": 44
+  },
+  {
+    "outputFile": "StructureDefinition-m11-protocol-amendment.json",
+    "fshName": "M11_ProtocolAmendment",
+    "fshType": "Extension",
+    "fshFile": "ext-m11-protocol-amendment.fsh",
+    "startLine": 52,
+    "endLine": 165
+  },
+  {
+    "outputFile": "StructureDefinition-m11-protocol-design.json",
+    "fshName": "M11_ProtocolDesign",
+    "fshType": "Extension",
+    "fshFile": "ext-m11-protocol-summary.fsh",
+    "startLine": 15,
+    "endLine": 207
+  },
+  {
+    "outputFile": "StructureDefinition-m11-r5-group-ext.json",
+    "fshName": "M11-R5-Group-Extension",
+    "fshType": "Extension",
+    "fshFile": "extBack-m11-group.fsh",
+    "startLine": 20,
+    "endLine": 45
+  },
+  {
+    "outputFile": "StructureDefinition-m11-r5-group.json",
+    "fshName": "M11-R5-group",
+    "fshType": "Profile",
+    "fshFile": "extBack-m11-group.fsh",
+    "startLine": 3,
+    "endLine": 15
+  },
+  {
+    "outputFile": "StructureDefinition-m11-r5-groupCharacteristic-ext.json",
+    "fshName": "M11-R5-GroupCharacteristic-Extension",
+    "fshType": "Extension",
+    "fshFile": "extBack-m11-group.fsh",
+    "startLine": 50,
+    "endLine": 66
+  },
+  {
+    "outputFile": "StructureDefinition-m11-reporting-table.json",
+    "fshName": "M11-reporting-Table",
+    "fshType": "Profile",
+    "fshFile": "ext-m11-reporting.fsh",
+    "startLine": 48,
+    "endLine": 57
+  },
+  {
+    "outputFile": "StructureDefinition-m11-reporting.json",
+    "fshName": "M11_reporting",
+    "fshType": "Extension",
+    "fshFile": "ext-m11-reporting.fsh",
+    "startLine": 3,
+    "endLine": 38
+  },
+  {
+    "outputFile": "StructureDefinition-m11-research-study-narratives.json",
+    "fshName": "M11ResearchStudyNarratives",
+    "fshType": "Profile",
+    "fshFile": "M11NarrativeElement.fsh",
+    "startLine": 19,
+    "endLine": 47
+  },
+  {
+    "outputFile": "StructureDefinition-m11-research-study-profile.json",
+    "fshName": "M11_ResearchStudyProfile",
+    "fshType": "Profile",
+    "fshFile": "Prof M11 ResearchStudy.fsh",
+    "startLine": 1,
+    "endLine": 52
+  },
+  {
+    "outputFile": "StructureDefinition-m11-research-study.json",
+    "fshName": "M11_ResearchStudy",
+    "fshType": "Extension",
+    "fshFile": "ext-m11-research-study.fsh",
+    "startLine": 1,
+    "endLine": 28
+  },
+  {
+    "outputFile": "StructureDefinition-narrative-elements.json",
+    "fshName": "NarrativeElements",
+    "fshType": "Extension",
+    "fshFile": "M11NarrativeElement.fsh",
+    "startLine": 3,
+    "endLine": 14
+  },
+  {
+    "outputFile": "StructureDefinition-usdm-estimand-treatment.json",
+    "fshName": "USDMEstimandTreatment",
+    "fshType": "Extension",
+    "fshFile": "ext-m11-objectives.fsh",
+    "startLine": 90,
+    "endLine": 119
+  },
+  {
+    "outputFile": "ValueSet-m11-amendment-details-statement-vs.json",
+    "fshName": "M11AmendmentDetailsStatementVS",
+    "fshType": "ValueSet",
+    "fshFile": "M11Terminology\\M11AmendmentDetailsStatementVS.fsh",
+    "startLine": 2,
+    "endLine": 17
+  },
+  {
+    "outputFile": "ValueSet-m11-amendment-scope-enrollment-vs.json",
+    "fshName": "M11AmendmentScopeEnrollmentVS",
+    "fshType": "ValueSet",
+    "fshFile": "M11Terminology\\M11AmendmentScopeEnrollmentVS.fsh",
+    "startLine": 3,
+    "endLine": 16
+  },
+  {
+    "outputFile": "ValueSet-m11-arm-type-vs.json",
+    "fshName": "M11ArmTypeVS",
+    "fshType": "ValueSet",
+    "fshFile": "ext-m11-intervention.fsh",
+    "startLine": 67,
+    "endLine": 83
+  },
+  {
+    "outputFile": "ValueSet-m11-blinded-roles-vs.json",
+    "fshName": "M11BlindedRolesVVS",
+    "fshType": "ValueSet",
+    "fshFile": "M11Terminology\\M11BlindedRolesVS.fsh",
+    "startLine": 3,
+    "endLine": 20
+  },
+  {
+    "outputFile": "ValueSet-m11-blindedRoles-vs.json",
+    "fshName": "M11BlindedRolesVS",
+    "fshType": "ValueSet",
+    "fshFile": "M11Terminology\\M11Section01VS.fsh",
+    "startLine": 143,
+    "endLine": 158
+  },
+  {
+    "outputFile": "ValueSet-m11-controlType-vs.json",
+    "fshName": "M11ControlTypeVS",
+    "fshType": "ValueSet",
+    "fshFile": "M11Terminology\\M11Section01VS.fsh",
+    "startLine": 42,
+    "endLine": 59
+  },
+  {
+    "outputFile": "ValueSet-m11-country-region-vs.json",
+    "fshName": "M11CountryRegionVS",
+    "fshType": "ValueSet",
+    "fshFile": "M11Terminology\\M11CountryRegionVS.fsh",
+    "startLine": 1,
+    "endLine": 15
+  },
+  {
+    "outputFile": "ValueSet-m11-event-type-vs.json",
+    "fshName": "M11EventTypeVS",
+    "fshType": "ValueSet",
+    "fshFile": "ext-m11-reporting.fsh",
+    "startLine": 63,
+    "endLine": 83
+  },
+  {
+    "outputFile": "ValueSet-m11-imp-nimp-type-vs.json",
+    "fshName": "M11ImpNimpTypeVS",
+    "fshType": "ValueSet",
+    "fshFile": "ext-m11-intervention.fsh",
+    "startLine": 136,
+    "endLine": 148
+  },
+  {
+    "outputFile": "ValueSet-m11-independentCommittees-vs.json",
+    "fshName": "M11IndependentCommitteesVS",
+    "fshType": "ValueSet",
+    "fshFile": "M11Terminology\\M11Section01VS.fsh",
+    "startLine": 178,
+    "endLine": 192
+  },
+  {
+    "outputFile": "ValueSet-m11-intervention-type-vs.json",
+    "fshName": "M11InterventionTypeVS",
+    "fshType": "ValueSet",
+    "fshFile": "ext-m11-intervention.fsh",
+    "startLine": 88,
+    "endLine": 110
+  },
+  {
+    "outputFile": "ValueSet-m11-interventionAssignmentMethod-vs.json",
+    "fshName": "M11InterventionAssignmentMethodVS",
+    "fshType": "ValueSet",
+    "fshFile": "M11Terminology\\M11Section01VS.fsh",
+    "startLine": 66,
+    "endLine": 78
+  },
+  {
+    "outputFile": "ValueSet-m11-interventionModel-vs.json",
+    "fshName": "M11InterventionModelVS",
+    "fshType": "ValueSet",
+    "fshFile": "M11Terminology\\M11Section01VS.fsh",
+    "startLine": 4,
+    "endLine": 15
+  },
+  {
+    "outputFile": "ValueSet-m11-phase-vs.json",
+    "fshName": "M11PhaseVS",
+    "fshType": "ValueSet",
+    "fshFile": "M11Terminology\\M11PhaseVS.fsh",
+    "startLine": 3,
+    "endLine": 24
+  },
+  {
+    "outputFile": "ValueSet-m11-populationType-vs.json",
+    "fshName": "M11PopulationTypeVS",
+    "fshType": "ValueSet",
+    "fshFile": "M11Terminology\\M11Section01VS.fsh",
+    "startLine": 21,
+    "endLine": 33
+  },
+  {
+    "outputFile": "ValueSet-m11-siteDistribution-vs.json",
+    "fshName": "M11SiteDistributionVS",
+    "fshType": "ValueSet",
+    "fshFile": "M11Terminology\\M11Section01VS.fsh",
+    "startLine": 85,
+    "endLine": 96
+  },
+  {
+    "outputFile": "ValueSet-m11-siteGeographicscope-vs.json",
+    "fshName": "M11SiteGeographicscopeVS",
+    "fshType": "ValueSet",
+    "fshFile": "M11Terminology\\M11Section01VS.fsh",
+    "startLine": 103,
+    "endLine": 116
+  },
+  {
+    "outputFile": "ValueSet-m11-source-code-vs.json",
+    "fshName": "M11SourceCodeVS",
+    "fshType": "ValueSet",
+    "fshFile": "ext-m11-intervention.fsh",
+    "startLine": 152,
+    "endLine": 164
+  },
+  {
+    "outputFile": "ValueSet-m11-study-amendment-reason-vs.json",
+    "fshName": "M11StudyAmendmentReasonVS",
+    "fshType": "ValueSet",
+    "fshFile": "M11Terminology\\M11StudyAmendmentReasonVS.fsh",
+    "startLine": 3,
+    "endLine": 28
+  },
+  {
+    "outputFile": "ValueSet-m11-study-amendment-scope-vs.json",
+    "fshName": "M11AmendmentScopeVS",
+    "fshType": "ValueSet",
+    "fshFile": "M11Terminology\\M11AmendmentScopeVS.fsh",
+    "startLine": 3,
+    "endLine": 19
+  },
+  {
+    "outputFile": "ValueSet-m11-target-Maximum-vs.json",
+    "fshName": "UDPTarget-MaximumVS",
+    "fshType": "ValueSet",
+    "fshFile": "M11Terminology\\M11Section01VS.fsh",
+    "startLine": 161,
+    "endLine": 171
+  },
+  {
+    "outputFile": "ValueSet-m11-trialBlindSchema-vs.json",
+    "fshName": "M11TrialBlindSchemaVS",
+    "fshType": "ValueSet",
+    "fshFile": "M11Terminology\\M11Section01VS.fsh",
+    "startLine": 123,
+    "endLine": 136
+  },
+  {
+    "outputFile": "ValueSet-m11-use-code-vs.json",
+    "fshName": "M11UseCodeVS",
+    "fshType": "ValueSet",
+    "fshFile": "ext-m11-intervention.fsh",
+    "startLine": 114,
+    "endLine": 132
+  },
+  {
+    "outputFile": "ValueSet-m11-yes-no-vs.json",
+    "fshName": "M11YesNoVS",
+    "fshType": "ValueSet",
+    "fshFile": "M11Terminology\\M11YesNoVS.fsh",
+    "startLine": 3,
+    "endLine": 15
+  },
+  {
+    "outputFile": "ValueSet-udp-address-purpose-type-vs.json",
+    "fshName": "UDPAddressPurposeType",
+    "fshType": "ValueSet",
+    "fshFile": "UDPTerminology\\UDP Address Purpose Type.fsh",
+    "startLine": 1,
+    "endLine": 21
+  },
+  {
+    "outputFile": "ValueSet-udp-identifier-type-vs.json",
+    "fshName": "UDPIdentifierType_VS",
+    "fshType": "ValueSet",
+    "fshFile": "UDPTerminology\\UDP Identifier Type.fsh",
+    "startLine": 1,
+    "endLine": 26
+  },
+  {
+    "outputFile": "ValueSet-udp-narrative-elements-vs.json",
+    "fshName": "UDPNarrativeElementsVS",
+    "fshType": "ValueSet",
+    "fshFile": "UDPTerminology\\UDPNarrativeElementType.fsh",
+    "startLine": 1,
+    "endLine": 10
+  },
+  {
+    "outputFile": "ValueSet-udp-party-role-type-vs.json",
+    "fshName": "UDPPartyRoleType",
+    "fshType": "ValueSet",
+    "fshFile": "UDPTerminology\\UDP Party Role Type.fsh",
+    "startLine": 1,
+    "endLine": 21
+  },
+  {
+    "outputFile": "ValueSet-udp-related-artifact-type-vs.json",
+    "fshName": "UDPRelatedArtifactType",
+    "fshType": "ValueSet",
+    "fshFile": "UDPTerminology\\UDP Related Artifact Type.fsh",
+    "startLine": 1,
+    "endLine": 21
+  },
+  {
+    "outputFile": "ValueSet-udp-section-codes-03-vs.json",
+    "fshName": "UDPSectionCodes03VS",
+    "fshType": "ValueSet",
+    "fshFile": "UDPTerminology\\UDPSectionCodesVS.fsh",
+    "startLine": 1,
+    "endLine": 13
+  },
+  {
+    "outputFile": "ValueSet-udp-section-codes-vs.json",
+    "fshName": "UDPSectionCodesVS",
+    "fshType": "ValueSet",
+    "fshFile": "UDPTerminology\\UDPSectionCodesVS.fsh",
+    "startLine": 16,
+    "endLine": 223
+  },
+  {
+    "outputFile": "ValueSet-udp-study-title-type-vs.json",
+    "fshName": "UDPStudyTitleTypeVS",
+    "fshType": "ValueSet",
+    "fshFile": "UDPTerminology\\UDP Study Label Type.fsh",
+    "startLine": 1,
+    "endLine": 20
+  }
+]

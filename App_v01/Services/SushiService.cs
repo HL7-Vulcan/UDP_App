@@ -260,59 +260,50 @@ public class SushiService
                 CreateNoWindow         = true,
             };
 
-            // Diagnostics — show environment before we do anything
-            onLine?.Invoke($"[INFO] OS: {System.Runtime.InteropServices.RuntimeInformation.OSDescription}");
-            onLine?.Invoke($"[INFO] App PATH: {Environment.GetEnvironmentVariable("PATH") ?? "(null)"}");
-            onLine?.Invoke($"[INFO] /usr/local/bin/node FileInfo.Exists: {new FileInfo("/usr/local/bin/node").Exists}");
-            onLine?.Invoke($"[INFO] /usr/bin/node FileInfo.Exists: {new FileInfo("/usr/bin/node").Exists}");
-            try { onLine?.Invoke($"[INFO] CanOpenRead /usr/local/bin/node: {CanExecute("/usr/local/bin/node")}"); } catch { }
-
-            // Find node explicitly — Azure App Service strips PATH so 'node' isn't
-            // reachable even though it is installed somewhere on disk.
-            var nodeExeFound = FindNodeExecutable();
             onLine?.Invoke($"[INFO] Running: {sushiExe} {argPrefix}");
-            onLine?.Invoke($"[INFO] node found at: {nodeExeFound ?? "NOT FOUND"}");
 
-            // /home/bin/sushi IS the JS file (starts with #!/usr/bin/env node).
-            // If node was found, invoke: node /home/bin/sushi  (no js-entry lookup needed)
-            if (nodeExeFound != null && (sushiExe.EndsWith("/sushi") || sushiExe.EndsWith("\\sushi")))
+            if (!OperatingSystem.IsWindows())
             {
-                // Check first line to decide if it's already JS or a shell wrapper
-                var firstLine = "";
-                try { firstLine = File.ReadLines(sushiExe).FirstOrDefault() ?? ""; } catch { }
-                onLine?.Invoke($"[INFO] sushi first line: {firstLine}");
+                // On Linux/Azure: node may not be on the .NET process PATH.
+                // Find it explicitly and ensure it's reachable by the child process.
+                var nodeExeFound = FindNodeExecutable();
+                onLine?.Invoke($"[INFO] node found at: {nodeExeFound ?? "NOT FOUND"}");
 
-                if (firstLine.Contains("node"))
+                if (nodeExeFound != null && (sushiExe.EndsWith("/sushi") || sushiExe.EndsWith("\\sushi")))
                 {
-                    // It IS the JS entry — invoke directly
-                    psi.FileName  = nodeExeFound;
-                    psi.Arguments = $"\"{sushiExe}\"";
-                    onLine?.Invoke($"[INFO] Invoking as: {nodeExeFound} \"{sushiExe}\"");
-                }
-                else
-                {
-                    var jsEntry = FindSushiJsEntry(sushiExe);
-                    onLine?.Invoke($"[INFO] sushi JS entry: {jsEntry ?? "NOT FOUND"}");
-                    if (jsEntry != null)
+                    var firstLine = "";
+                    try { firstLine = File.ReadLines(sushiExe).FirstOrDefault() ?? ""; } catch { }
+
+                    if (firstLine.Contains("node"))
                     {
                         psi.FileName  = nodeExeFound;
-                        psi.Arguments = $"\"{jsEntry}\"";
+                        psi.Arguments = $"\"{sushiExe}\"";
+                        onLine?.Invoke($"[INFO] Invoking as: {nodeExeFound} \"{sushiExe}\"");
                     }
-                }
+                    else
+                    {
+                        var jsEntry = FindSushiJsEntry(sushiExe);
+                        onLine?.Invoke($"[INFO] sushi JS entry: {jsEntry ?? "NOT FOUND"}");
+                        if (jsEntry != null)
+                        {
+                            psi.FileName  = nodeExeFound;
+                            psi.Arguments = $"\"{jsEntry}\"";
+                        }
+                    }
 
-                // Ensure node's directory is on the child PATH too
-                var nodeDir = Path.GetDirectoryName(nodeExeFound) ?? "";
-                var currentPath2 = Environment.GetEnvironmentVariable("PATH") ?? "";
-                psi.Environment["PATH"] = nodeDir + ":/usr/local/bin:/usr/bin:/bin:" + currentPath2;
+                    var nodeDir = Path.GetDirectoryName(nodeExeFound) ?? "";
+                    var currentPath = Environment.GetEnvironmentVariable("PATH") ?? "";
+                    psi.Environment["PATH"] = nodeDir + ":/usr/local/bin:/usr/bin:/bin:" + currentPath;
+                }
+                else if (nodeExeFound == null)
+                {
+                    onLine?.Invoke("[WARN] node not found — forcing PATH and attempting direct run");
+                    psi.Environment["PATH"] =
+                        "/home/node/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/home/bin:/opt/nodejs/bin:/usr/local/nodejs/bin";
+                }
             }
-            else if (nodeExeFound == null)
-            {
-                // Last-ditch: force-set PATH to all plausible node locations
-                // and just try running sushi directly (it will fail with a useful error)
-                onLine?.Invoke("[WARN] node not found — forcing PATH and attempting direct run");
-                psi.Environment["PATH"] =
-                    "/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/home/bin:/opt/nodejs/bin:/usr/local/nodejs/bin";
-            }
+            // Windows: cmd.exe inherits the user's PATH which already includes node/npm dirs —
+            // no PATH manipulation needed.
 
             using var proc = new Process { StartInfo = psi };
             proc.Start();

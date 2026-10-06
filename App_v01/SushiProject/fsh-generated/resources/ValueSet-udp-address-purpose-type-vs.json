@@ -1,0 +1,44 @@
+{
+  "resourceType": "ValueSet",
+  "status": "active",
+  "name": "UDPAddressPurposeType",
+  "id": "udp-address-purpose-type-vs",
+  "title": "UDP Address Purpose Type Value Set",
+  "description": "These codes represent intended use of an address.  There is an HL7 value set \nfor Contact entity type - this has \"prefered\" binding and must therefore be included in this value set\nThis is a UDP specific value set using NCIT codes to extend a required HL7 value set.\n\nNeither HL7 nor NCIT have the simple concept of a \"legal address\".  HL7 has the concept of an Administrative address\nwhich is not precise enough and NCIT has Sponsor Legal Address, Co-SPonsor Legal Address etc\nFor the present we shall use the HL7 ADMIN address as the designation of the legal address.",
+  "url": "http://HL7Vulcan/UDP/IG/ValueSet/udp-address-purpose-type-vs",
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm",
+      "valueInteger": 1
+    }
+  ],
+  "copyright": "Portions of this material derives from the ICH M11 Harmonised Guideline CeSHarP. \nThe ICH M11 Harmonised Guideline CeSHarP is copyright ©2025+ International Committee on Harmonisation and is made available under license. \n\nCDISC publishes semantics for the ICH M11 protocol data elements and valid \nvalue sets. This terminology set is published and stored in the NCI Thesaurus \nSubset C217023 - ICH M11 Terminology \n(https://evsexplore.semantics.cancer.gov/evsexplore/subset/ncit/C217023) \n\nThe NCI Thesaurus is released under the CC BY 4.0 license\n\nFor more licensing information and links see: [licenses.html](licenses.html)",
+  "experimental": false,
+  "publisher": "UDP",
+  "compose": {
+    "include": [
+      {
+        "valueSet": [
+          "http://terminology.hl7.org/ValueSet/contactentity-type"
+        ]
+      },
+      {
+        "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+        "concept": [
+          {
+            "code": "C218677",
+            "display": "Sponsor Legal Address"
+          },
+          {
+            "code": "C218679",
+            "display": "Co-Sponsor Legal Address"
+          },
+          {
+            "code": "C70946",
+            "display": "Postal Address"
+          }
+        ]
+      }
+    ]
+  }
+}

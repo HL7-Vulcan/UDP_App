@@ -1,0 +1,71 @@
+{
+  "resourceType": "ValueSet",
+  "status": "active",
+  "name": "UDPIdentifierType_VS",
+  "id": "udp-identifier-type-vs",
+  "title": "UDP Identifier Type Value Set",
+  "description": "These codes represent the types of identifier used ina study.\nThis is a UDP specific value set.\nThese are codes used in M11 but in the M11 Specification each code is associated with a distinct M11 attribute \nrather than being a classifier for a more general attribute.  FHIR structures are designed to work with a repeating\nidentifier attribute classified by an approriate terminology. This value set enables that by using NCIT codes to create a FHIR value set.",
+  "url": "http://HL7Vulcan/UDP/IG/ValueSet/udp-identifier-type-vs",
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm",
+      "valueInteger": 1
+    }
+  ],
+  "copyright": "Portions of this material derives from the ICH M11 Harmonised Guideline CeSHarP. \nThe ICH M11 Harmonised Guideline CeSHarP is copyright ©2025+ International Committee on Harmonisation and is made available under license. \n\nCDISC publishes semantics for the ICH M11 protocol data elements and valid \nvalue sets. This terminology set is published and stored in the NCI Thesaurus \nSubset C217023 - ICH M11 Terminology \n(https://evsexplore.semantics.cancer.gov/evsexplore/subset/ncit/C217023) \n\nThe NCI Thesaurus is released under the CC BY 4.0 license\n\nFor more licensing information and links see: [licenses.html](licenses.html)",
+  "experimental": false,
+  "publisher": "UDP",
+  "compose": {
+    "include": [
+      {
+        "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+        "concept": [
+          {
+            "code": "C132351",
+            "display": "Sponsor Protocol Identifier"
+          },
+          {
+            "code": "C218672",
+            "display": "Original Protocol Indicator"
+          },
+          {
+            "code": "C218477",
+            "display": "Amendment Identifier"
+          },
+          {
+            "code": "C218684",
+            "display": "EU Clinical Trial Register Number"
+          },
+          {
+            "code": "C218685",
+            "display": "US FDA Investigational New Drug Application Number"
+          },
+          {
+            "code": "C218686",
+            "display": "US FDA Investigational Device Exemption Application Number"
+          },
+          {
+            "code": "C218687",
+            "display": "Japan Registry for Clinical Trials Number"
+          },
+          {
+            "code": "C172240",
+            "display": "Clinicaltrials.gov Identifier"
+          },
+          {
+            "code": "C218688",
+            "display": "NMPA IND Number"
+          },
+          {
+            "code": "C218689",
+            "display": "WHO/UTN Number"
+          },
+          {
+            "code": "C218690",
+            "display": "Other Regulatory or Clinical Trial Identifier"
+          }
+        ]
+      }
+    ]
+  }
+}

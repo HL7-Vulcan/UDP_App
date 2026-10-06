@@ -1,0 +1,652 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "m11-protocol-amendment",
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-type-characteristics",
+      "valueCode": "can-bind"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm",
+      "valueInteger": 2
+    }
+  ],
+  "url": "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-protocol-amendment",
+  "name": "M11_ProtocolAmendment",
+  "status": "active",
+  "description": "Amendment to a protocol. This is originally from EBM.",
+  "copyright": "Portions of this material derives from the ICH M11 Harmonised Guideline CeSHarP. \nThe ICH M11 Harmonised Guideline CeSHarP is copyright ©2025+ International Committee on Harmonisation and is made available under license. \n\nCDISC publishes semantics for the ICH M11 protocol data elements and valid \nvalue sets. This terminology set is published and stored in the NCI Thesaurus \nSubset C217023 - ICH M11 Terminology \n(https://evsexplore.semantics.cancer.gov/evsexplore/subset/ncit/C217023) \n\nThe NCI Thesaurus is released under the CC BY 4.0 license\n\nCDISC also publishes the USDM reference architecture which is covered by the CC-BY-4.0 license\n\nFor more licensing information and links see: [licenses.html](licenses.html)",
+  "fhirVersion": "6.0.0-ballot3",
+  "kind": "complex-type",
+  "abstract": false,
+  "context": [
+    {
+      "expression": "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-research-study-profile#ResearchStudy",
+      "type": "element"
+    }
+  ],
+  "type": "Extension",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Extension",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "Extension",
+        "path": "Extension",
+        "short": "Amendment to a protocol - from EBM",
+        "definition": "Representation of amendments to a study protocol.",
+        "comment": "The original extension is from EBM and is being modified to separate general amendments (which belong in EBM) and those specific to the UDP use cases."
+      },
+      {
+        "id": "Extension.extension",
+        "path": "Extension.extension",
+        "min": 2
+      },
+      {
+        "id": "Extension.extension:identifier",
+        "path": "Extension.extension",
+        "sliceName": "identifier",
+        "min": 1,
+        "max": "1"
+      },
+      {
+        "id": "Extension.extension:identifier.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:identifier.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "identifier"
+      },
+      {
+        "id": "Extension.extension:identifier.value[x]",
+        "path": "Extension.extension.value[x]",
+        "short": "Amendment identifier",
+        "definition": "Identifier for this amendment - if it is the current amendment the identifier is repeated from the title page",
+        "type": [
+          {
+            "code": "Identifier"
+          }
+        ]
+      },
+      {
+        "id": "Extension.extension:previous",
+        "path": "Extension.extension",
+        "sliceName": "previous",
+        "min": 0,
+        "max": "1"
+      },
+      {
+        "id": "Extension.extension:previous.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:previous.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "previous"
+      },
+      {
+        "id": "Extension.extension:previous.value[x]",
+        "path": "Extension.extension.value[x]",
+        "type": [
+          {
+            "code": "CodeableConcept"
+          }
+        ],
+        "binding": {
+          "strength": "required",
+          "valueSet": "http://HL7Vulcan/UDP/IG/ValueSet/m11-amendment-details-statement-vs"
+        }
+      },
+      {
+        "id": "Extension.extension:scope",
+        "path": "Extension.extension",
+        "sliceName": "scope",
+        "min": 1,
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:scope.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:scope.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "scope"
+      },
+      {
+        "id": "Extension.extension:scope.value[x]",
+        "path": "Extension.extension.value[x]",
+        "short": "Global, Not Global",
+        "definition": "C218673 Global, Country, Region, or Site.",
+        "comment": "If an amendment applies to all sites in the trial, enter Global and delete the Country, Region and Site Identifier fields. \r\n  If amending a single-country study, enter global. \r\n  If the amendment does not apply to all sites in the trial, select Not Global and utilize one of the identifiers based on amendment scope. \r\n  Use the ISO-3166 region or country identifier (for example, DE or EU).",
+        "type": [
+          {
+            "code": "CodeableConcept"
+          }
+        ],
+        "binding": {
+          "strength": "extensible",
+          "valueSet": "http://HL7Vulcan/UDP/IG/ValueSet/m11-study-amendment-scope-vs"
+        }
+      },
+      {
+        "id": "Extension.extension:country",
+        "path": "Extension.extension",
+        "sliceName": "country",
+        "min": 0,
+        "max": "*"
+      },
+      {
+        "id": "Extension.extension:country.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:country.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "country"
+      },
+      {
+        "id": "Extension.extension:country.value[x]",
+        "path": "Extension.extension.value[x]",
+        "definition": "C20108",
+        "type": [
+          {
+            "code": "CodeableConcept"
+          }
+        ],
+        "binding": {
+          "strength": "extensible",
+          "valueSet": "http://HL7Vulcan/UDP/IG/ValueSet/m11-country-region-vs"
+        }
+      },
+      {
+        "id": "Extension.extension:region",
+        "path": "Extension.extension",
+        "sliceName": "region",
+        "min": 0,
+        "max": "*"
+      },
+      {
+        "id": "Extension.extension:region.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:region.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "region"
+      },
+      {
+        "id": "Extension.extension:region.value[x]",
+        "path": "Extension.extension.value[x]",
+        "definition": "C218674",
+        "type": [
+          {
+            "code": "CodeableConcept"
+          }
+        ],
+        "binding": {
+          "strength": "extensible",
+          "valueSet": "http://HL7Vulcan/UDP/IG/ValueSet/m11-country-region-vs"
+        }
+      },
+      {
+        "id": "Extension.extension:site",
+        "path": "Extension.extension",
+        "sliceName": "site",
+        "min": 0,
+        "max": "*"
+      },
+      {
+        "id": "Extension.extension:site.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:site.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "site"
+      },
+      {
+        "id": "Extension.extension:site.value[x]",
+        "path": "Extension.extension.value[x]",
+        "definition": "C83081",
+        "type": [
+          {
+            "code": "Identifier"
+          },
+          {
+            "code": "Reference"
+          }
+        ]
+      },
+      {
+        "id": "Extension.extension:approvalDate",
+        "path": "Extension.extension",
+        "sliceName": "approvalDate",
+        "min": 0,
+        "max": "1"
+      },
+      {
+        "id": "Extension.extension:approvalDate.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:approvalDate.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "approvalDate"
+      },
+      {
+        "id": "Extension.extension:approvalDate.value[x]",
+        "path": "Extension.extension.value[x]",
+        "type": [
+          {
+            "code": "date"
+          }
+        ]
+      },
+      {
+        "id": "Extension.extension:signature",
+        "path": "Extension.extension",
+        "sliceName": "signature",
+        "min": 0,
+        "max": "1"
+      },
+      {
+        "id": "Extension.extension:signature.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:signature.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "signature"
+      },
+      {
+        "id": "Extension.extension:signature.value[x]",
+        "path": "Extension.extension.value[x]",
+        "type": [
+          {
+            "code": "Signature"
+          }
+        ]
+      },
+      {
+        "id": "Extension.extension:signatureUrl",
+        "path": "Extension.extension",
+        "sliceName": "signatureUrl",
+        "min": 0,
+        "max": "1"
+      },
+      {
+        "id": "Extension.extension:signatureUrl.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:signatureUrl.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "signatureUrl"
+      },
+      {
+        "id": "Extension.extension:signatureUrl.value[x]",
+        "path": "Extension.extension.value[x]",
+        "type": [
+          {
+            "code": "string"
+          },
+          {
+            "code": "url"
+          }
+        ]
+      },
+      {
+        "id": "Extension.extension:signatureMethod",
+        "path": "Extension.extension",
+        "sliceName": "signatureMethod",
+        "min": 0,
+        "max": "1"
+      },
+      {
+        "id": "Extension.extension:signatureMethod.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:signatureMethod.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "signatureMethod"
+      },
+      {
+        "id": "Extension.extension:signatureMethod.value[x]",
+        "path": "Extension.extension.value[x]",
+        "type": [
+          {
+            "code": "string"
+          }
+        ]
+      },
+      {
+        "id": "Extension.extension:scopeImpact",
+        "path": "Extension.extension",
+        "sliceName": "scopeImpact",
+        "min": 0,
+        "max": "3",
+        "type": [
+          {
+            "code": "Extension",
+            "profile": [
+              "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-amendment-scope-impact"
+            ]
+          }
+        ],
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:primaryReason",
+        "path": "Extension.extension",
+        "sliceName": "primaryReason",
+        "min": 0,
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:primaryReason.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:primaryReason.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "primaryReason"
+      },
+      {
+        "id": "Extension.extension:primaryReason.value[x]",
+        "path": "Extension.extension.value[x]",
+        "short": "Reason for amendment, e.g. Safety",
+        "definition": "Reason for amendment, e.g. Safety.",
+        "type": [
+          {
+            "code": "CodeableConcept"
+          }
+        ],
+        "binding": {
+          "strength": "extensible",
+          "valueSet": "http://HL7Vulcan/UDP/IG/ValueSet/m11-study-amendment-reason-vs"
+        }
+      },
+      {
+        "id": "Extension.extension:secondaryReason",
+        "path": "Extension.extension",
+        "sliceName": "secondaryReason",
+        "min": 0,
+        "max": "*",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:secondaryReason.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:secondaryReason.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "secondaryReason"
+      },
+      {
+        "id": "Extension.extension:secondaryReason.value[x]",
+        "path": "Extension.extension.value[x]",
+        "short": "Reason for amendment, e.g. Manufacturing change",
+        "definition": "Reason for amendment, e.g. Manufacturing change.",
+        "type": [
+          {
+            "code": "CodeableConcept"
+          }
+        ],
+        "binding": {
+          "strength": "extensible",
+          "valueSet": "http://HL7Vulcan/UDP/IG/ValueSet/m11-study-amendment-reason-vs"
+        }
+      },
+      {
+        "id": "Extension.extension:summary",
+        "path": "Extension.extension",
+        "sliceName": "summary",
+        "min": 0,
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:summary.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:summary.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "summary"
+      },
+      {
+        "id": "Extension.extension:summary.value[x]",
+        "path": "Extension.extension.value[x]",
+        "short": "summary of changes",
+        "definition": "Summary of amendmets.",
+        "type": [
+          {
+            "code": "string"
+          }
+        ]
+      },
+      {
+        "id": "Extension.extension:substantialImpactSafety",
+        "path": "Extension.extension",
+        "sliceName": "substantialImpactSafety",
+        "min": 0,
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:substantialImpactSafety.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:substantialImpactSafety.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "substantialImpactSafety"
+      },
+      {
+        "id": "Extension.extension:substantialImpactSafety.value[x]",
+        "path": "Extension.extension.value[x]",
+        "short": "Substantial impact on safety",
+        "definition": "Substantial impact on safety.",
+        "type": [
+          {
+            "code": "CodeableConcept"
+          }
+        ],
+        "binding": {
+          "strength": "required",
+          "valueSet": "http://HL7Vulcan/UDP/IG/ValueSet/m11-yes-no-vs"
+        }
+      },
+      {
+        "id": "Extension.extension:substantialImpactSafetyComment",
+        "path": "Extension.extension",
+        "sliceName": "substantialImpactSafetyComment",
+        "min": 0,
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:substantialImpactSafetyComment.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:substantialImpactSafetyComment.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "substantialImpactSafetyComment"
+      },
+      {
+        "id": "Extension.extension:substantialImpactSafetyComment.value[x]",
+        "path": "Extension.extension.value[x]",
+        "short": "Comment on substantial impact on safety",
+        "definition": "Comment on substantial impact on safety.",
+        "type": [
+          {
+            "code": "string"
+          }
+        ]
+      },
+      {
+        "id": "Extension.extension:substantialImpactReliability",
+        "path": "Extension.extension",
+        "sliceName": "substantialImpactReliability",
+        "min": 0,
+        "max": "1"
+      },
+      {
+        "id": "Extension.extension:substantialImpactReliability.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:substantialImpactReliability.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "substantialImpactReliability"
+      },
+      {
+        "id": "Extension.extension:substantialImpactReliability.value[x]",
+        "path": "Extension.extension.value[x]",
+        "short": "Substantial impact on reliability",
+        "definition": "Substantial impact on reliability.",
+        "type": [
+          {
+            "code": "CodeableConcept"
+          }
+        ],
+        "binding": {
+          "strength": "required",
+          "valueSet": "http://HL7Vulcan/UDP/IG/ValueSet/m11-yes-no-vs"
+        }
+      },
+      {
+        "id": "Extension.extension:substantialImpactReliabilityComment",
+        "path": "Extension.extension",
+        "sliceName": "substantialImpactReliabilityComment",
+        "min": 0,
+        "max": "1"
+      },
+      {
+        "id": "Extension.extension:substantialImpactReliabilityComment.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:substantialImpactReliabilityComment.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "substantialImpactReliabilityComment"
+      },
+      {
+        "id": "Extension.extension:substantialImpactReliabilityComment.value[x]",
+        "path": "Extension.extension.value[x]",
+        "short": "Comment on substantial impact on reliability",
+        "definition": "Comment on substantial impact on reliability.",
+        "type": [
+          {
+            "code": "string"
+          }
+        ]
+      },
+      {
+        "id": "Extension.extension:details",
+        "path": "Extension.extension",
+        "sliceName": "details",
+        "min": 0,
+        "max": "*",
+        "type": [
+          {
+            "code": "Extension",
+            "profile": [
+              "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-amendment-detail"
+            ]
+          }
+        ],
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:rationale",
+        "path": "Extension.extension",
+        "sliceName": "rationale",
+        "min": 0,
+        "max": "1"
+      },
+      {
+        "id": "Extension.extension:rationale.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:rationale.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "rationale"
+      },
+      {
+        "id": "Extension.extension:rationale.value[x]",
+        "path": "Extension.extension.value[x]",
+        "type": [
+          {
+            "code": "string"
+          }
+        ]
+      },
+      {
+        "id": "Extension.extension:description",
+        "path": "Extension.extension",
+        "sliceName": "description",
+        "min": 0,
+        "max": "1"
+      },
+      {
+        "id": "Extension.extension:description.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:description.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "description"
+      },
+      {
+        "id": "Extension.extension:description.value[x]",
+        "path": "Extension.extension.value[x]",
+        "type": [
+          {
+            "code": "markdown"
+          },
+          {
+            "code": "string"
+          }
+        ]
+      },
+      {
+        "id": "Extension.url",
+        "path": "Extension.url",
+        "fixedUri": "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-protocol-amendment"
+      },
+      {
+        "id": "Extension.value[x]",
+        "path": "Extension.value[x]",
+        "max": "0"
+      }
+    ]
+  }
+}

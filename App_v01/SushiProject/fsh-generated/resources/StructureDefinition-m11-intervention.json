@@ -1,0 +1,286 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "m11-intervention",
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-type-characteristics",
+      "valueCode": "can-bind"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm",
+      "valueInteger": 2
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-wg",
+      "valueCode": "brr"
+    }
+  ],
+  "url": "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-intervention",
+  "name": "M11_Intervention",
+  "status": "active",
+  "description": "M11 Table of interventions",
+  "copyright": "Portions of this material derives from the ICH M11 Harmonised Guideline CeSHarP. \nThe ICH M11 Harmonised Guideline CeSHarP is copyright ©2025+ International Committee on Harmonisation and is made available under license. \n\nCDISC publishes semantics for the ICH M11 protocol data elements and valid \nvalue sets. This terminology set is published and stored in the NCI Thesaurus \nSubset C217023 - ICH M11 Terminology \n(https://evsexplore.semantics.cancer.gov/evsexplore/subset/ncit/C217023) \n\nThe NCI Thesaurus is released under the CC BY 4.0 license\n\nCDISC also publishes the USDM reference architecture which is covered by the CC-BY-4.0 license\n\nFor more licensing information and links see: [licenses.html](licenses.html)",
+  "fhirVersion": "6.0.0-ballot3",
+  "kind": "complex-type",
+  "abstract": false,
+  "context": [
+    {
+      "type": "element",
+      "expression": "Element"
+    }
+  ],
+  "type": "Extension",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Extension",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "Extension",
+        "path": "Extension",
+        "short": "Intervention details",
+        "definition": "Intervention details that cannot be provided using ActivityDefinition.",
+        "comment": "This is very specificd to M11 Section 06."
+      },
+      {
+        "id": "Extension.extension:armType",
+        "path": "Extension.extension",
+        "sliceName": "armType",
+        "min": 0,
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:armType.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:armType.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "armType"
+      },
+      {
+        "id": "Extension.extension:armType.value[x]",
+        "path": "Extension.extension.value[x]",
+        "type": [
+          {
+            "code": "CodeableConcept"
+          }
+        ],
+        "binding": {
+          "strength": "required",
+          "valueSet": "http://HL7Vulcan/UDP/IG/ValueSet/m11-arm-type-vs"
+        }
+      },
+      {
+        "id": "Extension.extension:interventionType",
+        "path": "Extension.extension",
+        "sliceName": "interventionType",
+        "min": 0,
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:interventionType.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:interventionType.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "interventionType"
+      },
+      {
+        "id": "Extension.extension:interventionType.value[x]",
+        "path": "Extension.extension.value[x]",
+        "type": [
+          {
+            "code": "CodeableConcept"
+          }
+        ],
+        "binding": {
+          "strength": "required",
+          "valueSet": "http://HL7Vulcan/UDP/IG/ValueSet/m11-intervention-type-vs"
+        }
+      },
+      {
+        "id": "Extension.extension:dosageStrength",
+        "path": "Extension.extension",
+        "sliceName": "dosageStrength",
+        "min": 0,
+        "max": "1"
+      },
+      {
+        "id": "Extension.extension:dosageStrength.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:dosageStrength.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "dosageStrength"
+      },
+      {
+        "id": "Extension.extension:dosageStrength.value[x]",
+        "path": "Extension.extension.value[x]",
+        "type": [
+          {
+            "code": "string"
+          }
+        ]
+      },
+      {
+        "id": "Extension.extension:dosageLevels",
+        "path": "Extension.extension",
+        "sliceName": "dosageLevels",
+        "min": 0,
+        "max": "1"
+      },
+      {
+        "id": "Extension.extension:dosageLevels.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:dosageLevels.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "dosageLevels"
+      },
+      {
+        "id": "Extension.extension:dosageLevels.value[x]",
+        "path": "Extension.extension.value[x]",
+        "type": [
+          {
+            "code": "string"
+          }
+        ]
+      },
+      {
+        "id": "Extension.extension:regimen",
+        "path": "Extension.extension",
+        "sliceName": "regimen",
+        "min": 0,
+        "max": "1"
+      },
+      {
+        "id": "Extension.extension:regimen.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:regimen.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "regimen"
+      },
+      {
+        "id": "Extension.extension:regimen.value[x]",
+        "path": "Extension.extension.value[x]",
+        "type": [
+          {
+            "code": "string"
+          }
+        ]
+      },
+      {
+        "id": "Extension.extension:use",
+        "path": "Extension.extension",
+        "sliceName": "use",
+        "min": 0,
+        "max": "1"
+      },
+      {
+        "id": "Extension.extension:use.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:use.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "use"
+      },
+      {
+        "id": "Extension.extension:use.value[x]",
+        "path": "Extension.extension.value[x]",
+        "type": [
+          {
+            "code": "CodeableConcept"
+          }
+        ],
+        "binding": {
+          "strength": "required",
+          "valueSet": "http://HL7Vulcan/UDP/IG/ValueSet/m11-use-code-vs"
+        }
+      },
+      {
+        "id": "Extension.extension:imp-nimp",
+        "path": "Extension.extension",
+        "sliceName": "imp-nimp",
+        "min": 0,
+        "max": "1"
+      },
+      {
+        "id": "Extension.extension:imp-nimp.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:imp-nimp.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "imp-nimp"
+      },
+      {
+        "id": "Extension.extension:imp-nimp.value[x]",
+        "path": "Extension.extension.value[x]",
+        "type": [
+          {
+            "code": "CodeableConcept"
+          }
+        ],
+        "binding": {
+          "strength": "required",
+          "valueSet": "http://HL7Vulcan/UDP/IG/ValueSet/m11-imp-nimp-type-vs"
+        }
+      },
+      {
+        "id": "Extension.extension:sourcing",
+        "path": "Extension.extension",
+        "sliceName": "sourcing",
+        "min": 0,
+        "max": "1"
+      },
+      {
+        "id": "Extension.extension:sourcing.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:sourcing.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "sourcing"
+      },
+      {
+        "id": "Extension.extension:sourcing.value[x]",
+        "path": "Extension.extension.value[x]",
+        "type": [
+          {
+            "code": "CodeableConcept"
+          }
+        ],
+        "binding": {
+          "strength": "required",
+          "valueSet": "http://HL7Vulcan/UDP/IG/ValueSet/m11-source-code-vs"
+        }
+      },
+      {
+        "id": "Extension.url",
+        "path": "Extension.url",
+        "fixedUri": "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-intervention"
+      },
+      {
+        "id": "Extension.value[x]",
+        "path": "Extension.value[x]",
+        "max": "0"
+      }
+    ]
+  }
+}

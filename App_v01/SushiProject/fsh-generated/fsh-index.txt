@@ -1,0 +1,59 @@
+Output File                                              Name                                  Type        FSH File                                           Lines
+CodeSystem-ncit-cs.json                                  NCIT                                  CodeSystem  M11Terminology\NCITCodeSystem.fsh                  1 - 431
+Composition-Narrative-Composition-M11Section07.json      Narrative-Composition-M11Section07    Instance    Examples\section7_data_2026-10-06.fsh              1 - 66
+StructureDefinition-m11-amendment-detail.json            M11_AmendmentDetails                  Extension   ext-m11-protocol-amendment.fsh                     24 - 49
+StructureDefinition-m11-amendment-scope-impact.json      M11_AmendmentScopeImpact              Extension   ext-m11-protocol-amendment.fsh                     2 - 19
+StructureDefinition-m11-approval.json                    M11_Approval                          Extension   ext-m11-approval.fsh                               1 - 26
+StructureDefinition-m11-composition-order.json           M11_CompositionOrder                  Extension   ext-m11-composition-order.fsh                      1 - 12
+StructureDefinition-m11-confidentiality-statement.json   M11_ConfidentialityStatement          Extension   ext-m11-confidentiality-statement.fsh              1 - 14
+StructureDefinition-m11-design-table.json                M11-design-table                      Profile     ext-m11-protocol-summary.fsh                       3 - 12
+StructureDefinition-m11-estimands.json                   M11Estimands                          Extension   ext-m11-objectives.fsh                             55 - 84
+StructureDefinition-m11-intercurrent-events.json         M11IntercurrentEvents                 Extension   ext-m11-objectives.fsh                             124 - 144
+StructureDefinition-m11-intervention-table.json          M11-Intervention-Table                Profile     ext-m11-intervention.fsh                           52 - 61
+StructureDefinition-m11-intervention.json                M11_Intervention                      Extension   ext-m11-intervention.fsh                           3 - 43
+StructureDefinition-m11-objective-table.json             M11-objective-table                   Profile     ext-m11-objectives.fsh                             3 - 12
+StructureDefinition-m11-objective.json                   M11Objective                          Extension   ext-m11-objectives.fsh                             17 - 44
+StructureDefinition-m11-protocol-amendment.json          M11_ProtocolAmendment                 Extension   ext-m11-protocol-amendment.fsh                     52 - 165
+StructureDefinition-m11-protocol-design.json             M11_ProtocolDesign                    Extension   ext-m11-protocol-summary.fsh                       15 - 207
+StructureDefinition-m11-r5-group-ext.json                M11-R5-Group-Extension                Extension   extBack-m11-group.fsh                              20 - 45
+StructureDefinition-m11-r5-group.json                    M11-R5-group                          Profile     extBack-m11-group.fsh                              3 - 15
+StructureDefinition-m11-r5-groupCharacteristic-ext.json  M11-R5-GroupCharacteristic-Extension  Extension   extBack-m11-group.fsh                              50 - 66
+StructureDefinition-m11-reporting-table.json             M11-reporting-Table                   Profile     ext-m11-reporting.fsh                              48 - 57
+StructureDefinition-m11-reporting.json                   M11_reporting                         Extension   ext-m11-reporting.fsh                              3 - 38
+StructureDefinition-m11-research-study-narratives.json   M11ResearchStudyNarratives            Profile     M11NarrativeElement.fsh                            19 - 47
+StructureDefinition-m11-research-study-profile.json      M11_ResearchStudyProfile              Profile     Prof M11 ResearchStudy.fsh                         1 - 52
+StructureDefinition-m11-research-study.json              M11_ResearchStudy                     Extension   ext-m11-research-study.fsh                         1 - 28
+StructureDefinition-narrative-elements.json              NarrativeElements                     Extension   M11NarrativeElement.fsh                            3 - 14
+StructureDefinition-usdm-estimand-treatment.json         USDMEstimandTreatment                 Extension   ext-m11-objectives.fsh                             90 - 119
+ValueSet-m11-amendment-details-statement-vs.json         M11AmendmentDetailsStatementVS        ValueSet    M11Terminology\M11AmendmentDetailsStatementVS.fsh  2 - 17
+ValueSet-m11-amendment-scope-enrollment-vs.json          M11AmendmentScopeEnrollmentVS         ValueSet    M11Terminology\M11AmendmentScopeEnrollmentVS.fsh   3 - 16
+ValueSet-m11-arm-type-vs.json                            M11ArmTypeVS                          ValueSet    ext-m11-intervention.fsh                           67 - 83
+ValueSet-m11-blinded-roles-vs.json                       M11BlindedRolesVVS                    ValueSet    M11Terminology\M11BlindedRolesVS.fsh               3 - 20
+ValueSet-m11-blindedRoles-vs.json                        M11BlindedRolesVS                     ValueSet    M11Terminology\M11Section01VS.fsh                  143 - 158
+ValueSet-m11-controlType-vs.json                         M11ControlTypeVS                      ValueSet    M11Terminology\M11Section01VS.fsh                  42 - 59
+ValueSet-m11-country-region-vs.json                      M11CountryRegionVS                    ValueSet    M11Terminology\M11CountryRegionVS.fsh              1 - 15
+ValueSet-m11-event-type-vs.json                          M11EventTypeVS                        ValueSet    ext-m11-reporting.fsh                              63 - 83
+ValueSet-m11-imp-nimp-type-vs.json                       M11ImpNimpTypeVS                      ValueSet    ext-m11-intervention.fsh                           136 - 148
+ValueSet-m11-independentCommittees-vs.json               M11IndependentCommitteesVS            ValueSet    M11Terminology\M11Section01VS.fsh                  178 - 192
+ValueSet-m11-intervention-type-vs.json                   M11InterventionTypeVS                 ValueSet    ext-m11-intervention.fsh                           88 - 110
+ValueSet-m11-interventionAssignmentMethod-vs.json        M11InterventionAssignmentMethodVS     ValueSet    M11Terminology\M11Section01VS.fsh                  66 - 78
+ValueSet-m11-interventionModel-vs.json                   M11InterventionModelVS                ValueSet    M11Terminology\M11Section01VS.fsh                  4 - 15
+ValueSet-m11-phase-vs.json                               M11PhaseVS                            ValueSet    M11Terminology\M11PhaseVS.fsh                      3 - 24
+ValueSet-m11-populationType-vs.json                      M11PopulationTypeVS                   ValueSet    M11Terminology\M11Section01VS.fsh                  21 - 33
+ValueSet-m11-siteDistribution-vs.json                    M11SiteDistributionVS                 ValueSet    M11Terminology\M11Section01VS.fsh                  85 - 96
+ValueSet-m11-siteGeographicscope-vs.json                 M11SiteGeographicscopeVS              ValueSet    M11Terminology\M11Section01VS.fsh                  103 - 116
+ValueSet-m11-source-code-vs.json                         M11SourceCodeVS                       ValueSet    ext-m11-intervention.fsh                           152 - 164
+ValueSet-m11-study-amendment-reason-vs.json              M11StudyAmendmentReasonVS             ValueSet    M11Terminology\M11StudyAmendmentReasonVS.fsh       3 - 28
+ValueSet-m11-study-amendment-scope-vs.json               M11AmendmentScopeVS                   ValueSet    M11Terminology\M11AmendmentScopeVS.fsh             3 - 19
+ValueSet-m11-target-Maximum-vs.json                      UDPTarget-MaximumVS                   ValueSet    M11Terminology\M11Section01VS.fsh                  161 - 171
+ValueSet-m11-trialBlindSchema-vs.json                    M11TrialBlindSchemaVS                 ValueSet    M11Terminology\M11Section01VS.fsh                  123 - 136
+ValueSet-m11-use-code-vs.json                            M11UseCodeVS                          ValueSet    ext-m11-intervention.fsh                           114 - 132
+ValueSet-m11-yes-no-vs.json                              M11YesNoVS                            ValueSet    M11Terminology\M11YesNoVS.fsh                      3 - 15
+ValueSet-udp-address-purpose-type-vs.json                UDPAddressPurposeType                 ValueSet    UDPTerminology\UDP Address Purpose Type.fsh        1 - 21
+ValueSet-udp-identifier-type-vs.json                     UDPIdentifierType_VS                  ValueSet    UDPTerminology\UDP Identifier Type.fsh             1 - 26
+ValueSet-udp-narrative-elements-vs.json                  UDPNarrativeElementsVS                ValueSet    UDPTerminology\UDPNarrativeElementType.fsh         1 - 10
+ValueSet-udp-party-role-type-vs.json                     UDPPartyRoleType                      ValueSet    UDPTerminology\UDP Party Role Type.fsh             1 - 21
+ValueSet-udp-related-artifact-type-vs.json               UDPRelatedArtifactType                ValueSet    UDPTerminology\UDP Related Artifact Type.fsh       1 - 21
+ValueSet-udp-section-codes-03-vs.json                    UDPSectionCodes03VS                   ValueSet    UDPTerminology\UDPSectionCodesVS.fsh               1 - 13
+ValueSet-udp-section-codes-vs.json                       UDPSectionCodesVS                     ValueSet    UDPTerminology\UDPSectionCodesVS.fsh               16 - 223
+ValueSet-udp-study-title-type-vs.json                    UDPStudyTitleTypeVS                   ValueSet    UDPTerminology\UDP Study Label Type.fsh            1 - 20
