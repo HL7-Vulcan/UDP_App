@@ -39,4 +39,8 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="SushiProject\input\fsh\Examples\" />
+  </ItemGroup>
+
 </Project>

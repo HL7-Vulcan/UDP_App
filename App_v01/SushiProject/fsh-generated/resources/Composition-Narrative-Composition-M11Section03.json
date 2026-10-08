@@ -1,0 +1,243 @@
+{
+  "resourceType": "Composition",
+  "id": "Narrative-Composition-M11Section03",
+  "meta": {
+    "profile": [
+      "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-research-study-narratives"
+    ]
+  },
+  "author": [
+    {
+      "reference": "Narrative-Organization"
+    }
+  ],
+  "section": [
+    {
+      "text": {
+        "status": "additional",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\"></div>"
+      },
+      "section": [
+        {
+          "text": {
+            "status": "additional",
+            "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">~~~pobj1</div>"
+          },
+          "entry": [
+            {
+              "reference": "Composition/Estimands-primary-01"
+            },
+            {
+              "reference": "Composition/ICE-primary-01-01"
+            },
+            {
+              "reference": "Composition/ICE-primary-01-02"
+            }
+          ],
+          "title": "Section 3.1.1",
+          "code": {
+            "coding": [
+              {
+                "code": "C218528",
+                "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+                "display": "ICH M11 Protocol Section 3.1.1 Primary Objective"
+              }
+            ]
+          }
+        },
+        {
+          "text": {
+            "status": "additional",
+            "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">~~~pobj2</div>"
+          },
+          "entry": [
+            {
+              "reference": "Composition/Estimands-primary-02"
+            },
+            {
+              "reference": "Composition/ICE-primary-02-01"
+            },
+            {
+              "reference": "Composition/ICE-primary-02-02"
+            }
+          ],
+          "title": "Section 3.1.1",
+          "code": {
+            "coding": [
+              {
+                "code": "C218528",
+                "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+                "display": "ICH M11 Protocol Section 3.1.1 Primary Objective"
+              }
+            ]
+          }
+        }
+      ],
+      "title": "Section 3.1",
+      "code": {
+        "coding": [
+          {
+            "code": "C218527",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "ICH M11 Protocol Section 3.1 Primary Objective(s) and Associated Estimand(s)"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "status": "additional",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\"></div>"
+      },
+      "section": [
+        {
+          "text": {
+            "status": "additional",
+            "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">~~~sobj1</div>"
+          },
+          "entry": [
+            {
+              "reference": "Composition/Estimands-secondary-01"
+            },
+            {
+              "reference": "Composition/ICE-secondary-01-01"
+            },
+            {
+              "reference": "Composition/ICE-secondary-01-02"
+            }
+          ],
+          "title": "Section 3.2.1",
+          "code": {
+            "coding": [
+              {
+                "code": "C218530",
+                "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+                "display": "ICH M11 Protocol Section 3.2.1 Secondary Objective"
+              }
+            ]
+          }
+        },
+        {
+          "text": {
+            "status": "additional",
+            "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">~~~sobj2</div>"
+          },
+          "entry": [
+            {
+              "reference": "Composition/Estimands-secondary-02"
+            },
+            {
+              "reference": "Composition/ICE-secondary-02-01"
+            },
+            {
+              "reference": "Composition/ICE-secondary-02-02"
+            }
+          ],
+          "title": "Section 3.2.1",
+          "code": {
+            "coding": [
+              {
+                "code": "C218530",
+                "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+                "display": "ICH M11 Protocol Section 3.2.1 Secondary Objective"
+              }
+            ]
+          }
+        }
+      ],
+      "title": "Section 3.2",
+      "code": {
+        "coding": [
+          {
+            "code": "C218529",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "ICH M11 Protocol Section 3.2 Secondary Objective(s) and Associated Estimand(s)"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "status": "additional",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\"></div>"
+      },
+      "section": [
+        {
+          "text": {
+            "status": "additional",
+            "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">~~~xobj1</div>"
+          },
+          "entry": [
+            {
+              "reference": "Composition/Estimands-exploratory-01"
+            },
+            {
+              "reference": "Composition/ICE-exploratory-01-01"
+            },
+            {
+              "reference": "Composition/ICE-exploratory-01-02"
+            }
+          ],
+          "title": "Section 3.3.1",
+          "code": {
+            "coding": [
+              {
+                "code": "C218532",
+                "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+                "display": "ICH M11 Protocol Section 3.3.1 Exploratory Objective"
+              }
+            ]
+          }
+        },
+        {
+          "text": {
+            "status": "additional",
+            "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">~~~xobj2</div>"
+          },
+          "entry": [
+            {
+              "reference": "Composition/Estimands-exploratory-02"
+            },
+            {
+              "reference": "Composition/ICE-exploratory-02-01"
+            },
+            {
+              "reference": "Composition/ICE-exploratory-02-02"
+            }
+          ],
+          "title": "Section 3.3.1",
+          "code": {
+            "coding": [
+              {
+                "code": "C218532",
+                "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+                "display": "ICH M11 Protocol Section 3.3.1 Exploratory Objective"
+              }
+            ]
+          }
+        }
+      ],
+      "title": "Section 3.3",
+      "code": {
+        "coding": [
+          {
+            "code": "C218531",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "ICH M11 Protocol Section 3.3 Exploratory Objective(s)"
+          }
+        ]
+      }
+    }
+  ],
+  "status": "final",
+  "type": {
+    "coding": [
+      {
+        "code": "C207508",
+        "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl"
+      }
+    ]
+  },
+  "date": "2025-06-30T12:46:00Z",
+  "title": "Example Narrative with Section per Section - (this is the Composition Title}"
+}

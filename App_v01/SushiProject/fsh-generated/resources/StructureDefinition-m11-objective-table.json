@@ -15,14 +15,14 @@
   "fhirVersion": "6.0.0-ballot3",
   "kind": "resource",
   "abstract": false,
-  "type": "Basic",
-  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Basic",
+  "type": "Composition",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Composition",
   "derivation": "constraint",
   "differential": {
     "element": [
       {
-        "id": "Basic.extension",
-        "path": "Basic.extension",
+        "id": "Composition.extension",
+        "path": "Composition.extension",
         "slicing": {
           "discriminator": [
             {
@@ -35,8 +35,8 @@
         }
       },
       {
-        "id": "Basic.extension:objective",
-        "path": "Basic.extension",
+        "id": "Composition.extension:objective",
+        "path": "Composition.extension",
         "sliceName": "objective",
         "min": 0,
         "max": "*",

@@ -8,12 +8,156 @@
     "endLine": 431
   },
   {
-    "outputFile": "Composition-Narrative-Composition-M11Section07.json",
-    "fshName": "Narrative-Composition-M11Section07",
+    "outputFile": "Composition-Estimands-exploratory-01.json",
+    "fshName": "Estimands-exploratory-01",
     "fshType": "Instance",
-    "fshFile": "Examples\\section7_data_2026-10-06.fsh",
+    "fshFile": "Examples\\section3_data.fsh",
+    "startLine": 441,
+    "endLine": 466
+  },
+  {
+    "outputFile": "Composition-Estimands-exploratory-02.json",
+    "fshName": "Estimands-exploratory-02",
+    "fshType": "Instance",
+    "fshFile": "Examples\\section3_data.fsh",
+    "startLine": 517,
+    "endLine": 542
+  },
+  {
+    "outputFile": "Composition-Estimands-primary-01.json",
+    "fshName": "Estimands-primary-01",
+    "fshType": "Instance",
+    "fshFile": "Examples\\section3_data.fsh",
+    "startLine": 133,
+    "endLine": 158
+  },
+  {
+    "outputFile": "Composition-Estimands-primary-02.json",
+    "fshName": "Estimands-primary-02",
+    "fshType": "Instance",
+    "fshFile": "Examples\\section3_data.fsh",
+    "startLine": 209,
+    "endLine": 234
+  },
+  {
+    "outputFile": "Composition-Estimands-secondary-01.json",
+    "fshName": "Estimands-secondary-01",
+    "fshType": "Instance",
+    "fshFile": "Examples\\section3_data.fsh",
+    "startLine": 287,
+    "endLine": 312
+  },
+  {
+    "outputFile": "Composition-Estimands-secondary-02.json",
+    "fshName": "Estimands-secondary-02",
+    "fshType": "Instance",
+    "fshFile": "Examples\\section3_data.fsh",
+    "startLine": 363,
+    "endLine": 388
+  },
+  {
+    "outputFile": "Composition-ICE-exploratory-01-01.json",
+    "fshName": "ICE-exploratory-01-01",
+    "fshType": "Instance",
+    "fshFile": "Examples\\section3_data.fsh",
+    "startLine": 471,
+    "endLine": 490
+  },
+  {
+    "outputFile": "Composition-ICE-exploratory-01-02.json",
+    "fshName": "ICE-exploratory-01-02",
+    "fshType": "Instance",
+    "fshFile": "Examples\\section3_data.fsh",
+    "startLine": 494,
+    "endLine": 513
+  },
+  {
+    "outputFile": "Composition-ICE-exploratory-02-01.json",
+    "fshName": "ICE-exploratory-02-01",
+    "fshType": "Instance",
+    "fshFile": "Examples\\section3_data.fsh",
+    "startLine": 547,
+    "endLine": 566
+  },
+  {
+    "outputFile": "Composition-ICE-exploratory-02-02.json",
+    "fshName": "ICE-exploratory-02-02",
+    "fshType": "Instance",
+    "fshFile": "Examples\\section3_data.fsh",
+    "startLine": 570,
+    "endLine": 589
+  },
+  {
+    "outputFile": "Composition-ICE-primary-01-01.json",
+    "fshName": "ICE-primary-01-01",
+    "fshType": "Instance",
+    "fshFile": "Examples\\section3_data.fsh",
+    "startLine": 163,
+    "endLine": 182
+  },
+  {
+    "outputFile": "Composition-ICE-primary-01-02.json",
+    "fshName": "ICE-primary-01-02",
+    "fshType": "Instance",
+    "fshFile": "Examples\\section3_data.fsh",
+    "startLine": 186,
+    "endLine": 205
+  },
+  {
+    "outputFile": "Composition-ICE-primary-02-01.json",
+    "fshName": "ICE-primary-02-01",
+    "fshType": "Instance",
+    "fshFile": "Examples\\section3_data.fsh",
+    "startLine": 239,
+    "endLine": 258
+  },
+  {
+    "outputFile": "Composition-ICE-primary-02-02.json",
+    "fshName": "ICE-primary-02-02",
+    "fshType": "Instance",
+    "fshFile": "Examples\\section3_data.fsh",
+    "startLine": 262,
+    "endLine": 281
+  },
+  {
+    "outputFile": "Composition-ICE-secondary-01-01.json",
+    "fshName": "ICE-secondary-01-01",
+    "fshType": "Instance",
+    "fshFile": "Examples\\section3_data.fsh",
+    "startLine": 317,
+    "endLine": 336
+  },
+  {
+    "outputFile": "Composition-ICE-secondary-01-02.json",
+    "fshName": "ICE-secondary-01-02",
+    "fshType": "Instance",
+    "fshFile": "Examples\\section3_data.fsh",
+    "startLine": 340,
+    "endLine": 359
+  },
+  {
+    "outputFile": "Composition-ICE-secondary-02-01.json",
+    "fshName": "ICE-secondary-02-01",
+    "fshType": "Instance",
+    "fshFile": "Examples\\section3_data.fsh",
+    "startLine": 393,
+    "endLine": 412
+  },
+  {
+    "outputFile": "Composition-ICE-secondary-02-02.json",
+    "fshName": "ICE-secondary-02-02",
+    "fshType": "Instance",
+    "fshFile": "Examples\\section3_data.fsh",
+    "startLine": 416,
+    "endLine": 435
+  },
+  {
+    "outputFile": "Composition-Narrative-Composition-M11Section03.json",
+    "fshName": "Narrative-Composition-M11Section03",
+    "fshType": "Instance",
+    "fshFile": "Examples\\section3_data.fsh",
     "startLine": 1,
-    "endLine": 66
+    "endLine": 128
   },
   {
     "outputFile": "StructureDefinition-m11-amendment-detail.json",
@@ -109,7 +253,7 @@
     "fshType": "Extension",
     "fshFile": "ext-m11-objectives.fsh",
     "startLine": 17,
-    "endLine": 44
+    "endLine": 41
   },
   {
     "outputFile": "StructureDefinition-m11-protocol-amendment.json",

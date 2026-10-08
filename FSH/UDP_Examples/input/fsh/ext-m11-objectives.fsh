@@ -1,7 +1,7 @@
 //--------------------------------------------------------------------------------------
 //
 Profile: M11-objective-table
-Parent: Basic
+Parent: Composition
 Id: m11-objective-table
 Description: """Profile of Basic resource to be used as Reporting details  according to M11 Table of reportings """
 * insert rs-copyright-structure
@@ -36,12 +36,12 @@ Objective[]
 * ^status = #active
 
 * extension contains
-  section 1..1 MS and  // must be one of C218528 Primary Objective, C218530 Secondary Objective, C218532 Exploratory Objective
+  //section 1..1 MS and  // must be one of C218528 Primary Objective, C218530 Secondary Objective, C218532 Exploratory Objective
   m11-estimands named estimands 1..* MS and
   m11-intercurrent-events named intercurrentEvents 0..*
 
-* extension[section].value[x] only CodeableConcept
-* extension[section].value[x] from udp-section-codes-03-vs
+// * extension[section].value[x] only CodeableConcept
+// * extension[section].value[x] from udp-section-codes-03-vs
 
 /* * extension[objective].value[x] only string
   * ^short = "Objective"

@@ -1,0 +1,77 @@
+{
+  "resourceType": "Composition",
+  "id": "Estimands-primary-01",
+  "meta": {
+    "profile": [
+      "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-objective-table"
+    ]
+  },
+  "author": [
+    {
+      "reference": "Narrative-Organization"
+    }
+  ],
+  "extension": [
+    {
+      "extension": [
+        {
+          "extension": [
+            {
+              "url": "population",
+              "valueString": "~~~pop_est1_pobj1"
+            },
+            {
+              "url": "endpoint"
+            }
+          ],
+          "url": "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-estimands"
+        },
+        {
+          "extension": [
+            {
+              "url": "treatment",
+              "valueString": "~~~treat1_est1_pobj1\n~~~treat2_est1_pobj1"
+            },
+            {
+              "url": "endpoint"
+            }
+          ],
+          "url": "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-estimands"
+        },
+        {
+          "extension": [
+            {
+              "url": "endpoint",
+              "valueString": "~~~end_est1_pobj1"
+            }
+          ],
+          "url": "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-estimands"
+        },
+        {
+          "extension": [
+            {
+              "url": "summary",
+              "valueString": "~~~sum_est1_pobj1"
+            },
+            {
+              "url": "endpoint"
+            }
+          ],
+          "url": "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-estimands"
+        }
+      ],
+      "url": "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-objective"
+    }
+  ],
+  "type": {
+    "coding": [
+      {
+        "code": "C207508",
+        "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl"
+      }
+    ]
+  },
+  "date": "2025-06-30T12:46:00Z",
+  "title": "Example Narrative with Section per Section - (this is the Composition Title}",
+  "status": "draft"
+}

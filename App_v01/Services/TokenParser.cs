@@ -76,6 +76,74 @@ public static class TokenParser
     }
 
     /// <summary>
+    /// Find the first {{REPEAT...}} block in <paramref name="template"/> and expand it
+    /// once per entry in <paramref name="iterations"/>.  For each iteration, any nested
+    /// inner {{REPEAT...}} blocks with _X tokens are expanded using that iteration's
+    /// <c>iceIds</c>, then all remaining tokens are substituted using <c>fieldValues</c>.
+    /// Returns (expandedText, matchStart, matchLength), or null if no REPEAT found.
+    /// </summary>
+    public static (string expanded, int matchStart, int matchLength)? ExpandOuterRepeat(
+        string template,
+        IEnumerable<(Func<string, string?> fieldValues, IEnumerable<string> iceIds)> iterations)
+    {
+        int i = 0;
+        while (i < template.Length)
+        {
+            int open = FindTokenStart(template, i);
+            if (open < 0) break;
+            int close = FindTokenEnd(template, open);
+            if (close < 0) break;
+
+            string content = template.Substring(open + 2, close - open - 4);
+            if (content.StartsWith("REPEAT", StringComparison.Ordinal))
+            {
+                int lineStart = open;
+                while (lineStart > 0 && template[lineStart - 1] != '\n' && template[lineStart - 1] != '\r')
+                    lineStart--;
+
+                string rowPattern = content.Substring("REPEAT".Length);
+
+                int blockEnd = close;
+                while (blockEnd < template.Length && (template[blockEnd] == ' ' || template[blockEnd] == '\t'))
+                    blockEnd++;
+                if (blockEnd < template.Length && template[blockEnd] == '\r') blockEnd++;
+                if (blockEnd < template.Length && template[blockEnd] == '\n') blockEnd++;
+
+                var sb = new System.Text.StringBuilder();
+                bool firstIter = true;
+                foreach (var (fieldValues, iceIds) in iterations)
+                {
+                    if (!firstIter) sb.AppendLine();
+                    firstIter = false;
+
+                    // Expand any inner REPEAT blocks (those with _X tokens) using this iteration's iceIds
+                    string body = rowPattern;
+                    bool anyInner = true;
+                    while (anyInner)
+                    {
+                        var inner = FindAndExpandRepeat(body, iceIds);
+                        if (inner.HasValue)
+                        {
+                            var (exp, ms, ml) = inner.Value;
+                            body = body.Remove(ms, ml).Insert(ms, exp);
+                        }
+                        else anyInner = false;
+                    }
+
+                    // Substitute all remaining field tokens using this iteration's values
+                    body = Substitute(body, fieldValues);
+                    sb.Append(body);
+                }
+
+                return (sb.ToString(), lineStart, blockEnd - lineStart);
+            }
+
+            i = close;
+        }
+        return null;
+    }
+
+    /// <summary>
     /// Find a {{REPEAT<content>}} token in <paramref name="template"/>,
     /// expand it by substituting {{TABLE_ROW_X}} with each row id,
     /// and return (expandedLines, matchStart, matchLength).
@@ -114,15 +182,43 @@ public static class TokenParser
                 if (blockEnd < template.Length && template[blockEnd] == '\r') blockEnd++;
                 if (blockEnd < template.Length && template[blockEnd] == '\n') blockEnd++;
 
-                var sb = new System.Text.StringBuilder();
-                bool first = true;
-                foreach (var rowId in rowIds)
+                // Discover the row-id token(s): any {{..._X}} token inside the row pattern.
+                // All such tokens are substituted with the rowId for that iteration.
+                var rowTokens = new System.Collections.Generic.HashSet<string>(
+                    StringComparer.Ordinal);
                 {
-                    if (!first) sb.AppendLine();
-                    first = false;
-                    // Preserve leading whitespace by wrapping pattern in {{ }} for Substitute
-                    sb.Append(Substitute("{{" + rowPattern + "}}", key =>
-                        key == "TABLE_ROW_X" ? rowId : key));
+                    int scan = 0;
+                    while (scan < rowPattern.Length)
+                    {
+                        int to = FindTokenStart(rowPattern, scan);
+                        if (to < 0) break;
+                        int tc = FindTokenEnd(rowPattern, to);
+                        if (tc < 0) break;
+                        string tok = rowPattern.Substring(to + 2, tc - to - 4);
+                        if (tok.EndsWith("_X", StringComparison.Ordinal))
+                            rowTokens.Add(tok);
+                        scan = tc;
+                    }
+                }
+                var sb = new System.Text.StringBuilder();
+                if (rowTokens.Count == 0)
+                {
+                    // No _X row-id tokens in the pattern: this is a "emit once" REPEAT block
+                    // (e.g. a single-value field like treatment).  Emit the pattern exactly once,
+                    // leaving any {{field}} tokens intact for Substitute to resolve afterward.
+                    sb.Append(rowPattern);
+                }
+                else
+                {
+                    bool first = true;
+                    foreach (var rowId in rowIds)
+                    {
+                        if (!first) sb.AppendLine();
+                        first = false;
+                        // Substitute only the _X tokens; leave all other {{field}} tokens intact.
+                        sb.Append(Substitute(rowPattern, key =>
+                            rowTokens.Contains(key) ? rowId : "{{" + key + "}}"));
+                    }
                 }
 
                 return (sb.ToString(), lineStart, blockEnd - lineStart);

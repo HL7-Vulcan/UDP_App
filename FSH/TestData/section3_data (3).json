@@ -1,0 +1,110 @@
+{
+  "primaryObjectives": [
+    {
+      "objectiveText": "~~~pobj1",
+      "C70833": "~~~pop_est1_pobj1",
+      "C49236": "~~~treat1_est1_pobj1\n~~~treat2_est1_pobj1",
+      "C25212": "~~~end_est1_pobj1",
+      "C188853": "~~~sum_est1_pobj1",
+      "iceRows": [
+        {
+          "C188856": "~~~event_ice1_pobj1",
+          "C188857": "~~~strat_ice1_pobj1"
+        },
+        {
+          "C188856": "~~~event_ice2_pobj1",
+          "C188857": "~~~strat_ice2_pobj1"
+        }
+      ]
+    },
+    {
+      "objectiveText": "~~~pobj2",
+      "C70833": "~~~pop_est1_pobj2",
+      "C49236": "~~~treat1_est1_pobj2\n~~~treat2_est1_pobj2",
+      "C25212": "~~~end_est1_pobj2",
+      "C188853": "~~~sum_est1_pobj2",
+      "iceRows": [
+        {
+          "C188856": "~~~event_ice1_pobj2",
+          "C188857": "~~~strat_ice1_pobj2"
+        },
+        {
+          "C188856": "~~~event_ice2_pobj2",
+          "C188857": "~~~strat_ice2_pobj2"
+        }
+      ]
+    }
+  ],
+  "secondaryObjectives": [
+    {
+      "objectiveText": "~~~sobj1",
+      "C70833": "~~~pop_est1_sobj1",
+      "C49236": "~~~treat1_est1_sobj1\n~~~treat2_est1_sobj1",
+      "C25212": "~~~end_est1_sobj1",
+      "C188853": "~~~sum_est1_sobj1",
+      "iceRows": [
+        {
+          "C188856": "~~~event_ice1_sobj1",
+          "C188857": "~~~strat_ice1_sobj1"
+        },
+        {
+          "C188856": "~~~event_ice2_sobj1",
+          "C188857": "~~~strat_ice2_sobj1"
+        }
+      ]
+    },
+    {
+      "objectiveText": "~~~sobj2",
+      "C70833": "~~~pop_est1_sobj2",
+      "C49236": "~~~treat1_est1_sobj2\n~~~treat2_est1_sobj2",
+      "C25212": "~~~end_est1_sobj2",
+      "C188853": "~~~sum_est1_sobj2",
+      "iceRows": [
+        {
+          "C188856": "~~~event_ice1_sobj2",
+          "C188857": "~~~strat_ice1_sobj2"
+        },
+        {
+          "C188856": "~~~event_ice2_sobj2",
+          "C188857": "~~~strat_ice2_sobj2"
+        }
+      ]
+    }
+  ],
+  "exploratoryObjectives": [
+    {
+      "objectiveText": "~~~xobj1",
+      "C70833": "~~~pop_est1_xobj1",
+      "C49236": "~~~treat1_est1_xobj1\n~~~treat2_est1_xobj1",
+      "C25212": "~~~end_est1_xobj1",
+      "C188853": "~~~sum_est1_xobj1",
+      "iceRows": [
+        {
+          "C188856": "~~~event_ice1_xobj1",
+          "C188857": "~~~strat_ice1_xobj1"
+        },
+        {
+          "C188856": "~~~event_ice2_xobj1",
+          "C188857": "~~~strat_ice2_xobj1"
+        }
+      ]
+    },
+    {
+      "objectiveText": "~~~xobj2",
+      "C70833": "~~~pop_est1_xobj2",
+      "C49236": "~~~treat1_est1_xobj2\n~~~treat2_est1_xobj2",
+      "C25212": "~~~end_est1_xobj2",
+      "C188853": "~~~sum_est1_xobj2",
+      "iceRows": [
+        {
+          "C188856": "~~~event_ice1_xobj2",
+          "C188857": "~~~strat_ice1_xobj2"
+        },
+        {
+          "C188856": "~~~event_ice2_xobj2",
+          "C188857": "~~~strat_ice2_xobj2"
+        }
+      ]
+    }
+  ]
+}

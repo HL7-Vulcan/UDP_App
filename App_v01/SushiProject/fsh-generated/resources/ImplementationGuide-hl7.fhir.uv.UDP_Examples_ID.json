@@ -41,13 +41,211 @@
     "resource": [
       {
         "reference": {
-          "reference": "Composition/Narrative-Composition-M11Section07"
+          "reference": "Composition/Narrative-Composition-M11Section03"
         },
         "name": "Example Narrative Single Composition with a Section for Each M11 Section",
-        "description": "Example Narrative Single Composition with a contained section for e part of M11 Section 07.",
+        "description": "Example Narrative Single Composition with a contained section for e part of M11 Section 03.",
         "isExample": true,
         "profile": [
           "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-research-study-narratives"
+        ]
+      },
+      {
+        "reference": {
+          "reference": "Composition/Estimands-primary-01"
+        },
+        "name": "Example Narrative with Section per Section - (this is the Composition Title}",
+        "description": "Table defining the primary objectives",
+        "isExample": true,
+        "profile": [
+          "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-objective-table"
+        ]
+      },
+      {
+        "reference": {
+          "reference": "Composition/ICE-primary-01-01"
+        },
+        "name": "Example Narrative with Section per Section - (this is the Composition Title}",
+        "description": "Table defining the primary objectives",
+        "isExample": true,
+        "profile": [
+          "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-objective-table"
+        ]
+      },
+      {
+        "reference": {
+          "reference": "Composition/ICE-primary-01-02"
+        },
+        "name": "Example Narrative with Section per Section - (this is the Composition Title}",
+        "description": "Table defining the primary objectives",
+        "isExample": true,
+        "profile": [
+          "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-objective-table"
+        ]
+      },
+      {
+        "reference": {
+          "reference": "Composition/Estimands-primary-02"
+        },
+        "name": "Example Narrative with Section per Section - (this is the Composition Title}",
+        "description": "Table defining the primary objectives",
+        "isExample": true,
+        "profile": [
+          "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-objective-table"
+        ]
+      },
+      {
+        "reference": {
+          "reference": "Composition/ICE-primary-02-01"
+        },
+        "name": "Example Narrative with Section per Section - (this is the Composition Title}",
+        "description": "Table defining the primary objectives",
+        "isExample": true,
+        "profile": [
+          "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-objective-table"
+        ]
+      },
+      {
+        "reference": {
+          "reference": "Composition/ICE-primary-02-02"
+        },
+        "name": "Example Narrative with Section per Section - (this is the Composition Title}",
+        "description": "Table defining the primary objectives",
+        "isExample": true,
+        "profile": [
+          "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-objective-table"
+        ]
+      },
+      {
+        "reference": {
+          "reference": "Composition/Estimands-secondary-01"
+        },
+        "name": "Example Narrative with Section per Section - (this is the Composition Title}",
+        "description": "Table defining the primary objectives",
+        "isExample": true,
+        "profile": [
+          "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-objective-table"
+        ]
+      },
+      {
+        "reference": {
+          "reference": "Composition/ICE-secondary-01-01"
+        },
+        "name": "Example Narrative with Section per Section - (this is the Composition Title}",
+        "description": "Table defining the primary objectives",
+        "isExample": true,
+        "profile": [
+          "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-objective-table"
+        ]
+      },
+      {
+        "reference": {
+          "reference": "Composition/ICE-secondary-01-02"
+        },
+        "name": "Example Narrative with Section per Section - (this is the Composition Title}",
+        "description": "Table defining the primary objectives",
+        "isExample": true,
+        "profile": [
+          "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-objective-table"
+        ]
+      },
+      {
+        "reference": {
+          "reference": "Composition/Estimands-secondary-02"
+        },
+        "name": "Example Narrative with Section per Section - (this is the Composition Title}",
+        "description": "Table defining the primary objectives",
+        "isExample": true,
+        "profile": [
+          "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-objective-table"
+        ]
+      },
+      {
+        "reference": {
+          "reference": "Composition/ICE-secondary-02-01"
+        },
+        "name": "Example Narrative with Section per Section - (this is the Composition Title}",
+        "description": "Table defining the primary objectives",
+        "isExample": true,
+        "profile": [
+          "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-objective-table"
+        ]
+      },
+      {
+        "reference": {
+          "reference": "Composition/ICE-secondary-02-02"
+        },
+        "name": "Example Narrative with Section per Section - (this is the Composition Title}",
+        "description": "Table defining the primary objectives",
+        "isExample": true,
+        "profile": [
+          "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-objective-table"
+        ]
+      },
+      {
+        "reference": {
+          "reference": "Composition/Estimands-exploratory-01"
+        },
+        "name": "Example Narrative with Section per Section - (this is the Composition Title}",
+        "description": "Table defining the primary objectives",
+        "isExample": true,
+        "profile": [
+          "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-objective-table"
+        ]
+      },
+      {
+        "reference": {
+          "reference": "Composition/ICE-exploratory-01-01"
+        },
+        "name": "Example Narrative with Section per Section - (this is the Composition Title}",
+        "description": "Table defining the primary objectives",
+        "isExample": true,
+        "profile": [
+          "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-objective-table"
+        ]
+      },
+      {
+        "reference": {
+          "reference": "Composition/ICE-exploratory-01-02"
+        },
+        "name": "Example Narrative with Section per Section - (this is the Composition Title}",
+        "description": "Table defining the primary objectives",
+        "isExample": true,
+        "profile": [
+          "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-objective-table"
+        ]
+      },
+      {
+        "reference": {
+          "reference": "Composition/Estimands-exploratory-02"
+        },
+        "name": "Example Narrative with Section per Section - (this is the Composition Title}",
+        "description": "Table defining the primary objectives",
+        "isExample": true,
+        "profile": [
+          "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-objective-table"
+        ]
+      },
+      {
+        "reference": {
+          "reference": "Composition/ICE-exploratory-02-01"
+        },
+        "name": "Example Narrative with Section per Section - (this is the Composition Title}",
+        "description": "Table defining the primary objectives",
+        "isExample": true,
+        "profile": [
+          "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-objective-table"
+        ]
+      },
+      {
+        "reference": {
+          "reference": "Composition/ICE-exploratory-02-02"
+        },
+        "name": "Example Narrative with Section per Section - (this is the Composition Title}",
+        "description": "Table defining the primary objectives",
+        "isExample": true,
+        "profile": [
+          "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-objective-table"
         ]
       },
       {
