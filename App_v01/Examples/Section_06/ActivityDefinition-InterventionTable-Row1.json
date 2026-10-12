@@ -1,0 +1,112 @@
+{
+  "resourceType": "ActivityDefinition",
+  "id": "InterventionTable-Row1",
+  "meta": {
+    "profile": [
+      "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-intervention-table"
+    ]
+  },
+  "extension": [
+    {
+      "extension": [
+        {
+          "url": "armType",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "code": "C174266",
+                "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+                "display": "Experimental Arm"
+              }
+            ]
+          }
+        },
+        {
+          "url": "interventionType",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "code": "C1909",
+                "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+                "display": "Drug"
+              }
+            ]
+          }
+        },
+        {
+          "url": "dosageStrength",
+          "valueString": "500mg"
+        },
+        {
+          "url": "dosageLevels",
+          "valueString": "500mg twice daily"
+        },
+        {
+          "url": "regimen",
+          "valueString": "Twice daily for 12 weeks"
+        },
+        {
+          "url": "use",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "code": "C41161",
+                "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+                "display": "Experimental Intervention"
+              }
+            ]
+          }
+        },
+        {
+          "url": "imp-nimp",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "code": "C202579",
+                "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+                "display": "MP"
+              }
+            ]
+          }
+        },
+        {
+          "url": "sourcing",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "code": "C215659",
+                "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+                "display": "Centrally Sourced"
+              }
+            ]
+          }
+        }
+      ],
+      "url": "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-intervention"
+    }
+  ],
+  "dosage": [
+    {
+      "route": {
+        "coding": [
+          {
+            "code": "R1",
+            "system": "https://HL7Vulcan.org/UDP/Terminology/IDMP",
+            "display": "oral"
+          }
+        ]
+      }
+    }
+  ],
+  "status": "draft",
+  "title": "Active Treatment Arm",
+  "productCodeableConcept": {
+    "coding": [
+      {
+        "code": "EX2015/03",
+        "system": "https://exemplarSponsor.com/sponsor-identifier",
+        "display": "Exoticillin"
+      }
+    ]
+  }
+}

@@ -1,0 +1,233 @@
+{
+  "resourceType": "Composition",
+  "id": "Narrative-Composition-M11Section05",
+  "meta": {
+    "profile": [
+      "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-research-study-narratives"
+    ]
+  },
+  "author": [
+    {
+      "reference": "Narrative-Organization"
+    }
+  ],
+  "section": [
+    {
+      "text": {
+        "status": "additional",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">The trial will enrol adult participants aged 18 to 75 years with a confirmed diagnosis of moderate-to-severe plaque psoriasis, defined as a Psoriasis Area and Severity Index (PASI) score of 12 or greater and a body surface area (BSA) involvement of 10% or greater at screening.</div>"
+      },
+      "title": "Section 5.1",
+      "code": {
+        "coding": [
+          {
+            "code": "C218548",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "ICH M11 Protocol Section 5.1 Description of Trial Population and Rationale"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "status": "additional",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">Participants must meet all of the following inclusion criteria to be eligible for enrolment.</div>"
+      },
+      "entry": [
+        {
+          "reference": "Group/eligibility-group-inclusion-age-weight"
+        },
+        {
+          "reference": "Group/eligibility-group-inclusion-diagnosis-consent"
+        },
+        {
+          "reference": "Group/exclusion-group-exclusion-prior-biologics"
+        },
+        {
+          "reference": "Group/exclusion-group-exclusion-pregnancy"
+        }
+      ],
+      "title": "Section 5.2",
+      "code": {
+        "coding": [
+          {
+            "code": "C218549",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "ICH M11 Protocol Section 5.2 Inclusion Criteria"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "status": "additional",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">Participants meeting any of the following exclusion criteria are not eligible for enrolment.</div>"
+      },
+      "title": "Section 5.3",
+      "code": {
+        "coding": [
+          {
+            "code": "C218550",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "ICH M11 Protocol Section 5.3 Exclusion Criteria"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "status": "additional",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">Women of childbearing potential (WOCBP) are defined as women who are biologically capable of becoming pregnant. Women who are postmenopausal (at least 12 consecutive months of spontaneous amenorrhoea) or permanently sterile are not considered WOCBP.</div>"
+      },
+      "title": "Section 5.4.1",
+      "code": {
+        "coding": [
+          {
+            "code": "C218552",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "ICH M11 Protocol Section 5.4.1 Definitions Related to Childbearing Potential"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "status": "additional",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">WOCBP must agree to use a highly effective method of contraception from the time of screening until at least 12 weeks after the last dose of investigational product.</div>"
+      },
+      "title": "Section 5.4.2",
+      "code": {
+        "coding": [
+          {
+            "code": "C218553",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "ICH M11 Protocol Section 5.4.2 Contraception Requirements"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "status": "additional",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">Participants must comply with the following lifestyle restrictions throughout their participation in the trial.</div>"
+      },
+      "title": "Section 5.5",
+      "code": {
+        "coding": [
+          {
+            "code": "C218554",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "ICH M11 Protocol Section 5.5 Lifestyle Restrictions"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "status": "additional",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">Participants must avoid grapefruit, grapefruit juice, and Seville oranges from 7 days prior to the first dose until the end of the treatment period.</div>"
+      },
+      "title": "Section 5.5.1",
+      "code": {
+        "coding": [
+          {
+            "code": "C218555",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "ICH M11 Protocol Section 5.5.1 Meals and Dietary Restrictions"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "status": "additional",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">Participants must abstain from alcohol consumption within 24 hours prior to and 24 hours following each study visit.</div>"
+      },
+      "title": "Section 5.5.2",
+      "code": {
+        "coding": [
+          {
+            "code": "C218559",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "ICH M11 Protocol Section 5.5.2 Caffeine, Alcohol, Tobacco, and Other Restrictions"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "status": "additional",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">Participants should avoid strenuous physical activity within 48 hours prior to scheduled blood sampling visits.</div>"
+      },
+      "title": "Section 5.5.3",
+      "code": {
+        "coding": [
+          {
+            "code": "C218557",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "ICH M11 Protocol Section 5.5.3 Physical Activity Restrictions"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "status": "additional",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">No other activity restrictions apply.</div>"
+      },
+      "title": "Section 5.5.4",
+      "code": {
+        "coding": [
+          {
+            "code": "C218558",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "ICH M11 Protocol Section 5.5.4 Other Activity Restrictions"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "status": "additional",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">Participants who fail to meet eligibility criteria at screening will be considered screen failures and their data collected to understand the characteristics of the screened population.</div>"
+      },
+      "title": "Section 5.6.1",
+      "code": {
+        "coding": [
+          {
+            "code": "009",
+            "system": "https://HL7Vulcan.org/UDP/Terminology",
+            "display": "ICH M11 Protocol Section 5.6.1 Screen Failure"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "status": "additional",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">Rescreening may be permitted once, at the discretion of the investigator, if the screen failure was due to a transient condition that has resolved.</div>"
+      },
+      "title": "Section 5.6.2",
+      "code": {
+        "coding": [
+          {
+            "code": "010",
+            "system": "https://HL7Vulcan.org/UDP/Terminology",
+            "display": "ICH M11 Protocol Section 5.6.2 Rescreening"
+          }
+        ]
+      }
+    }
+  ],
+  "status": "final",
+  "type": {
+    "coding": [
+      {
+        "code": "C207508",
+        "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl"
+      }
+    ]
+  },
+  "date": "2025-06-30T12:46:00Z",
+  "title": "Example Narrative with Section per Section - (this is the Composition Title}"
+}

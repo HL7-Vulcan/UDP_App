@@ -5,6 +5,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
+builder.Services.AddHttpClient();
+
 builder.Services.AddScoped<UDP_App.Services.DataServiceTP>();
 builder.Services.AddScoped<UDP_App.Services.SushiService>();
 builder.Services.AddScoped<UDP_App.Services.DataService01>();
@@ -14,6 +16,9 @@ builder.Services.AddScoped<UDP_App.Services.DataService06>();
 builder.Services.AddScoped<UDP_App.Services.DataService07>();
 builder.Services.AddScoped<UDP_App.Services.DataService08>();
 builder.Services.AddScoped<UDP_App.Services.DataService09>();
+builder.Services.AddSingleton<UDP_App.Services.SettingsService>();
+builder.Services.AddScoped<UDP_App.Services.FhirBrowseService>();
+builder.Services.AddScoped<UDP_App.Services.BuildService>();
 
 var app = builder.Build();
 

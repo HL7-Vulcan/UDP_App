@@ -1,0 +1,94 @@
+@page "/setup"
+@rendermode InteractiveServer
+@using UDP_App.Models
+@using UDP_App.Services
+@inject SettingsService SettingsSvc
+@inject NavigationManager Nav
+
+<PageTitle>Setup — UDP Browse</PageTitle>
+
+<h1>Server Setup</h1>
+
+<p>Configure the FHIR server connection. Changes take effect immediately for the current session.</p>
+
+<EditForm Model="@_form" OnValidSubmit="Save">
+    <DataAnnotationsValidator />
+
+    <div class="mb-3">
+        <label class="form-label">Server Base URL</label>
+        <InputText class="form-control" @bind-Value="_form.BaseUrl" placeholder="https://example.fhir.org" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Username</label>
+        <InputText class="form-control" @bind-Value="_form.Username" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Password</label>
+        <InputText class="form-control" type="password" @bind-Value="_form.Password" />
+    </div>
+
+    <hr class="my-3" />
+    <h5>Build</h5>
+    <p class="text-muted" style="font-size:0.9em;">
+        The Build page scans a folder of JSON files for FHIR resources and lets you review them before uploading.
+    </p>
+
+    <div class="mb-3">
+        <label class="form-label">Examples Folder Path</label>
+        <InputText class="form-control" @bind-Value="_form.ExamplesFolder" placeholder="C:\path\to\examples  or  /home/user/examples" />
+        <div class="form-text">Absolute path to the folder containing JSON example files.</div>
+    </div>
+
+    <hr class="my-3" />
+    <h5>Vhewer</h5>
+    <p class="text-muted" style="font-size:0.9em;">
+        Vhewer is an online FHIR resource viewer. The URL below is used when you click
+        the <strong>Vhewer</strong> button on a resource.
+    </p>
+
+    <div class="mb-3">
+        <label class="form-label">Vhewer URL</label>
+        <InputText class="form-control" @bind-Value="_form.VhewerUrl" placeholder="https://vhewer.com" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Study Option</label>
+        <InputText class="form-control" @bind-Value="_form.StudyOption" placeholder="study" />
+        <div class="form-text">Used as the path segment for the Study button on Bundle resources.</div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save &amp; Connect</button>
+    <a href="/" class="btn btn-secondary ms-2">Cancel</a>
+</EditForm>
+
+@if (_saved)
+{
+    <div class="alert alert-success mt-3">Settings saved. <a href="/browse">Browse resources →</a></div>
+}
+
+@code {
+    private FhirServerSettings _form = new();
+    private bool _saved;
+
+    protected override void OnInitialized()
+    {
+        // Pre-populate form from current settings
+        _form = new FhirServerSettings
+        {
+            BaseUrl   = SettingsSvc.Settings.BaseUrl,
+            Username  = SettingsSvc.Settings.Username,
+            Password  = SettingsSvc.Settings.Password,
+            ExamplesFolder = SettingsSvc.Settings.ExamplesFolder,
+            VhewerUrl      = SettingsSvc.Settings.VhewerUrl,
+            StudyOption    = SettingsSvc.Settings.StudyOption,
+        };
+    }
+
+    private void Save()
+    {
+        SettingsSvc.Update(_form);
+        _saved = true;
+    }
+}

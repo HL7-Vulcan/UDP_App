@@ -1,0 +1,170 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "m11-estimands",
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-type-characteristics",
+      "valueCode": "can-bind"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm",
+      "valueInteger": 2
+    }
+  ],
+  "url": "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-estimands",
+  "name": "M11Estimands",
+  "title": "M11 Section 03 - Estimands Table",
+  "status": "active",
+  "description": "Fixed structure for use in Section 03\n\nEstimand[]\n    population\n    treatment[]\n        usdm\n    frequency\n    route\n",
+  "copyright": "Portions of this material derives from the ICH M11 Harmonised Guideline CeSHarP. \nThe ICH M11 Harmonised Guideline CeSHarP is copyright ©2025+ International Committee on Harmonisation and is made available under license. \n\nCDISC publishes semantics for the ICH M11 protocol data elements and valid \nvalue sets. This terminology set is published and stored in the NCI Thesaurus \nSubset C217023 - ICH M11 Terminology \n(https://evsexplore.semantics.cancer.gov/evsexplore/subset/ncit/C217023) \n\nThe NCI Thesaurus is released under the CC BY 4.0 license\n\nCDISC also publishes the USDM reference architecture which is covered by the CC-BY-4.0 license\n\nFor more licensing information and links see: [licenses.html](licenses.html)",
+  "fhirVersion": "6.0.0-ballot3",
+  "kind": "complex-type",
+  "abstract": false,
+  "context": [
+    {
+      "type": "element",
+      "expression": "Element"
+    }
+  ],
+  "type": "Extension",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Extension",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "Extension",
+        "path": "Extension",
+        "short": "M11 Section 03 - Estimands Table",
+        "definition": "Fixed structure for use in Section 03\n\nEstimand[]\n    population\n    treatment[]\n        usdm\n    frequency\n    route\n"
+      },
+      {
+        "id": "Extension.extension",
+        "path": "Extension.extension",
+        "min": 1
+      },
+      {
+        "id": "Extension.extension:population",
+        "path": "Extension.extension",
+        "sliceName": "population",
+        "min": 0,
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:population.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:population.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "population"
+      },
+      {
+        "id": "Extension.extension:population.value[x]",
+        "path": "Extension.extension.value[x]",
+        "type": [
+          {
+            "code": "string"
+          }
+        ]
+      },
+      {
+        "id": "Extension.extension:treatment",
+        "path": "Extension.extension",
+        "sliceName": "treatment",
+        "min": 0,
+        "max": "*",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:treatment.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:treatment.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "treatment"
+      },
+      {
+        "id": "Extension.extension:treatment.value[x]",
+        "path": "Extension.extension.value[x]",
+        "type": [
+          {
+            "code": "string"
+          },
+          {
+            "code": "Reference",
+            "targetProfile": [
+              "http://HL7Vulcan/UDP/IG/StructureDefinition/usdm-estimand-treatment"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "Extension.extension:endpoint",
+        "path": "Extension.extension",
+        "sliceName": "endpoint",
+        "min": 1,
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:endpoint.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:endpoint.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "endpoint"
+      },
+      {
+        "id": "Extension.extension:endpoint.value[x]",
+        "path": "Extension.extension.value[x]",
+        "type": [
+          {
+            "code": "string"
+          }
+        ]
+      },
+      {
+        "id": "Extension.extension:summary",
+        "path": "Extension.extension",
+        "sliceName": "summary",
+        "min": 0,
+        "max": "1"
+      },
+      {
+        "id": "Extension.extension:summary.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:summary.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "summary"
+      },
+      {
+        "id": "Extension.extension:summary.value[x]",
+        "path": "Extension.extension.value[x]",
+        "type": [
+          {
+            "code": "string"
+          }
+        ]
+      },
+      {
+        "id": "Extension.url",
+        "path": "Extension.url",
+        "fixedUri": "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-estimands"
+      },
+      {
+        "id": "Extension.value[x]",
+        "path": "Extension.value[x]",
+        "max": "0"
+      }
+    ]
+  }
+}

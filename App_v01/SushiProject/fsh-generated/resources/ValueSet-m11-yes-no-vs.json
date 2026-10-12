@@ -1,0 +1,35 @@
+{
+  "resourceType": "ValueSet",
+  "status": "active",
+  "name": "M11YesNoVS",
+  "id": "m11-yes-no-vs",
+  "title": "ICH M11 No Yes Value Set Terminology",
+  "description": "Terminology associated with the no yes value set codelist of the ICH M11 protocol template.\nThis is ICH M11 Value Set C217046 drawn from the NCI Thesaurus and represented here in FHIR format.",
+  "url": "http://HL7Vulcan/UDP/IG/ValueSet/m11-yes-no-vs",
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm",
+      "valueInteger": 0
+    }
+  ],
+  "copyright": "Portions of this material derives from the ICH M11 Harmonised Guideline CeSHarP. \nThe ICH M11 Harmonised Guideline CeSHarP is copyright ©2025+ International Committee on Harmonisation and is made available under license. \n\nCDISC publishes semantics for the ICH M11 protocol data elements and valid \nvalue sets. This terminology set is published and stored in the NCI Thesaurus \nSubset C217023 - ICH M11 Terminology \n(https://evsexplore.semantics.cancer.gov/evsexplore/subset/ncit/C217023) \n\nThe NCI Thesaurus is released under the CC BY 4.0 license\n\nFor more licensing information and links see: [licenses.html](licenses.html)",
+  "experimental": false,
+  "publisher": "ICH M11",
+  "compose": {
+    "include": [
+      {
+        "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+        "concept": [
+          {
+            "code": "C49487",
+            "display": "No"
+          },
+          {
+            "code": "C49488",
+            "display": "Yes"
+          }
+        ]
+      }
+    ]
+  }
+}

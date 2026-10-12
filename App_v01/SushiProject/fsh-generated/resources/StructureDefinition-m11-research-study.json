@@ -1,0 +1,124 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "m11-research-study",
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-type-characteristics",
+      "valueCode": "can-bind"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm",
+      "valueInteger": 2
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-wg",
+      "valueCode": "brr"
+    }
+  ],
+  "url": "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-research-study",
+  "name": "M11_ResearchStudy",
+  "title": "M11 Research Study Extension",
+  "status": "active",
+  "description": "Additions for M11 not otherwise dealt with",
+  "copyright": "Portions of this material derives from the ICH M11 Harmonised Guideline CeSHarP. \nThe ICH M11 Harmonised Guideline CeSHarP is copyright ©2025+ International Committee on Harmonisation and is made available under license. \n\nCDISC publishes semantics for the ICH M11 protocol data elements and valid \nvalue sets. This terminology set is published and stored in the NCI Thesaurus \nSubset C217023 - ICH M11 Terminology \n(https://evsexplore.semantics.cancer.gov/evsexplore/subset/ncit/C217023) \n\nThe NCI Thesaurus is released under the CC BY 4.0 license\n\nCDISC also publishes the USDM reference architecture which is covered by the CC-BY-4.0 license\n\nFor more licensing information and links see: [licenses.html](licenses.html)",
+  "fhirVersion": "6.0.0-ballot3",
+  "kind": "complex-type",
+  "abstract": false,
+  "context": [
+    {
+      "expression": "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-research-study-profile#ResearchStudy",
+      "type": "element"
+    }
+  ],
+  "type": "Extension",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Extension",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "Extension",
+        "path": "Extension",
+        "short": "Additional concepts for M11",
+        "definition": "Signature and date for approval.",
+        "comment": "Additional concepts required by M11 that have no other obvious home."
+      },
+      {
+        "id": "Extension.extension",
+        "path": "Extension.extension",
+        "min": 2
+      },
+      {
+        "id": "Extension.extension:originalProtocol",
+        "path": "Extension.extension",
+        "sliceName": "originalProtocol",
+        "min": 1,
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:originalProtocol.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:originalProtocol.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "originalProtocol"
+      },
+      {
+        "id": "Extension.extension:originalProtocol.value[x]",
+        "path": "Extension.extension.value[x]",
+        "short": "Original Protocol Indicator",
+        "definition": "An indication as to whether the protocol document reflects the original version of the protocol..",
+        "type": [
+          {
+            "code": "CodeableConcept"
+          }
+        ],
+        "binding": {
+          "strength": "required",
+          "valueSet": "http://HL7Vulcan/UDP/IG/ValueSet/m11-amendment-details-statement-vs"
+        }
+      },
+      {
+        "id": "Extension.extension:versionDate",
+        "path": "Extension.extension",
+        "sliceName": "versionDate",
+        "min": 1,
+        "max": "1"
+      },
+      {
+        "id": "Extension.extension:versionDate.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:versionDate.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "versionDate"
+      },
+      {
+        "id": "Extension.extension:versionDate.value[x]",
+        "path": "Extension.extension.value[x]",
+        "short": "Protocol version date",
+        "definition": "The date on which the document is versioned.",
+        "comment": "The date on ResearchStudy is the date the resource last significantly changed - not the same as the protocol version date",
+        "type": [
+          {
+            "code": "date"
+          }
+        ]
+      },
+      {
+        "id": "Extension.url",
+        "path": "Extension.url",
+        "fixedUri": "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-research-study"
+      },
+      {
+        "id": "Extension.value[x]",
+        "path": "Extension.value[x]",
+        "max": "0"
+      }
+    ]
+  }
+}

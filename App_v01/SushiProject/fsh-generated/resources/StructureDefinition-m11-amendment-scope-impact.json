@@ -1,0 +1,115 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "m11-amendment-scope-impact",
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-type-characteristics",
+      "valueCode": "can-bind"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm",
+      "valueInteger": 2
+    }
+  ],
+  "url": "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-amendment-scope-impact",
+  "name": "M11_AmendmentScopeImpact",
+  "status": "active",
+  "description": "Provides number or percentage of each group affected by a single amendment",
+  "copyright": "Portions of this material derives from the ICH M11 Harmonised Guideline CeSHarP. \nThe ICH M11 Harmonised Guideline CeSHarP is copyright ©2025+ International Committee on Harmonisation and is made available under license. \n\nCDISC publishes semantics for the ICH M11 protocol data elements and valid \nvalue sets. This terminology set is published and stored in the NCI Thesaurus \nSubset C217023 - ICH M11 Terminology \n(https://evsexplore.semantics.cancer.gov/evsexplore/subset/ncit/C217023) \n\nThe NCI Thesaurus is released under the CC BY 4.0 license\n\nCDISC also publishes the USDM reference architecture which is covered by the CC-BY-4.0 license\n\nFor more licensing information and links see: [licenses.html](licenses.html)",
+  "fhirVersion": "6.0.0-ballot3",
+  "kind": "complex-type",
+  "abstract": false,
+  "context": [
+    {
+      "expression": "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-protocol-amendment",
+      "type": "extension"
+    }
+  ],
+  "type": "Extension",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Extension",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "Extension",
+        "path": "Extension",
+        "definition": "Provides number or percentage of each group affected by a single amendment"
+      },
+      {
+        "id": "Extension.extension",
+        "path": "Extension.extension",
+        "min": 2
+      },
+      {
+        "id": "Extension.extension:number",
+        "path": "Extension.extension",
+        "sliceName": "number",
+        "min": 1,
+        "max": "1"
+      },
+      {
+        "id": "Extension.extension:number.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:number.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "number"
+      },
+      {
+        "id": "Extension.extension:number.value[x]",
+        "path": "Extension.extension.value[x]",
+        "short": "Number of participants, or % of participants",
+        "type": [
+          {
+            "code": "positiveInt"
+          },
+          {
+            "code": "Quantity"
+          }
+        ]
+      },
+      {
+        "id": "Extension.extension:scope",
+        "path": "Extension.extension",
+        "sliceName": "scope",
+        "min": 1,
+        "max": "1"
+      },
+      {
+        "id": "Extension.extension:scope.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:scope.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "scope"
+      },
+      {
+        "id": "Extension.extension:scope.value[x]",
+        "path": "Extension.extension.value[x]",
+        "type": [
+          {
+            "code": "CodeableConcept"
+          }
+        ],
+        "binding": {
+          "strength": "required",
+          "valueSet": "http://HL7Vulcan/UDP/IG/ValueSet/m11-amendment-scope-enrollment-vs"
+        }
+      },
+      {
+        "id": "Extension.url",
+        "path": "Extension.url",
+        "fixedUri": "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-amendment-scope-impact"
+      },
+      {
+        "id": "Extension.value[x]",
+        "path": "Extension.value[x]",
+        "max": "0"
+      }
+    ]
+  }
+}

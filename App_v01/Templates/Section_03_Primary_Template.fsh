@@ -5,7 +5,7 @@ InstanceOf:  m11-objective-table
 Usage: #example
 
 Description: "Table defining the primary objectives"
-* id = "{{PRIMARY_TABLE_X}}" // This is specified ONLY to allow documentatation of examples - it is not normally specified
+* id = "{{ESTIMANDS_TABLE_X}}" // This is specified ONLY to allow documentatation of examples - it is not normally specified
 * type = $NCIT#C207508 // Narrative
 * date = "2025-06-30T12:46:00Z"
 * author = Reference(Narrative-Organization) // Reference to Organization: Marketing 

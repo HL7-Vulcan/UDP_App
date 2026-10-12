@@ -1,0 +1,60 @@
+{
+  "resourceType": "Group",
+  "id": "exclusion-group-exclusion-prior-biologics",
+  "characteristic": [
+    {
+      "code": {
+        "coding": [
+          {
+            "code": "416897000",
+            "system": "http://snomed.info/sct",
+            "display": "IL-17 inhibitor"
+          }
+        ]
+      },
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "code": "BiologicTherapy"
+          }
+        ]
+      },
+      "exclude": true,
+      "description": "prior IL-17 inhibitor within 24 weeks"
+    },
+    {
+      "valueRange": {
+        "low": {
+          "value": 0,
+          "code": "wk",
+          "system": "http://unitsofmeasure.org",
+          "unit": "weeks"
+        },
+        "high": {
+          "value": 24,
+          "code": "wk",
+          "system": "http://unitsofmeasure.org",
+          "unit": "weeks"
+        }
+      },
+      "code": {
+        "coding": [
+          {
+            "code": "787021000",
+            "system": "http://snomed.info/sct",
+            "display": "Washout period"
+          }
+        ]
+      },
+      "exclude": true,
+      "description": "within 24-week washout period"
+    }
+  ],
+  "name": "exclusion-prior-biologics",
+  "title": "Prior Biologic Therapy Exclusion",
+  "status": "active",
+  "description": "Participants who have received any biologic agent targeting IL-17, IL-23, or TNF-alpha within 24 weeks prior to randomisation are not eligible.",
+  "type": "person",
+  "membership": "definitional",
+  "combinationMethod": "any-of"
+}

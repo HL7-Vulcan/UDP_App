@@ -1,0 +1,45 @@
+@inherits LayoutComponentBase
+@inject ILogger<MainLayout> Logger
+
+<ErrorBoundary @ref="_errorBoundary">
+    <ChildContent>
+        <div class="page">
+            <div class="sidebar">
+                <NavMenu />
+            </div>
+
+            <main>
+                <div class="top-row px-4">
+                    <a href="/setup" class="nav-link">⚙ Setup</a>
+                </div>
+
+                <article class="content px-4">
+                    @Body
+                </article>
+            </main>
+        </div>
+    </ChildContent>
+    <ErrorContent Context="ex">
+        <div style="padding:2rem;font-family:monospace;background:#fff0f0;border:2px solid red;">
+            <h3>Circuit Error</h3>
+            <p><strong>@ex.GetType().FullName</strong></p>
+            <p>@ex.Message</p>
+            <pre style="white-space:pre-wrap;font-size:0.8em;">@ex.StackTrace</pre>
+            @if (ex.InnerException != null)
+            {
+                <p><strong>Inner:</strong> @ex.InnerException.Message</p>
+                <pre style="white-space:pre-wrap;font-size:0.8em;">@ex.InnerException.StackTrace</pre>
+            }
+        </div>
+    </ErrorContent>
+</ErrorBoundary>
+
+<div id="blazor-error-ui" data-nosnippet>
+    An unhandled error has occurred.
+    <a href="." class="reload">Reload</a>
+    <span class="dismiss">🗙</span>
+</div>
+
+@code {
+    private ErrorBoundary? _errorBoundary;
+}

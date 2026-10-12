@@ -50,19 +50,8 @@ Description: """Example Narrative Single Composition with a contained section fo
         </div>
       """
  {{REPEAT  * entry[+] = Reference({{TABLE_ROW_X}})}}
+
 //  * extension[order].valueInteger = {{n}}
-
-// * section[+]
-//   * title = "Section 5.2"
-//   * code = $NCIT#C218549  "ICH M11 Protocol Section 5.2 Inclusion Criteria"
-//   * text.status = #additional
-//   * text.div = """<div xmlns='http://www.w3.org/1999/xhtml' xml:lang="en" lang="en"> 
-// {{C25532}}
-//         </div>
-//       """
-//   * entry[+] = Reference(eligibility-group-diabetes) 
-//   * extension[order].valueInteger = 2
-
 
 * section[+]
   * title = "Section 5.3"

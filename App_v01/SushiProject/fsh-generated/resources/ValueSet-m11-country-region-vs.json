@@ -1,0 +1,31 @@
+{
+  "resourceType": "ValueSet",
+  "status": "active",
+  "name": "M11CountryRegionVS",
+  "id": "m11-country-region-vs",
+  "title": "ICH M11 Study Amendment Country Value Set",
+  "description": "Codes drawn from \nISO 3166 Country Codes, Alpha 3; \nISO 3166 Country Codes, Alpha 2; \ncountry/region codes. This is ICH M11 Value Set represented here in FHIR format.",
+  "url": "http://HL7Vulcan/UDP/IG/ValueSet/m11-country-region-vs",
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm",
+      "valueInteger": 1
+    }
+  ],
+  "copyright": "Portions of this material derives from the ICH M11 Harmonised Guideline CeSHarP. \nThe ICH M11 Harmonised Guideline CeSHarP is copyright ©2025+ International Committee on Harmonisation and is made available under license. \n\nCDISC publishes semantics for the ICH M11 protocol data elements and valid \nvalue sets. This terminology set is published and stored in the NCI Thesaurus \nSubset C217023 - ICH M11 Terminology \n(https://evsexplore.semantics.cancer.gov/evsexplore/subset/ncit/C217023) \n\nThe NCI Thesaurus is released under the CC BY 4.0 license\n\nFor more licensing information and links see: [licenses.html](licenses.html)",
+  "experimental": false,
+  "compose": {
+    "include": [
+      {
+        "valueSet": [
+          "http://hl7.org/fhir/ValueSet/iso3166-1-2"
+        ]
+      },
+      {
+        "valueSet": [
+          "http://hl7.org/fhir/ValueSet/iso3166-1-3"
+        ]
+      }
+    ]
+  }
+}

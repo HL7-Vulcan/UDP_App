@@ -1,0 +1,59 @@
+{
+  "resourceType": "ValueSet",
+  "status": "active",
+  "name": "UDPPartyRoleType",
+  "id": "udp-party-role-type-vs",
+  "title": "UDP Party Role Type Value Set",
+  "description": "These codes represent the types of role ResearchStudy.AssociatedParty can play. This is required for the\nmechanism used by FHIR for associating one entity with another. This is a UDP specific value set and uses NCIT codes to \ncreate an appropriate FHIR value set.",
+  "url": "http://HL7Vulcan/UDP/IG/ValueSet/udp-party-role-type-vs",
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm",
+      "valueInteger": 1
+    }
+  ],
+  "copyright": "Portions of this material derives from the ICH M11 Harmonised Guideline CeSHarP. \nThe ICH M11 Harmonised Guideline CeSHarP is copyright ©2025+ International Committee on Harmonisation and is made available under license. \n\nCDISC publishes semantics for the ICH M11 protocol data elements and valid \nvalue sets. This terminology set is published and stored in the NCI Thesaurus \nSubset C217023 - ICH M11 Terminology \n(https://evsexplore.semantics.cancer.gov/evsexplore/subset/ncit/C217023) \n\nThe NCI Thesaurus is released under the CC BY 4.0 license\n\nFor more licensing information and links see: [licenses.html](licenses.html)",
+  "experimental": false,
+  "publisher": "UDP",
+  "compose": {
+    "include": [
+      {
+        "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+        "concept": [
+          {
+            "code": "C70793",
+            "display": "Clinical Study Sponsor"
+          },
+          {
+            "code": "C215670",
+            "display": "Local Legal Sponsor"
+          },
+          {
+            "code": "C71136",
+            "display": "Regulatory Application Sponsor"
+          },
+          {
+            "code": "C142679",
+            "display": "Secondary Sponsor"
+          },
+          {
+            "code": "C215669",
+            "display": "Study Co-Sponsor"
+          },
+          {
+            "code": "C93478",
+            "display": "Study Legal Sponsor"
+          },
+          {
+            "code": "C156625",
+            "display": "Device Manufacturer"
+          },
+          {
+            "code": "C51876",
+            "display": "Sponsor Medical Expert"
+          }
+        ]
+      }
+    ]
+  }
+}

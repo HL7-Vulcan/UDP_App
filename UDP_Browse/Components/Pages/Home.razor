@@ -1,0 +1,12 @@
+@page "/"
+@using UDP_Browse.Services
+@inject SettingsService Settings
+
+<PageTitle>UDP Browse</PageTitle>
+
+<h1>UDP Browse</h1>
+
+<p>Use the <strong>Browse Resources</strong> page to list FHIR resources from the configured server,
+   or visit <strong>Setup</strong> to change the server address and credentials.</p>
+
+<p>Current server: <code>@Settings.Settings.BaseUrl</code></p>

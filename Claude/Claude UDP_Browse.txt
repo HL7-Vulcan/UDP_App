@@ -1,0 +1,58 @@
+I want a new app in the UDPApp solution again using the same Blazor framework.  When this new app is developed we will transfer the functionality into App_v01.  The new app is called UDP_Browse.  The objective is to list all the FHIR resources stored on a given FHIR server.  The initial server to look at is at https://tbuofzdjhm.edge.aidbox.app with username "postman" and password "secret" but the server address, username and password should all be configurable from a setup page.
+
+
+
+https://vhewer.com/?{{url}}?_user=postman&_password=secret
+
+Add a Vhewer section to the setup page with a parameter Vhewer URL with default value https://vhewer.com
+
+For the Vhewer button concatenate the following: the Vhewer URL from the setup page, make sure it has a trailing forward slash - add one if its missing.  Then  a ? then the server address from the setup page then / followed by the resource name followed by / followed by the resource id followed by /?_user= followed by user name from the setup page followed by &_password= followed by the password from the setup page
+
+{VhewerUrl}/?url={BaseUrl}/{ResourceType}/{Id}/?_user={username}&_password={password}
+
+{VhewerUrl}/{studyOption}/?url={BaseUrl}/{ResourceType}/{Id}/?_user={username}&_password={password}
+
+
+
+Add a new page to the app called "Build"
+
+Create a list of all the json files in the Examples folder
+
+From each file extract each block that begins 
+{ "resourceType" : 
+and ends with a matching }
+
+This is the JSON_BLOCK that block find the string value  that is the value for the "id" field - this is the BLOCK_ID.
+
+Display each block and its ID in a list
+
+
+When the JSON_BLOCKs and BLOCK_IDs have been extracted rebuild them into a single file called bundle.json  The pattern to follow in building the file is shown by the file bundle.json in the templates folder.  This is composed of a repeating block starting with the token <<<REPEAT and ending with the matching >>>  These <<<REPEAT … >>> blocks should be separated by a comma and a new line.  Within the block are two further blocks to be replaced.  The first is <<<JSON_BLOCK>>> which should be replaced by the JSON_BLOCK and the second is <<<BLOCK_ID>>> which should be replaced by the value for the BLOCK_ID
+
+
+{
+  "resourceType": "Bundle",
+  "type": "transaction",
+  "entry": [
+    <<<REPEAT
+    {
+      "resource": <<<JSON_BLOCK>>>
+      ,
+      "request": {
+        "method": "PUT",
+        "url": "<<<BLOCK_ID>>>"
+      }
+    }
+>>>
+  ]
+}
+
+On the build page I now need a button labelled "To Server" and when I click it should use a PUT to send the generated bundle.json file to the server using the server URL, username and password as specified on the setup page
+
+
+objectives
+Prof M11 ResearchStudy
+protocol-summary
+intervention
+M11NarrativeElements
+

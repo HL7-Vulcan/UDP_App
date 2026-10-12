@@ -1,0 +1,217 @@
+{
+  "resourceType": "Bundle",
+  "type": "transaction",
+  "entry": [
+        {
+      "resource": {
+  "resourceType": "MedicinalProductDefinition",
+  "id": "InvestigationalMedicinalProduct",
+  "identifier": [
+    {
+      "type": {
+        "coding": [
+          {
+            "code": "C218675",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "Sponsor\u0027s Investigational Product Code"
+          }
+        ]
+      },
+      "system": "https://exemplarSponsor.com/sponsor-identifier",
+      "value": "EX2010/12-IH; EX2010/12-IM"
+    }
+  ],
+  "name": [
+    {
+      "productName": "Exoticillin dry powder for inhalation; Exoticillin solution for injection",
+      "type": {
+        "coding": [
+          {
+            "code": "C97054",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "Nonproprietary Name(s)"
+          }
+        ]
+      }
+    },
+    {
+      "productName": "Exoticillin Inhaler; Exoticillin Injector",
+      "type": {
+        "coding": [
+          {
+            "code": "C71898",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "Proprietary Name(s)"
+          }
+        ]
+      }
+    }
+  ]
+}
+      ,
+      "request": {
+        "method": "PUT",
+        "url": "MedicinalProductDefinition/InvestigationalMedicinalProduct"
+      }
+    },
+    {
+      "resource": {
+  "resourceType": "Organization",
+  "id": "Exemplar-Regulator-Organization",
+  "contact": [
+    {
+      "purpose": {
+        "coding": [
+          {
+            "code": "ADMIN",
+            "system": "http://terminology.hl7.org/CodeSystem/contactentity-type",
+            "display": "Administrative"
+          }
+        ]
+      },
+      "address": {
+        "line": [
+          "Exemplar Road"
+        ],
+        "city": "Exemplarton",
+        "postalCode": "EX99 2AB",
+        "country": "United Kingdom"
+      }
+    }
+  ],
+  "name": "Exemplar Regulating Authority (ERA)"
+}
+      ,
+      "request": {
+        "method": "PUT",
+        "url": "Organization/Exemplar-Regulator-Organization"
+      }
+    },
+    {
+      "resource": {
+  "resourceType": "Organization",
+  "id": "LocalSponsorOrganization",
+  "contact": [
+    {
+      "purpose": {
+        "coding": [
+          {
+            "code": "ADMIN",
+            "system": "http://terminology.hl7.org/CodeSystem/contactentity-type",
+            "display": "Administrative"
+          }
+        ]
+      },
+      "address": {
+        "line": [
+          "2-1-1 Nihonbashi, Chuo-ku, Tokyo 103-0027, Japan"
+        ]
+      }
+    }
+  ],
+  "name": "Exemplar Pharmaceuticals Japan K.K."
+}
+      ,
+      "request": {
+        "method": "PUT",
+        "url": "Organization/LocalSponsorOrganization"
+      }
+    },
+    {
+      "resource": {
+  "resourceType": "Organization",
+  "id": "SponsorOrganization",
+  "contact": [
+    {
+      "purpose": {
+        "coding": [
+          {
+            "code": "ADMIN",
+            "system": "http://terminology.hl7.org/CodeSystem/contactentity-type",
+            "display": "Administrative"
+          }
+        ]
+      },
+      "address": {
+        "line": [
+          "1 Science Park, Cambridge, CB4 0WA, United Kingdom"
+        ]
+      }
+    }
+  ],
+  "name": "Exemplar Pharmaceuticals Ltd"
+}
+      ,
+      "request": {
+        "method": "PUT",
+        "url": "Organization/SponsorOrganization"
+      }
+    },
+    {
+      "resource": {
+  "resourceType": "Practitioner",
+  "id": "LocalSponsorPractitioner",
+  "name": [
+    {
+      "text": "Exemplar Pharmaceuticals Japan K.K."
+    }
+  ],
+  "address": [
+    {
+      "line": [
+        "2-1-1 Nihonbashi, Chuo-ku, Tokyo 103-0027, Japan"
+      ]
+    }
+  ]
+}
+      ,
+      "request": {
+        "method": "PUT",
+        "url": "Practitioner/LocalSponsorPractitioner"
+      }
+    },
+    {
+      "resource": {
+  "resourceType": "Practitioner",
+  "id": "SponsorExpertPractitioner",
+  "text": {
+    "status": "generated",
+    "div": "\u003Cdiv xmlns=\u0022http://www.w3.org/1999/xhtml\u0022 lang=\u0022en\u0022 xml:lang=\u0022en\u0022\u003EMedical Expert contact details held in the sponsor TMF\u003C/div\u003E"
+  },
+  "name": [
+    {
+      "text": "Dr James Brown, MD PhD, Exemplar Pharmaceuticals Ltd, james.brown@exemplarpharma.com"
+    }
+  ]
+}
+      ,
+      "request": {
+        "method": "PUT",
+        "url": "Practitioner/SponsorExpertPractitioner"
+      }
+    },
+    {
+      "resource": {
+  "resourceType": "Practitioner",
+  "id": "SponsorPractitioner",
+  "name": [
+    {
+      "text": "Exemplar Pharmaceuticals Ltd"
+    }
+  ],
+  "address": [
+    {
+      "line": [
+        "1 Science Park, Cambridge, CB4 0WA, United Kingdom"
+      ]
+    }
+  ]
+}
+      ,
+      "request": {
+        "method": "PUT",
+        "url": "Practitioner/SponsorPractitioner"
+      }
+    }
+  ]
+}

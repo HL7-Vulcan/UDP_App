@@ -1,0 +1,59 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "m11-intervention-table",
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-implements",
+      "valueUri": "http://hl7.org/fhir/StructureDefinition/MetadataResource"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm",
+      "valueInteger": 2
+    }
+  ],
+  "url": "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-intervention-table",
+  "name": "M11-Intervention-Table",
+  "status": "active",
+  "description": "Profile of ActivityDefinition to be used as an Arm definition according to M11 Table of interventions ",
+  "copyright": "Portions of this material derives from the ICH M11 Harmonised Guideline CeSHarP. \nThe ICH M11 Harmonised Guideline CeSHarP is copyright ©2025+ International Committee on Harmonisation and is made available under license. \n\nCDISC publishes semantics for the ICH M11 protocol data elements and valid \nvalue sets. This terminology set is published and stored in the NCI Thesaurus \nSubset C217023 - ICH M11 Terminology \n(https://evsexplore.semantics.cancer.gov/evsexplore/subset/ncit/C217023) \n\nThe NCI Thesaurus is released under the CC BY 4.0 license\n\nCDISC also publishes the USDM reference architecture which is covered by the CC-BY-4.0 license\n\nFor more licensing information and links see: [licenses.html](licenses.html)",
+  "fhirVersion": "6.0.0-ballot3",
+  "kind": "resource",
+  "abstract": false,
+  "type": "ActivityDefinition",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/ActivityDefinition",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "ActivityDefinition.extension",
+        "path": "ActivityDefinition.extension",
+        "slicing": {
+          "discriminator": [
+            {
+              "type": "value",
+              "path": "url"
+            }
+          ],
+          "ordered": false,
+          "rules": "open"
+        }
+      },
+      {
+        "id": "ActivityDefinition.extension:intervention",
+        "path": "ActivityDefinition.extension",
+        "sliceName": "intervention",
+        "min": 0,
+        "max": "*",
+        "type": [
+          {
+            "code": "Extension",
+            "profile": [
+              "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-intervention"
+            ]
+          }
+        ],
+        "mustSupport": true
+      }
+    ]
+  }
+}

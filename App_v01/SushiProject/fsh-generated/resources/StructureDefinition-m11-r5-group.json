@@ -1,0 +1,90 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "m11-r5-group",
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-implements",
+      "valueUri": "http://hl7.org/fhir/StructureDefinition/CanonicalResource"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm",
+      "valueInteger": 2
+    }
+  ],
+  "url": "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-r5-group",
+  "name": "M11-R5-group",
+  "status": "active",
+  "description": "Profile of FHIR R5 Group resource to be used for backport of FHIR R6 Group for M11",
+  "copyright": "Portions of this material derives from the ICH M11 Harmonised Guideline CeSHarP. \nThe ICH M11 Harmonised Guideline CeSHarP is copyright ©2025+ International Committee on Harmonisation and is made available under license. \n\nCDISC publishes semantics for the ICH M11 protocol data elements and valid \nvalue sets. This terminology set is published and stored in the NCI Thesaurus \nSubset C217023 - ICH M11 Terminology \n(https://evsexplore.semantics.cancer.gov/evsexplore/subset/ncit/C217023) \n\nThe NCI Thesaurus is released under the CC BY 4.0 license\n\nCDISC also publishes the USDM reference architecture which is covered by the CC-BY-4.0 license\n\nFor more licensing information and links see: [licenses.html](licenses.html)",
+  "fhirVersion": "6.0.0-ballot3",
+  "kind": "resource",
+  "abstract": false,
+  "type": "Group",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Group",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "Group.extension",
+        "path": "Group.extension",
+        "slicing": {
+          "discriminator": [
+            {
+              "type": "value",
+              "path": "url"
+            }
+          ],
+          "ordered": false,
+          "rules": "open"
+        },
+        "min": 1
+      },
+      {
+        "id": "Group.extension:r5-group",
+        "path": "Group.extension",
+        "sliceName": "r5-group",
+        "min": 1,
+        "max": "1",
+        "type": [
+          {
+            "code": "Extension",
+            "profile": [
+              "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-r5-group-ext"
+            ]
+          }
+        ],
+        "mustSupport": true
+      },
+      {
+        "id": "Group.characteristic.extension",
+        "path": "Group.characteristic.extension",
+        "slicing": {
+          "discriminator": [
+            {
+              "type": "value",
+              "path": "url"
+            }
+          ],
+          "ordered": false,
+          "rules": "open"
+        }
+      },
+      {
+        "id": "Group.characteristic.extension:characteristic",
+        "path": "Group.characteristic.extension",
+        "sliceName": "characteristic",
+        "min": 0,
+        "max": "1",
+        "type": [
+          {
+            "code": "Extension",
+            "profile": [
+              "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-r5-groupCharacteristic-ext"
+            ]
+          }
+        ],
+        "isSummary": true
+      }
+    ]
+  }
+}

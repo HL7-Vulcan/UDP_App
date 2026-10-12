@@ -1,0 +1,166 @@
+@page "/build"
+@rendermode InteractiveServer
+@using UDP_Browse.Services
+@inject SettingsService SettingsSvc
+@inject BuildService BuildSvc
+
+<PageTitle>Build — UDP Browse</PageTitle>
+
+<h1>Build</h1>
+
+@if (string.IsNullOrWhiteSpace(SettingsSvc.Settings.ExamplesFolder))
+{
+    <div class="alert alert-warning">
+        No Examples Folder is configured. Visit <a href="/setup">Setup</a> to set the path.
+    </div>
+}
+else
+{
+    <div class="d-flex align-items-center gap-2 mb-2 flex-wrap">
+        <span class="text-muted">Folder: <code>@SettingsSvc.Settings.ExamplesFolder</code></span>
+        <button class="btn btn-sm btn-outline-secondary" @onclick="Reload">↺ Reload</button>
+        <button class="btn btn-sm btn-success" @onclick="GenerateBundle" disabled="@(_generating || _sending)">
+            @if (_generating) { <span class="spinner-border spinner-border-sm me-1"></span> }
+            Generate Bundle
+        </button>
+        <button class="btn btn-sm btn-primary" @onclick="SendToServer" disabled="@(_generating || _sending)">
+            @if (_sending) { <span class="spinner-border spinner-border-sm me-1"></span> }
+            To Server
+        </button>
+    </div>
+
+    @if (_bundleMessage is not null)
+    {
+        <div class="alert @(_bundleError ? "alert-danger" : "alert-success") py-2">@_bundleMessage</div>
+    }
+
+    @if (_error is not null)
+    {
+        <div class="alert alert-danger">@_error</div>
+    }
+    else if (_blocks.Count == 0)
+    {
+        <p class="text-muted">No FHIR resources found. Make sure the folder contains .json files with a <code>resourceType</code> field.</p>
+    }
+    else
+    {
+        <p class="text-muted">@_blocks.Count resource(s) found across @_fileCount file(s).</p>
+
+        @foreach (var group in _blocks.GroupBy(b => b.FileName))
+        {
+            <h5 class="mt-3 mb-1">📄 @group.Key</h5>
+
+            @foreach (var block in group)
+            {
+                <div class="card mb-2">
+                    <div class="card-header d-flex justify-content-between align-items-center py-2"
+                         style="cursor:pointer;"
+                         @onclick="() => Toggle(block)">
+                        <span>
+                            <span class="badge bg-secondary me-2">@block.ResourceType</span>
+                            <code>@block.Id</code>
+                        </span>
+                        <span class="text-muted" style="font-size:0.85em;">
+                            @(_expanded.Contains(block) ? "▲ hide" : "▼ show")
+                        </span>
+                    </div>
+                    @if (_expanded.Contains(block))
+                    {
+                        <div class="card-body p-0">
+                            <pre style="max-height:40vh; overflow:auto; font-size:0.78em; padding:1rem; margin:0; background:#f8f9fa;">@block.Json</pre>
+                        </div>
+                    }
+                </div>
+            }
+        }
+    }
+}
+
+@code {
+    private IReadOnlyList<FhirResourceBlock> _blocks = Array.Empty<FhirResourceBlock>();
+    private HashSet<FhirResourceBlock> _expanded = new();
+    private int _fileCount;
+    private string? _error;
+    private string? _bundleMessage;
+    private bool _bundleError;
+    private bool _generating;
+    private bool _sending;
+
+    protected override void OnInitialized() => Load();
+
+    private void Reload() => Load();
+
+    private void Load()
+    {
+        _error    = null;
+        _expanded.Clear();
+        try
+        {
+            var folder = SettingsSvc.Settings.ExamplesFolder;
+            if (string.IsNullOrWhiteSpace(folder)) { _blocks = Array.Empty<FhirResourceBlock>(); return; }
+            if (!Directory.Exists(folder)) { _error = $"Folder not found: {folder}"; _blocks = Array.Empty<FhirResourceBlock>(); return; }
+
+            _blocks    = BuildSvc.ScanFolder(folder);
+            _fileCount = _blocks.Select(b => b.FileName).Distinct().Count();
+        }
+        catch (Exception ex)
+        {
+            _error  = ex.Message;
+            _blocks = Array.Empty<FhirResourceBlock>();
+        }
+    }
+
+    private void Toggle(FhirResourceBlock block)
+    {
+        if (!_expanded.Remove(block))
+            _expanded.Add(block);
+    }
+
+    private async Task SendToServer()
+    {
+        _bundleMessage = null;
+        _bundleError   = false;
+        _sending       = true;
+        try
+        {
+            var (status, reason) = await BuildSvc.SendBundleToServerAsync(SettingsSvc.Settings.ExamplesFolder);
+            var ok = status is >= 200 and < 300;
+            _bundleMessage = $"Server responded: {status} {reason}";
+            _bundleError   = !ok;
+        }
+        catch (Exception ex)
+        {
+            _bundleMessage = $"Error: {ex.Message}";
+            _bundleError   = true;
+        }
+        finally
+        {
+            _sending = false;
+        }
+    }
+
+    private async Task GenerateBundle()
+    {
+        _bundleMessage = null;
+        _bundleError   = false;
+        _generating    = true;
+        try
+        {
+            var examplesFolder  = SettingsSvc.Settings.ExamplesFolder;
+            var templatesFolder = "Templates";
+            var outputPath = await Task.Run(() => BuildSvc.GenerateBundle(examplesFolder, templatesFolder));
+            _bundleMessage = $"Bundle written to: {outputPath}";
+            // Reload the list so bundle.json appears
+            Load();
+        }
+        catch (Exception ex)
+        {
+            _bundleMessage = $"Error: {ex.Message}";
+            _bundleError   = true;
+        }
+        finally
+        {
+            _generating = false;
+        }
+    }
+}

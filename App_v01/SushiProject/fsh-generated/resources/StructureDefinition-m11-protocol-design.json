@@ -1,0 +1,937 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "m11-protocol-design",
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-type-characteristics",
+      "valueCode": "can-bind"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm",
+      "valueInteger": 2
+    }
+  ],
+  "url": "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-protocol-design",
+  "name": "M11_ProtocolDesign",
+  "status": "active",
+  "description": "Design of a protocol.",
+  "copyright": "Portions of this material derives from the ICH M11 Harmonised Guideline CeSHarP. \nThe ICH M11 Harmonised Guideline CeSHarP is copyright ©2025+ International Committee on Harmonisation and is made available under license. \n\nCDISC publishes semantics for the ICH M11 protocol data elements and valid \nvalue sets. This terminology set is published and stored in the NCI Thesaurus \nSubset C217023 - ICH M11 Terminology \n(https://evsexplore.semantics.cancer.gov/evsexplore/subset/ncit/C217023) \n\nThe NCI Thesaurus is released under the CC BY 4.0 license\n\nCDISC also publishes the USDM reference architecture which is covered by the CC-BY-4.0 license\n\nFor more licensing information and links see: [licenses.html](licenses.html)",
+  "fhirVersion": "6.0.0-ballot3",
+  "kind": "complex-type",
+  "abstract": false,
+  "context": [
+    {
+      "expression": "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-research-study-profile#ResearchStudy",
+      "type": "element"
+    }
+  ],
+  "type": "Extension",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Extension",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "Extension",
+        "path": "Extension",
+        "short": "Design of a protocol",
+        "definition": "Representation of design of a study protocol.",
+        "comment": "This is Section 1 of the ICH Technical Design and Guideline Documents"
+      },
+      {
+        "id": "Extension.extension",
+        "path": "Extension.extension",
+        "min": 30
+      },
+      {
+        "id": "Extension.extension:interventionModel",
+        "path": "Extension.extension",
+        "sliceName": "interventionModel",
+        "min": 1,
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:interventionModel.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:interventionModel.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "interventionModel"
+      },
+      {
+        "id": "Extension.extension:interventionModel.value[x]",
+        "path": "Extension.extension.value[x]",
+        "short": "C217277 Intervention Model",
+        "definition": "The overall design configuration for assigning intervention to participants.",
+        "type": [
+          {
+            "code": "CodeableConcept"
+          }
+        ],
+        "binding": {
+          "strength": "required",
+          "valueSet": "http://HL7Vulcan/UDP/IG/ValueSet/m11-interventionModel-vs"
+        }
+      },
+      {
+        "id": "Extension.extension:populationType",
+        "path": "Extension.extension",
+        "sliceName": "populationType",
+        "min": 1,
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:populationType.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:populationType.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "populationType"
+      },
+      {
+        "id": "Extension.extension:populationType.value[x]",
+        "path": "Extension.extension.value[x]",
+        "short": "C217278 Population Type",
+        "definition": "A characterisation or classification of the trial population.",
+        "type": [
+          {
+            "code": "CodeableConcept"
+          }
+        ],
+        "binding": {
+          "strength": "required",
+          "valueSet": "http://HL7Vulcan/UDP/IG/ValueSet/m11-populationType-vs"
+        }
+      },
+      {
+        "id": "Extension.extension:controlType",
+        "path": "Extension.extension",
+        "sliceName": "controlType",
+        "min": 1,
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:controlType.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:controlType.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "controlType"
+      },
+      {
+        "id": "Extension.extension:controlType.value[x]",
+        "path": "Extension.extension.value[x]",
+        "short": "C217279 Control Type",
+        "definition": "A characterization or classification of the comparator against which the study intervention is evaluated.",
+        "type": [
+          {
+            "code": "CodeableConcept"
+          }
+        ],
+        "binding": {
+          "strength": "required",
+          "valueSet": "http://HL7Vulcan/UDP/IG/ValueSet/m11-controlType-vs"
+        }
+      },
+      {
+        "id": "Extension.extension:populationDiagnosisOrCondition",
+        "path": "Extension.extension",
+        "sliceName": "populationDiagnosisOrCondition",
+        "min": 1,
+        "max": "*",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:populationDiagnosisOrCondition.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "populationDiagnosisOrCondition"
+      },
+      {
+        "id": "Extension.extension:comparator",
+        "path": "Extension.extension",
+        "sliceName": "comparator",
+        "min": 1,
+        "max": "*"
+      },
+      {
+        "id": "Extension.extension:comparator.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:comparator.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "comparator"
+      },
+      {
+        "id": "Extension.extension:comparator.value[x]",
+        "path": "Extension.extension.value[x]",
+        "short": "Comparator",
+        "definition": "The comparator against which the study intervention is evaluated.",
+        "comment": "M11 CC97054 requires a narrative representation of the comparator - the name.",
+        "type": [
+          {
+            "code": "Reference",
+            "targetProfile": [
+              "http://hl7.org/fhir/StructureDefinition/MedicinalProductDefinition"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "Extension.extension:minimumAge",
+        "path": "Extension.extension",
+        "sliceName": "minimumAge",
+        "min": 1,
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:minimumAge.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:minimumAge.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "minimumAge"
+      },
+      {
+        "id": "Extension.extension:minimumAge.value[x]",
+        "path": "Extension.extension.value[x]",
+        "short": "C49693/C25301 Minimum Age value/units",
+        "definition": "The anticipated minimum age of the participants to be entered in a clinical trial.",
+        "type": [
+          {
+            "code": "Quantity"
+          }
+        ]
+      },
+      {
+        "id": "Extension.extension:unitsOfMinimumAge",
+        "path": "Extension.extension",
+        "sliceName": "unitsOfMinimumAge",
+        "min": 1,
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:unitsOfMinimumAge.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "unitsOfMinimumAge"
+      },
+      {
+        "id": "Extension.extension:maximumAge",
+        "path": "Extension.extension",
+        "sliceName": "maximumAge",
+        "min": 1,
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:maximumAge.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:maximumAge.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "maximumAge"
+      },
+      {
+        "id": "Extension.extension:maximumAge.value[x]",
+        "path": "Extension.extension.value[x]",
+        "short": "C49694/C25301 Maximum Age value/units",
+        "definition": "The anticipated maximum age of the participants to be entered in a clinical trial.",
+        "type": [
+          {
+            "code": "Quantity"
+          }
+        ]
+      },
+      {
+        "id": "Extension.extension:unitsOfMaximumAge",
+        "path": "Extension.extension",
+        "sliceName": "unitsOfMaximumAge",
+        "min": 1,
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:unitsOfMaximumAge.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "unitsOfMaximumAge"
+      },
+      {
+        "id": "Extension.extension:interventionAssignmentMethod",
+        "path": "Extension.extension",
+        "sliceName": "interventionAssignmentMethod",
+        "min": 1,
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:interventionAssignmentMethod.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:interventionAssignmentMethod.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "interventionAssignmentMethod"
+      },
+      {
+        "id": "Extension.extension:interventionAssignmentMethod.value[x]",
+        "path": "Extension.extension.value[x]",
+        "short": " C217280 Intervention Assignment Method",
+        "definition": "The process used to assign trial participants to a trial intervention or trial arm.",
+        "type": [
+          {
+            "code": "CodeableConcept"
+          }
+        ],
+        "binding": {
+          "strength": "required",
+          "valueSet": "http://HL7Vulcan/UDP/IG/ValueSet/m11-interventionAssignmentMethod-vs"
+        }
+      },
+      {
+        "id": "Extension.extension:randomisationType",
+        "path": "Extension.extension",
+        "sliceName": "randomisationType",
+        "min": 1,
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:randomisationType.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:randomisationType.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "randomisationType"
+      },
+      {
+        "id": "Extension.extension:randomisationType.value[x]",
+        "path": "Extension.extension.value[x]",
+        "short": "C223137 Randomisation Type",
+        "definition": "The type of randomisation to be used (e.g., simple randomisation, block randomisation)",
+        "comment": "this is just a text description - implementers may want to provide a value set that tehe text can be drawn from.",
+        "type": [
+          {
+            "code": "string"
+          },
+          {
+            "code": "CodeableConcept"
+          }
+        ]
+      },
+      {
+        "id": "Extension.extension:otherInterventionAssignmentMethod",
+        "path": "Extension.extension",
+        "sliceName": "otherInterventionAssignmentMethod",
+        "min": 1,
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:otherInterventionAssignmentMethod.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:otherInterventionAssignmentMethod.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "otherInterventionAssignmentMethod"
+      },
+      {
+        "id": "Extension.extension:otherInterventionAssignmentMethod.value[x]",
+        "path": "Extension.extension.value[x]",
+        "short": "C223138 Other Intervention Assignment Method",
+        "definition": "If applicable, describe the other intervention assignment method.",
+        "type": [
+          {
+            "code": "string"
+          }
+        ]
+      },
+      {
+        "id": "Extension.extension:stratificationIndicator",
+        "path": "Extension.extension",
+        "sliceName": "stratificationIndicator",
+        "min": 1,
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:stratificationIndicator.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:stratificationIndicator.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "stratificationIndicator"
+      },
+      {
+        "id": "Extension.extension:stratificationIndicator.value[x]",
+        "path": "Extension.extension.value[x]",
+        "short": "C223136 Stratification Indicator",
+        "definition": "",
+        "type": [
+          {
+            "code": "CodeableConcept"
+          }
+        ],
+        "binding": {
+          "strength": "required",
+          "valueSet": "http://HL7Vulcan/UDP/IG/ValueSet/m11-yes-no-vs"
+        }
+      },
+      {
+        "id": "Extension.extension:siteDistribution",
+        "path": "Extension.extension",
+        "sliceName": "siteDistribution",
+        "min": 1,
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:siteDistribution.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:siteDistribution.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "siteDistribution"
+      },
+      {
+        "id": "Extension.extension:siteDistribution.value[x]",
+        "path": "Extension.extension.value[x]",
+        "short": "C217049 Site Distribution",
+        "definition": "An indication as to whether the occurrence applies to a single or multiple trial sites.",
+        "type": [
+          {
+            "code": "CodeableConcept"
+          }
+        ],
+        "binding": {
+          "strength": "required",
+          "valueSet": "http://HL7Vulcan/UDP/IG/ValueSet/m11-siteDistribution-vs"
+        }
+      },
+      {
+        "id": "Extension.extension:siteGeographicScope",
+        "path": "Extension.extension",
+        "sliceName": "siteGeographicScope",
+        "min": 1,
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:siteGeographicScope.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:siteGeographicScope.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "siteGeographicScope"
+      },
+      {
+        "id": "Extension.extension:siteGeographicScope.value[x]",
+        "path": "Extension.extension.value[x]",
+        "short": "C217050: Site geographic scope",
+        "definition": "An indication as to whether the trial is taking place in one or more countries.",
+        "type": [
+          {
+            "code": "CodeableConcept"
+          }
+        ],
+        "binding": {
+          "strength": "required",
+          "valueSet": "http://HL7Vulcan/UDP/IG/ValueSet/m11-siteGeographicscope-vs"
+        }
+      },
+      {
+        "id": "Extension.extension:masterProtocolIndicator",
+        "path": "Extension.extension",
+        "sliceName": "masterProtocolIndicator",
+        "min": 1,
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:masterProtocolIndicator.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:masterProtocolIndicator.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "masterProtocolIndicator"
+      },
+      {
+        "id": "Extension.extension:masterProtocolIndicator.value[x]",
+        "path": "Extension.extension.value[x]",
+        "short": "C217046 Master Protocol Indicator",
+        "definition": "An indication as to whether the protocol is a master protocol.",
+        "type": [
+          {
+            "code": "CodeableConcept"
+          }
+        ],
+        "binding": {
+          "strength": "required",
+          "valueSet": "http://HL7Vulcan/UDP/IG/ValueSet/m11-yes-no-vs"
+        }
+      },
+      {
+        "id": "Extension.extension:drug-DeviceCombinationProductIndicator",
+        "path": "Extension.extension",
+        "sliceName": "drug-DeviceCombinationProductIndicator",
+        "min": 1,
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:drug-DeviceCombinationProductIndicator.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:drug-DeviceCombinationProductIndicator.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "drug-DeviceCombinationProductIndicator"
+      },
+      {
+        "id": "Extension.extension:drug-DeviceCombinationProductIndicator.value[x]",
+        "path": "Extension.extension.value[x]",
+        "short": "C217046 Drug-Device Combination Product Indicator",
+        "definition": "An indication as to whether the clinical trial is testing a drug-device combination product.",
+        "type": [
+          {
+            "code": "CodeableConcept"
+          }
+        ],
+        "binding": {
+          "strength": "required",
+          "valueSet": "http://HL7Vulcan/UDP/IG/ValueSet/m11-yes-no-vs"
+        }
+      },
+      {
+        "id": "Extension.extension:adaptiveTrialDesignIndicator",
+        "path": "Extension.extension",
+        "sliceName": "adaptiveTrialDesignIndicator",
+        "min": 1,
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:adaptiveTrialDesignIndicator.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:adaptiveTrialDesignIndicator.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "adaptiveTrialDesignIndicator"
+      },
+      {
+        "id": "Extension.extension:adaptiveTrialDesignIndicator.value[x]",
+        "path": "Extension.extension.value[x]",
+        "short": "C217046 Adaptive Trial Design Indicator",
+        "definition": "An indication as to whether the clinical trial uses an adaptive trial design.",
+        "type": [
+          {
+            "code": "CodeableConcept"
+          }
+        ],
+        "binding": {
+          "strength": "required",
+          "valueSet": "http://HL7Vulcan/UDP/IG/ValueSet/m11-yes-no-vs"
+        }
+      },
+      {
+        "id": "Extension.extension:numberOfArms",
+        "path": "Extension.extension",
+        "sliceName": "numberOfArms",
+        "min": 1,
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:numberOfArms.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:numberOfArms.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "numberOfArms"
+      },
+      {
+        "id": "Extension.extension:numberOfArms.value[x]",
+        "path": "Extension.extension.value[x]",
+        "short": "C98771 Number of Arms",
+        "definition": "The planned number of intervention groups.",
+        "type": [
+          {
+            "code": "integer"
+          }
+        ]
+      },
+      {
+        "id": "Extension.extension:trialBlindSchema",
+        "path": "Extension.extension",
+        "sliceName": "trialBlindSchema",
+        "min": 1,
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:trialBlindSchema.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:trialBlindSchema.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "trialBlindSchema"
+      },
+      {
+        "id": "Extension.extension:trialBlindSchema.value[x]",
+        "path": "Extension.extension.value[x]",
+        "short": "C217051 Trial Blind Schema",
+        "definition": "The type of experimental design used to describe the level of awareness of the trial participants and/ or personnel as it relates to the respective intervention(s) or assessments being observed, received or administered.",
+        "type": [
+          {
+            "code": "CodeableConcept"
+          }
+        ],
+        "binding": {
+          "strength": "required",
+          "valueSet": "http://HL7Vulcan/UDP/IG/ValueSet/m11-trialBlindSchema-vs"
+        }
+      },
+      {
+        "id": "Extension.extension:blindedRoles",
+        "path": "Extension.extension",
+        "sliceName": "blindedRoles",
+        "min": 1,
+        "max": "*",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:blindedRoles.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:blindedRoles.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "blindedRoles"
+      },
+      {
+        "id": "Extension.extension:blindedRoles.value[x]",
+        "path": "Extension.extension.value[x]",
+        "short": "C217281: Blinded Roles",
+        "definition": "An identifying designation assigned to a blinded individual within a clinical trial that corresponds with their function",
+        "type": [
+          {
+            "code": "CodeableConcept"
+          }
+        ],
+        "binding": {
+          "strength": "required",
+          "valueSet": "http://HL7Vulcan/UDP/IG/ValueSet/m11-blindedRoles-vs"
+        }
+      },
+      {
+        "id": "Extension.extension:targetOrMaximum",
+        "path": "Extension.extension",
+        "sliceName": "targetOrMaximum",
+        "min": 1,
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:targetOrMaximum.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:targetOrMaximum.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "targetOrMaximum"
+      },
+      {
+        "id": "Extension.extension:targetOrMaximum.value[x]",
+        "path": "Extension.extension.value[x]",
+        "short": "Target-Maximum",
+        "definition": "A characterisation or classification of the trial participant numbers as to whether the numbers reflect a target or maximum.",
+        "comment": "The ICH spec has this as optional boilerplate text but it has to be a variable to be processable",
+        "type": [
+          {
+            "code": "CodeableConcept"
+          }
+        ],
+        "binding": {
+          "strength": "required",
+          "valueSet": "http://HL7Vulcan/UDP/IG/ValueSet/m11-target-Maximum-vs"
+        }
+      },
+      {
+        "id": "Extension.extension:numberOfParticipants",
+        "path": "Extension.extension",
+        "sliceName": "numberOfParticipants",
+        "min": 1,
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:numberOfParticipants.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:numberOfParticipants.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "numberOfParticipants"
+      },
+      {
+        "id": "Extension.extension:numberOfParticipants.value[x]",
+        "path": "Extension.extension.value[x]",
+        "short": "C49692 Number of Participants",
+        "definition": "The planned number of participant be entered in a clinical trial.",
+        "type": [
+          {
+            "code": "integer"
+          }
+        ]
+      },
+      {
+        "id": "Extension.extension:totalPlannedDurationOfTrialIntervention",
+        "path": "Extension.extension",
+        "sliceName": "totalPlannedDurationOfTrialIntervention",
+        "min": 1,
+        "max": "1"
+      },
+      {
+        "id": "Extension.extension:totalPlannedDurationOfTrialIntervention.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:totalPlannedDurationOfTrialIntervention.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "totalPlannedDurationOfTrialIntervention"
+      },
+      {
+        "id": "Extension.extension:totalPlannedDurationOfTrialIntervention.value[x]",
+        "path": "Extension.extension.value[x]",
+        "short": "C218712/C218713 total planned duration of trial intervention value/units",
+        "definition": "The total planned duration of trial intervention",
+        "type": [
+          {
+            "code": "Quantity"
+          }
+        ]
+      },
+      {
+        "id": "Extension.extension:alternateDescriptionOfPlannedDurationOfTrialIntervention",
+        "path": "Extension.extension",
+        "sliceName": "alternateDescriptionOfPlannedDurationOfTrialIntervention",
+        "min": 1,
+        "max": "1"
+      },
+      {
+        "id": "Extension.extension:alternateDescriptionOfPlannedDurationOfTrialIntervention.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:alternateDescriptionOfPlannedDurationOfTrialIntervention.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "alternateDescriptionOfPlannedDurationOfTrialIntervention"
+      },
+      {
+        "id": "Extension.extension:alternateDescriptionOfPlannedDurationOfTrialIntervention.value[x]",
+        "path": "Extension.extension.value[x]",
+        "short": "C218714 alternate description of planned duration of trial intervention if duration will vary",
+        "definition": "An alternative textual narrative for the planned duration of trial intervention.",
+        "type": [
+          {
+            "code": "string"
+          }
+        ]
+      },
+      {
+        "id": "Extension.extension:totalPlannedDurationOfTrialParticipation",
+        "path": "Extension.extension",
+        "sliceName": "totalPlannedDurationOfTrialParticipation",
+        "min": 1,
+        "max": "1"
+      },
+      {
+        "id": "Extension.extension:totalPlannedDurationOfTrialParticipation.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:totalPlannedDurationOfTrialParticipation.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "totalPlannedDurationOfTrialParticipation"
+      },
+      {
+        "id": "Extension.extension:totalPlannedDurationOfTrialParticipation.value[x]",
+        "path": "Extension.extension.value[x]",
+        "short": "C218715/C218716 total planned duration of trial participation value/units",
+        "definition": "The total planned duration of trial participation",
+        "type": [
+          {
+            "code": "Quantity"
+          }
+        ]
+      },
+      {
+        "id": "Extension.extension:alternateDescriptionOfPlannedDurationOfTrialParticipation",
+        "path": "Extension.extension",
+        "sliceName": "alternateDescriptionOfPlannedDurationOfTrialParticipation",
+        "min": 1,
+        "max": "1"
+      },
+      {
+        "id": "Extension.extension:alternateDescriptionOfPlannedDurationOfTrialParticipation.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:alternateDescriptionOfPlannedDurationOfTrialParticipation.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "alternateDescriptionOfPlannedDurationOfTrialParticipation"
+      },
+      {
+        "id": "Extension.extension:alternateDescriptionOfPlannedDurationOfTrialParticipation.value[x]",
+        "path": "Extension.extension.value[x]",
+        "short": "C218717 alternate description of planned duration of trial participation if duration will vary",
+        "definition": "An alternative narrative for the planned duration of trial participation.",
+        "type": [
+          {
+            "code": "string"
+          }
+        ]
+      },
+      {
+        "id": "Extension.extension:additionalDescriptionofDuration",
+        "path": "Extension.extension",
+        "sliceName": "additionalDescriptionofDuration",
+        "min": 1,
+        "max": "1"
+      },
+      {
+        "id": "Extension.extension:additionalDescriptionofDuration.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:additionalDescriptionofDuration.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "additionalDescriptionofDuration"
+      },
+      {
+        "id": "Extension.extension:additionalDescriptionofDuration.value[x]",
+        "path": "Extension.extension.value[x]",
+        "short": "C218838 Additional Description of Duration",
+        "definition": "A narrative providing additional details about the duration of an participant's use of a trial intervention or their planned participation time in the trial.",
+        "type": [
+          {
+            "code": "string"
+          }
+        ]
+      },
+      {
+        "id": "Extension.extension:independentCommittees",
+        "path": "Extension.extension",
+        "sliceName": "independentCommittees",
+        "min": 1,
+        "max": "*",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:independentCommittees.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:independentCommittees.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "independentCommittees"
+      },
+      {
+        "id": "Extension.extension:independentCommittees.value[x]",
+        "path": "Extension.extension.value[x]",
+        "short": "C217282 Independent Committees",
+        "definition": "An independent group of experts that has oversight over, and conducts periodic review of, specific trial activities.",
+        "type": [
+          {
+            "code": "CodeableConcept"
+          }
+        ],
+        "binding": {
+          "strength": "required",
+          "valueSet": "http://HL7Vulcan/UDP/IG/ValueSet/m11-independentCommittees-vs"
+        }
+      },
+      {
+        "id": "Extension.extension:otherCommittees",
+        "path": "Extension.extension",
+        "sliceName": "otherCommittees",
+        "min": 1,
+        "max": "*"
+      },
+      {
+        "id": "Extension.extension:otherCommittees.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:otherCommittees.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "otherCommittees"
+      },
+      {
+        "id": "Extension.extension:otherCommittees.value[x]",
+        "path": "Extension.extension.value[x]",
+        "short": "C218719 Other Committees",
+        "definition": "A committee that is different than the one(s) previously specified or mentioned.",
+        "type": [
+          {
+            "code": "string"
+          }
+        ]
+      },
+      {
+        "id": "Extension.url",
+        "path": "Extension.url",
+        "fixedUri": "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-protocol-design"
+      },
+      {
+        "id": "Extension.value[x]",
+        "path": "Extension.value[x]",
+        "max": "0"
+      }
+    ]
+  }
+}

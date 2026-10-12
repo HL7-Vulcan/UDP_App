@@ -1,0 +1,752 @@
+{
+  "resourceType": "ValueSet",
+  "status": "active",
+  "name": "UDPSectionCodesVS",
+  "id": "udp-section-codes-vs",
+  "title": "UDP Section Codes Value Set",
+  "description": "Codes representing sections of M11.\nThis value set is not identified in the M11 specification but is in the NCI Thesaurus and was \noriginally specified for M11.  It is NCI Value Set C217272 drawn from the NCI Thesaurus and represented here in FHIR format.\nThese codes are present in UDP to allow granularity in narrative compositions.",
+  "url": "http://HL7Vulcan/UDP/IG/ValueSet/udp-section-codes-vs",
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm",
+      "valueInteger": 2
+    }
+  ],
+  "copyright": "Portions of this material derives from the ICH M11 Harmonised Guideline CeSHarP. \nThe ICH M11 Harmonised Guideline CeSHarP is copyright ©2025+ International Committee on Harmonisation and is made available under license. \n\nCDISC publishes semantics for the ICH M11 protocol data elements and valid \nvalue sets. This terminology set is published and stored in the NCI Thesaurus \nSubset C217023 - ICH M11 Terminology \n(https://evsexplore.semantics.cancer.gov/evsexplore/subset/ncit/C217023) \n\nThe NCI Thesaurus is released under the CC BY 4.0 license\n\nFor more licensing information and links see: [licenses.html](licenses.html)",
+  "experimental": false,
+  "publisher": "UDP",
+  "compose": {
+    "include": [
+      {
+        "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+        "concept": [
+          {
+            "code": "C222769",
+            "display": "ICH M11 Protocol Section Title Page"
+          },
+          {
+            "code": "C218514",
+            "display": "ICH M11 Protocol Section 1 PROTOCOL SUMMARY"
+          },
+          {
+            "code": "C218515",
+            "display": "ICH M11 Protocol Section 1.1 Protocol Synopsis"
+          },
+          {
+            "code": "C218516",
+            "display": "ICH M11 Protocol Section 1.1.1 Primary and Secondary Objectives and Estimands"
+          },
+          {
+            "code": "C218517",
+            "display": "ICH M11 Protocol Section 1.1.2 Overall Design"
+          },
+          {
+            "code": "C218518",
+            "display": "ICH M11 Protocol Section 1.2 Trial Schema"
+          },
+          {
+            "code": "C218519",
+            "display": "ICH M11 Protocol Section 1.3 Schedule of Activities"
+          },
+          {
+            "code": "C218520",
+            "display": "ICH M11 Protocol Section 2 INTRODUCTION"
+          },
+          {
+            "code": "C218521",
+            "display": "ICH M11 Protocol Section 2.1 Purpose of Trial"
+          },
+          {
+            "code": "C218522",
+            "display": "ICH M11 Protocol Section 2.2 Assessment of Risks and Benefits"
+          },
+          {
+            "code": "C218523",
+            "display": "ICH M11 Protocol Section 2.2.1 Risk Summary and Mitigation Strategy"
+          },
+          {
+            "code": "C218524",
+            "display": "ICH M11 Protocol Section 2.2.2 Benefit Summary"
+          },
+          {
+            "code": "C218525",
+            "display": "ICH M11 Protocol Section 2.2.3 Overall Risk-Benefit Assessment"
+          },
+          {
+            "code": "C218526",
+            "display": "ICH M11 Protocol Section 3 TRIAL OBJECTIVES AND ASSOCIATED ESTIMANDS"
+          },
+          {
+            "code": "C218527",
+            "display": "ICH M11 Protocol Section 3.1 Primary Objective(s) and Associated Estimand(s)"
+          },
+          {
+            "code": "C218528",
+            "display": "ICH M11 Protocol Section 3.1.1 Primary Objective"
+          },
+          {
+            "code": "C218529",
+            "display": "ICH M11 Protocol Section 3.2 Secondary Objective(s) and Associated Estimand(s)"
+          },
+          {
+            "code": "C218530",
+            "display": "ICH M11 Protocol Section 3.2.1 Secondary Objective"
+          },
+          {
+            "code": "C218531",
+            "display": "ICH M11 Protocol Section 3.3 Exploratory Objective(s)"
+          },
+          {
+            "code": "C218532",
+            "display": "ICH M11 Protocol Section 3.3.1 Exploratory Objective"
+          },
+          {
+            "code": "C218533",
+            "display": "ICH M11 Protocol Section 4 TRIAL DESIGN"
+          },
+          {
+            "code": "C218534",
+            "display": "ICH M11 Protocol Section 4.1 Description of Trial Design"
+          },
+          {
+            "code": "C218535",
+            "display": "ICH M11 Protocol Section 4.1.1 Stakeholder Input into Design"
+          },
+          {
+            "code": "C218536",
+            "display": "ICH M11 Protocol Section 4.2 Rationale for Trial Design"
+          },
+          {
+            "code": "C218537",
+            "display": "ICH M11 Protocol Section 4.2.1 Rationale for Estimand(s)"
+          },
+          {
+            "code": "C218538",
+            "display": "ICH M11 Protocol Section 4.2.2 Rationale for Intervention Model"
+          },
+          {
+            "code": "C218539",
+            "display": "ICH M11 Protocol Section 4.2.3 Rationale for Control Type"
+          },
+          {
+            "code": "C218540",
+            "display": "ICH M11 Protocol Section 4.2.4 Rationale for Trial Duration"
+          },
+          {
+            "code": "C218541",
+            "display": "ICH M11 Protocol Section 4.2.5 Rationale for Adaptive or Novel Trial Design"
+          },
+          {
+            "code": "C218542",
+            "display": "ICH M11 Protocol Section 4.2.6 Rationale for Interim Analysis"
+          },
+          {
+            "code": "C218543",
+            "display": "ICH M11 Protocol Section 4.2.7 Rationale for Other Trial Design Aspects"
+          },
+          {
+            "code": "C218544",
+            "display": "ICH M11 Protocol Section 4.3 Trial Stopping Rules"
+          },
+          {
+            "code": "C218545",
+            "display": "ICH M11 Protocol Section 4.4 Start of Trial and End of Trial"
+          },
+          {
+            "code": "C218546",
+            "display": "ICH M11 Protocol Section 4.5 Access to Trial Intervention After End of Trial"
+          },
+          {
+            "code": "C218547",
+            "display": "ICH M11 Protocol Section 5 TRIAL POPULATION"
+          },
+          {
+            "code": "C218548",
+            "display": "ICH M11 Protocol Section 5.1 Description of Trial Population and Rationale"
+          },
+          {
+            "code": "C218549",
+            "display": "ICH M11 Protocol Section 5.2 Inclusion Criteria"
+          },
+          {
+            "code": "C218550",
+            "display": "ICH M11 Protocol Section 5.3 Exclusion Criteria"
+          },
+          {
+            "code": "C218551",
+            "display": "ICH M11 Protocol Section 5.4 Contraception"
+          },
+          {
+            "code": "C218552",
+            "display": "ICH M11 Protocol Section 5.4.1 Definitions Related to Childbearing Potential"
+          },
+          {
+            "code": "C218553",
+            "display": "ICH M11 Protocol Section 5.4.2 Contraception Requirements"
+          },
+          {
+            "code": "C218554",
+            "display": "ICH M11 Protocol Section 5.5 Lifestyle Restrictions"
+          },
+          {
+            "code": "C218555",
+            "display": "ICH M11 Protocol Section 5.5.1 Meals and Dietary Restrictions"
+          },
+          {
+            "code": "C218556",
+            "display": "ICH M11 Protocol Section 5.5.2 Caffeine, Alcohol, Tobacco, and Other Restrictions"
+          },
+          {
+            "code": "C218557",
+            "display": "ICH M11 Protocol Section 5.5.3 Physical Activity Restrictions"
+          },
+          {
+            "code": "C218558",
+            "display": "ICH M11 Protocol Section 5.5.4 Other Activity Restrictions"
+          },
+          {
+            "code": "C218559",
+            "display": "ICH M11 Protocol Section 5.6 Screen Failure and Rescreening"
+          },
+          {
+            "code": "C218560",
+            "display": "ICH M11 Protocol Section 6 TRIAL INTERVENTION AND CONCOMITANT THERAPY"
+          },
+          {
+            "code": "C218561",
+            "display": "ICH M11 Protocol Section 6.1 Description of Investigational Trial Intervention"
+          },
+          {
+            "code": "C218562",
+            "display": "ICH M11 Protocol Section 6.2 Rationale for Investigational Trial Intervention Dose and Regimen"
+          },
+          {
+            "code": "C218563",
+            "display": "ICH M11 Protocol Section 6.3 Investigational Trial Intervention Administration"
+          },
+          {
+            "code": "C218564",
+            "display": "ICH M11 Protocol Section 6.4 Investigational Trial Intervention Dose Modification"
+          },
+          {
+            "code": "C218565",
+            "display": "ICH M11 Protocol Section 6.5 Management of Investigational Trial Intervention Overdose"
+          },
+          {
+            "code": "C218566",
+            "display": "ICH M11 Protocol Section 6.6 Preparation, Storage, Handling and Accountability of Investigational Trial Intervention"
+          },
+          {
+            "code": "C218567",
+            "display": "ICH M11 Protocol Section 6.6.1 Preparation of Investigational Trial Intervention"
+          },
+          {
+            "code": "C218568",
+            "display": "ICH M11 Protocol Section 6.6.2 Storage and Handling of Investigational Trial Intervention"
+          },
+          {
+            "code": "C218569",
+            "display": "ICH M11 Protocol Section 6.6.3 Accountability of Investigational Trial Intervention"
+          },
+          {
+            "code": "C218570",
+            "display": "ICH M11 Protocol Section 6.7 Investigational Trial Intervention Assignment, Randomisation and Blinding"
+          },
+          {
+            "code": "C218571",
+            "display": "ICH M11 Protocol Section 6.7.1 Participant Assignment to Investigational Trial Intervention"
+          },
+          {
+            "code": "C218572",
+            "display": "ICH M11 Protocol Section 6.7.2 Randomisation"
+          },
+          {
+            "code": "C218573",
+            "display": "ICH M11 Protocol Section 6.7.3 Measures to Maintain Blinding"
+          },
+          {
+            "code": "C218574",
+            "display": "ICH M11 Protocol Section 6.7.4 Emergency Unblinding at the Site"
+          },
+          {
+            "code": "C218575",
+            "display": "ICH M11 Protocol Section 6.8 Investigational Trial Intervention Adherence"
+          },
+          {
+            "code": "C218576",
+            "display": "ICH M11 Protocol Section 6.9 Description of Noninvestigational Trial Intervention"
+          },
+          {
+            "code": "C218577",
+            "display": "ICH M11 Protocol Section 6.9.1 Background Trial Intervention"
+          },
+          {
+            "code": "C218578",
+            "display": "ICH M11 Protocol Section 6.9.2 Rescue Therapy"
+          },
+          {
+            "code": "C218579",
+            "display": "ICH M11 Protocol Section 6.9.3 Other Noninvestigational Trial Intervention"
+          },
+          {
+            "code": "C218580",
+            "display": "ICH M11 Protocol Section 6.10 Concomitant Therapy"
+          },
+          {
+            "code": "C218581",
+            "display": "ICH M11 Protocol Section 6.10.1 Prohibited Concomitant Therapy"
+          },
+          {
+            "code": "C218582",
+            "display": "ICH M11 Protocol Section 6.10.2 Permitted Concomitant Therapy"
+          },
+          {
+            "code": "C218583",
+            "display": "ICH M11 Protocol Section 7 PARTICIPANT DISCONTINUATION OF TRIAL INTERVENTION AND DISCONTINUATION OR WITHDRAWAL FROM TRIAL"
+          },
+          {
+            "code": "C218584",
+            "display": "ICH M11 Protocol Section 7.1 Discontinuation of Trial Intervention for Individual Participants"
+          },
+          {
+            "code": "C218585",
+            "display": "ICH M11 Protocol Section 7.1.1 Permanent Discontinuation of Trial Intervention"
+          },
+          {
+            "code": "C218586",
+            "display": "ICH M11 Protocol Section 7.1.2 Temporary Discontinuation of Trial Intervention"
+          },
+          {
+            "code": "C218587",
+            "display": "ICH M11 Protocol Section 7.1.3 Rechallenge"
+          },
+          {
+            "code": "C218588",
+            "display": "ICH M11 Protocol Section 7.2 Participant Discontinuation or Withdrawal from the Trial"
+          },
+          {
+            "code": "C218589",
+            "display": "ICH M11 Protocol Section 7.3 Management of Loss to Follow-Up"
+          },
+          {
+            "code": "C218590",
+            "display": "ICH M11 Protocol Section 8 TRIAL ASSESSMENTS AND PROCEDURES"
+          },
+          {
+            "code": "C218591",
+            "display": "ICH M11 Protocol Section 8.1 Trial Assessments and Procedures Considerations"
+          },
+          {
+            "code": "C218592",
+            "display": "ICH M11 Protocol Section 8.2 Screening/Baseline Assessments and Procedures"
+          },
+          {
+            "code": "C218593",
+            "display": "ICH M11 Protocol Section 8.3 Efficacy Assessments and Procedures"
+          },
+          {
+            "code": "C218594",
+            "display": "ICH M11 Protocol Section 8.4 Safety Assessments and Procedures"
+          },
+          {
+            "code": "C218595",
+            "display": "ICH M11 Protocol Section 8.4.1 Physical Examination"
+          },
+          {
+            "code": "C218596",
+            "display": "ICH M11 Protocol Section 8.4.2 Vital Signs"
+          },
+          {
+            "code": "C218597",
+            "display": "ICH M11 Protocol Section 8.4.3 Electrocardiograms"
+          },
+          {
+            "code": "C218598",
+            "display": "ICH M11 Protocol Section 8.4.4 Clinical Laboratory Assessments"
+          },
+          {
+            "code": "C218599",
+            "display": "ICH M11 Protocol Section 8.4.5 Pregnancy Testing"
+          },
+          {
+            "code": "C218600",
+            "display": "ICH M11 Protocol Section 8.4.6 Suicidal Ideation and Behaviour Risk Monitoring"
+          },
+          {
+            "code": "C218601",
+            "display": "ICH M11 Protocol Section 8.5 Pharmacokinetics"
+          },
+          {
+            "code": "C218602",
+            "display": "ICH M11 Protocol Section 8.6 Biomarkers"
+          },
+          {
+            "code": "C218603",
+            "display": "ICH M11 Protocol Section 8.6.1 Genetics, Genomics, Pharmacogenetics and Pharmacogenomics"
+          },
+          {
+            "code": "C218604",
+            "display": "ICH M11 Protocol Section 8.6.2 Pharmacodynamic Biomarkers"
+          },
+          {
+            "code": "C218605",
+            "display": "ICH M11 Protocol Section 8.6.3 Other Biomarkers"
+          },
+          {
+            "code": "C218606",
+            "display": "ICH M11 Protocol Section 8.7 Immunogenicity Assessments"
+          },
+          {
+            "code": "C218607",
+            "display": "ICH M11 Protocol Section 8.8 Medical Resource Utilisation and Health Economics"
+          },
+          {
+            "code": "C218608",
+            "display": "ICH M11 Protocol Section 9 ADVERSE EVENTS, SERIOUS ADVERSE EVENTS, PRODUCT COMPLAINTS, PREGNANCY AND POSTPARTUM INFORMATION, AND SPECIAL SAFETY SITUATIONS"
+          },
+          {
+            "code": "C218609",
+            "display": "ICH M11 Protocol Section 9.1 Definitions"
+          },
+          {
+            "code": "C218610",
+            "display": "ICH M11 Protocol Section 9.1.1 Definitions of Adverse Events"
+          },
+          {
+            "code": "C218611",
+            "display": "ICH M11 Protocol Section 9.1.2 Definitions of Serious Adverse Events"
+          },
+          {
+            "code": "C218612",
+            "display": "ICH M11 Protocol Section 9.1.3 Definitions of Product Complaints"
+          },
+          {
+            "code": "C218613",
+            "display": "ICH M11 Protocol Section 9.1.3.1 Definitions of Medical Device Product Complaints"
+          },
+          {
+            "code": "C218614",
+            "display": "ICH M11 Protocol Section 9.2 Timing and Procedures for Collection and Reporting"
+          },
+          {
+            "code": "C218615",
+            "display": "ICH M11 Protocol Section 9.2.1 Timing"
+          },
+          {
+            "code": "C218616",
+            "display": "ICH M11 Protocol Section 9.2.2 Collection Procedures"
+          },
+          {
+            "code": "C218617",
+            "display": "ICH M11 Protocol Section 9.2.3 Reporting"
+          },
+          {
+            "code": "C218618",
+            "display": "ICH M11 Protocol Section 9.2.3.1 Regulatory Reporting Requirements"
+          },
+          {
+            "code": "C218619",
+            "display": "ICH M11 Protocol Section 9.2.4 Adverse Events of Special Interest"
+          },
+          {
+            "code": "C218620",
+            "display": "ICH M11 Protocol Section 9.2.5 Disease-related Events or Outcomes Not Qualifying as AEs or SAEs"
+          },
+          {
+            "code": "C218621",
+            "display": "ICH M11 Protocol Section 9.3 Pregnancy and Postpartum Information"
+          },
+          {
+            "code": "C218622",
+            "display": "ICH M11 Protocol Section 9.3.1 Participants Who Become Pregnant During the Trial"
+          },
+          {
+            "code": "C218623",
+            "display": "ICH M11 Protocol Section 9.3.2 Participants Whose Partners Become Pregnant During the Trial"
+          },
+          {
+            "code": "C218624",
+            "display": "ICH M11 Protocol Section 9.4 Special Safety Situations"
+          },
+          {
+            "code": "C218625",
+            "display": "ICH M11 Protocol Section 10 STATISTICAL CONSIDERATIONS"
+          },
+          {
+            "code": "C218626",
+            "display": "ICH M11 Protocol Section 10.1 General Considerations"
+          },
+          {
+            "code": "C218627",
+            "display": "ICH M11 Protocol Section 10.2 Analysis Sets"
+          },
+          {
+            "code": "C218628",
+            "display": "ICH M11 Protocol Section 10.3 Analyses of Demographics and Other Baseline Variables"
+          },
+          {
+            "code": "C218629",
+            "display": "ICH M11 Protocol Section 10.4 Analyses Associated with the Primary Objective(s)"
+          },
+          {
+            "code": "C218630",
+            "display": "ICH M11 Protocol Section 10.4.1 Primary Objective"
+          },
+          {
+            "code": "C218631",
+            "display": "ICH M11 Protocol Section 10.4.1.1 Statistical Analysis Method"
+          },
+          {
+            "code": "C218632",
+            "display": "ICH M11 Protocol Section 10.4.1.2 Handling of Data in Relation to Primary Estimand(s)"
+          },
+          {
+            "code": "C218633",
+            "display": "ICH M11 Protocol Section 10.4.1.3 Handling of Missing Data in Relation to Primary Estimand(s)"
+          },
+          {
+            "code": "C218634",
+            "display": "ICH M11 Protocol Section 10.4.1.4 Sensitivity Analysis"
+          },
+          {
+            "code": "C218635",
+            "display": "ICH M11 Protocol Section 10.4.1.5 Supplementary Analysis"
+          },
+          {
+            "code": "C218636",
+            "display": "ICH M11 Protocol Section 10.5 Analyses Associated with the Secondary Objective(s)"
+          },
+          {
+            "code": "C218637",
+            "display": "ICH M11 Protocol Section 10.5.1 Secondary Objective"
+          },
+          {
+            "code": "C218638",
+            "display": "ICH M11 Protocol Section 10.5.1.1 Statistical Analysis Method"
+          },
+          {
+            "code": "C218639",
+            "display": "ICH M11 Protocol Section 10.5.1.2 Handling of Data in Relation to Secondary Estimand(s)"
+          },
+          {
+            "code": "C218640",
+            "display": "ICH M11 Protocol Section 10.5.1.3 Handling of Missing Data in Relation to Secondary Estimand(s)"
+          },
+          {
+            "code": "C218641",
+            "display": "ICH M11 Protocol Section 10.5.1.4 Sensitivity Analysis"
+          },
+          {
+            "code": "C218642",
+            "display": "ICH M11 Protocol Section 10.5.1.5 Supplementary Analysis"
+          },
+          {
+            "code": "C218643",
+            "display": "ICH M11 Protocol Section 10.6 Analyses Associated with the Exploratory Objective(s)"
+          },
+          {
+            "code": "C218644",
+            "display": "ICH M11 Protocol Section 10.7 Safety Analyses"
+          },
+          {
+            "code": "C218645",
+            "display": "ICH M11 Protocol Section 10.8 Other Analyses"
+          },
+          {
+            "code": "C218646",
+            "display": "ICH M11 Protocol Section 10.9 Interim Analyses"
+          },
+          {
+            "code": "C218647",
+            "display": "ICH M11 Protocol Section 10.10 Multiplicity Adjustments"
+          },
+          {
+            "code": "C218648",
+            "display": "ICH M11 Protocol Section 10.11 Sample Size Determination"
+          },
+          {
+            "code": "C218649",
+            "display": "ICH M11 Protocol Section 11 TRIAL OVERSIGHT AND OTHER GENERAL CONSIDERATIONS"
+          },
+          {
+            "code": "C218650",
+            "display": "ICH M11 Protocol Section 11.1 Regulatory and Ethical Considerations"
+          },
+          {
+            "code": "C218651",
+            "display": "ICH M11 Protocol Section 11.2 Trial Oversight"
+          },
+          {
+            "code": "C218652",
+            "display": "ICH M11 Protocol Section 11.2.1 Investigator Responsibilities"
+          },
+          {
+            "code": "C218653",
+            "display": "ICH M11 Protocol Section 11.2.2 Sponsor Responsibilities"
+          },
+          {
+            "code": "C218654",
+            "display": "ICH M11 Protocol Section 11.3 Informed Consent Process"
+          },
+          {
+            "code": "C218655",
+            "display": "ICH M11 Protocol Section 11.3.1 Informed Consent for Rescreening"
+          },
+          {
+            "code": "C218656",
+            "display": "ICH M11 Protocol Section 11.3.2 Informed Consent for Use of Remaining Samples in Exploratory Research"
+          },
+          {
+            "code": "C218657",
+            "display": "ICH M11 Protocol Section 11.4 Committees"
+          },
+          {
+            "code": "C218658",
+            "display": "ICH M11 Protocol Section 11.5 Insurance and Indemnity"
+          },
+          {
+            "code": "C218659",
+            "display": "ICH M11 Protocol Section 11.6 Risk-Based Quality Management"
+          },
+          {
+            "code": "C218660",
+            "display": "ICH M11 Protocol Section 11.7 Data Governance"
+          },
+          {
+            "code": "C218661",
+            "display": "ICH M11 Protocol Section 11.8 Data Protection"
+          },
+          {
+            "code": "C218662",
+            "display": "ICH M11 Protocol Section 11.9 Source Records"
+          },
+          {
+            "code": "C218663",
+            "display": "ICH M11 Protocol Section 11.10 Protocol Deviations"
+          },
+          {
+            "code": "C218664",
+            "display": "ICH M11 Protocol Section 11.11 Early Site Closure"
+          },
+          {
+            "code": "C218665",
+            "display": "ICH M11 Protocol Section 11.12 Data Dissemination"
+          },
+          {
+            "code": "C218666",
+            "display": "ICH M11 Protocol Section 12 APPENDIX: SUPPORTING DETAILS"
+          },
+          {
+            "code": "C218667",
+            "display": "ICH M11 Protocol Section 12.1 Clinical Laboratory Tests"
+          },
+          {
+            "code": "C218668",
+            "display": "ICH M11 Protocol Section 12.2 Country/Region-Specific Differences"
+          },
+          {
+            "code": "C218669",
+            "display": "ICH M11 Protocol Section 12.3 Prior Protocol Amendment(s)"
+          },
+          {
+            "code": "C218670",
+            "display": "ICH M11 Protocol Section 13 APPENDIX: GLOSSARY OF TERMS AND ABBREVIATIONS"
+          },
+          {
+            "code": "C218671",
+            "display": "ICH M11 Protocol Section 14 APPENDIX: REFERENCES"
+          }
+        ]
+      },
+      {
+        "system": "https://HL7Vulcan.org/UDP/Terminology",
+        "concept": [
+          {
+            "code": "018",
+            "display": "ICH M11 Protocol Section 1.2.1 Trial Schema Description"
+          },
+          {
+            "code": "019",
+            "display": "ICH M11 Protocol Section 1.2.2 Trial Schema Notes"
+          },
+          {
+            "code": "001",
+            "display": "ICH M11 Protocol Section 2.2.1.1 Risk Summary and Mitigation Strategy - Trial Intervention"
+          },
+          {
+            "code": "002",
+            "display": "ICH M11 Protocol Section 2.2.1.2 Risk Summary and Mitigation Strategy - Trial Procedures"
+          },
+          {
+            "code": "003",
+            "display": "ICH M11 Protocol Section 2.2.1.3 Risk Summary and Mitigation Strategy - Other"
+          },
+          {
+            "code": "004",
+            "display": "ICH M11 Protocol Section 4.1.0.1 Overall Description of Trial Design and Description of Intervention Model"
+          },
+          {
+            "code": "005",
+            "display": "ICH M11 Protocol Section 4.1.0.2 Description of Trial Duration"
+          },
+          {
+            "code": "006",
+            "display": "ICH M11 Protocol Section 4.1.0.3 Description of Method of Assignment to Trial Intervention"
+          },
+          {
+            "code": "007",
+            "display": "ICH M11 Protocol Section 4.1.0.4 Description of Level and Method of Blinding"
+          },
+          {
+            "code": "008",
+            "display": "ICH M11 Protocol Section 4.1.0.5 Additional Description of Trial Design"
+          },
+          {
+            "code": "020",
+            "display": "ICH M11 Protocol Section 4.4.1 Start of Trial"
+          },
+          {
+            "code": "021",
+            "display": "ICH M11 Protocol Section 4.4.2 End of Trial"
+          },
+          {
+            "code": "009",
+            "display": "ICH M11 Protocol Section 5.6.1 Screen Failure"
+          },
+          {
+            "code": "010",
+            "display": "ICH M11 Protocol Section 5.6.2 Rescreening"
+          },
+          {
+            "code": "011",
+            "display": "ICH M11 Protocol Section 8.2.1 Screening Assessments and Procedures"
+          },
+          {
+            "code": "012",
+            "display": "ICH M11 Protocol Section 8.2.2 Baseline Assessments and Procedures"
+          },
+          {
+            "code": "013",
+            "display": "ICH M11 Protocol Section 9.2.2.1 Collection Procedures: Identification"
+          },
+          {
+            "code": "014",
+            "display": "ICH M11 Protocol Section 9.2.2.2 Collection Procedures: Severity"
+          },
+          {
+            "code": "015",
+            "display": "ICH M11 Protocol Section 9.2.2.3 Collection Procedures: Causality"
+          },
+          {
+            "code": "016",
+            "display": "ICH M11 Protocol Section 9.2.2.4 Collection Procedures: Recording"
+          },
+          {
+            "code": "017",
+            "display": "ICH M11 Protocol Section 9.2.2.5 Collection Procedures: Follow-up"
+          }
+        ]
+      }
+    ]
+  }
+}

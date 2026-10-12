@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>UDP App</title>
     <base href="/" />
+    <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="app.css" />
     <link rel="stylesheet" href="UDP_App.styles.css" />
     <HeadOutlet @rendermode="InteractiveServer" />
@@ -13,5 +14,15 @@
     <Routes @rendermode="InteractiveServer" />
     <script src="_framework/blazor.web.js"></script>
     <script src="section02-interop.js"></script>
+    <script>
+        window.downloadBase64File = (filename, mimeType, b64) => {
+            const a = document.createElement('a');
+            a.href = 'data:' + mimeType + ';base64,' + b64;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        };
+    </script>
 </body>
 </html>

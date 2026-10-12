@@ -3,4 +3,5 @@
     <File Path="Claude/claude blazor app section 02.txt" />
   </Folder>
   <Project Path="App_v01/App_v01.csproj" />
+  <Project Path="UDP_Browse/UDP_Browse.csproj" />
 </Solution>

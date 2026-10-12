@@ -1,0 +1,572 @@
+{
+  "resourceType": "Bundle",
+  "type": "transaction",
+  "entry": [
+        {
+      "resource": {
+  "resourceType": "Basic",
+  "id": "ReportingTable-Row1",
+  "meta": {
+    "profile": [
+      "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-reporting-table"
+    ]
+  },
+  "extension": [
+    {
+      "extension": [
+        {
+          "url": "eventType",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "code": "C218510",
+                "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+                "display": "Lactation Event"
+              }
+            ]
+          }
+        },
+        {
+          "url": "eventType",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "code": "C218510",
+                "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+                "display": "Lactation Event"
+              }
+            ]
+          }
+        },
+        {
+          "url": "situationalScope",
+          "valueString": "All participants"
+        },
+        {
+          "url": "reportablePeriodStart",
+          "valueDate": "2024-01-15"
+        },
+        {
+          "url": "reportablePeriodEnd",
+          "valueDate": "2024-07-15"
+        },
+        {
+          "url": "reportingTiming",
+          "valueString": "Within 24 hours of awareness"
+        },
+        {
+          "url": "reportingMethod",
+          "valueString": "Electronic data capture system"
+        },
+        {
+          "url": "backupReportingMethod",
+          "valueString": "Paper case report form"
+        }
+      ],
+      "url": "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-reporting"
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "code": "adminact",
+        "system": "http://terminology.hl7.org/CodeSystem/basic-resource-type"
+      }
+    ]
+  }
+}
+      ,
+      "request": {
+        "method": "PUT",
+        "url": "Basic/ReportingTable-Row1"
+      }
+    },
+    {
+      "resource": {
+  "resourceType": "Basic",
+  "id": "ReportingTable-Row2",
+  "meta": {
+    "profile": [
+      "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-reporting-table"
+    ]
+  },
+  "extension": [
+    {
+      "extension": [
+        {
+          "url": "eventType",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "code": "C41335",
+                "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+                "display": "Serious Adverse Event"
+              }
+            ]
+          }
+        },
+        {
+          "url": "eventType",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "code": "C41335",
+                "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+                "display": "Serious Adverse Event"
+              }
+            ]
+          }
+        },
+        {
+          "url": "situationalScope",
+          "valueString": "All participants"
+        },
+        {
+          "url": "reportablePeriodStart",
+          "valueDate": "2024-01-15"
+        },
+        {
+          "url": "reportablePeriodEnd",
+          "valueDate": "2024-07-15"
+        },
+        {
+          "url": "reportingTiming",
+          "valueString": "Within 24 hours of awareness"
+        },
+        {
+          "url": "reportingMethod",
+          "valueString": "Electronic data capture system"
+        },
+        {
+          "url": "backupReportingMethod",
+          "valueString": "Paper case report form"
+        }
+      ],
+      "url": "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-reporting"
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "code": "adminact",
+        "system": "http://terminology.hl7.org/CodeSystem/basic-resource-type"
+      }
+    ]
+  }
+}
+      ,
+      "request": {
+        "method": "PUT",
+        "url": "Basic/ReportingTable-Row2"
+      }
+    },
+    {
+      "resource": {
+  "resourceType": "Basic",
+  "id": "ReportingTable-Row3",
+  "meta": {
+    "profile": [
+      "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-reporting-table"
+    ]
+  },
+  "extension": [
+    {
+      "extension": [
+        {
+          "url": "eventType",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "code": "C25742",
+                "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+                "display": "Pregnancy Event"
+              }
+            ]
+          }
+        },
+        {
+          "url": "eventType",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "code": "C25742",
+                "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+                "display": "Pregnancy Event"
+              }
+            ]
+          }
+        },
+        {
+          "url": "situationalScope",
+          "valueString": "Female participants and female partners of male participants"
+        },
+        {
+          "url": "reportablePeriodStart",
+          "valueDate": "2024-01-15"
+        },
+        {
+          "url": "reportablePeriodEnd",
+          "valueDate": "2024-10-15"
+        },
+        {
+          "url": "reportingTiming",
+          "valueString": "Within 5 business days of awareness"
+        },
+        {
+          "url": "reportingMethod",
+          "valueString": "Electronic data capture system"
+        },
+        {
+          "url": "backupReportingMethod",
+          "valueString": "Paper case report form"
+        }
+      ],
+      "url": "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-reporting"
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "code": "adminact",
+        "system": "http://terminology.hl7.org/CodeSystem/basic-resource-type"
+      }
+    ]
+  }
+}
+      ,
+      "request": {
+        "method": "PUT",
+        "url": "Basic/ReportingTable-Row3"
+      }
+    },
+    {
+      "resource": {
+  "resourceType": "Composition",
+  "id": "Narrative-Composition-M11Section09",
+  "meta": {
+    "profile": [
+      "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-research-study-narratives"
+    ]
+  },
+  "author": [
+    {
+      "reference": "Narrative-Organization"
+    }
+  ],
+  "section": [
+    {
+      "text": {
+        "status": "additional",
+        "div": "\u003Cdiv xmlns=\u0022http://www.w3.org/1999/xhtml\u0022 xml:lang=\u0022en\u0022 lang=\u0022en\u0022\u003EAn adverse event (AE) is any untoward medical occurrence in a clinical trial participant administered a medicinal product, which does not necessarily have a causal relationship with this treatment.\u003C/div\u003E"
+      },
+      "title": "Section 9.1.1",
+      "code": {
+        "coding": [
+          {
+            "code": "C218610",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "ICH M11 Protocol Section 9.1.1 Definitions of Adverse Events"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "status": "additional",
+        "div": "\u003Cdiv xmlns=\u0022http://www.w3.org/1999/xhtml\u0022 xml:lang=\u0022en\u0022 lang=\u0022en\u0022\u003EA serious adverse event (SAE) is any untoward medical occurrence that results in death, is life-threatening, requires inpatient hospitalisation or prolongation of existing hospitalisation, results in persistent or significant disability or incapacity, or is a congenital anomaly or birth defect.\u003C/div\u003E"
+      },
+      "title": "Section 9.1.2",
+      "code": {
+        "coding": [
+          {
+            "code": "C218611",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "ICH M11 Protocol Section 9.1.2 Definitions of Serious Adverse Events"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "status": "additional",
+        "div": "\u003Cdiv xmlns=\u0022http://www.w3.org/1999/xhtml\u0022 xml:lang=\u0022en\u0022 lang=\u0022en\u0022\u003EA product complaint is any written, electronic, or oral communication that alleges deficiencies related to the identity, quality, durability, reliability, safety, effectiveness, or performance of a medicinal product.\u003C/div\u003E"
+      },
+      "title": "Section 9.1.3",
+      "code": {
+        "coding": [
+          {
+            "code": "C218612",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "ICH M11 Protocol Section 9.1.3 Definitions of Product Complaints"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "status": "additional",
+        "div": "\u003Cdiv xmlns=\u0022http://www.w3.org/1999/xhtml\u0022 xml:lang=\u0022en\u0022 lang=\u0022en\u0022\u003EA medical device product complaint is any written, electronic, or oral communication that alleges deficiencies related to the identity, quality, durability, reliability, safety, effectiveness, or performance of a medical device.\u003C/div\u003E"
+      },
+      "title": "Section 9.1.3.1",
+      "code": {
+        "coding": [
+          {
+            "code": "C218613",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "ICH M11 Protocol Section 9.1.3.1 Definitions of Medical Device Product Complaints"
+          }
+        ]
+      }
+    },
+    {
+      "entry": [
+        {
+          "reference": "Basic/ReportingTable-Row1"
+        },
+        {
+          "reference": "Basic/ReportingTable-Row2"
+        },
+        {
+          "reference": "Basic/ReportingTable-Row3"
+        }
+      ],
+      "title": "Section 9.2",
+      "code": {
+        "coding": [
+          {
+            "code": "C218614",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "ICH M11 Protocol Section 9.2 Timing and Procedures for Collection and Reporting"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "status": "additional",
+        "div": "\u003Cdiv xmlns=\u0022http://www.w3.org/1999/xhtml\u0022 xml:lang=\u0022en\u0022 lang=\u0022en\u0022\u003EAll adverse events will be collected from the time of informed consent until the end of the follow-up period as specified in the Schedule of Activities.\u003C/div\u003E"
+      },
+      "title": "Section 9.2.1",
+      "code": {
+        "coding": [
+          {
+            "code": "C218615",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "ICH M11 Protocol Section 9.2.1 Timing"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "status": "additional",
+        "div": "\u003Cdiv xmlns=\u0022http://www.w3.org/1999/xhtml\u0022 xml:lang=\u0022en\u0022 lang=\u0022en\u0022\u003EAdverse events will be identified through participant self-report, clinician observation, and review of clinical assessments at each visit.\u003C/div\u003E"
+      },
+      "title": "Section 9.2.2.1",
+      "code": {
+        "coding": [
+          {
+            "code": "013",
+            "system": "https://HL7Vulcan.org/UDP/Terminology",
+            "display": "ICH M11 Protocol Section 9.2.2.1 Collection Procedures: Identification"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "status": "additional",
+        "div": "\u003Cdiv xmlns=\u0022http://www.w3.org/1999/xhtml\u0022 xml:lang=\u0022en\u0022 lang=\u0022en\u0022\u003EThe severity of adverse events will be graded according to the Common Terminology Criteria for Adverse Events (CTCAE) version 5.0.\u003C/div\u003E"
+      },
+      "title": "Section 9.2.2.2",
+      "code": {
+        "coding": [
+          {
+            "code": "014",
+            "system": "https://HL7Vulcan.org/UDP/Terminology",
+            "display": "ICH M11 Protocol Section 9.2.2.2 Collection Procedures: Severity"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "status": "additional",
+        "div": "\u003Cdiv xmlns=\u0022http://www.w3.org/1999/xhtml\u0022 xml:lang=\u0022en\u0022 lang=\u0022en\u0022\u003EThe causal relationship between each adverse event and the investigational product will be assessed by the investigator as either related or not related.\u003C/div\u003E"
+      },
+      "title": "Section 9.2.2.3",
+      "code": {
+        "coding": [
+          {
+            "code": "015",
+            "system": "https://HL7Vulcan.org/UDP/Terminology",
+            "display": "ICH M11 Protocol Section 9.2.2.3 Collection Procedures: Causality"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "status": "additional",
+        "div": "\u003Cdiv xmlns=\u0022http://www.w3.org/1999/xhtml\u0022 xml:lang=\u0022en\u0022 lang=\u0022en\u0022\u003E{{Cxxx}}\u003C/div\u003E"
+      },
+      "title": "Section 9.2.2.4",
+      "code": {
+        "coding": [
+          {
+            "code": "016",
+            "system": "https://HL7Vulcan.org/UDP/Terminology",
+            "display": "ICH M11 Protocol Section 9.2.2.4 Collection Procedures: Recording"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "status": "additional",
+        "div": "\u003Cdiv xmlns=\u0022http://www.w3.org/1999/xhtml\u0022 xml:lang=\u0022en\u0022 lang=\u0022en\u0022\u003EAll adverse events will be recorded in the electronic case report form within 24 hours of the investigator becoming aware of the event.\u003C/div\u003E"
+      },
+      "title": "Section 9.2.2.5",
+      "code": {
+        "coding": [
+          {
+            "code": "017",
+            "system": "https://HL7Vulcan.org/UDP/Terminology",
+            "display": "ICH M11 Protocol Section 9.2.2.5 Collection Procedures: Follow-up"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "status": "additional",
+        "div": "\u003Cdiv xmlns=\u0022http://www.w3.org/1999/xhtml\u0022 xml:lang=\u0022en\u0022 lang=\u0022en\u0022\u003ESerious adverse events must be reported to the sponsor within 24 hours of the investigator becoming aware of the event.\u003C/div\u003E"
+      },
+      "title": "Section 9.2.3",
+      "code": {
+        "coding": [
+          {
+            "code": "C218617",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "ICH M11 Protocol Section 9.2.3 Reporting"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "status": "additional",
+        "div": "\u003Cdiv xmlns=\u0022http://www.w3.org/1999/xhtml\u0022 xml:lang=\u0022en\u0022 lang=\u0022en\u0022\u003EThe sponsor will report all suspected unexpected serious adverse reactions (SUSARs) to the relevant regulatory authorities in accordance with local requirements.\u003C/div\u003E"
+      },
+      "title": "Section 9.2.3.1",
+      "code": {
+        "coding": [
+          {
+            "code": "C218618",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "ICH M11 Protocol Section 9.2.3.1 Regulatory Reporting Requirements"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "status": "additional",
+        "div": "\u003Cdiv xmlns=\u0022http://www.w3.org/1999/xhtml\u0022 xml:lang=\u0022en\u0022 lang=\u0022en\u0022\u003EThe following adverse events have been identified as adverse events of special interest (AESI) for this trial based on the known safety profile of the investigational product.\u003C/div\u003E"
+      },
+      "title": "Section 9.2.4",
+      "code": {
+        "coding": [
+          {
+            "code": "C218619",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "ICH M11 Protocol Section 9.2.4 Adverse Events of Special Interest"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "status": "additional",
+        "div": "\u003Cdiv xmlns=\u0022http://www.w3.org/1999/xhtml\u0022 xml:lang=\u0022en\u0022 lang=\u0022en\u0022\u003E{{CxC21877xx}}\u003C/div\u003E"
+      },
+      "title": "Section 9.2.5",
+      "code": {
+        "coding": [
+          {
+            "code": "C218620",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "ICH M11 Protocol Section 9.2.5 Disease-related Events or Outcomes Not Qualifying as AEs or SAEs"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "status": "additional",
+        "div": "\u003Cdiv xmlns=\u0022http://www.w3.org/1999/xhtml\u0022 xml:lang=\u0022en\u0022 lang=\u0022en\u0022\u003EFemale participants who become pregnant during the trial must be withdrawn from investigational product. Pregnancy outcomes will be followed up and reported.\u003C/div\u003E"
+      },
+      "title": "Section 9.3.1",
+      "code": {
+        "coding": [
+          {
+            "code": "C218622",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "ICH M11 Protocol Section 9.3.1 Participants Who Become Pregnant During the Trial"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "status": "additional",
+        "div": "\u003Cdiv xmlns=\u0022http://www.w3.org/1999/xhtml\u0022 xml:lang=\u0022en\u0022 lang=\u0022en\u0022\u003EIf a male participant\u0027s partner becomes pregnant during the trial or within 90 days of the last dose, the participant must notify the investigator who will report the pregnancy to the sponsor.\u003C/div\u003E"
+      },
+      "title": "Section 9.3.2",
+      "code": {
+        "coding": [
+          {
+            "code": "C218623",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "ICH M11 Protocol Section 9.3.2 Participants Whose Partners Become Pregnant During the Trial"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "status": "additional",
+        "div": "\u003Cdiv xmlns=\u0022http://www.w3.org/1999/xhtml\u0022 xml:lang=\u0022en\u0022 lang=\u0022en\u0022\u003ESpecial safety situations include overdose, misuse, abuse, off-label use, medication errors, and occupational exposure. These must be reported to the sponsor within 24 hours.\u003C/div\u003E"
+      },
+      "title": "Section 9.4",
+      "code": {
+        "coding": [
+          {
+            "code": "C218624",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "ICH M11 Protocol Section 9.4 Special Safety Situations"
+          }
+        ]
+      }
+    }
+  ],
+  "status": "final",
+  "type": {
+    "coding": [
+      {
+        "code": "C207508",
+        "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl"
+      }
+    ]
+  },
+  "date": "2025-06-30T12:46:00Z",
+  "title": "Example Narrative with Section per Section - (this is the Composition Title}"
+}
+      ,
+      "request": {
+        "method": "PUT",
+        "url": "Composition/Narrative-Composition-M11Section09"
+      }
+    }
+  ]
+}

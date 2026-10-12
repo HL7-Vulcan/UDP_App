@@ -1,0 +1,374 @@
+{
+  "resourceType": "Composition",
+  "id": "Narrative-Composition-M11Section06",
+  "meta": {
+    "profile": [
+      "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-research-study-narratives"
+    ]
+  },
+  "author": [
+    {
+      "reference": "Narrative-Organization"
+    }
+  ],
+  "section": [
+    {
+      "text": {
+        "status": "additional",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">This section describes the investigational and noninvestigational trial interventions, including the rationale for dose selection, administration procedures, and concomitant therapy restrictions.</div>"
+      },
+      "entry": [
+        {
+          "reference": "ActivityDefinition/InterventionTable-Row1"
+        },
+        {
+          "reference": "ActivityDefinition/InterventionTable-Row2"
+        },
+        {
+          "reference": "ActivityDefinition/InterventionTable-Row3"
+        }
+      ],
+      "title": "Section 6",
+      "code": {
+        "coding": [
+          {
+            "code": "C218560",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "ICH M11 Protocol Section 6 TRIAL INTERVENTION AND CONCOMITANT THERAPY"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "status": "additional",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">Exoticillin 500mg film-coated tablets. Nonproprietary name: exoticillin. Pharmaceutical dose form: film-coated tablet. Dosage strength: 500mg.</div>"
+      },
+      "title": "Section 6.1",
+      "code": {
+        "coding": [
+          {
+            "code": "C218561",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "ICH M11 Protocol Section 6.1 Description of Investigational Trial Intervention"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "status": "additional",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">The dose of 500mg twice daily was selected based on Phase II data demonstrating optimal efficacy with an acceptable safety profile at this dose level.</div>"
+      },
+      "title": "Section 6.2",
+      "code": {
+        "coding": [
+          {
+            "code": "C218562",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "ICH M11 Protocol Section 6.2 Rationale for Investigational Trial Intervention Dose and Regimen"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "status": "additional",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">Exoticillin 500mg tablets will be administered orally twice daily with or without food for the duration of the treatment period.</div>"
+      },
+      "title": "Section 6.3",
+      "code": {
+        "coding": [
+          {
+            "code": "C218563",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "ICH M11 Protocol Section 6.3 Investigational Trial Intervention Administration"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "status": "additional",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">Dose reductions to 250mg twice daily are permitted for participants experiencing Grade 2 or higher adverse events attributable to the investigational product.</div>"
+      },
+      "title": "Section 6.4",
+      "code": {
+        "coding": [
+          {
+            "code": "C218564",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "ICH M11 Protocol Section 6.4 Investigational Trial Intervention Dose Modification"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "status": "additional",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">In the event of overdose, symptomatic and supportive treatment should be provided. There is no specific antidote for exoticillin.</div>"
+      },
+      "title": "Section 6.5",
+      "code": {
+        "coding": [
+          {
+            "code": "C218565",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "ICH M11 Protocol Section 6.5 Management of Investigational Trial Intervention Overdose"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "status": "additional",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">Investigational product will be supplied as blister packs by the sponsor. No preparation is required at site.</div>"
+      },
+      "title": "Section 6.6.1",
+      "code": {
+        "coding": [
+          {
+            "code": "C218567",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "ICH M11 Protocol Section 6.6.1 Preparation of Investigational Trial Intervention"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "status": "additional",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">Investigational product must be stored at room temperature (15-25°C), protected from light and moisture.</div>"
+      },
+      "title": "Section 6.6.2",
+      "code": {
+        "coding": [
+          {
+            "code": "C218568",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "ICH M11 Protocol Section 6.6.2 Storage and Handling of Investigational Trial Intervention"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "status": "additional",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">Site staff must maintain accurate records of all investigational product received, dispensed, and returned or destroyed.</div>"
+      },
+      "title": "Section 6.6.3",
+      "code": {
+        "coding": [
+          {
+            "code": "C218569",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "ICH M11 Protocol Section 6.6.3 Accountability of Investigational Trial Intervention"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "status": "additional",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">Participants will be assigned to treatment using an Interactive Web Response System (IWRS).</div>"
+      },
+      "title": "Section 6.7.1",
+      "code": {
+        "coding": [
+          {
+            "code": "C218571",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "ICH M11 Protocol Section 6.7.1 Participant Assignment to Investigational Trial Intervention"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "status": "additional",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">Randomisation will be performed centrally using a 1:1 ratio via the IWRS. Randomisation will be stratified by disease severity and geographic region.</div>"
+      },
+      "title": "Section 6.7.2",
+      "code": {
+        "coding": [
+          {
+            "code": "C218572",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "ICH M11 Protocol Section 6.7.2 Randomisation"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "status": "additional",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">This is a double-blind trial. The investigational product and placebo are identical in appearance. The IWRS will maintain the blind.</div>"
+      },
+      "title": "Section 6.7.3",
+      "code": {
+        "coding": [
+          {
+            "code": "C218573",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "ICH M11 Protocol Section 6.7.3 Measures to Maintain Blinding"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "status": "additional",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">Emergency unblinding may be performed by the investigator in the event of a medical emergency. The sponsor must be notified within 24 hours.</div>"
+      },
+      "title": "Section 6.7.4",
+      "code": {
+        "coding": [
+          {
+            "code": "C218574",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "ICH M11 Protocol Section 6.7.4 Emergency Unblinding at the Site"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "status": "additional",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">Adherence will be assessed by tablet count at each visit. Participants with less than 80% adherence will be counselled by site staff.</div>"
+      },
+      "title": "Section 6.8",
+      "code": {
+        "coding": [
+          {
+            "code": "C218575",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "ICH M11 Protocol Section 6.8 Investigational Trial Intervention Adherence"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "status": "additional",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">No noninvestigational trial interventions are planned for this trial.</div>"
+      },
+      "title": "Section 6.9",
+      "code": {
+        "coding": [
+          {
+            "code": "C218576",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "ICH M11 Protocol Section 6.9 Description of Noninvestigational Trial Intervention"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "status": "additional",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">Background therapy consists of standard-of-care treatment administered to all participants throughout the trial in addition to the investigational product.</div>"
+      },
+      "title": "Section 6.9.1",
+      "code": {
+        "coding": [
+          {
+            "code": "C218577",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "ICH M11 Protocol Section 6.9.1 Background Trial Intervention"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "status": "additional",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">Rescue therapy with short-acting bronchodilators is permitted for participants experiencing acute symptom exacerbation. Use of rescue therapy will be recorded in the eCRF.</div>"
+      },
+      "title": "Section 6.9.2",
+      "code": {
+        "coding": [
+          {
+            "code": "C218578",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "ICH M11 Protocol Section 6.9.2 Rescue Therapy"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "status": "additional",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">No other noninvestigational trial interventions are planned. Any additional medications required for participant safety will be recorded as concomitant medications.</div>"
+      },
+      "title": "Section 6.9.3",
+      "code": {
+        "coding": [
+          {
+            "code": "C218579",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "ICH M11 Protocol Section 6.9.3 Other Noninvestigational Trial Intervention"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "status": "additional",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">Concomitant medications taken within 30 days prior to screening and during the trial must be recorded in the electronic case report form.</div>"
+      },
+      "title": "Section 6.10",
+      "code": {
+        "coding": [
+          {
+            "code": "C218580",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "ICH M11 Protocol Section 6.10 Concomitant Therapy"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "status": "additional",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">The following medications are prohibited during the trial: strong CYP3A4 inhibitors, strong CYP3A4 inducers, and other investigational products.</div>"
+      },
+      "title": "Section 6.10.1",
+      "code": {
+        "coding": [
+          {
+            "code": "C218581",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "ICH M11 Protocol Section 6.10.1 Prohibited Concomitant Therapy"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "status": "additional",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">All other concomitant medications are permitted provided they are stable for at least 30 days prior to randomisation.</div>"
+      },
+      "title": "Section 6.10.2",
+      "code": {
+        "coding": [
+          {
+            "code": "C218582",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "ICH M11 Protocol Section 6.10.2 Permitted Concomitant Therapy"
+          }
+        ]
+      }
+    }
+  ],
+  "status": "final",
+  "type": {
+    "coding": [
+      {
+        "code": "C207508",
+        "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl"
+      }
+    ]
+  },
+  "date": "2025-06-30T12:46:00Z",
+  "title": "Example Narrative with Section per Section - (this is the Composition Title}"
+}

@@ -1,0 +1,46 @@
+{
+  "resourceType": "Group",
+  "id": "exclusion-group-exclusion-pregnancy",
+  "characteristic": [
+    {
+      "code": {
+        "coding": [
+          {
+            "code": "77386006",
+            "system": "http://snomed.info/sct",
+            "display": "Pregnant"
+          }
+        ]
+      },
+      "valueBoolean": true,
+      "exclude": true,
+      "description": "currently pregnant"
+    },
+    {
+      "code": {
+        "coding": [
+          {
+            "code": "40733004",
+            "system": "http://snomed.info/sct",
+            "display": "Infectious disease"
+          }
+        ]
+      },
+      "valueQuantity": {
+        "value": 1,
+        "code": "{episode}",
+        "system": "http://unitsofmeasure.org",
+        "unit": "episode"
+      },
+      "exclude": true,
+      "description": "active systemic infection at screening"
+    }
+  ],
+  "name": "exclusion-pregnancy",
+  "title": "Pregnancy and Infection Exclusion",
+  "status": "active",
+  "description": "Participants who are pregnant or have an active systemic infection are not eligible.",
+  "type": "person",
+  "membership": "definitional",
+  "combinationMethod": "any-of"
+}

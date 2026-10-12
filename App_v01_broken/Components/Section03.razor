@@ -1,0 +1,413 @@
+@page "/section-03"
+@layout MainLayout
+@using UDP_App.Models
+@using UDP_App.Services
+@inject DataService DataSvc
+@inject SushiService SushiSvc
+@inject IJSRuntime JS
+@implements IDisposable
+
+<PageTitle>Section 3 – Trial Objectives and Associated Estimands</PageTitle>
+
+<style>
+    .doc-page {
+        background:#fff; width:794px; min-height:1123px;
+        margin:30px auto 80px; padding:72px;
+        box-shadow:0 4px 24px rgba(0,0,0,0.18);
+        font-family:'Calibri',Arial,sans-serif; font-size:11pt; color:#000;
+    }
+    .h1 { font-family:'Times New Roman',Times,serif; font-size:14pt; font-weight:700; margin:0 0 18px; }
+    .h2 { font-family:'Times New Roman',Times,serif; font-size:14pt; font-weight:700; margin:26px 0 12px; }
+    .h3 { font-family:'Times New Roman',Times,serif; font-size:12pt; font-weight:700; margin:20px 0 10px; }
+    .h4 { font-family:'Times New Roman',Times,serif; font-size:12pt; font-weight:700; margin:14px 0 6px; }
+
+    .field-wrap { position:relative; margin-bottom:6px; }
+    .fid-tip {
+        display:none; position:absolute; top:-17px; left:0;
+        background:#333; color:#fff; font-size:7.5pt; padding:1px 5px;
+        border-radius:2px; white-space:nowrap; pointer-events:none; z-index:10;
+    }
+    .field-wrap:hover .fid-tip { display:block; }
+
+    textarea.fb {
+        display:block; width:100%; background:#d0cece; color:#1a7a1a;
+        border:none; border-bottom:1.5px solid #999;
+        font-family:'Calibri',Arial,sans-serif; font-size:11pt;
+        line-height:1.4; padding:4px 6px; outline:none; resize:vertical; min-height:48px;
+    }
+    textarea.fb:focus { background:#bfbcbc; }
+    textarea.fb::placeholder { color:#9a7ab5; font-style:italic; }
+    textarea.fb.req-empty { border-bottom:2px solid #c00; background:#f5d0d0; }
+
+    .est-tbl { width:100%; border-collapse:collapse; margin:8px 0 4px; font-size:10.5pt; }
+    .est-tbl .col-hdr th { background:#404040; color:#fff; font-family:Arial,sans-serif; font-weight:700; font-size:10pt; padding:5px 8px; text-align:left; border:1px solid #555; }
+    .est-tbl td { border:1px solid #aaa; padding:4px 6px; vertical-align:top; }
+    .est-tbl td.lbl { background:#f2f2f2; font-weight:700; font-size:10pt; width:38%; }
+
+    .ice-tbl { width:100%; border-collapse:collapse; margin:6px 0; font-size:10.5pt; }
+    .ice-tbl th { background:#404040; color:#fff; font-family:Arial,sans-serif; font-weight:700; font-size:10pt; padding:5px 8px; text-align:left; border:1px solid #555; width:50%; }
+    .ice-tbl td { border:1px solid #aaa; padding:3px 4px; vertical-align:top; }
+
+    .obj-block { margin-bottom:10px; }
+    .obj-block + .obj-block { margin-top:18px; padding-top:14px; border-top:1px dashed #ccc; }
+    .ice-label { font-weight:700; font-size:10pt; margin:10px 0 4px; }
+
+    .add-btn { background:#00B050; color:#fff; border:none; border-radius:3px; padding:5px 14px; font-size:10pt; cursor:pointer; margin:8px 0; font-family:'Calibri',Arial,sans-serif; }
+    .add-btn:hover { background:#008a3e; }
+    .add-btn.small { padding:3px 10px; font-size:9.5pt; margin:4px 0; }
+
+    .toolbar { display:flex; justify-content:flex-end; gap:10px; margin-top:32px; flex-wrap:wrap; }
+    .btn { padding:7px 20px; border:none; border-radius:3px; font-size:10pt; cursor:pointer; font-family:inherit; }
+    .btn-primary   { background:#1f3864; color:#fff; }
+    .btn-secondary { background:#eee; color:#333; border:1px solid #ccc; }
+    .btn-danger    { background:#c00; color:#fff; }
+
+    /* Context menu */
+    .ctx-menu { display:none; position:fixed; background:#fff; border:1px solid #ccc; border-radius:4px; box-shadow:0 4px 16px rgba(0,0,0,0.18); z-index:1000; min-width:320px; max-width:420px; font-family:'Calibri',Arial,sans-serif; font-size:10pt; }
+    .ctx-menu.open { display:block; }
+    .ctx-header { background:#1f3864; color:#fff; padding:8px 12px; font-weight:700; font-size:10pt; border-radius:4px 4px 0 0; display:flex; justify-content:space-between; align-items:center; }
+    .ctx-close { background:none; border:none; color:#fff; font-size:14px; cursor:pointer; padding:0 2px; line-height:1; }
+    .ctx-body { padding:10px 12px; }
+    .ctx-row { display:flex; gap:8px; margin-bottom:6px; font-size:9.5pt; }
+    .ctx-row label { font-weight:700; white-space:nowrap; min-width:100px; color:#333; }
+    .ctx-row span  { color:#555; word-break:break-all; }
+    .ctx-divider   { border:none; border-top:1px solid #e0e0e0; margin:8px 0; }
+    .ctx-guidance  { font-size:9.5pt; color:#444; line-height:1.5; }
+    .ctx-guidance strong { color:#1f3864; }
+
+    .fmt-row { display:flex; gap:14px; margin:10px 0 16px; }
+    .fmt-row label { display:flex; align-items:center; gap:5px; font-size:10pt; cursor:pointer; }
+    .overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:200; align-items:center; justify-content:center; }
+    .overlay.show { display:flex; }
+    .dbox { background:#fff; border-radius:6px; padding:28px 32px; width:400px; box-shadow:0 8px 40px rgba(0,0,0,0.25); }
+    .dbox h3 { font-size:13pt; font-weight:700; color:#1f3864; margin-bottom:12px; }
+    .dbox p  { font-size:10.5pt; margin-bottom:16px; line-height:1.5; }
+    .dbox input[type=text] { width:100%; border:1px solid #aaa; border-radius:3px; padding:6px 8px; font-size:10pt; margin-bottom:14px; outline:none; }
+    .dbr { display:flex; justify-content:flex-end; gap:10px; }
+
+    .sbar { position:fixed; bottom:0; left:0; right:0; background:#1f3864; color:#fff; font-size:9pt; padding:5px 18px; display:flex; justify-content:space-between; align-items:center; z-index:100; }
+    #sstat { font-weight:600; }
+</style>
+
+<div class="doc-page">
+    <div class="h1">3.&nbsp;&nbsp;Trial Objectives and Associated Estimands</div>
+
+    <!-- ── 3.1 Primary ─────────────────────────────────────────────────────── -->
+    <div class="h2">3.1&nbsp;&nbsp;Primary Objective(s) and Associated Estimand(s)</div>
+    <div class="h3">3.1.1&nbsp;&nbsp;Primary Objective(s) and Associated Estimand(s)</div>
+
+    @for (int i = 0; i < _model.PrimaryObjectives.Count; i++)
+    {
+        var idx = i; // capture for lambda
+        <div class="obj-block">
+            <ObjectiveBlockComponent
+                TypeName="primary"
+                ObjIndex="@(idx + 1)"
+                Block="@_model.PrimaryObjectives[idx]"
+                OnChanged="@StateHasChanged"
+                OnRightClick="@ShowCtxMenu" />
+        </div>
+    }
+    <button class="add-btn" @onclick="() => AddObjective(_model.PrimaryObjectives)">+ Add Primary Objective</button>
+
+    <!-- ── 3.2 Secondary ──────────────────────────────────────────────────── -->
+    <div class="h2">3.2&nbsp;&nbsp;Secondary Objective(s) and Associated Estimand(s)</div>
+    <div class="h3">3.2.1&nbsp;&nbsp;Secondary Objective(s) and Associated Estimand(s)</div>
+
+    @for (int i = 0; i < _model.SecondaryObjectives.Count; i++)
+    {
+        var idx = i;
+        <div class="obj-block">
+            <ObjectiveBlockComponent
+                TypeName="secondary"
+                ObjIndex="@(idx + 1)"
+                Block="@_model.SecondaryObjectives[idx]"
+                OnChanged="@StateHasChanged"
+                OnRightClick="@ShowCtxMenu" />
+        </div>
+    }
+    <button class="add-btn" @onclick="() => AddObjective(_model.SecondaryObjectives)">+ Add Secondary Objective</button>
+
+    <!-- ── 3.3 Exploratory ────────────────────────────────────────────────── -->
+    <div class="h2">3.3&nbsp;&nbsp;Exploratory Objective(s)</div>
+    <div class="h3">3.3.1&nbsp;&nbsp;Exploratory Objective(s)</div>
+
+    @for (int i = 0; i < _model.ExploratoryObjectives.Count; i++)
+    {
+        var idx = i;
+        <div class="obj-block">
+            <ObjectiveBlockComponent
+                TypeName="exploratory"
+                ObjIndex="@(idx + 1)"
+                Block="@_model.ExploratoryObjectives[idx]"
+                OnChanged="@StateHasChanged"
+                OnRightClick="@ShowCtxMenu" />
+        </div>
+    }
+    <button class="add-btn" @onclick="() => AddObjective(_model.ExploratoryObjectives)">+ Add Exploratory Objective</button>
+
+    <!-- ── Toolbar ────────────────────────────────────────────────────────── -->
+    <div class="toolbar">
+        <button class="btn btn-danger"     @onclick="ClearAll">Clear All</button>
+        <button class="btn btn-secondary"  @onclick="LoadSample">Fill with Sample Data</button>
+        <button class="btn btn-secondary"  @onclick="OpenImport">⬆ Load from File</button>
+        <button class="btn btn-secondary"  @onclick="() => _showExport = true">⬇ Save to File…</button>
+        <button class="btn btn-primary"    @onclick="SaveToBrowser">Save to Browser</button>
+    </div>
+</div>
+
+<!-- ── Context menu (field info) ─────────────────────────────────────────── -->
+<div class="ctx-menu @(_ctxOpen ? "open" : "")" style="top:@_ctxY;left:@_ctxX">
+    <div class="ctx-header">
+        <span>Field Info</span>
+        <button class="ctx-close" @onclick="CloseCtx">✕</button>
+    </div>
+    <div class="ctx-body">
+        <div class="ctx-row"><label>Field ID:</label><span>@_ctxFieldId</span></div>
+        @if (!string.IsNullOrEmpty(_ctxGuidance))
+        {
+            <hr class="ctx-divider" />
+            <div class="ctx-guidance">@((MarkupString)_ctxGuidance)</div>
+        }
+    </div>
+</div>
+@if (_ctxOpen) { <div style="position:fixed;inset:0;z-index:999" @onclick="CloseCtx"></div> }
+
+<!-- ── Export modal ──────────────────────────────────────────────────────── -->
+<div class="overlay @(_showExport ? "show" : "")">
+    <div class="dbox">
+        <h3>Save Data to File</h3>
+        <label style="font-size:10pt;font-weight:700;display:block;margin-bottom:4px;">File name</label>
+        <input type="text" @bind="_exportName" />
+        <label style="font-size:10pt;font-weight:700;display:block;margin:10px 0 6px;">Format</label>
+        <div class="fmt-row">
+            <label><input type="radio" name="efmt" value="fhir" @onchange='() => _exportFmt = "fhir"' checked="@(_exportFmt == "fhir")" /> FHIR</label>
+            <label><input type="radio" name="efmt" value="json" @onchange='() => _exportFmt = "json"' checked="@(_exportFmt == "json")" /> JSON</label>
+            <label><input type="radio" name="efmt" value="csv"  @onchange='() => _exportFmt = "csv"'  checked="@(_exportFmt == "csv")"  /> CSV</label>
+            <label><input type="radio" name="efmt" value="txt"  @onchange='() => _exportFmt = "txt"'  checked="@(_exportFmt == "txt")"  /> Plain Text</label>
+        </div>
+        <div class="dbr">
+            <button class="btn btn-secondary" @onclick="() => _showExport = false">Cancel</button>
+            <button class="btn btn-primary"   @onclick="DoExport">Download</button>
+        </div>
+    </div>
+</div>
+
+<!-- ── Required fields modal ─────────────────────────────────────────────── -->
+<div class="overlay @(_showReq ? "show" : "")">
+    <div class="dbox">
+        <h3 style="color:#c00;">Incomplete Required Fields</h3>
+        <p>@_reqMsg</p>
+        <div class="dbr">
+            <button class="btn btn-secondary" @onclick="() => _showReq = false">Cancel</button>
+            <button class="btn btn-danger"    @onclick="ForceSave">Save Anyway</button>
+        </div>
+    </div>
+</div>
+
+<div class="sbar">
+    <span>Section 3 – Trial Objectives &nbsp;|&nbsp; Right-click field for info &nbsp;|&nbsp; Grey = data entry &nbsp;|&nbsp; Red border = required</span>
+    <span id="sstat">@_statusMsg</span>
+</div>
+
+@code {
+    private Section03Model _model = new();
+
+    // UI state
+    private bool   _showExport = false;
+    private bool   _showReq    = false;
+    private string _exportName = "section3_data";
+    private string _exportFmt  = "fhir";
+    private string _statusMsg  = string.Empty;
+    private string _reqMsg     = string.Empty;
+    private bool   _pendingExport = false;
+
+    // Context menu
+    private bool   _ctxOpen    = false;
+    private string _ctxX       = "0px";
+    private string _ctxY       = "0px";
+    private string _ctxFieldId = string.Empty;
+    private string _ctxGuidance = string.Empty;
+
+    private System.Timers.Timer? _statusTimer;
+
+    private DotNetObjectReference<Section03>? _objRef;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender) return;
+        try
+        {
+            _objRef = DotNetObjectReference.Create(this);
+            await JS.InvokeVoidAsync("udpSetDotNetRef", _objRef);
+            var saved = await JS.InvokeAsync<string?>("localStorage.getItem", "s3data");
+            if (!string.IsNullOrEmpty(saved))
+            {
+                var loaded = DataSvc.FromJsonSection03(saved);
+                if (loaded != null) { _model = loaded; StateHasChanged(); }
+            }
+        }
+        catch { }
+    }
+
+    [Microsoft.JSInterop.JSInvokable]
+    public void ReceiveFileContent(string json)
+    {
+        var loaded = DataSvc.FromJsonSection03(json);
+        if (loaded != null)
+        {
+            _model = loaded;
+            AutoSave();
+            SetStatus("⬆ Loaded from file", 4000);
+            InvokeAsync(StateHasChanged);
+        }
+        else
+        {
+            SetStatus("Could not parse file", 4000);
+        }
+    }
+
+    private void AddObjective(List<ObjectiveBlock> list)
+    {
+        list.Add(new ObjectiveBlock());
+        AutoSave();
+    }
+
+    private void LoadSample()
+    {
+        _model = new Section03Model
+        {
+            PrimaryObjectives = new()
+            {
+                new ObjectiveBlock
+                {
+                    ObjectiveText = "To evaluate the efficacy of [treatment] compared to [control] in reducing [primary endpoint] at [timepoint].",
+                    C70833  = "Adult patients aged 18–75 with a diagnosis of [condition]",
+                    C49236  = "[Treatment A] vs [Control/Placebo]",
+                    C25212  = "Change from baseline to Week 24 in [primary outcome measure]",
+                    C188853 = "Difference in mean changes between treatment conditions",
+                    IceRows = new()
+                    {
+                        new IceRow { C188856 = "Premature discontinuation of randomised treatment", C188857 = "Hypothetical strategy: assume patient had remained on treatment" },
+                        new IceRow { C188856 = "Use of rescue medication", C188857 = "While on treatment strategy: data collected while on rescue medication are included" },
+                    }
+                }
+            },
+            SecondaryObjectives = new()
+            {
+                new ObjectiveBlock
+                {
+                    ObjectiveText = "To assess the effect of [treatment] on [secondary endpoint] over [timeframe].",
+                    C70833  = "Same as primary analysis population",
+                    C49236  = "[Treatment A] vs [Control/Placebo]",
+                    C25212  = "Change from baseline to Week 52 in [secondary outcome measure]",
+                    C188853 = string.Empty,
+                    IceRows = new() { new IceRow { C188856 = "Premature discontinuation", C188857 = "Hypothetical strategy" } }
+                }
+            },
+            ExploratoryObjectives = new()
+            {
+                new ObjectiveBlock
+                {
+                    ObjectiveText = "To explore biomarkers that may predict response to [treatment].",
+                    C70833  = "Biomarker-evaluable sub-population",
+                    C49236  = "[Treatment A]",
+                    C25212  = "Correlation of [biomarker] with response at Week 24",
+                    C188853 = string.Empty,
+                    IceRows = new() { new IceRow() }
+                }
+            }
+        };
+        AutoSave();
+        SetStatus("Sample data loaded", 3000);
+    }
+
+    private async Task ClearAll()
+    {
+        bool confirmed = await JS.InvokeAsync<bool>("confirm", "Clear all entered data?");
+        if (!confirmed) return;
+        _model = new Section03Model();
+        await JS.InvokeVoidAsync("localStorage.removeItem", "s3data");
+        SetStatus("Cleared", 2000);
+    }
+
+    private async Task SaveToBrowser()
+    {
+        AutoSave();
+        SetStatus($"✓ Saved {DateTime.Now:HH:mm:ss}", 3000);
+    }
+
+    private void AutoSave()
+    {
+        _ = Task.Run(async () =>
+        {
+            try { await JS.InvokeVoidAsync("localStorage.setItem", "s3data", DataSvc.ToJson(_model)); }
+            catch { }
+        });
+    }
+
+    private async Task OpenImport()
+    {
+        try { await JS.InvokeVoidAsync("udpOpenFilePicker"); }
+        catch (Exception ex) { SetStatus("Open file error: " + ex.Message, 4000); }
+    }
+
+
+    private async Task DoExport()
+    {
+        _showExport = false;
+        try
+        {
+            var (content, mime, ext) = _exportFmt switch
+            {
+                "csv"  => (DataSvc.ToCsv(_model),       "text/csv",         ".csv"),
+                "txt"  => (DataSvc.ToPlainText(_model),  "text/plain",       ".txt"),
+                "fhir" => (DataSvc.ToFsh(_model),        "text/fsh",         ".fsh"),
+                _      => (DataSvc.ToJson(_model),       "application/json", ".json"),
+            };
+            var fn = (_exportName.Trim().Length > 0 ? _exportName.Trim() : "section3_data") + ext;
+            if (_exportFmt == "fhir") SushiSvc.SaveToExamples(fn, content);
+            await JS.InvokeVoidAsync("udpDownload", fn, content, mime);
+            SetStatus($"⬇ Downloaded {fn}", 4000);
+        }
+        catch (Exception ex) { SetStatus($"Export error: {ex.Message}", 5000); }
+    }
+
+    private void ForceSave()
+    {
+        _showReq = false;
+        if (_pendingExport) { _pendingExport = false; _showExport = true; }
+        else { AutoSave(); SetStatus($"✓ Saved {DateTime.Now:HH:mm:ss}", 3000); }
+    }
+
+    private void ShowCtxMenu(CtxMenuArgs args)
+    {
+        _ctxFieldId  = args.FieldId;
+        _ctxGuidance = args.Guidance;
+        _ctxX = args.X;
+        _ctxY = args.Y;
+        _ctxOpen = true;
+    }
+
+    private void CloseCtx() => _ctxOpen = false;
+
+    private void SetStatus(string msg, int clearMs = 0)
+    {
+        _statusMsg = msg;
+        _statusTimer?.Dispose();
+        if (clearMs > 0)
+        {
+            _statusTimer = new System.Timers.Timer(clearMs);
+            _statusTimer.Elapsed += (_, _) => { _statusMsg = string.Empty; InvokeAsync(StateHasChanged); _statusTimer?.Dispose(); };
+            _statusTimer.AutoReset = false;
+            _statusTimer.Start();
+        }
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        _statusTimer?.Dispose();
+        _objRef?.Dispose();
+    }
+}

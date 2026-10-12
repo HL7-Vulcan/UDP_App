@@ -1,0 +1,35 @@
+{
+  "resourceType": "ValueSet",
+  "status": "active",
+  "name": "UDPTarget-MaximumVS",
+  "id": "m11-target-Maximum-vs",
+  "title": "UDP ...",
+  "description": "Terminology associated with the ... value set codelist of the ICH M11 protocol template.",
+  "url": "http://HL7Vulcan/UDP/IG/ValueSet/m11-target-Maximum-vs",
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm",
+      "valueInteger": 0
+    }
+  ],
+  "copyright": "Portions of this material derives from the ICH M11 Harmonised Guideline CeSHarP. \nThe ICH M11 Harmonised Guideline CeSHarP is copyright ©2025+ International Committee on Harmonisation and is made available under license. \n\nCDISC publishes semantics for the ICH M11 protocol data elements and valid \nvalue sets. This terminology set is published and stored in the NCI Thesaurus \nSubset C217023 - ICH M11 Terminology \n(https://evsexplore.semantics.cancer.gov/evsexplore/subset/ncit/C217023) \n\nThe NCI Thesaurus is released under the CC BY 4.0 license\n\nFor more licensing information and links see: [licenses.html](licenses.html)",
+  "experimental": false,
+  "publisher": "Vulcan UDP",
+  "compose": {
+    "include": [
+      {
+        "system": "https://HL7Vulcan.org/UDP/target",
+        "concept": [
+          {
+            "code": "1",
+            "display": "Target"
+          },
+          {
+            "code": "2",
+            "display": "Maximum"
+          }
+        ]
+      }
+    ]
+  }
+}

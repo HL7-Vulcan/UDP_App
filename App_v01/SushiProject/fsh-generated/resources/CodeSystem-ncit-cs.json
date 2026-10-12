@@ -1,0 +1,2160 @@
+{
+  "resourceType": "CodeSystem",
+  "status": "active",
+  "content": "fragment",
+  "name": "NCIT",
+  "id": "ncit-cs",
+  "title": "Fragment of NCIT Code System",
+  "description": "This is a fragment from the NCI Thesaurus covering codes used by ICH M11 Value Sets.\nThese should all be moved into tx.fhir.org but are included here in FHIR format for testing and validation.",
+  "url": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+  "concept": [
+    {
+      "code": "C20189",
+      "display": "Property or Attribute",
+      "definition": "A distinguishing quality or prominent aspect of a person, object, action, process, or substance.",
+      "concept": [
+        {
+          "code": "C48191",
+          "display": "Information",
+          "definition": "Knowledge derived from study, experience, or instruction that has been gathered or received by communication.",
+          "concept": [
+            {
+              "code": "C60776",
+              "display": "Contact Information",
+              "definition": "Information regarding the means of contacting a person or group.",
+              "concept": [
+                {
+                  "code": "C218693",
+                  "display": "Designated Medical Expert Contact Information",
+                  "definition": "The contact information for the sponsor's representative who can advise on specific trial-related medical questions or problems."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "C25162",
+          "display": "Code",
+          "definition": "A symbol or combination of symbols which is assigned to the members of a collection.",
+          "concept": [
+            {
+              "code": "C20108",
+              "display": "Country Code",
+              "definition": "An alphanumeric system designed to identify countries. The ISO 3166 standard includes a two letter representation, a three letter representation, and a 3 number representation. The last two are identical to the UN system. The US State Department system maintains a separate two letter representation code set.",
+              "concept": [
+                {
+                  "code": "C54641",
+                  "display": "Alpha-2 Country Code",
+                  "definition": "The two-letter country codes specified by the ISO 3166-1 country code standard."
+                },
+                {
+                  "code": "C54642",
+                  "display": "Alpha-3 Country Code",
+                  "definition": "The three-letter country codes specified by the ISO 3166-1 country code standard."
+                },
+                {
+                  "code": "C54640",
+                  "display": "Numeric Country Code",
+                  "definition": "The numeric, three-digit country codes specified by the ISO 3166-1 country code standard."
+                },
+                {
+                  "code": "C165131",
+                  "display": "Study Country Code",
+                  "definition": "no definition found"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "C41009",
+          "display": "Qualifier",
+          "definition": "A term that helps define and render a concept unique.",
+          "concept": [
+            {
+              "code": "C21514",
+              "display": "Temporal Qualifier",
+              "definition": "Terms used to indicate units of time or other terms associated with time.",
+              "concept": [
+                {
+                  "code": "C25164",
+                  "display": "Date",
+                  "definition": "The particular day, month and year an event has happened or will happen.",
+                  "concept": [
+                    {
+                      "code": "C71476",
+                      "display": "Approval Date",
+                      "definition": "A date of an official approbation, recognition, or acceptance as satisfactory.",
+                      "concept": [
+                        {
+                          "code": "C132352",
+                          "display": "Protocol Approval by Sponsor Date",
+                          "definition": "The date that the sponsor approved a version of the protocol."
+                        }
+                      ]
+                    },
+                    {
+                      "code": "C93702",
+                      "display": "Version Date",
+                      "definition": "The date (and time) on which an entity is versioned.",
+                      "concept": [
+                        {
+                          "code": "C93813",
+                          "display": "Document Version Date",
+                          "definition": "The date on which the document is versioned."
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "C27993",
+              "display": "General Qualifier",
+              "definition": "A term that helps define and render another concept unique.",
+              "concept": [
+                {
+                  "code": "C17998",
+                  "display": "Unknown",
+                  "definition": "Not known, observed, recorded; or reported as unknown by the data contributor.",
+                  "concept": [
+                    {
+                      "code": "C150003",
+                      "display": "Unknown Transformation",
+                      "definition": "It is unknown whether any transformation of the product takes place."
+                    }
+                  ]
+                },
+                {
+                  "code": "C48655",
+                  "display": "Missing Value Reason",
+                  "definition": "A specific reason explaining why a meaningful value is not available. A meaningful value answers the question posed by a Data Element Concept. In contrast, a Missing Value Reason answers the implicit question \"Why is there no 'meaningful' value?\", when there is none.",
+                  "concept": [
+                    {
+                      "code": "C48660",
+                      "display": "Not Applicable",
+                      "definition": "Determination of a value is not relevant in the current context."
+                    }
+                  ]
+                },
+                {
+                  "code": "C17649",
+                  "display": "Other",
+                  "definition": "Different than the one(s) previously specified or mentioned."
+                },
+                {
+                  "code": "C68846",
+                  "display": "Global",
+                  "definition": "Covering or affecting the whole of a system."
+                },
+                {
+                  "code": "C217026",
+                  "display": "Not Global",
+                  "definition": "Covering or affecting only a portion of the entire system."
+                },
+                {
+                  "code": "C218489",
+                  "display": "By Cohort",
+                  "definition": "Covering or affecting a cohort of individuals."
+                }
+              ]
+            },
+            {
+              "code": "C13442",
+              "display": "Anatomy Qualifier",
+              "definition": "An adjectival term used to specify a region of the body or other concepts associated with the body.",
+              "concept": [
+                {
+                  "code": "C41065",
+                  "display": "Locally",
+                  "definition": "To a restricted area (of the body)."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "C25341",
+          "display": "Location",
+          "definition": "A position, site, or point in space where something can be found.",
+          "concept": [
+            {
+              "code": "C222063",
+              "display": "Location of Medical Expert Contact Information",
+              "definition": "The physical or virtual location of the medical expert (as designated by the sponsor) contact information."
+            },
+            {
+              "code": "C218484",
+              "display": "Location of Sponsor Approval Date",
+              "definition": "The physical or virtual location of the date on which the sponsor approved the current version of the protocol."
+            },
+            {
+              "code": "C222064",
+              "display": "Location of Sponsor Signatory Information",
+              "definition": "The physical or virtual location of the sponsor signatory information."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "C43431",
+      "display": "Activity",
+      "definition": "An active process; excludes processes and mechanisms which fulfill biological functions.",
+      "concept": [
+        {
+          "code": "C16326",
+          "display": "Behavior",
+          "definition": "The actions or reactions of an object or organism, usually in relation to the environment or surrounding world of stimuli.",
+          "concept": [
+            {
+              "code": "C16452",
+              "display": "Communication",
+              "definition": "The exchange of information between objects, people, or groups.",
+              "concept": [
+                {
+                  "code": "C82658",
+                  "display": "Communication Response",
+                  "definition": "A statement (either spoken or written) that is made in reply to a question, request, criticism, or accusation.",
+                  "concept": [
+                    {
+                      "code": "C49149",
+                      "display": "Answer",
+                      "definition": "A statement (either spoken or written) that is made in reply to a question or request or criticism or accusation; a statement that solves a problem or explains how to solve the problem.",
+                      "concept": [
+                        {
+                          "code": "C49487",
+                          "display": "No",
+                          "definition": "The non-affirmative response to a question."
+                        },
+                        {
+                          "code": "C49488",
+                          "display": "Yes",
+                          "definition": "The affirmative response to a question."
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "C19683",
+              "display": "Personal Behavior",
+              "definition": "The observable response of a person.",
+              "concept": [
+                {
+                  "code": "C16735",
+                  "display": "Informed Consent",
+                  "definition": "Consent by a patient to a surgical or medical procedure or participation in a clinical study after achieving an understanding of the relevant medical facts and the risks involved."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "C16203",
+          "display": "Clinical or Research Activity",
+          "definition": "Any specific activity undertaken during the course of a clinical study or research protocol.",
+          "concept": [
+            {
+              "code": "C15429",
+              "display": "Research Activity",
+              "definition": "Systematic investigation into a subject in order to discover facts, establish or revise a theory, or develop a plan of action based on the facts discovered.",
+              "concept": [
+                {
+                  "code": "C63536",
+                  "display": "Study",
+                  "definition": "A detailed examination, analysis, or critical inspection of a subject designed to discover facts about it.",
+                  "concept": [
+                    {
+                      "code": "C15206",
+                      "display": "Clinical Study",
+                      "definition": "Research conducted with human subjects or on material of human origin in which an investigator directly interacts with human subjects; includes development of new technologies, study of mechanisms of human diseases, therapy, clinical trials, epidemiologic, behavior, and health services research.",
+                      "concept": [
+                        {
+                          "code": "C208216",
+                          "display": "Clinical Study by Type",
+                          "definition": "A clinical study classified by its type, such as observational studies, case-control studies, cohort studies, cross-sectional studies, and clinical trials.",
+                          "concept": [
+                            {
+                              "code": "C71104",
+                              "display": "Clinical Trial",
+                              "definition": "A research study that prospectively assigns human participants or groups of humans to one or more health-related interventions to evaluate the effects on health outcomes.",
+                              "concept": [
+                                {
+                                  "code": "C70820",
+                                  "display": "Clinical Trial by Phase",
+                                  "definition": "A description of a clinical trial by the phase of the trial (I, II, III, or IV).",
+                                  "concept": [
+                                    {
+                                      "code": "C54721",
+                                      "display": "Early Phase 1 Trial",
+                                      "definition": "Exploratory clinical trials, in a small number of participants, that are conducted early in Phase 1. The investigational trial intervention is administered at a low dose for a limited time. Early Phase 1 trials provide insights into a variety of parameters such as pharmacokinetic, pharmacodynamic, and other biomarkers. They involve limited human exposure, have no therapeutic or diagnostic intent, and are not intended to assess clinical tolerability."
+                                    },
+                                    {
+                                      "code": "C15600",
+                                      "display": "Phase I Trial",
+                                      "definition": "Exploratory clinical trials that may be first-in-human, conducted in a small number of patients or healthy volunteers to evaluate clinical safety, tolerability, or therapeutic intent (pharmacokinetics and pharmacodynamics) of an investigational trial intervention.",
+                                      "concept": [
+                                        {
+                                          "code": "C142564",
+                                          "display": "First-in-Human Study",
+                                          "definition": "A type of phase 1 clinical trial in which the test product is administered to human beings for the first time."
+                                        },
+                                        {
+                                          "code": "C199990",
+                                          "display": "Phase Ia Trial",
+                                          "definition": "A type of phase 1 trial with a single ascending dose (dose escalation) in a small group of patients (in comparison to a Phase 1b)."
+                                        },
+                                        {
+                                          "code": "C199989",
+                                          "display": "Phase Ib Trial",
+                                          "definition": "A type of phase 1 trial with multiple ascending doses (dose expansion) in a larger group of patients (in comparison to a Phase 1a)."
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "code": "C15693",
+                                      "display": "Phase I/II Trial",
+                                      "definition": "A single clinical trial that combines elements of Phase 1 and Phase 2 trials, which may begin as a Phase 1 trial and transition into Phase 2 based upon predetermined criteria.",
+                                      "concept": [
+                                        {
+                                          "code": "C15835",
+                                          "display": "Phase I and II Vaccine Trials",
+                                          "definition": "Select candidate vaccines or concepts suitable for Phase I and Phase II trials and conduct these trials."
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "code": "C198366",
+                                      "display": "Phase I/II/III Trial",
+                                      "definition": "A study that begins as a Phase I study and transitions into Phases II and III based upon successful completion of each previous portion."
+                                    },
+                                    {
+                                      "code": "C198367",
+                                      "display": "Phase I/III Trial",
+                                      "definition": "A study that begins as a Phase I study and transitions into a Phase III study upon successful completion of the Phase I portion."
+                                    },
+                                    {
+                                      "code": "C15601",
+                                      "display": "Phase II Trial",
+                                      "definition": "Exploratory trials conducted to evaluate the safety and efficacy of the investigational trial intervention in patients with the disease or condition. Objectives may include, but are not limited to, clinical pharmacology, dose-ranging (dose-response, frequency of dosing), type of patients, or other characteristics of safety and efficacy.",
+                                      "concept": [
+                                        {
+                                          "code": "C49686",
+                                          "display": "Phase IIa Trial",
+                                          "definition": "A clinical research protocol generally referred to as a pilot or feasibility trial that aims to prove the concept of the new intervention in question."
+                                        },
+                                        {
+                                          "code": "C49688",
+                                          "display": "Phase IIb Trial",
+                                          "definition": "A clinical research protocol generally referred to as a well-controlled and pivotal trial that aims to prove the mechanism of action of the new intervention in question. A pivotal study will generally be well-controlled, randomized, of adequate size, and whenever possible, double-blind."
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "code": "C15694",
+                                      "display": "Phase II/III Trial",
+                                      "definition": "A type of clinical study that combines elements characteristic of traditional Phase II and Phase III trials."
+                                    },
+                                    {
+                                      "code": "C217024",
+                                      "display": "Phase II/III/IV Trial",
+                                      "definition": "A study that begins as a Phase II study and transitions into Phases III and IV based upon successful completion of each previous portion."
+                                    },
+                                    {
+                                      "code": "C15602",
+                                      "display": "Phase III Trial",
+                                      "definition": "Confirmatory trials conducted to demonstrate safety, efficacy and tolerability of the investigational trial intervention in patients with the disease or condition. Their objectives are to evaluate the overall benefit-risk relationship and may provide substantial evidence for regulatory approval and product information.",
+                                      "concept": [
+                                        {
+                                          "code": "C15873",
+                                          "display": "Phase III Large Scale Vaccine Trial",
+                                          "definition": "Select suitable vaccine candidates and support efficacy trials when appropriate criteria are met."
+                                        },
+                                        {
+                                          "code": "C49687",
+                                          "display": "Phase IIIa Trial",
+                                          "definition": "A classification typically assigned retrospectively to a Phase III trial after regulatory authorities determined the need for a Phase III B trial."
+                                        },
+                                        {
+                                          "code": "C49689",
+                                          "display": "Phase IIIb Trial",
+                                          "definition": "A type of Phase III trial executed near the time of approval to elicit additional findings. This type of trial may be required as a condition of regulatory authority approval."
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "code": "C217025",
+                                      "display": "Phase III/IV Trial",
+                                      "definition": "A type of clinical study that combines elements characteristic of traditional Phase III and Phase IV trials."
+                                    },
+                                    {
+                                      "code": "C15603",
+                                      "display": "Phase IV Trial",
+                                      "definition": "Post-approval (or post-marketing) trials conducted to further evaluate the safety and efficacy of an investigational trial intervention in its approved indication and may be conducted to address a regulatory requirement. These studies may explore use of the investigational trial intervention in the real-world setting of clinical practice and may also inform health economics and health technology assessments."
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "C16847",
+          "display": "Technique",
+          "definition": "A practiced and regimented skill or series of actions.",
+          "concept": [
+            {
+              "code": "C20368",
+              "display": "Research Technique",
+              "definition": "Technique used in the laboratory for scientific research.",
+              "concept": [
+                {
+                  "code": "C60819",
+                  "display": "Assay",
+                  "definition": "A qualitative or quantitative analysis performed to determine the amount of a particular constituent in a sample or the biological or pharmacological properties or activity of a drug or substance.",
+                  "concept": [
+                    {
+                      "code": "C15958",
+                      "display": "In Vitro Assay",
+                      "definition": "Assay conducted in an artificial environment, such as in a test tube, under a defined and controlled set of solvent and solute conditions.",
+                      "concept": [
+                        {
+                          "code": "C17635",
+                          "display": "Tumor Necrosis Factor Assay",
+                          "definition": "An immunoassay to detect Tumor Necrosis Factor (TNF), which is a potent lymphoid factor, and exerts cytotoxic effects on a wide range of tumor cells and other target cells. Utilizes monoclonal antibody to TNF immobilized on microtitre plate."
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "C20181",
+      "display": "Conceptual Entity",
+      "definition": "An organizational header for concepts representing mostly abstract entities.",
+      "concept": [
+        {
+          "code": "C19160",
+          "display": "Occupation or Discipline",
+          "definition": "A grouping of occupations and fields of study.",
+          "concept": [
+            {
+              "code": "C25193",
+              "display": "Occupation",
+              "definition": "The principal activity that a person does to earn money.",
+              "concept": [
+                {
+                  "code": "C25392",
+                  "display": "Manufacturer",
+                  "definition": "A person, enterprise, or entity that produces finished goods.",
+                  "concept": [
+                    {
+                      "code": "C156625",
+                      "display": "Device Manufacture",
+                      "definition": "A person or entity that designs, manufactures, fabricates, assembles, or processes a finished device."
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "C49154",
+          "display": "Statement",
+          "definition": "A verbal and/or written message that asserts, affirms, or declares something.",
+          "concept": [
+            {
+              "code": "C218474",
+              "display": "Protocol Amendment Details Statement",
+              "definition": "no definition found",
+              "concept": [
+                {
+                  "code": "C218485",
+                  "display": "Protocol Not Amended",
+                  "definition": "This protocol has not been amended."
+                },
+                {
+                  "code": "C218488",
+                  "display": "Protocol Previously Amended See Summary of Changes Before the Table of Contents",
+                  "definition": "This protocol has been amended previously. The Protocol Amendment Summary of Changes for the current amendment is located directly before the Table of Contents. Prior amendment(s) to this protocol are listed in the table below, beginning with the most recent."
+                },
+                {
+                  "code": "C218487",
+                  "display": "Protocol Previously Amended, Details Presented",
+                  "definition": "This protocol has been amended previously. Details of prior amendments are presented in Section 12.3 Prior Protocol Amendment(s)."
+                },
+                {
+                  "code": "C218486",
+                  "display": "First Protocol Amendment",
+                  "definition": "This is the first protocol amendment."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "C25180",
+          "display": "Indicator",
+          "definition": "An event, entity or condition that typically characterizes a prescribed environment or situation and determines or aids in determining whether certain stated circumstances exist or criteria are satisfied.",
+          "concept": [
+            {
+              "code": "C218673",
+              "display": "Amendment Scope Global Applicability Indicator",
+              "definition": "A descriptive indicator of whether the amendment scope applies globally across the trial."
+            },
+            {
+              "code": "C218672",
+              "display": "Original Protocol Indicator",
+              "definition": "An indication as to whether the protocol document reflects the original version of the protocol."
+            }
+          ]
+        },
+        {
+          "code": "C25257",
+          "display": "Phase",
+          "definition": "A distinguishable part, a stage in a series of events or in a process of development, e.g. any of the varying aspects or stages in course of a disease; a fraction of a cycle.",
+          "concept": [
+            {
+              "code": "C48281",
+              "display": "Trial Phase",
+              "definition": "Clinical trials are broken into three or four phases: Phase I tests a new drug or treatment for safety in a small group; Phase II expands the study to a larger group of people; Phase III expands the study to an even larger group of people to measure whether the treatment actually benefits patients, and whether its benefits exceed its risks; and Phase IV takes place after the drug or treatment has been licensed and marketed."
+            }
+          ]
+        },
+        {
+          "code": "C25638",
+          "display": "Reason",
+          "definition": "An explanation of the cause of some phenomenon or action.",
+          "concept": [
+            {
+              "code": "C207457",
+              "display": "Study Amendment Reason",
+              "definition": "The rationale for the change(s) to, or formal clarification of, a protocol.",
+              "concept": [
+                {
+                  "code": "C218497",
+                  "display": "Change in Standard Of Care Amendment Reason",
+                  "definition": "A change in the standard of care necessitates a change(s) to, or formal clarification of, the protocol."
+                },
+                {
+                  "code": "C218496",
+                  "display": "Change in Strategy Amendment Reason",
+                  "definition": "A change in the study purpose or intent of the scientific plan necessitates a change(s) to, or formal clarification of, the protocol."
+                },
+                {
+                  "code": "C218495",
+                  "display": "IMP Addition Amendment Reason",
+                  "definition": "The addition of an investigational medicinal product to a clinical trial design necessitates a change(s) to, or formal clarification of, the protocol."
+                },
+                {
+                  "code": "C218501",
+                  "display": "Inconsistency and/or Error in the Protocol Amendment Reason",
+                  "definition": "An error or inconsistency in the protocol necessitates a change(s) to, or formal clarification of, the protocol."
+                },
+                {
+                  "code": "C218499",
+                  "display": "Investigator/Site Feedback Amendment Reason",
+                  "definition": "Feedback from the investigator or study site necessitates a change(s) to, or formal clarification of, the protocol."
+                },
+                {
+                  "code": "C218492",
+                  "display": "IRB/IEC Feedback Amendment Reason",
+                  "definition": "Feedback from the institutional review board or independent ethics committee necessitates a change(s) to, or formal clarification of, the protocol."
+                },
+                {
+                  "code": "C218494",
+                  "display": "Manufacturing Change Amendment Reason",
+                  "definition": "A change to manufacturing processes of the study agents necessitates a change(s) to, or formal clarification of, the protocol."
+                },
+                {
+                  "code": "C218498",
+                  "display": "New Data Available (Other Than Safety Data) Amendment Reason",
+                  "definition": "Previously unavailable data (other than safety data) becomes available, which necessitates a change(s) to, or formal clarification of, the protocol."
+                },
+                {
+                  "code": "C218491",
+                  "display": "New Regulatory Guidance Amendment Reason",
+                  "definition": "A regulatory agency has published a guidance document that necessitates a change(s) to, or formal clarification of, the protocol."
+                },
+                {
+                  "code": "C218493",
+                  "display": "New Safety Information Available Amendment Reason",
+                  "definition": "Previously unavailable safety data becomes available, which necessitates a change(s) to, or formal clarification of, the protocol."
+                },
+                {
+                  "code": "C218502",
+                  "display": "Protocol Design Error Amendment Reason",
+                  "definition": "A protocol design error necessitates a change(s) to, or formal clarification of, a document."
+                },
+                {
+                  "code": "C218500",
+                  "display": "Recruitment Difficulty Amendment Reason",
+                  "definition": "Challenges with participant recruitment necessitates a change(s) to, or formal clarification of, the protocol."
+                },
+                {
+                  "code": "C218490",
+                  "display": "Regulatory Agency Request to Amend Amendment Reason",
+                  "definition": "A regulatory agency has expressed a need for a change(s) to, or formal clarification of, the protocol."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "C25190",
+          "display": "Person",
+          "definition": "A human being.",
+          "concept": [
+            {
+              "code": "C198995",
+              "display": "Person by OccupationType",
+              "definition": "An individual who is classified by their work type.",
+              "concept": [
+                {
+                  "code": "C17445",
+                  "display": "Caregiver",
+                  "definition": "The primary person in charge of the care of a patient, usually a family member or a designated health care professional.",
+                  "concept": [
+                    {
+                      "code": "C53427",
+                      "display": "Other Caregiver",
+                      "definition": "Different from the previously specified or mentioned type of person who has primary responsibility for the assistance and supervision for an individual."
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "C198997",
+              "display": "Person by Activity Type",
+              "definition": "A person described by an activity with which they are engaged.",
+              "concept": [
+                {
+                  "code": "C48355",
+                  "display": "Sponsor",
+                  "definition": "A person or organization that supports or champions something.",
+                  "concept": [
+                    {
+                      "code": "C71136",
+                      "display": "Regulatory Application Sponsor",
+                      "definition": "The party who submits a marketing application to FDA for approval of a drug, device, or biologic product. An applicant is the person or entity who assumes responsibility for the marketing of a new medical product, including responsibility for compliance with applicable provisions of the Federal Food, Drug, and Cosmetic Act and related regulations. The sponsor is usually an individual, partnership, corporation, government agency, manufacturer or scientific institution."
+                    },
+                    {
+                      "code": "C142679",
+                      "display": "Secondary Sponsor",
+                      "definition": "Additional individuals, organizations or other legal persons, if any, that have agreed with the primary sponsor to take on sponsorship responsibilities. (WHO)"
+                    },
+                    {
+                      "code": "C93478",
+                      "display": "Study Legal Sponsor",
+                      "definition": "A sponsor that initiates the investigation and is legally responsible for the study."
+                    },
+                    {
+                      "code": "C215669",
+                      "display": "Study Co-Sponsor",
+                      "definition": "An individual, company, institution, or organization that is designated by the study sponsor as a vested partner in the study."
+                    },
+                    {
+                      "code": "C215670",
+                      "display": "Local Legal Sponsor",
+                      "definition": "The sponsor's legal representative at a geographical region within which the sponsor has no legal presence. (ICH M11)"
+                    },
+                    {
+                      "code": "C70793",
+                      "display": "Clinical Study Sponsor",
+                      "definition": "An individual, company, institution, or organization that takes responsibility for the initiation, management, and/or financing of a clinical study. (CDISC Glossary)",
+                      "concept": [
+                        {
+                          "code": "C187708",
+                          "display": "Commercial Clinical Trial Sponsor",
+                          "definition": "A person or organization that takes responsibility for a trial which is part of the development program for a marketing authorization of a medicinal product at the time of the application. (EUDRACT)"
+                        },
+                        {
+                          "code": "C187709",
+                          "display": "Non-commercial Clinical Trial Sponsor",
+                          "definition": "A person or organization that takes responsibility for a trial that is not part of the development program for a marketing authorization of a medicinal product at the time of the application. (EUDRACT)"
+                        },
+                        {
+                          "code": "C70794",
+                          "display": "Primary Clinical Study Sponsor",
+                          "definition": "The individual, organization, group or other legal person taking responsibility for securing the arrangements to initiate and/or manage a study (including arrangements to ensure that the study design meets appropriate standards and to ensure appropriate conduct and reporting). In commercial trials, the primary sponsor is normally the main applicant for regulatory authorization to begin the study. It may or may not be the main funder."
+                        },
+                        {
+                          "code": "C70795",
+                          "display": "Secondary Clinical Study Sponsor",
+                          "definition": "Additional individuals, organizations or other legal persons, if any, that have agreed with the primary sponsor to take on responsibilities of sponsorship. A secondary sponsor may have agreed -to take on all the responsibilities of sponsorship jointly with the primary sponsor; or to form a group with the primary sponsor in which the responsibilities of sponsorship are allocated among the members of the group; or to act as the sponsor's legal representative in relation to some or all of the study sites; or to take responsibility for the accuracy of study registration information submitted."
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "C43359",
+          "display": "Group",
+          "definition": "Any number of entities (members) considered as a unit.",
+          "concept": [
+            {
+              "code": "C17005",
+              "display": "Population Group",
+              "definition": "A group of individuals united by a common factor (e.g., geographic location, ethnicity, disease, age, sex).",
+              "concept": [
+                {
+                  "code": "C60758",
+                  "display": "Personnel",
+                  "definition": "Persons employed in any field.",
+                  "concept": [
+                    {
+                      "code": "C17089",
+                      "display": "Research Personnel",
+                      "definition": "People engaged in research.",
+                      "concept": [
+                        {
+                          "code": "C51876",
+                          "display": "Sponsor Medical Expert",
+                          "definition": "A physician or health care provider selected by the sponsor to be readily available to advise clinical trial officials on trial related medical questions or problems."
+                        },
+                        {
+                          "code": "C51824",
+                          "display": "Evaluator",
+                          "definition": "A person who determines the significance, worth, or condition of something by careful appraisal and study.",
+                          "concept": [
+                            {
+                              "code": "C207599",
+                              "display": "Outcomes Assessor",
+                              "definition": "The individual who evaluates the outcome(s) of interest."
+                            }
+                          ]
+                        },
+                        {
+                          "code": "C25936",
+                          "display": "Investigator",
+                          "definition": "An individual who conducts scientific research. In a clinical setting this individual actually conducts and/or supervises the clinical investigation and study-related procedures.  The investigator monitors the safety of the trial subjects and investigational staff (under whose immediate direction an agent is administered or dispensed to a subject).  The investigator collects and analyses data and study documents, and provides reports in compliance with applicable requirements.",
+                          "concept": [
+                            {
+                              "code": "C70722",
+                              "display": "Investigator by Role in Study",
+                              "definition": "The characteristic that defines the responsibility of the investigator on a particular study.",
+                              "concept": [
+                                {
+                                  "code": "C51812",
+                                  "display": "Co-Investigator",
+                                  "definition": "One of two or more scientists working together on a research project. A person that equally contributes to the preparation of the protocol, and shares the responsibilities of this position, including medical monitoring (particularly toxicity/safety), liaison with statisticians over analysis, and the generation of a report containing the results."
+                                },
+                                {
+                                  "code": "C51818",
+                                  "display": "Coordinating Investigator",
+                                  "definition": "A research scientist whose task is to see that work, or events, goes harmoniously.",
+                                  "concept": [
+                                    {
+                                      "code": "C154706",
+                                      "display": "National Coordinating Investigator",
+                                      "definition": "In the case of a multinational study, a person who has the responsibilities of the sponsor of the study in his/her country and will be responsible for the coordination of the principal investigators at different sites within that member state. (EMA)"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "code": "C51825",
+                                  "display": "Grant Investigator",
+                                  "definition": "An individual designated by the grantee to take part in the conduction of the study or to participate in a scientific activity being supported by the grant."
+                                },
+                                {
+                                  "code": "C19924",
+                                  "display": "Principal Investigator",
+                                  "definition": "An investigator who is responsible for all aspects of the conduct of a study.",
+                                  "concept": [
+                                    {
+                                      "code": "C51817",
+                                      "display": "Contract Principal Investigator",
+                                      "definition": "A scientist or health care professional that has a financial agreement, as outlined in a binding statement of work, with the sponsor to bear full and ultimate responsibility for the scientific, administrative, ethical, legal, technical, and fiscal aspects of the study, and for day-to-day management of the scientific project, as well as for documenting and reporting its results."
+                                    },
+                                    {
+                                      "code": "C63403",
+                                      "display": "Funded Principal Investigator",
+                                      "definition": "The investigator named on the award document.  This investigator has full and ultimate responsibility for all research conducted under the award."
+                                    },
+                                    {
+                                      "code": "C51826",
+                                      "display": "Grant Principal Investigator",
+                                      "definition": "An individual designated by the grantee to direct the project or activity being supported by the grant. He or she is responsible for the scientific, legal, administrative, and technical aspects of the grant and accountable to the grantee for the proper conduct of the project or activity. The Principle Investigator (PI) must have a formal written appointment with the applicant organization, which must be in the form of an official relationship between the parties, but need not involve a salary or other form of remuneration. The PI is a member of the grantee team responsible for ensuring compliance with the financial and administrative aspects of the award and with organizational as well as Federal requirements."
+                                    }
+                                  ]
+                                },
+                                {
+                                  "code": "C51856",
+                                  "display": "Protocol Lead Investigator",
+                                  "definition": "Primary clinical researcher of a clinical trial, ultimately responsible for all aspects in the conduct of a study, but has special responsibility with regard to the implementation and administration of the study design, and methodology of a trial."
+                                },
+                                {
+                                  "code": "C51875",
+                                  "display": "Site Representative Investigator",
+                                  "definition": "The investigator who officially represents a clinical site that participates in a multicentral clinical trial. The responsibilities of the official include the management of site compliance with rules and regulations and attention to personnel and patient requisites."
+                                },
+                                {
+                                  "code": "C54622",
+                                  "display": "Subinvestigator",
+                                  "definition": "Any individual member of the clinical trial team designated and supervised by the investigator at a trial site to perform critical trial-related procedures and/or to make important trial-related decisions (e.g., associates, residents, research fellows)."
+                                }
+                              ]
+                            },
+                            {
+                              "code": "C214478",
+                              "display": "Non-Physician Investigator",
+                              "definition": "A researcher who does not have a degree in medicine."
+                            },
+                            {
+                              "code": "C93404",
+                              "display": "Study Site Investigator",
+                              "definition": "A researcher at a study site who oversees multiple aspects of the study at a site, including protocol submission for IRB approval, participant recruitment, informed consent, data collection, and analysis."
+                            },
+                            {
+                              "code": "C198656",
+                              "display": "Treating Investigator",
+                              "definition": "The study investigator in charge of administering treatment to study participants."
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "C48910",
+          "display": "Subject",
+          "definition": "Some matter, situation, or event that is thought about, written about, or discussed.",
+          "concept": [
+            {
+              "code": "C79916",
+              "display": "Investigative Subject",
+              "definition": "An entity, either biologic or otherwise, of interest in an investigation.",
+              "concept": [
+                {
+                  "code": "C41189",
+                  "display": "Study Subject",
+                  "definition": "A matter or an individual that is observed, analyzed, examined, investigated, experimented upon, or/and treated in the course of a particular study.",
+                  "concept": [
+                    {
+                      "code": "C142710",
+                      "display": "Study Participant",
+                      "definition": "Any individiual that has a role in a study, including study personnel and study subjects.",
+                      "concept": [
+                        {
+                          "code": "C188266",
+                          "display": "High Risk Study Participant",
+                          "definition": "A participant in a study that presents a greater than moderate risk due to the increased probability for generating serious adverse events. Since there is a probability of an event that is serious and prolonged or permanent occurring as a result of study participation, the participant will require high intensity monitoring."
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "C25198",
+          "display": "Record",
+          "definition": "Anything (e.g., a document) providing permanent evidence of or information about past events.",
+          "concept": [
+            {
+              "code": "C19498",
+              "display": "Document",
+              "definition": "A physical object, or electronic counterpart, that is characterized by containing writing which is meant to be human-readable.",
+              "concept": [
+                {
+                  "code": "C42651",
+                  "display": "Protocol",
+                  "definition": "A rule which guides how an activity should be performed.",
+                  "concept": [
+                    {
+                      "code": "C70705",
+                      "display": "Component of Study Protocol",
+                      "definition": "A component of a plan on which a study is based.",
+                      "concept": [
+                        {
+                          "code": "C181183",
+                          "display": "Protocol Statement",
+                          "definition": "A written message providing an official assurance, account, or assertion within the study protocol.",
+                          "concept": [
+                            {
+                              "code": "C181236",
+                              "display": "Protocol Confidentiality Statement",
+                              "definition": "A written message within the study protocol that asserts a statement of non-disclosure, such that information contained within the protocol document may only be shared with authorized parties."
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "code": "C25678",
+                  "display": "Signature",
+                  "definition": "Individual's name or personal mark, used to sign documents and employed to signify that the writing which precedes accords with one's wishes and intentions; having a handwritten signature.",
+                  "concept": [
+                    {
+                      "code": "C222014",
+                      "display": "Sponsor Signatory",
+                      "definition": "A block of text containing the name and signature of the sponsor's signatory, along with the signature date."
+                    }
+                  ]
+                },
+                {
+                  "code": "C25364",
+                  "display": "Identifier",
+                  "definition": "One or more characters used to identify, name, or characterize the nature, properties, or contents of a thing.",
+                  "concept": [
+                    {
+                      "code": "C83081",
+                      "display": "Study Site Identifier",
+                      "definition": "A sequence of characters used to identify, name, or characterize the study site."
+                    },
+                    {
+                      "code": "C218674",
+                      "display": "Region Identifier",
+                      "definition": "A sequence of characters used to identify and/or name the region."
+                    },
+                    {
+                      "code": "C218690",
+                      "display": "Other Regulatory or Clinical Trial Identifier",
+                      "definition": "A sequence of characters assigned by a regulatory agency or other health authority that is used to identify a clinical trial, and that is different than the one(s) previously specified or mentioned."
+                    },
+                    {
+                      "code": "C96095",
+                      "display": "Product Identifier",
+                      "definition": "no definition found",
+                      "concept": [
+                        {
+                          "code": "C218675",
+                          "display": "Sponsor's Investigational Product Code",
+                          "definition": "A symbol or combination of symbols that are assigned by the sponsor to uniquely identify an experimental intervention."
+                        }
+                      ]
+                    },
+                    {
+                      "code": "C70663",
+                      "display": "Unique Identifier",
+                      "definition": "A set of characters used as a code that is unique in the context or the system for which it is created. It serves as a means of identification and reference (often instead of a name) for an entity, person, thing, function, procedure, activity, variable, or body of data.",
+                      "concept": [
+                        {
+                          "code": "C98714",
+                          "display": "Clinical Trial Registry Identifier",
+                          "definition": "A sequence of letters, numbers, or other characters that uniquely identifies a clinical trial within a clinical trial registry.",
+                          "concept": [
+                            {
+                              "code": "C172240",
+                              "display": "Clinicaltrials.gov Identifier",
+                              "definition": "The unique alphanumeric identifier for a trial as assigned by the Clinicaltrials.gov Protocol Registration and Results System (PRS).",
+                              "concept": [
+                                {
+                                  "code": "C127792",
+                                  "display": "Clinicaltrials.gov NCT Number for the Expanded Access Record",
+                                  "definition": "The unique alphanumeric identifier for a study with associated expanded access record, as assigned by the clinicaltrials.gov PRS system."
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "code": "C132299",
+                      "display": "Protocol Identifier",
+                      "definition": "A sequence of letters, numbers, or other characters that uniquely identifies a study protocol.",
+                      "concept": [
+                        {
+                          "code": "C132351",
+                          "display": "Sponsor Protocol Identifier",
+                          "definition": "A unique code, which is assigned by the sponsor, that identifies a specific protocol."
+                        }
+                      ]
+                    },
+                    {
+                      "code": "C218689",
+                      "display": "WHO/UTN Number",
+                      "definition": "A sequence of characters used to identify a clinical trial, as assigned by the World Health organization's International Clinical Trial's Registry Platform (ICTRP)."
+                    },
+                    {
+                      "code": "C218477",
+                      "display": "Amendment Identifier",
+                      "definition": "A sequence of characters used to uniquely identify a protocol amendment."
+                    },
+                    {
+                      "code": "C218688",
+                      "display": "NMPA IND Number",
+                      "definition": "A sequence of characters used to identify a clinical trial under an Investigational New Drug (IND) application, as assigned by the Chinese National Medicinal Products Administration (NMPA)."
+                    },
+                    {
+                      "code": "C218686",
+                      "display": "US FDA Investigational Device Exemption Application Number",
+                      "definition": "A sequence of characters used to identify a clinical trial under an Investigational Device Exemption (IDE) application, as assigned by the US Food and Drug Administration."
+                    },
+                    {
+                      "code": "C218684",
+                      "display": "EU Clinical Trial Register Number",
+                      "definition": "A sequence of characters used to identify a clinical trial, as assigned by the Clinical Trials Information System (CTIS) of the European Medicines Agency."
+                    },
+                    {
+                      "code": "C218687",
+                      "display": "Japan Registry for Clinical Trials Number",
+                      "definition": "A sequence of characters used to identify a clinical trial, as assigned by the Japan Registry for Clinical Trials (JRCT) of the Ministry of Health, Labour and Welfare (MHLW) in Japan."
+                    },
+                    {
+                      "code": "C218685",
+                      "display": "US FDA Investigational New Drug Application Number",
+                      "definition": "A sequence of characters used to identify a clinical trial under an Investigational New Drug (IND) application, as assigned by the US Food and Drug Administration."
+                    }
+                  ]
+                },
+                {
+                  "code": "C25704",
+                  "display": "Text",
+                  "definition": "The words of something written.",
+                  "concept": [
+                    {
+                      "code": "C207508",
+                      "display": "Narrative Content Text",
+                      "definition": "A textual representation of the narrative content."
+                    },
+                    {
+                      "code": "C93703",
+                      "display": "Version Number Text",
+                      "definition": "A numeric character string that identifies a form or variant of a type or original.",
+                      "concept": [
+                        {
+                          "code": "C181232",
+                          "display": "Study Protocol Version Number",
+                          "definition": "A string of numerals that uniquely identifies a specific version of a study protocol."
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "code": "C25407",
+                  "display": "Address",
+                  "definition": "A standardized representation of the location of a person, business, building, or organization.",
+                  "concept": [
+                    {
+                      "code": "C70946",
+                      "display": "Postal Address",
+                      "definition": "A physical location used by a person or organization for the purpose of receiving postal mail deliveries.",
+                      "concept": [
+                        {
+                          "code": "C93844",
+                          "display": "Health Care Provider Postal Address",
+                          "definition": "A contact point used to send physical forms of communication to the healthcare provider."
+                        },
+                        {
+                          "code": "C93847",
+                          "display": "Healthcare Facility Postal Address",
+                          "definition": "A contact point used to send physical forms of communication to the healthcare facility."
+                        },
+                        {
+                          "code": "C164841",
+                          "display": "Insured Person Postal Address",
+                          "definition": "no definition found"
+                        },
+                        {
+                          "code": "C93875",
+                          "display": "Organization Postal Address",
+                          "definition": "A contact point used to send physical forms of communication to the organization."
+                        },
+                        {
+                          "code": "C164888",
+                          "display": "Organization Staff Role Postal Address",
+                          "definition": "no definition found"
+                        },
+                        {
+                          "code": "C93880",
+                          "display": "Organizational Contact Postal Address",
+                          "definition": "A contact point used to send physical forms of communication to the organizational contact."
+                        },
+                        {
+                          "code": "C93983",
+                          "display": "Performer Postal Address",
+                          "definition": "A contact point used to send physical forms of communication to the performer."
+                        },
+                        {
+                          "code": "C93990",
+                          "display": "Person Postal Address",
+                          "definition": "A contact point used to send physical forms of communication to the person."
+                        },
+                        {
+                          "code": "C165044",
+                          "display": "Point Of Contact Postal Address",
+                          "definition": "no definition found"
+                        },
+                        {
+                          "code": "C94065",
+                          "display": "Research Staff Postal Address",
+                          "definition": "A contact point used to send physical forms of communication to the research staff."
+                        },
+                        {
+                          "code": "C95395",
+                          "display": "Service Delivery Location Postal Address",
+                          "definition": "The postal address of the service delivery location."
+                        },
+                        {
+                          "code": "C176376",
+                          "display": "Study Contact Postal Address",
+                          "definition": "A physical location used by a study contact for the purpose of receiving postal mail deliveries."
+                        },
+                        {
+                          "code": "C165133",
+                          "display": "Study Country Personnel Postal Address",
+                          "definition": "no definition found"
+                        },
+                        {
+                          "code": "C94101",
+                          "display": "Study Personnel Postal Address",
+                          "definition": "A contact point used to send physical forms of communication to the study personnel."
+                        },
+                        {
+                          "code": "C94147",
+                          "display": "Study Site Personnel Postal Address",
+                          "definition": "A contact point used to send physical forms of communication to the study site personnel."
+                        }
+                      ]
+                    },
+                    {
+                      "code": "C218677",
+                      "display": "Sponsor Legal Address",
+                      "definition": "The legally registered address of the trial sponsor."
+                    },
+                    {
+                      "code": "C218679",
+                      "display": "Co-Sponsor Legal Address",
+                      "definition": "The legally registered address of the trial co-sponsor."
+                    },
+                    {
+                      "code": "C218683",
+                      "display": "Device Manufacturer Legal Address",
+                      "definition": "The legally registered address of the device manufacturer."
+                    },
+                    {
+                      "code": "C218681",
+                      "display": "Local Sponsor Legal Address",
+                      "definition": "The legally registered address of the sponsor's legal representative at a geographical region within which the sponsor has no legal presence."
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "C25480",
+          "display": "Details",
+          "definition": "Particulars considered individually and in relation to a whole.",
+          "concept": [
+            {
+              "code": "C218694",
+              "display": "Protocol Amendment Details",
+              "definition": "Particulars about the protocol amendment, considered individually and in relation to a whole."
+            }
+          ]
+        },
+        {
+          "code": "C42614",
+          "display": "Name",
+          "definition": "The words or language units by which a thing is known.",
+          "concept": [
+            {
+              "code": "C218678",
+              "display": "Co-Sponsor Name",
+              "definition": "The literal identifier (i.e., distinctive designation) of the trial co-sponsor."
+            },
+            {
+              "code": "C218682",
+              "display": "Device Manufacturer Name",
+              "definition": "The literal identifier (i.e., distinctive designation) of the organization defined as being responsible for creating the device as stated on the package in which the product is supplied."
+            },
+            {
+              "code": "C218680",
+              "display": "Local Sponsor Name",
+              "definition": "The literal identifier (i.e., distinctive designation) of the sponsor's legal representative at a geographical region within which the sponsor has no legal presence."
+            },
+            {
+              "code": "C222495",
+              "display": "Trial Sponsor Name",
+              "definition": "The literal identifier (i.e., distinctive designation) of the trial sponsor."
+            },
+            {
+              "code": "C42774",
+              "display": "Title",
+              "definition": "An official descriptive name of a document, e.g. the long name of a study protocol provided by the study sponsor.",
+              "concept": [
+                {
+                  "code": "C132300",
+                  "display": "Protocol Title",
+                  "definition": "The name of a study protocol.",
+                  "concept": [
+                    {
+                      "code": "C132346",
+                      "display": "Official Protocol Title",
+                      "definition": "The formal, descriptive name of the protocol."
+                    }
+                  ]
+                },
+                {
+                  "code": "C93637",
+                  "display": "Public Title",
+                  "definition": "The title of the document intended for the general population.",
+                  "concept": [
+                    {
+                      "code": "C94105",
+                      "display": "Study Protocol Document Version Public Title",
+                      "definition": "The short descriptive name for the trial."
+                    }
+                  ]
+                },
+                {
+                  "code": "C49802",
+                  "display": "Trial Title",
+                  "definition": "The name of a clinical trial.",
+                  "concept": [
+                    {
+                      "code": "C207615",
+                      "display": "Brief Study Title",
+                      "definition": "The short descriptive name for the study."
+                    },
+                    {
+                      "code": "C207618",
+                      "display": "Scientific Study Title",
+                      "definition": "A more extensive descriptive name of the study that is intended for medical professionals, written using medical and scientific language."
+                    },
+                    {
+                      "code": "C207616",
+                      "display": "Official Study Title",
+                      "definition": "The formal descriptive name for the study."
+                    },
+                    {
+                      "code": "C207617",
+                      "display": "Public Study Title",
+                      "definition": "The descriptive name of the study that is intended for the lay public, written in easily understood language."
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "C93495",
+              "display": "Acronym",
+              "definition": "The non-unique initials or abbreviated name used for identification.",
+              "concept": [
+                {
+                  "code": "C94108",
+                  "display": "Study Protocol Version Acronym",
+                  "definition": "The non-unique initials or abbreviated name used for identification of the study protocol document version."
+                },
+                {
+                  "code": "C207646",
+                  "display": "Study Acronym",
+                  "definition": "The non-unique initials or abbreviated name used for identification of the study."
+                }
+              ]
+            },
+            {
+              "code": "C71898",
+              "display": "Proprietary Name",
+              "definition": "The part of the name or logo associated with a specific product or service identifying and distinguishing it from varieties of the same product or service marketed by competing companies."
+            },
+            {
+              "code": "C97054",
+              "display": "Generic Name",
+              "definition": "Drug name that is not protected by a trademark, usually descriptive of its chemical structure, and sometimes a public name.",
+              "concept": [
+                {
+                  "code": "C202465",
+                  "display": "Compendial Name",
+                  "definition": "A name within a pharmaceutical compendium that designates a small or large molecule substance that complies with compendial standards for strength, quality, and purity. (USP Nomenclature Guidelines)"
+                },
+                {
+                  "code": "C142585",
+                  "display": "International Nonproprietary Name",
+                  "definition": "A unique, internationally consistent and globally recognized name which identifies pharmaceutical substances or active pharmaceutical ingredients and is public property."
+                },
+                {
+                  "code": "C96973",
+                  "display": "United States Adopted Name",
+                  "definition": "A unique nonproprietary name assigned to drugs and biologics by the United States Adopted Names Council (USAN)."
+                },
+                {
+                  "code": "C203358",
+                  "display": "USP-NF Established Name",
+                  "definition": "A unique nonproprietary name assigned to drugs and biologics by the United States Pharmacopeia (USP) or excipients by the National Formulary (NF)."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "C19067",
+          "display": "Title",
+          "definition": "An identifying designation.",
+          "concept": [
+            {
+              "code": "C215610",
+              "display": "Document Content Reference Section Title",
+              "definition": "An identifying designation for a particular section for the document content reference.",
+              "concept": [
+                {
+                  "code": "C217359",
+                  "display": "Protocol Section Title",
+                  "definition": "An identifying designation for a section within a protocol document.",
+                  "concept": [
+                    {
+                      "code": "C217360",
+                      "display": "ICH M11 Protocol Section Title",
+                      "definition": "An identifying designation for a section within the ICH M11 protocol template document.",
+                      "concept": [
+                        {
+                          "code": "C218514",
+                          "display": "ICH M11 Protocol Section 1 PROTOCOL SUMMARY",
+                          "definition": "The title of section 1 of the ICH M11 protocol guideline: PROTOCOL SUMMARY."
+                        },
+                        {
+                          "code": "C218515",
+                          "display": "ICH M11 Protocol Section 1.1 Protocol Synopsis",
+                          "definition": "The title of section 1.1 of the ICH M11 protocol guideline: Protocol Synopsis."
+                        },
+                        {
+                          "code": "C218516",
+                          "display": "ICH M11 Protocol Section 1.1.1 Primary and Secondary Objectives and Estimands",
+                          "definition": "The title of section 1.1.1 of the ICH M11 protocol guideline: Primary and Secondary Objectives and Estimands."
+                        },
+                        {
+                          "code": "C218517",
+                          "display": "ICH M11 Protocol Section 1.1.2 Overall Design",
+                          "definition": "The title of section 1.1.2 of the ICH M11 protocol guideline: Overall Design."
+                        },
+                        {
+                          "code": "C218518",
+                          "display": "ICH M11 Protocol Section 1.2 Trial Schema",
+                          "definition": "The title of section 1.2 of the ICH M11 protocol guideline: Trial Schema."
+                        },
+                        {
+                          "code": "C218519",
+                          "display": "ICH M11 Protocol Section 1.3 Schedule of Activities",
+                          "definition": "The title of section 1.3 of the ICH M11 protocol guideline: Schedule of Activities."
+                        },
+                        {
+                          "code": "C218625",
+                          "display": "ICH M11 Protocol Section 10 STATISTICAL CONSIDERATIONS",
+                          "definition": "The title of section 10 of the ICH M11 protocol guideline: STATISTICAL CONSIDERATIONS."
+                        },
+                        {
+                          "code": "C218626",
+                          "display": "ICH M11 Protocol Section 10.1 General Considerations",
+                          "definition": "The title of section 10.1 of the ICH M11 protocol guideline: General Considerations."
+                        },
+                        {
+                          "code": "C218647",
+                          "display": "ICH M11 Protocol Section 10.10 Multiplicity Adjustments",
+                          "definition": "The title of section 10.10 of the ICH M11 protocol guideline: Multiplicity Adjustments."
+                        },
+                        {
+                          "code": "C218648",
+                          "display": "ICH M11 Protocol Section 10.11 Sample Size Determination",
+                          "definition": "The title of section 10.11 of the ICH M11 protocol guideline: Sample Size Determination."
+                        },
+                        {
+                          "code": "C218627",
+                          "display": "ICH M11 Protocol Section 10.2 Analysis Sets",
+                          "definition": "The title of section 10.2 of the ICH M11 protocol guideline: Analysis Sets."
+                        },
+                        {
+                          "code": "C218628",
+                          "display": "ICH M11 Protocol Section 10.3 Analyses of Demographics and Other Baseline Variables",
+                          "definition": "The title of section 10.3 of the ICH M11 protocol guideline: Analyses of Demographics and Other Baseline Variables."
+                        },
+                        {
+                          "code": "C218629",
+                          "display": "ICH M11 Protocol Section 10.4 Analyses Associated with the Primary Objective(s)",
+                          "definition": "The title of section 10.4 of the ICH M11 protocol guideline: Analyses Associated with the Primary Objective(s)."
+                        },
+                        {
+                          "code": "C218630",
+                          "display": "ICH M11 Protocol Section 10.4.1 Primary Objective",
+                          "definition": "The title of section 10.4.1 of the ICH M11 protocol guideline: Primary Objective."
+                        },
+                        {
+                          "code": "C218631",
+                          "display": "ICH M11 Protocol Section 10.4.1.1 Statistical Analysis Method",
+                          "definition": "The title of section 10.4.1.1 of the ICH M11 protocol guideline: Statistical Analysis Method."
+                        },
+                        {
+                          "code": "C218632",
+                          "display": "ICH M11 Protocol Section 10.4.1.2 Handling of Data in Relation to Primary Estimand(s)",
+                          "definition": "The title of section 10.4.1.2 of the ICH M11 protocol guideline: Handling of Data in Relation to Primary Estimand(s)."
+                        },
+                        {
+                          "code": "C218633",
+                          "display": "ICH M11 Protocol Section 10.4.1.3 Handling of Missing Data in Relation to Primary Estimand(s)",
+                          "definition": "The title of section 10.4.1.3 of the ICH M11 protocol guideline: Handling of Missing Data in Relation to Primary Estimand(s)"
+                        },
+                        {
+                          "code": "C218634",
+                          "display": "ICH M11 Protocol Section 10.4.1.4 Sensitivity Analysis",
+                          "definition": "The title of section 10.4.1.4 of the ICH M11 protocol guideline: Sensitivity Analysis."
+                        },
+                        {
+                          "code": "C218635",
+                          "display": "ICH M11 Protocol Section 10.4.1.5 Supplementary Analysis",
+                          "definition": "The title of section 10.4.1.5 of the ICH M11 protocol guideline: Supplementary Analysis."
+                        },
+                        {
+                          "code": "C218636",
+                          "display": "ICH M11 Protocol Section 10.5 Analyses Associated with the Secondary Objective(s)",
+                          "definition": "The title of section 10.5 of the ICH M11 protocol guideline: Analyses Associated with the Secondary Objective(s)."
+                        },
+                        {
+                          "code": "C218637",
+                          "display": "ICH M11 Protocol Section 10.5.1 Secondary Objective",
+                          "definition": "The title of section 10.5.1 of the ICH M11 protocol guideline: Secondary Objective."
+                        },
+                        {
+                          "code": "C218638",
+                          "display": "ICH M11 Protocol Section 10.5.1.1 Statistical Analysis Method",
+                          "definition": "The title of section 10.5.1.1 of the ICH M11 protocol guideline: Statistical Analysis Method."
+                        },
+                        {
+                          "code": "C218639",
+                          "display": "ICH M11 Protocol Section 10.5.1.2 Handling of Data in Relation to Secondary Estimand(s)",
+                          "definition": "The title of section 10.5.1.2 of the ICH M11 protocol guideline: Handling of Data in Relation to Secondary Estimand(s)."
+                        },
+                        {
+                          "code": "C218640",
+                          "display": "ICH M11 Protocol Section 10.5.1.3 Handling of Missing Data in Relation to Secondary Estimand(s)",
+                          "definition": "The title of section 10.5.1.3 of the ICH M11 protocol guideline: Handling of Missing Data in Relation to Secondary Estimand(s)."
+                        },
+                        {
+                          "code": "C218641",
+                          "display": "ICH M11 Protocol Section 10.5.1.4 Sensitivity Analysis",
+                          "definition": "The title of section 10.5.1.4 of the ICH M11 protocol guideline: Sensitivity Analysis."
+                        },
+                        {
+                          "code": "C218642",
+                          "display": "ICH M11 Protocol Section 10.5.1.5 Supplementary Analysis",
+                          "definition": "The title of section 10.5.1.5 of the ICH M11 protocol guideline: Supplementary Analysis."
+                        },
+                        {
+                          "code": "C218643",
+                          "display": "ICH M11 Protocol Section 10.6 Analyses Associated with the Exploratory Objective(s)",
+                          "definition": "The title of section 10.6 of the ICH M11 protocol guideline: Analyses Associated with the Exploratory Objective(s)."
+                        },
+                        {
+                          "code": "C218644",
+                          "display": "ICH M11 Protocol Section 10.7 Safety Analyses",
+                          "definition": "The title of section 10.7 of the ICH M11 protocol guideline: Safety Analyses."
+                        },
+                        {
+                          "code": "C218645",
+                          "display": "ICH M11 Protocol Section 10.8 Other Analyses",
+                          "definition": "The title of section 10.8 of the ICH M11 protocol guideline: Other Analyses."
+                        },
+                        {
+                          "code": "C218646",
+                          "display": "ICH M11 Protocol Section 10.9 Interim Analyses",
+                          "definition": "The title of section 10.9 of the ICH M11 protocol guideline: Interim Analyses."
+                        },
+                        {
+                          "code": "C218649",
+                          "display": "ICH M11 Protocol Section 11 TRIAL OVERSIGHT AND OTHER GENERAL CONSIDERATIONS",
+                          "definition": "The title of section 11 of the ICH M11 protocol guideline: TRIAL OVERSIGHT AND OTHER GENERAL CONSIDERATIONS."
+                        },
+                        {
+                          "code": "C218650",
+                          "display": "ICH M11 Protocol Section 11.1 Regulatory and Ethical Considerations",
+                          "definition": "The title of section 11.1 of the ICH M11 protocol guideline: Regulatory and Ethical Considerations."
+                        },
+                        {
+                          "code": "C218663",
+                          "display": "ICH M11 Protocol Section 11.10 Protocol Deviations",
+                          "definition": "The title of section 11.10 of the ICH M11 protocol guideline: Protocol Deviations."
+                        },
+                        {
+                          "code": "C218664",
+                          "display": "ICH M11 Protocol Section 11.11 Early Site Closure",
+                          "definition": "The title of section 11.11 of the ICH M11 protocol guideline: Early Site Closure."
+                        },
+                        {
+                          "code": "C218665",
+                          "display": "ICH M11 Protocol Section 11.12 Data Dissemination",
+                          "definition": "The title of section 11.12 of the ICH M11 protocol guideline: Data Dissemination."
+                        },
+                        {
+                          "code": "C218651",
+                          "display": "ICH M11 Protocol Section 11.2 Trial Oversight",
+                          "definition": "The title of section 11.2 of the ICH M11 protocol guideline: Trial Oversight."
+                        },
+                        {
+                          "code": "C218652",
+                          "display": "ICH M11 Protocol Section 11.2.1 Investigator Responsibilities",
+                          "definition": "The title of section 11.2.1 of the ICH M11 protocol guideline: Investigator Responsibilities."
+                        },
+                        {
+                          "code": "C218653",
+                          "display": "ICH M11 Protocol Section 11.2.2 Sponsor Responsibilities",
+                          "definition": "The title of section 11.2.2 of the ICH M11 protocol guideline: Sponsor Responsibilities."
+                        },
+                        {
+                          "code": "C218654",
+                          "display": "ICH M11 Protocol Section 11.3 Informed Consent Process",
+                          "definition": "The title of section 11.3 of the ICH M11 protocol guideline: Informed Consent Process."
+                        },
+                        {
+                          "code": "C218655",
+                          "display": "ICH M11 Protocol Section 11.3.1 Informed Consent for Rescreening",
+                          "definition": "The title of section 11.3.1 of the ICH M11 protocol guideline: Informed Consent for Rescreening."
+                        },
+                        {
+                          "code": "C218656",
+                          "display": "ICH M11 Protocol Section 11.3.2 Informed Consent for Use of Remaining Samples in Exploratory Research",
+                          "definition": "The title of section 11.3.2 of the ICH M11 protocol guideline: Informed Consent for Use of Remaining Samples in Exploratory Research."
+                        },
+                        {
+                          "code": "C218657",
+                          "display": "ICH M11 Protocol Section 11.4 Committees",
+                          "definition": "The title of section 11.4 of the ICH M11 protocol guideline: Committees."
+                        },
+                        {
+                          "code": "C218658",
+                          "display": "ICH M11 Protocol Section 11.5 Insurance and Indemnity",
+                          "definition": "The title of section 11.5 of the ICH M11 protocol guideline: Insurance and Indemnity."
+                        },
+                        {
+                          "code": "C218659",
+                          "display": "ICH M11 Protocol Section 11.6 Risk-Based Quality Management",
+                          "definition": "The title of section 11.6 of the ICH M11 protocol guideline: Risk-Based Quality Management."
+                        },
+                        {
+                          "code": "C218660",
+                          "display": "ICH M11 Protocol Section 11.7 Data Governance",
+                          "definition": "The title of section 11.7 of the ICH M11 protocol guideline: Data Governance."
+                        },
+                        {
+                          "code": "C218661",
+                          "display": "ICH M11 Protocol Section 11.8 Data Protection",
+                          "definition": "The title of section 11.8 of the ICH M11 protocol guideline: Data Protection."
+                        },
+                        {
+                          "code": "C218662",
+                          "display": "ICH M11 Protocol Section 11.9 Source Records",
+                          "definition": "The title of section 11.9 of the ICH M11 protocol guideline: Source Records."
+                        },
+                        {
+                          "code": "C218666",
+                          "display": "ICH M11 Protocol Section 12 APPENDIX: SUPPORTING DETAILS",
+                          "definition": "The title of section 12 of the ICH M11 protocol guideline: APPENDIX: SUPPORTING DETAILS."
+                        },
+                        {
+                          "code": "C218667",
+                          "display": "ICH M11 Protocol Section 12.1 Clinical Laboratory Tests",
+                          "definition": "The title of section 12.1 of the ICH M11 protocol guideline: Clinical Laboratory Tests."
+                        },
+                        {
+                          "code": "C218668",
+                          "display": "ICH M11 Protocol Section 12.2 Country/Region-Specific Differences",
+                          "definition": "The title of section 12.2 of the ICH M11 protocol guideline: Country/Region-Specific Differences."
+                        },
+                        {
+                          "code": "C218669",
+                          "display": "ICH M11 Protocol Section 12.3 Prior Protocol Amendment(s)",
+                          "definition": "The title of section 12.3 of the ICH M11 protocol guideline: Prior Protocol Amendment(s)."
+                        },
+                        {
+                          "code": "C218670",
+                          "display": "ICH M11 Protocol Section 13 APPENDIX: GLOSSARY OF TERMS AND ABBREVIATIONS",
+                          "definition": "The title of section 13 of the ICH M11 protocol guideline: APPENDIX: GLOSSARY OF TERMS AND ABBREVIATIONS."
+                        },
+                        {
+                          "code": "C218671",
+                          "display": "ICH M11 Protocol Section 14 APPENDIX: REFERENCES",
+                          "definition": "The title of section 14 of the ICH M11 protocol guideline: APPENDIX: REFERENCES."
+                        },
+                        {
+                          "code": "C218520",
+                          "display": "ICH M11 Protocol Section 2 INTRODUCTION",
+                          "definition": "The title of section 2 of the ICH M11 protocol guideline: INTRODUCTION."
+                        },
+                        {
+                          "code": "C218521",
+                          "display": "ICH M11 Protocol Section 2.1 Purpose of Trial",
+                          "definition": "The title of section 2.1 of the ICH M11 protocol guideline: Purpose of Trial."
+                        },
+                        {
+                          "code": "C218522",
+                          "display": "ICH M11 Protocol Section 2.2 Assessment of Risks and Benefits",
+                          "definition": "The title of section 2.2 of the ICH M11 protocol guideline: Assessment of Risks and Benefits."
+                        },
+                        {
+                          "code": "C218523",
+                          "display": "ICH M11 Protocol Section 2.2.1 Risk Summary and Mitigation Strategy",
+                          "definition": "The title of section 2.2.2 of the ICH M11 protocol guideline: Risk Summary and Mitigation Strategy."
+                        },
+                        {
+                          "code": "C218524",
+                          "display": "ICH M11 Protocol Section 2.2.2 Benefit Summary",
+                          "definition": "The title of section 2.2.1 of the ICH M11 protocol guideline: Benefit Summary."
+                        },
+                        {
+                          "code": "C218525",
+                          "display": "ICH M11 Protocol Section 2.2.3 Overall Risk-Benefit Assessment",
+                          "definition": "The title of section 2.2.3 of the ICH M11 protocol guideline: Overall Risk-Benefit Assessment."
+                        },
+                        {
+                          "code": "C218526",
+                          "display": "ICH M11 Protocol Section 3 TRIAL OBJECTIVES AND ASSOCIATED ESTIMANDS",
+                          "definition": "The title of section 3 of the ICH M11 protocol guideline: TRIAL OBJECTIVES AND ASSOCIATED ESTIMANDS."
+                        },
+                        {
+                          "code": "C218527",
+                          "display": "ICH M11 Protocol Section 3.1 Primary Objective(s) and Associated Estimand(s)",
+                          "definition": "The title of section 3.1 of the ICH M11 protocol guideline: Primary Objective(s) and Associated Estimand(s)."
+                        },
+                        {
+                          "code": "C218528",
+                          "display": "ICH M11 Protocol Section 3.1.1 Primary Objective",
+                          "definition": "The title of section 3.1.1 of the ICH M11 protocol guideline: Primary Objective."
+                        },
+                        {
+                          "code": "C218529",
+                          "display": "ICH M11 Protocol Section 3.2 Secondary Objective(s) and Associated Estimand(s)",
+                          "definition": "The title of section 3.2 of the ICH M11 protocol guideline: Secondary Objective(s) and Associated Estimand(s)."
+                        },
+                        {
+                          "code": "C218530",
+                          "display": "ICH M11 Protocol Section 3.2.1 Secondary Objective",
+                          "definition": "The title of section 3.2.1 of the ICH M11 protocol guideline: Secondary Objective."
+                        },
+                        {
+                          "code": "C218531",
+                          "display": "ICH M11 Protocol Section 3.3 Exploratory Objective(s)",
+                          "definition": "The title of section 3.3 of the ICH M11 protocol guideline: Exploratory Objective(s)."
+                        },
+                        {
+                          "code": "C218532",
+                          "display": "ICH M11 Protocol Section 3.3.1 Exploratory Objective",
+                          "definition": "The title of section 3.3.1 of the ICH M11 protocol guideline: Exploratory Objective."
+                        },
+                        {
+                          "code": "C218533",
+                          "display": "ICH M11 Protocol Section 4 TRIAL DESIGN",
+                          "definition": "The title of section 4 of the ICH M11 protocol guideline: TRIAL DESIGN."
+                        },
+                        {
+                          "code": "C218534",
+                          "display": "ICH M11 Protocol Section 4.1 Description of Trial Design",
+                          "definition": "The title of section 4.1 of the ICH M11 protocol guideline: Description of Trial Design."
+                        },
+                        {
+                          "code": "C218535",
+                          "display": "ICH M11 Protocol Section 4.1.1 Stakeholder Input into Design",
+                          "definition": "The title of section 4.1.1 of the ICH M11 protocol guideline: Stakeholder Input into Design."
+                        },
+                        {
+                          "code": "C218536",
+                          "display": "ICH M11 Protocol Section 4.2 Rationale for Trial Design",
+                          "definition": "The title of section 4.2 of the ICH M11 protocol guideline: Rationale for Trial Design."
+                        },
+                        {
+                          "code": "C218537",
+                          "display": "ICH M11 Protocol Section 4.2.1 Rationale for Estimand(s)",
+                          "definition": "The title of section 4.2.1 of the ICH M11 protocol guideline: Rationale for Estimand(s)."
+                        },
+                        {
+                          "code": "C218538",
+                          "display": "ICH M11 Protocol Section 4.2.2 Rationale for Intervention Model",
+                          "definition": "The title of section 4.2.2 of the ICH M11 protocol guideline: Rationale for Intervention Model."
+                        },
+                        {
+                          "code": "C218539",
+                          "display": "ICH M11 Protocol Section 4.2.3 Rationale for Control Type",
+                          "definition": "The title of section 4.2.3 of the ICH M11 protocol guideline: Rationale for Control Type."
+                        },
+                        {
+                          "code": "C218540",
+                          "display": "ICH M11 Protocol Section 4.2.4 Rationale for Trial Duration",
+                          "definition": "The title of section 4.2.4 of the ICH M11 protocol guideline: Rationale for Trial Duration."
+                        },
+                        {
+                          "code": "C218541",
+                          "display": "ICH M11 Protocol Section 4.2.5 Rationale for Adaptive or Novel Trial Design",
+                          "definition": "The title of section 4.2.5 of the ICH M11 protocol guideline: Rationale for Adaptive or Novel Trial Design."
+                        },
+                        {
+                          "code": "C218542",
+                          "display": "ICH M11 Protocol Section 4.2.6 Rationale for Interim Analysis",
+                          "definition": "The title of section 4.2.6 of the ICH M11 protocol guideline: Rationale for Interim Analysis."
+                        },
+                        {
+                          "code": "C218543",
+                          "display": "ICH M11 Protocol Section 4.2.7 Rationale for Other Trial Design Aspects",
+                          "definition": "The title of section 4.2.7 of the ICH M11 protocol guideline: Rationale for Other Trial Design Aspects."
+                        },
+                        {
+                          "code": "C218544",
+                          "display": "ICH M11 Protocol Section 4.3 Trial Stopping Rules",
+                          "definition": "The title of section 4.3 of the ICH M11 protocol guideline: Trial Stopping Rules."
+                        },
+                        {
+                          "code": "C218545",
+                          "display": "ICH M11 Protocol Section 4.4 Start of Trial and End of Trial",
+                          "definition": "The title of section 4.4 of the ICH M11 protocol guideline: Start of Trial and End of Trial."
+                        },
+                        {
+                          "code": "C218546",
+                          "display": "ICH M11 Protocol Section 4.5 Access to Trial Intervention After End of Trial",
+                          "definition": "The title of section 4.5 of the ICH M11 protocol guideline: Access to Trial Intervention After End of Trial."
+                        },
+                        {
+                          "code": "C218547",
+                          "display": "ICH M11 Protocol Section 5 TRIAL POPULATION",
+                          "definition": "The title of section 5 of the ICH M11 protocol guideline: TRIAL POPULATION."
+                        },
+                        {
+                          "code": "C218548",
+                          "display": "ICH M11 Protocol Section 5.1 Description of Trial Population and Rationale",
+                          "definition": "The title of section 5.1 of the ICH M11 protocol guideline: Description of Trial Population and Rationale."
+                        },
+                        {
+                          "code": "C218549",
+                          "display": "ICH M11 Protocol Section 5.2 Inclusion Criteria",
+                          "definition": "The title of section 5.2 of the ICH M11 protocol guideline: Inclusion Criteria."
+                        },
+                        {
+                          "code": "C218550",
+                          "display": "ICH M11 Protocol Section 5.3 Exclusion Criteria",
+                          "definition": "The title of section 5.3 of the ICH M11 protocol guideline: Exclusion Criteria."
+                        },
+                        {
+                          "code": "C218551",
+                          "display": "ICH M11 Protocol Section 5.4 Contraception",
+                          "definition": "The title of section 5.4 of the ICH M11 protocol guideline: Contraception."
+                        },
+                        {
+                          "code": "C218552",
+                          "display": "ICH M11 Protocol Section 5.4.1 Definitions Related to Childbearing Potential",
+                          "definition": "The title of section 5.4.1 of the ICH M11 protocol guideline: Definitions Related to Childbearing Potential."
+                        },
+                        {
+                          "code": "C218553",
+                          "display": "ICH M11 Protocol Section 5.4.2 Contraception Requirements",
+                          "definition": "The title of section 5.4.2 of the ICH M11 protocol guideline: Contraception Requirements."
+                        },
+                        {
+                          "code": "C218554",
+                          "display": "ICH M11 Protocol Section 5.5 Lifestyle Restrictions",
+                          "definition": "The title of section 5.5 of the ICH M11 protocol guideline: Lifestyle Restrictions."
+                        },
+                        {
+                          "code": "C218555",
+                          "display": "ICH M11 Protocol Section 5.5.1 Meals and Dietary Restrictions",
+                          "definition": "The title of section 5.5.1 of the ICH M11 protocol guideline: Meals and Dietary Restrictions."
+                        },
+                        {
+                          "code": "C218556",
+                          "display": "ICH M11 Protocol Section 5.5.2 Caffeine, Alcohol, Tobacco, and Other Restrictions",
+                          "definition": "The title of section 5.5.2 of the ICH M11 protocol guideline: Caffeine, Alcohol, Tobacco, and Other Restrictions."
+                        },
+                        {
+                          "code": "C218557",
+                          "display": "ICH M11 Protocol Section 5.5.3 Physical Activity Restrictions",
+                          "definition": "The title of section 5.5.3 of the ICH M11 protocol guideline: Physical Activity Restrictions."
+                        },
+                        {
+                          "code": "C218558",
+                          "display": "ICH M11 Protocol Section 5.5.4 Other Activity Restrictions",
+                          "definition": "The title of section 5.5.4 of the ICH M11 protocol guideline: Other Activity Restrictions."
+                        },
+                        {
+                          "code": "C218559",
+                          "display": "ICH M11 Protocol Section 5.6 Screen Failure and Rescreening",
+                          "definition": "The title of section 5.6 of the ICH M11 protocol guideline: Screen Failure and Rescreening."
+                        },
+                        {
+                          "code": "C218560",
+                          "display": "ICH M11 Protocol Section 6 TRIAL INTERVENTION AND CONCOMITANT THERAPY",
+                          "definition": "The title of section 6 of the ICH M11 protocol guideline: TRIAL INTERVENTION AND CONCOMITANT THERAPY."
+                        },
+                        {
+                          "code": "C218561",
+                          "display": "ICH M11 Protocol Section 6.1 Description of Investigational Trial Intervention",
+                          "definition": "The title of section 6.1 of the ICH M11 protocol guideline: Description of Investigational Trial Intervention."
+                        },
+                        {
+                          "code": "C218580",
+                          "display": "ICH M11 Protocol Section 6.10 Concomitant Therapy",
+                          "definition": "The title of section 6.10 of the ICH M11 protocol guideline: Concomitant Therapy."
+                        },
+                        {
+                          "code": "C218581",
+                          "display": "ICH M11 Protocol Section 6.10.1 Prohibited Concomitant Therapy",
+                          "definition": "The title of section 6.10.1 of the ICH M11 protocol guideline: Prohibited Concomitant Therapy."
+                        },
+                        {
+                          "code": "C218582",
+                          "display": "ICH M11 Protocol Section 6.10.2 Permitted Concomitant Therapy",
+                          "definition": "The title of section 6.10.2 of the ICH M11 protocol guideline: Permitted Concomitant Therapy."
+                        },
+                        {
+                          "code": "C218562",
+                          "display": "ICH M11 Protocol Section 6.2 Rationale for Investigational Trial Intervention Dose and Regimen",
+                          "definition": "The title of section 6.2 of the ICH M11 protocol guideline: Rationale for Investigational Trial Intervention Dose and Regimen."
+                        },
+                        {
+                          "code": "C218563",
+                          "display": "ICH M11 Protocol Section 6.3 Investigational Trial Intervention Administration",
+                          "definition": "The title of section 6.3 of the ICH M11 protocol guideline: Investigational Trial Intervention Administration."
+                        },
+                        {
+                          "code": "C218564",
+                          "display": "ICH M11 Protocol Section 6.4 Investigational Trial Intervention Dose Modification",
+                          "definition": "The title of section 6.4 of the ICH M11 protocol guideline: Investigational Trial Intervention Dose Modification."
+                        },
+                        {
+                          "code": "C218565",
+                          "display": "ICH M11 Protocol Section 6.5 Management of Investigational Trial Intervention Overdose",
+                          "definition": "The title of section 6.5 of the ICH M11 protocol guideline: Management of Investigational Trial Intervention Overdose."
+                        },
+                        {
+                          "code": "C218566",
+                          "display": "ICH M11 Protocol Section 6.6 Preparation, Storage, Handling and Accountability of Investigational Trial Intervention",
+                          "definition": "The title of section 6.6 of the ICH M11 protocol guideline: Preparation, Storage, Handling and Accountability of Investigational Trial Intervention."
+                        },
+                        {
+                          "code": "C218567",
+                          "display": "ICH M11 Protocol Section 6.6.1 Preparation of Investigational Trial Intervention",
+                          "definition": "The title of section 6.6.1 of the ICH M11 protocol guideline: Preparation of Investigational Trial Intervention."
+                        },
+                        {
+                          "code": "C218568",
+                          "display": "ICH M11 Protocol Section 6.6.2 Storage and Handling of Investigational Trial Intervention",
+                          "definition": "The title of section 6.6.2 of the ICH M11 protocol guideline: Storage and Handling of Investigational Trial Intervention."
+                        },
+                        {
+                          "code": "C218569",
+                          "display": "ICH M11 Protocol Section 6.6.3 Accountability of Investigational Trial Intervention",
+                          "definition": "The title of section 6.6.3 of the ICH M11 protocol guideline: Accountability of Investigational Trial Intervention."
+                        },
+                        {
+                          "code": "C218570",
+                          "display": "ICH M11 Protocol Section 6.7 Investigational Trial Intervention Assignment, Randomisation and Blinding",
+                          "definition": "The title of section 6.7 of the ICH M11 protocol guideline: Investigational Trial Intervention Assignment, Randomisation and Blinding."
+                        },
+                        {
+                          "code": "C218571",
+                          "display": "ICH M11 Protocol Section 6.7.1 Participant Assignment to Investigational Trial Intervention",
+                          "definition": "The title of section 6.7.1 of the ICH M11 protocol guideline: Participant Assignment to Investigational Trial Intervention."
+                        },
+                        {
+                          "code": "C218572",
+                          "display": "ICH M11 Protocol Section 6.7.2 Randomisation",
+                          "definition": "The title of section 6.7.2 of the ICH M11 protocol guideline: Randomisation."
+                        },
+                        {
+                          "code": "C218573",
+                          "display": "ICH M11 Protocol Section 6.7.3 Measures to Maintain Blinding",
+                          "definition": "The title of section 6.7.3 of the ICH M11 protocol guideline: Measures to Maintain Blinding."
+                        },
+                        {
+                          "code": "C218574",
+                          "display": "ICH M11 Protocol Section 6.7.4 Emergency Unblinding at the Site",
+                          "definition": "The title of section 6.7.4 of the ICH M11 protocol guideline: Emergency Unblinding at the Site."
+                        },
+                        {
+                          "code": "C218575",
+                          "display": "ICH M11 Protocol Section 6.8 Investigational Trial Intervention Adherence",
+                          "definition": "The title of section 6.8 of the ICH M11 protocol guideline: Investigational Trial Intervention Adherence."
+                        },
+                        {
+                          "code": "C218576",
+                          "display": "ICH M11 Protocol Section 6.9 Description of Noninvestigational Trial Intervention",
+                          "definition": "The title of section 6.9 of the ICH M11 protocol guideline: Description of Noninvestigational Trial Intervention."
+                        },
+                        {
+                          "code": "C218577",
+                          "display": "ICH M11 Protocol Section 6.9.1 Background Trial Intervention",
+                          "definition": "The title of section 6.9.1 of the ICH M11 protocol guideline: Background Trial Intervention."
+                        },
+                        {
+                          "code": "C218578",
+                          "display": "ICH M11 Protocol Section 6.9.2 Rescue Therapy",
+                          "definition": "The title of section 6.9.2 of the ICH M11 protocol guideline: Rescue Therapy."
+                        },
+                        {
+                          "code": "C218579",
+                          "display": "ICH M11 Protocol Section 6.9.3 Other Noninvestigational Trial Intervention",
+                          "definition": "The title of section 6.9.3 of the ICH M11 protocol guideline: Other Noninvestigational Trial Intervention."
+                        },
+                        {
+                          "code": "C218583",
+                          "display": "ICH M11 Protocol Section 7 PARTICIPANT DISCONTINUATION OF TRIAL INTERVENTION AND DISCONTINUATION OR WITHDRAWAL FROM TRIAL",
+                          "definition": "The title of section 7 of the ICH M11 protocol guideline: PARTICIPANT DISCONTINUATION OF TRIAL INTERVENTION AND DISCONTINUATION OR WITHDRAWAL FROM TRIAL."
+                        },
+                        {
+                          "code": "C218584",
+                          "display": "ICH M11 Protocol Section 7.1 Discontinuation of Trial Intervention for Individual Participants",
+                          "definition": "The title of section 7.1 of the ICH M11 protocol guideline: Discontinuation of Trial Intervention for Individual Participants."
+                        },
+                        {
+                          "code": "C218585",
+                          "display": "ICH M11 Protocol Section 7.1.1 Permanent Discontinuation of Trial Intervention",
+                          "definition": "The title of section 7.1.1 of the ICH M11 protocol guideline: Permanent Discontinuation of Trial Intervention."
+                        },
+                        {
+                          "code": "C218586",
+                          "display": "ICH M11 Protocol Section 7.1.2 Temporary Discontinuation of Trial Intervention",
+                          "definition": "The title of section 7.1.2 of the ICH M11 protocol guideline: Temporary Discontinuation of Trial Intervention."
+                        },
+                        {
+                          "code": "C218587",
+                          "display": "ICH M11 Protocol Section 7.1.3 Rechallenge",
+                          "definition": "The title of section 7.1.3 of the ICH M11 protocol guideline: Rechallenge."
+                        },
+                        {
+                          "code": "C218588",
+                          "display": "ICH M11 Protocol Section 7.2 Participant Discontinuation or Withdrawal from the Trial",
+                          "definition": "The title of section 7.2 of the ICH M11 protocol guideline: Participant Discontinuation or Withdrawal from the Trial."
+                        },
+                        {
+                          "code": "C218589",
+                          "display": "ICH M11 Protocol Section 7.3 Management of Loss to Follow-Up",
+                          "definition": "The title of section 7.3 of the ICH M11 protocol guideline: Management of Loss to Follow-Up."
+                        },
+                        {
+                          "code": "C218590",
+                          "display": "ICH M11 Protocol Section 8 TRIAL ASSESSMENTS AND PROCEDURES",
+                          "definition": "The title of section 8 of the ICH M11 protocol guideline: TRIAL ASSESSMENTS AND PROCEDURES."
+                        },
+                        {
+                          "code": "C218591",
+                          "display": "ICH M11 Protocol Section 8.1 Trial Assessments and Procedures Considerations",
+                          "definition": "The title of section 8.1 of the ICH M11 protocol guideline: Trial Assessments and Procedures Considerations."
+                        },
+                        {
+                          "code": "C218592",
+                          "display": "ICH M11 Protocol Section 8.2 Screening/Baseline Assessments and Procedures",
+                          "definition": "The title of section 8.2 of the ICH M11 protocol guideline: Screening/Baseline Assessments and Procedures."
+                        },
+                        {
+                          "code": "C218593",
+                          "display": "ICH M11 Protocol Section 8.3 Efficacy Assessments and Procedures",
+                          "definition": "The title of section 8.3 of the ICH M11 protocol guideline: Efficacy Assessments and Procedures."
+                        },
+                        {
+                          "code": "C218594",
+                          "display": "ICH M11 Protocol Section 8.4 Safety Assessments and Procedures",
+                          "definition": "The title of section 8.4 of the ICH M11 protocol guideline: Safety Assessments and Procedures."
+                        },
+                        {
+                          "code": "C218595",
+                          "display": "ICH M11 Protocol Section 8.4.1 Physical Examination",
+                          "definition": "The title of section 8.4.1 of the ICH M11 protocol guideline: Physical Examination."
+                        },
+                        {
+                          "code": "C218596",
+                          "display": "ICH M11 Protocol Section 8.4.2 Vital Signs",
+                          "definition": "The title of section 8.4.2 of the ICH M11 protocol guideline: Vital Signs."
+                        },
+                        {
+                          "code": "C218597",
+                          "display": "ICH M11 Protocol Section 8.4.3 Electrocardiograms",
+                          "definition": "The title of section 8.4.3 of the ICH M11 protocol guideline: Electrocardiograms."
+                        },
+                        {
+                          "code": "C218598",
+                          "display": "ICH M11 Protocol Section 8.4.4 Clinical Laboratory Assessments",
+                          "definition": "The title of section 8.4.4 of the ICH M11 protocol guideline: Clinical Laboratory Assessments."
+                        },
+                        {
+                          "code": "C218599",
+                          "display": "ICH M11 Protocol Section 8.4.5 Pregnancy Testing",
+                          "definition": "The title of section 8.4.5 of the ICH M11 protocol guideline: Pregnancy Testing."
+                        },
+                        {
+                          "code": "C218600",
+                          "display": "ICH M11 Protocol Section 8.4.6 Suicidal Ideation and Behaviour Risk Monitoring",
+                          "definition": "The title of section 8.4.6 of the ICH M11 protocol guideline: Suicidal Ideation and Behaviour Risk Monitoring."
+                        },
+                        {
+                          "code": "C218601",
+                          "display": "ICH M11 Protocol Section 8.5 Pharmacokinetics",
+                          "definition": "The title of section 8.5 of the ICH M11 protocol guideline: Pharmacokinetics."
+                        },
+                        {
+                          "code": "C218602",
+                          "display": "ICH M11 Protocol Section 8.6 Biomarkers",
+                          "definition": "The title of section 8.6 of the ICH M11 protocol guideline: Biomarkers."
+                        },
+                        {
+                          "code": "C218603",
+                          "display": "ICH M11 Protocol Section 8.6.1 Genetics, Genomics, Pharmacogenetics and Pharmacogenomics",
+                          "definition": "The title of section 8.6.1 of the ICH M11 protocol guideline: Genetics, Genomics, Pharmacogenetics and Pharmacogenomics."
+                        },
+                        {
+                          "code": "C218604",
+                          "display": "ICH M11 Protocol Section 8.6.2 Pharmacodynamic Biomarkers",
+                          "definition": "The title of section 8.6.2 of the ICH M11 protocol guideline: Pharmacodynamic Biomarkers."
+                        },
+                        {
+                          "code": "C218605",
+                          "display": "ICH M11 Protocol Section 8.6.3 Other Biomarkers",
+                          "definition": "The title of section 8.6.3 of the ICH M11 protocol guideline: Other Biomarkers."
+                        },
+                        {
+                          "code": "C218606",
+                          "display": "ICH M11 Protocol Section 8.7 Immunogenicity Assessments",
+                          "definition": "The title of section 8.7 of the ICH M11 protocol guideline: Immunogenicity Assessments."
+                        },
+                        {
+                          "code": "C218607",
+                          "display": "ICH M11 Protocol Section 8.8 Medical Resource Utilisation and Health Economics",
+                          "definition": "The title of section 8.8 of the ICH M11 protocol guideline: Medical Resource Utilisation and Health Economics."
+                        },
+                        {
+                          "code": "C218608",
+                          "display": "ICH M11 Protocol Section 9 ADVERSE EVENTS, SERIOUS ADVERSE EVENTS, PRODUCT COMPLAINTS, PREGNANCY AND POSTPARTUM INFORMATION, AND SPECIAL SAFETY SITUATIONS",
+                          "definition": "The title of section 9 of the ICH M11 protocol guideline: ADVERSE EVENTS, SERIOUS ADVERSE EVENTS, PRODUCT COMPLAINTS, PREGNANCY AND POSTPARTUM INFORMATION, AND SPECIAL SAFETY SITUATIONS."
+                        },
+                        {
+                          "code": "C218609",
+                          "display": "ICH M11 Protocol Section 9.1 Definitions",
+                          "definition": "The title of section 9.1 of the ICH M11 protocol guideline: Definitions."
+                        },
+                        {
+                          "code": "C218610",
+                          "display": "ICH M11 Protocol Section 9.1.1 Definitions of Adverse Events",
+                          "definition": "The title of section 9.1.1 of the ICH M11 protocol guideline: Definitions of Adverse Events."
+                        },
+                        {
+                          "code": "C218611",
+                          "display": "ICH M11 Protocol Section 9.1.2 Definitions of Serious Adverse Events",
+                          "definition": "The title of section 9.1.2 of the ICH M11 protocol guideline: Definitions of Serious Adverse Events."
+                        },
+                        {
+                          "code": "C218612",
+                          "display": "ICH M11 Protocol Section 9.1.3 Definitions of Product Complaints",
+                          "definition": "The title of section 9.1.3 of the ICH M11 protocol guideline: Definitions of Product Complaints."
+                        },
+                        {
+                          "code": "C218613",
+                          "display": "ICH M11 Protocol Section 9.1.3.1 Definitions of Medical Device Product Complaints",
+                          "definition": "The title of section 9.1.3.1 of the ICH M11 protocol guideline: Definitions of Medical Device Product Complaints."
+                        },
+                        {
+                          "code": "C218614",
+                          "display": "ICH M11 Protocol Section 9.2 Timing and Procedures for Collection and Reporting",
+                          "definition": "The title of section 9.2 of the ICH M11 protocol guideline: Timing and Procedures for Collection and Reporting."
+                        },
+                        {
+                          "code": "C218615",
+                          "display": "ICH M11 Protocol Section 9.2.1 Timing",
+                          "definition": "The title of section 9.2.1 of the ICH M11 protocol guideline: Timing."
+                        },
+                        {
+                          "code": "C218616",
+                          "display": "ICH M11 Protocol Section 9.2.2 Collection Procedures",
+                          "definition": "The title of section 9.2.2 of the ICH M11 protocol guideline: Collection Procedures."
+                        },
+                        {
+                          "code": "C218617",
+                          "display": "ICH M11 Protocol Section 9.2.3 Reporting",
+                          "definition": "The title of section 9.2.3 of the ICH M11 protocol guideline: Reporting."
+                        },
+                        {
+                          "code": "C218618",
+                          "display": "ICH M11 Protocol Section 9.2.3.1 Regulatory Reporting Requirements",
+                          "definition": "The title of section 9.2.3.1 of the ICH M11 protocol guideline: Regulatory Reporting Requirements."
+                        },
+                        {
+                          "code": "C218619",
+                          "display": "ICH M11 Protocol Section 9.2.4 Adverse Events of Special Interest",
+                          "definition": "The title of section 9.2.4 of the ICH M11 protocol guideline: Adverse Events of Special Interest."
+                        },
+                        {
+                          "code": "C218620",
+                          "display": "ICH M11 Protocol Section 9.2.5 Disease-related Events or Outcomes Not Qualifying as AEs or SAEs",
+                          "definition": "The title of section 9.2.5 of the ICH M11 protocol guideline: Disease-related Events or Outcomes Not Qualifying as AEs or SAEs."
+                        },
+                        {
+                          "code": "C218621",
+                          "display": "ICH M11 Protocol Section 9.3 Pregnancy and Postpartum Information",
+                          "definition": "The title of section 9.3 of the ICH M11 protocol guideline: Pregnancy and Postpartum Information."
+                        },
+                        {
+                          "code": "C218622",
+                          "display": "ICH M11 Protocol Section 9.3.1 Participants Who Become Pregnant During the Trial",
+                          "definition": "The title of section 9.3.1 of the ICH M11 protocol guideline: Participants Who Become Pregnant During the Trial."
+                        },
+                        {
+                          "code": "C218623",
+                          "display": "ICH M11 Protocol Section 9.3.2 Participants Whose Partners Become Pregnant During the Trial",
+                          "definition": "The title of section 9.3.2 of the ICH M11 protocol guideline: Participants Whose Partners Become Pregnant During the Trial."
+                        },
+                        {
+                          "code": "C218624",
+                          "display": "ICH M11 Protocol Section 9.4 Special Safety Situations",
+                          "definition": "The title of section 9.4 of the ICH M11 protocol guideline: Special Safety Situations."
+                        },
+                        {
+                          "code": "C222770",
+                          "display": "ICH M11 Protocol Section Amendment Details",
+                          "definition": "The title of the amendment details section of the ICH M11 protocol guideline: Amendment Details."
+                        },
+                        {
+                          "code": "C222769",
+                          "display": "ICH M11 Protocol Section Title Page",
+                          "definition": "Title Page Section of the ICH M11 Protocol standard, Title Page."
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-fmm",
+      "valueInteger": 2
+    }
+  ],
+  "copyright": "Portions of this material derives from the ICH M11 Harmonised Guideline CeSHarP. \nThe ICH M11 Harmonised Guideline CeSHarP is copyright ©2025+ International Committee on Harmonisation and is made available under license. \n\nCDISC publishes semantics for the ICH M11 protocol data elements and valid \nvalue sets. This terminology set is published and stored in the NCI Thesaurus \nSubset C217023 - ICH M11 Terminology \n(https://evsexplore.semantics.cancer.gov/evsexplore/subset/ncit/C217023) \n\nThe NCI Thesaurus is released under the CC BY 4.0 license\n\nFor more licensing information and links see: [licenses.html](licenses.html)",
+  "version": "26.02D",
+  "publisher": "NCI",
+  "experimental": false,
+  "caseSensitive": false,
+  "hierarchyMeaning": "part-of"
+}

@@ -1,0 +1,107 @@
+@page "/test"
+@layout MainLayout
+@using UDP_App.Models
+@using UDP_App.Services
+@inject DataService05 DataSvc
+@inject IJSRuntime JS
+
+<PageTitle>Test – Groups Component</PageTitle>
+
+<style>
+    .test-page { max-width:960px; margin:30px auto 80px; padding:24px; font-family:'Calibri',Arial,sans-serif; }
+    .test-page h1 { font-family:'Times New Roman',Times,serif; font-size:16pt; font-weight:700; margin-bottom:16px; }
+    .toolbar { display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap; }
+    .btn { padding:7px 18px; border:none; border-radius:3px; font-size:10pt; font-family:inherit; cursor:pointer; }
+    .btn-primary   { background:#1f3864; color:#fff; } .btn-primary:hover { background:#162a4e; }
+    .btn-secondary { background:#00B050; color:#fff; } .btn-secondary:hover { background:#008a3e; }
+</style>
+
+<div class="test-page">
+    <h1>Test Page – Groups Component</h1>
+    <div class="toolbar">
+        <button class="btn btn-secondary" @onclick="LoadSample">Load Sample Data</button>
+        <button class="btn btn-secondary" @onclick="@(() => _showValidation = true)">Validate</button>
+        <button class="btn btn-primary"   @onclick="SaveFhir">⬇ Save to FHIR</button>
+    </div>
+    <Groups Title="Test Groups"
+            GroupLabel="Group"
+            Data="@GroupData"
+            Rows="@GroupRows"
+            ShowValidation="@_showValidation"
+            OnDataChanged="@StateHasChanged"
+            OnRowAdded="@(row => { if (!GroupRows.Contains(row)) GroupRows.Add(row); })" />
+</div>
+
+@code {
+    private bool _showValidation = false;
+    private Dictionary<string, string> GroupData = new();
+    private List<int> GroupRows = new() { 1 };
+
+    protected override void OnInitialized()
+    {
+        // Default: one group, one Quantity characteristic
+        GroupData["CharOrder_r1"]       = "1";
+        GroupData["char_fmt_r1_c1"]     = "qty";
+        GroupData["char_exclude_r1_c1"] = "false";
+    }
+
+    private void LoadSample()
+    {
+        GroupData = new Dictionary<string, string>
+        {
+            ["name_r1"]              = "inclusion-age",
+            ["title_r1"]             = "Age Inclusion Criterion",
+            ["description_r1"]       = "Participants must be aged 18 to 75 years.",
+            ["type_r1"]              = "#person",
+            ["membership_r1"]        = "#definitional",
+            ["combinationMethod_r1"] = "#all-of",
+            ["CharOrder_r1"]         = "1,2,3,4",
+
+            // Characteristic 1 — Range
+            ["char_fmt_r1_c1"]         = "range",
+            ["char_code_r1_c1"]        = "$SCT#397669002 \"Age\"",
+            ["char_low_r1_c1"]         = "18 'a' \"years\"",
+            ["char_high_r1_c1"]        = "75 'a' \"years\"",
+            ["char_exclude_r1_c1"]     = "false",
+            ["char_desc_r1_c1"]        = "aged 18 to 75 years",
+
+            // Characteristic 2 — Type
+            ["char_fmt_r1_c2"]         = "type",
+            ["char_code_r1_c2"]        = "$SCT#248153007 \"Male\"",
+            ["char_type_r1_c2"]        = "#male",
+            ["char_exclude_r1_c2"]     = "false",
+            ["char_desc_r1_c2"]        = "male or female",
+
+            // Characteristic 3 — Boolean
+            ["char_fmt_r1_c3"]         = "bool",
+            ["char_code_r1_c3"]        = "$SCT#182992009 \"Consenting\"",
+            ["char_bool_r1_c3"]        = "true",
+            ["char_exclude_r1_c3"]     = "false",
+            ["char_desc_r1_c3"]        = "participant has consented",
+
+            // Characteristic 4 — Quantity
+            ["char_fmt_r1_c4"]         = "qty",
+            ["char_code_r1_c4"]        = "$SCT#27113001 \"Body weight\"",
+            ["char_qty_r1_c4"]         = "40 'kg' \"kilograms\"",
+            ["char_exclude_r1_c4"]     = "false",
+            ["char_desc_r1_c4"]        = "body weight at least 40 kg",
+        };
+        GroupRows = new List<int> { 1 };
+        StateHasChanged();
+    }
+
+    private async Task SaveFhir()
+    {
+        var model = new Section05Model
+        {
+            InclRows = GroupRows.Count,
+            InclData = new Dictionary<string, string>(GroupData),
+            ExclRows = 0,
+            ExclData = new Dictionary<string, string>(),
+        };
+        var (std, r5) = DataSvc.ToFsh(model);
+        var baseName = "test_groups_" + DateTime.Now.ToString("yyyy-MM-dd");
+        await JS.InvokeVoidAsync("udpDownload", baseName + ".fsh",      std, "text/plain");
+        await JS.InvokeVoidAsync("udpDownload", baseName + "_R5" + ".fsh", r5, "text/plain");
+    }
+}
