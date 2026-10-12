@@ -40,6 +40,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="SushiProject\fsh-generated\data\" />
+    <Folder Include="SushiProject\fsh-generated\includes\" />
+    <Folder Include="SushiProject\fsh-generated\resources\" />
     <Folder Include="SushiProject\input\fsh\Examples\" />
   </ItemGroup>
 
