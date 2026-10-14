@@ -1,0 +1,231 @@
+@page "/terminology"
+@layout MainLayout
+@using UDP_App.Models
+@using UDP_App.Services
+@inject TerminologyService TermSvc
+@inject IJSRuntime JS
+@implements IDisposable
+
+<PageTitle>Terminology – Picklist Definitions</PageTitle>
+
+<style>
+    .term-page { max-width: 860px; margin: 30px auto 80px; font-family: 'Calibri', Arial, sans-serif; font-size: 11pt; color: #000; }
+    .term-h1   { font-family: 'Times New Roman', Times, serif; font-size: 14pt; font-weight: 700; margin: 0 0 6px; color: #1f3864; }
+    .term-h2   { font-family: 'Times New Roman', Times, serif; font-size: 12pt; font-weight: 700; margin: 24px 0 8px; color: #1f3864; }
+    .vs-card   { border: 1px solid #bbb; border-radius: 5px; margin-bottom: 20px; background: #fafafa; }
+    .vs-hdr    { background: #1f3864; color: #fff; padding: 8px 14px; border-radius: 4px 4px 0 0; display: flex; align-items: baseline; gap: 12px; }
+    .vs-id     { font-size: 9.5pt; opacity: 0.75; }
+    .vs-desc   { padding: 6px 14px 4px; font-size: 9.5pt; color: #555; font-style: italic; }
+    .opt-tbl   { width: 100%; border-collapse: collapse; font-size: 10pt; }
+    .opt-tbl th { background: #e8ecf5; color: #1f3864; font-weight: 700; padding: 5px 10px; text-align: left; border-bottom: 1px solid #bbb; }
+    .opt-tbl td { padding: 5px 10px; border-bottom: 1px solid #e4e4e4; vertical-align: middle; }
+    .opt-tbl tr:last-child td { border-bottom: none; }
+    .code-badge { background: #e8ecf5; color: #1f3864; border-radius: 3px; padding: 1px 6px; font-size: 9pt; font-family: monospace; }
+    .fsh-val   { color: #888; font-size: 9pt; font-family: monospace; }
+    .act-btn   { background: none; border: 1px solid #bbb; border-radius: 3px; padding: 2px 8px; font-size: 9pt; cursor: pointer; color: #444; margin-right: 3px; }
+    .act-btn:hover { background: #eee; }
+    .act-btn.danger { border-color: #c00; color: #c00; }
+    .act-btn.danger:hover { background: #fee; }
+    .add-row   { padding: 10px 14px; background: #f0f4fb; border-top: 1px solid #dde; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .add-row input { background: #d0cece; color: #1a7a1a; border: none; border-bottom: 1.5px solid #999; font-family: 'Calibri', Arial, sans-serif; font-size: 10pt; padding: 2px 6px; outline: none; width: 160px; }
+    .add-row input:focus { background: #bfbcbc; }
+    .add-row label { font-size: 9.5pt; color: #444; white-space: nowrap; }
+    .add-btn   { background: #1f3864; color: #fff; border: none; border-radius: 3px; padding: 4px 14px; font-size: 10pt; cursor: pointer; }
+    .add-btn:hover { background: #162a4e; }
+    .new-vs-section { border: 1px dashed #bbb; border-radius: 5px; padding: 14px 16px; margin-bottom: 24px; background: #f9f9fc; }
+    .new-vs-section h3 { font-size: 11pt; font-weight: 700; color: #1f3864; margin: 0 0 10px; }
+    .field-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 8px; }
+    .field-row label { font-size: 9.5pt; color: #444; min-width: 90px; }
+    .field-row input { background: #d0cece; color: #1a7a1a; border: none; border-bottom: 1.5px solid #999; font-family: 'Calibri', Arial, sans-serif; font-size: 10pt; padding: 2px 6px; outline: none; width: 220px; }
+    .field-row input:focus { background: #bfbcbc; }
+    .toolbar { display: flex; justify-content: flex-end; gap: 10px; margin-top: 16px; }
+    .btn { padding: 7px 20px; border: none; border-radius: 3px; font-size: 10pt; font-family: inherit; cursor: pointer; }
+    .btn-primary   { background: #1f3864; color: #fff; } .btn-primary:hover { background: #162a4e; }
+    .btn-secondary { background: #eee; color: #333; border: 1px solid #ccc; } .btn-secondary:hover { background: #ddd; }
+    .sbar { position: fixed; bottom: 0; left: 0; right: 0; background: #1f3864; color: #fff; font-size: 9pt; padding: 5px 18px; display: flex; justify-content: space-between; align-items: center; z-index: 100; }
+    .msg-ok  { color: #7fda7f; }
+    .msg-err { color: #ffaaaa; }
+    .note { font-size: 9.5pt; color: #666; margin-bottom: 16px; }
+</style>
+
+<div class="term-page">
+    <div class="term-h1">Terminology – Picklist Definitions</div>
+    <p class="note">
+        Value sets defined here are shared across all sections. Changes take effect immediately
+        in any open section page. Add new value sets below, or edit options within existing ones.
+    </p>
+
+    @foreach (var vs in TermSvc.AllValueSets)
+    {
+        var vsId = vs.Id; // capture for lambdas
+        <div class="vs-card">
+            <div class="vs-hdr">
+                <span>@vs.Name</span>
+                <span class="vs-id">@vs.Id</span>
+            </div>
+            @if (!string.IsNullOrEmpty(vs.Description))
+            {
+                <div class="vs-desc">@vs.Description</div>
+            }
+
+            <table class="opt-tbl">
+                <thead>
+                    <tr>
+                        <th>Display</th>
+                        <th>System</th>
+                        <th>Code</th>
+                        <th>FSH value</th>
+                        <th style="width:130px">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var opt in vs.Options)
+                    {
+                        var code = opt.Code; // capture for lambdas
+                        <tr>
+                            <td>@opt.Display</td>
+                            <td><span class="code-badge">@opt.System</span></td>
+                            <td><span class="code-badge">@opt.Code</span></td>
+                            <td><span class="fsh-val">@opt.FshValue</span></td>
+                            <td>
+                                <button class="act-btn" title="Move up"
+                                    @onclick="() => Move(vsId, code, -1)">▲</button>
+                                <button class="act-btn" title="Move down"
+                                    @onclick="() => Move(vsId, code, +1)">▼</button>
+                                <button class="act-btn danger" title="Remove"
+                                    @onclick="() => Remove(vsId, code)">✕</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <!-- Add option row -->
+            <div class="add-row">
+                <label>Add option:</label>
+                <input type="text" placeholder="Display text" @bind="_newDisplay[vsId]" @bind:event="oninput" />
+                <input type="text" placeholder="System (e.g. $NCIT)" @bind="_newSystem[vsId]" @bind:event="oninput" style="width:110px" />
+                <input type="text" placeholder="Code (e.g. C12345)" @bind="_newCode[vsId]" @bind:event="oninput" />
+                <button class="add-btn" @onclick="() => AddOption(vsId)">+ Add</button>
+            </div>
+        </div>
+    }
+
+    <!-- New value set form -->
+    <div class="new-vs-section">
+        <h3>+ New Value Set</h3>
+        <div class="field-row">
+            <label>ID:</label>
+            <input type="text" placeholder="e.g. C217277" @bind="_newVsId" @bind:event="oninput" />
+        </div>
+        <div class="field-row">
+            <label>Name:</label>
+            <input type="text" placeholder="e.g. Intervention Model" @bind="_newVsName" @bind:event="oninput" />
+        </div>
+        <div class="field-row">
+            <label>Description:</label>
+            <input type="text" placeholder="(optional)" @bind="_newVsDesc" @bind:event="oninput" style="width:380px" />
+        </div>
+        <div class="toolbar">
+            <button class="btn btn-secondary" @onclick="ClearNewVsForm">Clear</button>
+            <button class="btn btn-primary" @onclick="CreateValueSet">Create Value Set</button>
+        </div>
+    </div>
+
+</div>
+
+<div class="sbar">
+    <span>Terminology – Shared Picklist Definitions</span>
+    <span class="@StatusCss">@StatusMessage</span>
+</div>
+
+@code {
+    // Per-value-set input buffers for the "add option" rows
+    private Dictionary<string, string> _newDisplay = new();
+    private Dictionary<string, string> _newSystem  = new();
+    private Dictionary<string, string> _newCode    = new();
+
+    // New value set form fields
+    private string _newVsId   = string.Empty;
+    private string _newVsName = string.Empty;
+    private string _newVsDesc = string.Empty;
+
+    private string StatusMessage = string.Empty;
+    private string StatusCss     = "msg-ok";
+    private System.Threading.Timer? _timer;
+
+    protected override void OnInitialized()
+    {
+        // Ensure input buffer entries exist for all seeded value sets
+        foreach (var vs in TermSvc.AllValueSets)
+            EnsureBuffers(vs.Id);
+    }
+
+    private void EnsureBuffers(string vsId)
+    {
+        _newDisplay.TryAdd(vsId, string.Empty);
+        _newSystem.TryAdd(vsId, "$NCIT");
+        _newCode.TryAdd(vsId, string.Empty);
+    }
+
+    private void AddOption(string vsId)
+    {
+        var display = _newDisplay.GetValueOrDefault(vsId, string.Empty).Trim();
+        var system  = _newSystem.GetValueOrDefault(vsId, "$NCIT").Trim();
+        var code    = _newCode.GetValueOrDefault(vsId, string.Empty).Trim();
+        if (string.IsNullOrEmpty(display) || string.IsNullOrEmpty(code))
+        {
+            SetStatus("Both Display and Code are required.", error: true); return;
+        }
+        if (string.IsNullOrEmpty(system)) system = "$NCIT";
+        TermSvc.AddOption(vsId, new PicklistOption { System = system, Code = code, Display = display });
+        _newDisplay[vsId] = string.Empty;
+        _newSystem[vsId]  = "$NCIT";
+        _newCode[vsId]    = string.Empty;
+        SetStatus($"Added '{display}' to {vsId}.");
+    }
+
+    private void Remove(string vsId, string code)
+    {
+        TermSvc.RemoveOption(vsId, code);
+        SetStatus($"Removed {code} from {vsId}.");
+    }
+
+    private void Move(string vsId, string code, int delta)
+    {
+        TermSvc.MoveOption(vsId, code, delta);
+    }
+
+    private void CreateValueSet()
+    {
+        var id   = _newVsId.Trim();
+        var name = _newVsName.Trim();
+        if (string.IsNullOrEmpty(id) || string.IsNullOrEmpty(name))
+        {
+            SetStatus("ID and Name are required.", error: true); return;
+        }
+        TermSvc.Upsert(new ValueSet { Id = id, Name = name, Description = _newVsDesc.Trim() });
+        EnsureBuffers(id);
+        SetStatus($"Created value set {id}.");
+        ClearNewVsForm();
+    }
+
+    private void ClearNewVsForm()
+    {
+        _newVsId = _newVsName = _newVsDesc = string.Empty;
+    }
+
+    private void SetStatus(string msg, bool error = false)
+    {
+        StatusMessage = msg;
+        StatusCss = error ? "msg-err" : "msg-ok";
+        _timer?.Dispose();
+        _timer = new System.Threading.Timer(_ =>
+        {
+            StatusMessage = string.Empty;
+            InvokeAsync(StateHasChanged);
+        }, null, 5000, System.Threading.Timeout.Infinite);
+    }
+
+    public void Dispose() => _timer?.Dispose();
+}

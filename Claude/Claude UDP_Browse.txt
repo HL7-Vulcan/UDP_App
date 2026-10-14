@@ -50,9 +50,3 @@ When the JSON_BLOCKs and BLOCK_IDs have been extracted rebuild them into a singl
 On the build page I now need a button labelled "To Server" and when I click it should use a PUT to send the generated bundle.json file to the server using the server URL, username and password as specified on the setup page
 
 
-objectives
-Prof M11 ResearchStudy
-protocol-summary
-intervention
-M11NarrativeElements
-

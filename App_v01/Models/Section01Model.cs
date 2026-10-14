@@ -28,14 +28,15 @@ public class Section01Model
     [JsonPropertyName("C218705")]  public string? C218705  { get; set; }  // Site Geographic Scope
     [JsonPropertyName("C218707")]  public string? C218707  { get; set; }  // Master Protocol Indicator
     [JsonPropertyName("C218706")]  public string? C218706  { get; set; }  // Adaptive Trial Design Indicator
+    [JsonPropertyName("C218708")]  public string? C218708  { get; set; }  // Drug/Device Combination Product Indicator
     [JsonPropertyName("C98771")]   public string? C98771   { get; set; }  // Number of Arms
     [JsonPropertyName("C49658")]   public string? C49658   { get; set; }  // Trial Blind Schema
-    [JsonPropertyName("C218709")]  public string? C218709  { get; set; }  // Blinded Roles
+    [JsonPropertyName("C218709")]  public List<string> C218709  { get; set; } = new();  // Blinded Roles (multi-value)
     [JsonPropertyName("C218710")]  public string? C218710  { get; set; }  // Target-Maximum
     [JsonPropertyName("C49692")]   public string? C49692   { get; set; }  // Number of Participants
     [JsonPropertyName("C218714")]  public string? C218714  { get; set; }  // Alt duration description
     [JsonPropertyName("C218715")]  public string? C218715  { get; set; }  // Total planned duration participation
-    [JsonPropertyName("C218718")]  public string? C218718  { get; set; }  // Independent Committees
+    [JsonPropertyName("C218718")]  public List<string> C218718  { get; set; } = new();  // Independent Committees (multi-value)
     [JsonPropertyName("C218719")]  public string? C218719  { get; set; }  // Other Committees
 
     // ── Comparator Product (Section_01_Comparator_Product.fsh) ───

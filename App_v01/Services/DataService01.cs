@@ -22,7 +22,11 @@ public class DataService01
             var attr = (System.Text.Json.Serialization.JsonPropertyNameAttribute?)
                 Attribute.GetCustomAttribute(prop, typeof(System.Text.Json.Serialization.JsonPropertyNameAttribute));
             var key = attr?.Name ?? prop.Name;
-            sb.AppendLine($"{key},{CsvEscape(prop.GetValue(model) as string)}");
+            var raw = prop.GetValue(model);
+            string? cell = raw is List<string> list
+                ? string.Join("; ", list)
+                : raw as string;
+            sb.AppendLine($"{key},{CsvEscape(cell)}");
         }
         return sb.ToString();
     }
@@ -49,15 +53,16 @@ public class DataService01
         L("Site Distribution",                    model.C218704);
         L("Site Geographic Scope",                model.C218705);
         L("Master Protocol Indicator",            model.C218707);
+        L("Drug/Device Combination Indicator",    model.C218708);
         L("Adaptive Trial Design Indicator",      model.C218706);
         L("Number of Arms",                       model.C98771);
         L("Trial Blind Schema",                   model.C49658);
-        L("Blinded Roles",                        model.C218709);
+        L("Blinded Roles",                        string.Join("; ", model.C218709));
         L("Target-Maximum",                       model.C218710);
         L("Number of Participants",               model.C49692);
         L("Alt. Duration Description",            model.C218714);
         L("Total Planned Duration (Participation)",model.C218715);
-        L("Independent Committees",               model.C218718);
+        L("Independent Committees",               string.Join("; ", model.C218718));
         L("Other Committees",                     model.C218719);
         sb.AppendLine("── Comparator Product ──");
         L("Comparator Product ID",   model.COMPARATOR_PRODUCT);
@@ -87,7 +92,10 @@ public class DataService01
         })
             main = main.Replace("{{" + k + "}}", v ?? string.Empty);
 
-        // Design table template
+        // Design table template — expand multi-value list fields first, then scalar substitution
+        tbl = ExpandListRepeat(tbl, "C218709", model.C218709);
+        tbl = ExpandListRepeat(tbl, "C218718", model.C218718);
+
         foreach (var (k, v) in new Dictionary<string, string?>
         {
             {"TABLE_X",    tableId},       {"COMPARATOR_PRODUCT", comparatorId},
@@ -98,10 +106,11 @@ public class DataService01
             {"CC223138",   model.CC223138},{"C223136",  model.C223136},
             {"C218704",    model.C218704}, {"C218705",  model.C218705},
             {"C218707",    model.C218707}, {"C218706",  model.C218706},
+            {"C218708",    model.C218708},
             {"C98771",     model.C98771},  {"C49658",   model.C49658},
-            {"C218709",    model.C218709}, {"C218710",  model.C218710},
+            {"C218710",    model.C218710},
             {"C49692",     model.C49692},  {"C218714",  model.C218714},
-            {"C218715",    model.C218715}, {"C218718",  model.C218718},
+            {"C218715",    model.C218715},
             {"C218719",    model.C218719},
         })
             tbl = tbl.Replace("{{" + k + "}}", v ?? string.Empty);
@@ -116,6 +125,62 @@ public class DataService01
             comp = comp.Replace("{{" + k + "}}", v ?? string.Empty);
 
         return main + "\r\n" + tbl + "\r\n" + comp;
+    }
+
+    /// <summary>
+    /// Finds a {{REPEAT ... {{fieldToken}} ...}} block in <paramref name="template"/> and
+    /// expands it once per item in <paramref name="values"/>, substituting {{fieldToken}}
+    /// with each value in turn.  If the list is empty the entire REPEAT block is removed.
+    /// </summary>
+    private static string ExpandListRepeat(string template, string fieldToken, List<string> values)
+    {
+        const string repeatOpen  = "{{REPEAT";
+        const string repeatClose = "}}";
+
+        int start = template.IndexOf(repeatOpen, StringComparison.Ordinal);
+        if (start < 0) return template;
+
+        // Find the matching closing }}
+        int end = template.IndexOf(repeatClose, start + repeatOpen.Length, StringComparison.Ordinal);
+        if (end < 0) return template;
+
+        // The row pattern is the text between {{REPEAT and }}
+        int patternStart = start + repeatOpen.Length;
+        string rowPattern = template.Substring(patternStart, end - patternStart);
+
+        // Only process this REPEAT block if it contains our fieldToken
+        if (!rowPattern.Contains("{{" + fieldToken + "}}"))
+            return template;
+
+        // Consume the trailing newline of the }} line
+        int blockEnd = end + repeatClose.Length;
+        while (blockEnd < template.Length && template[blockEnd] is ' ' or '\t') blockEnd++;
+        if (blockEnd < template.Length && template[blockEnd] == '\r') blockEnd++;
+        if (blockEnd < template.Length && template[blockEnd] == '\n') blockEnd++;
+
+        // Also strip the leading newline/whitespace before {{REPEAT so we don't leave a blank line
+        int blockStart = start;
+        while (blockStart > 0 && template[blockStart - 1] is ' ' or '\t') blockStart--;
+        if (blockStart > 0 && template[blockStart - 1] == '\n') blockStart--;
+        if (blockStart > 0 && template[blockStart - 1] == '\r') blockStart--;
+
+        var sb = new StringBuilder();
+        sb.Append(template, 0, blockStart);
+
+        if (values.Count > 0)
+        {
+            sb.AppendLine(); // restore the newline we stripped above
+            bool first = true;
+            foreach (var value in values)
+            {
+                if (!first) sb.AppendLine();
+                first = false;
+                sb.Append(rowPattern.Replace("{{" + fieldToken + "}}", value));
+            }
+        }
+
+        sb.Append(template, blockEnd, template.Length - blockEnd);
+        return sb.ToString();
     }
 
     public Section01Model? LoadSample()

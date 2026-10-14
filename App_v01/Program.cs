@@ -17,6 +17,7 @@ builder.Services.AddScoped<UDP_App.Services.DataService07>();
 builder.Services.AddScoped<UDP_App.Services.DataService08>();
 builder.Services.AddScoped<UDP_App.Services.DataService09>();
 builder.Services.AddSingleton<UDP_App.Services.SettingsService>();
+builder.Services.AddSingleton<UDP_App.Services.TerminologyService>();
 builder.Services.AddScoped<UDP_App.Services.FhirBrowseService>();
 builder.Services.AddScoped<UDP_App.Services.BuildService>();
 

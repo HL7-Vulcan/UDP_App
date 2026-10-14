@@ -1,0 +1,85 @@
+@*
+    Multi-select picklist with checkbox dropdown, driven by TerminologyService.
+    Selected values are stored as List<string> of FshValues — one entry per selection.
+    Usage:
+        <MultiPicklistSelect ValueSetId="C217281" DataCtx="C218709" @bind-Value="Model.C218709" />
+*@
+@using UDP_App.Models
+@using UDP_App.Services
+@inject TerminologyService TermSvc
+@implements IDisposable
+
+<div class="mpsl-wrap @(Open ? "mpsl-open" : "")" data-ctx="@DataCtx" @onclick:stopPropagation="true">
+    <div class="mpsl-trigger" @onclick="ToggleOpen" tabindex="0" @onkeydown="OnKeyDown">
+        <span class="mpsl-display">@DisplayText</span>
+        <span class="mpsl-arrow">@(Open ? "▲" : "▼")</span>
+    </div>
+    @if (Open)
+    {
+        <div class="mpsl-panel">
+            @foreach (var opt in TermSvc.OptionsFor(ValueSetId))
+            {
+                var fsh = opt.FshValue;
+                var chk = Value.Contains(fsh);
+                <label class="mpsl-item">
+                    <input type="checkbox" checked="@chk"
+                           @onchange="e => Toggle(fsh, (bool)(e.Value ?? false))" />
+                    @opt.Display
+                </label>
+            }
+        </div>
+    }
+</div>
+
+<style>
+    .mpsl-wrap { position: relative; display: inline-block; min-width: 240px; font-family: 'Calibri', Arial, sans-serif; font-size: 10.5pt; }
+    .mpsl-trigger { background: #d0cece; color: #1a7a1a; border: none; border-bottom: 1.5px solid #999; padding: 2px 6px 2px 4px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none; }
+    .mpsl-trigger:focus { outline: none; background: #bfbcbc; }
+    .mpsl-wrap.mpsl-open .mpsl-trigger { background: #bfbcbc; }
+    .mpsl-display { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .mpsl-arrow { margin-left: 6px; font-size: 8pt; color: #666; flex-shrink: 0; }
+    .mpsl-panel { position: absolute; left: 0; top: 100%; min-width: 100%; background: #fff; border: 1px solid #bbb; border-top: none; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 600; padding: 4px 0; }
+    .mpsl-item { display: flex; align-items: center; gap: 7px; padding: 5px 10px; cursor: pointer; font-size: 10pt; color: #1a7a1a; white-space: nowrap; }
+    .mpsl-item:hover { background: #f0f4fb; }
+    .mpsl-item input[type=checkbox] { accent-color: #1f3864; cursor: pointer; flex-shrink: 0; }
+</style>
+
+@code {
+    [Parameter] public string             ValueSetId   { get; set; } = string.Empty;
+    [Parameter] public string             DataCtx      { get; set; } = string.Empty;
+    [Parameter] public List<string>       Value        { get; set; } = new();
+    [Parameter] public EventCallback<List<string>> ValueChanged { get; set; }
+
+    private bool Open = false;
+
+    private string DisplayText =>
+        Value.Count == 0
+            ? "— select —"
+            : string.Join(", ", TermSvc.OptionsFor(ValueSetId)
+                .Where(o => Value.Contains(o.FshValue))
+                .Select(o => o.Display));
+
+    private void ToggleOpen() => Open = !Open;
+
+    private async Task Toggle(string fshValue, bool isChecked)
+    {
+        var updated = new List<string>(Value);
+        if (isChecked)
+        {
+            if (!updated.Contains(fshValue)) updated.Add(fshValue);
+        }
+        else
+        {
+            updated.Remove(fshValue);
+        }
+        await ValueChanged.InvokeAsync(updated);
+    }
+
+    private void OnKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key is "Enter" or " ") Open = !Open;
+        if (e.Key == "Escape") Open = false;
+    }
+
+    public void Dispose() { }
+}

@@ -4,6 +4,7 @@
 @using UDP_App.Services
 @inject DataService01 DataSvc
 @inject SushiService SushiSvc
+@inject TerminologyService TermSvc
 @inject IJSRuntime JS
 @implements IDisposable
 
@@ -69,6 +70,11 @@
     .ctx-div  { border:none; border-top:1px solid #e0e0e0; margin:8px 0; }
     .ctx-guide { font-size:9.5pt; color:#444; line-height:1.5; }
     .ctx-guide strong { color:#1f3864; }
+    /* Picklist selects — match fb input appearance */
+    select.fb { background:#d0cece; color:#1a7a1a; border:none; border-bottom:1.5px solid #999; font-family:'Calibri',Arial,sans-serif; font-size:10.5pt; padding:2px 4px; outline:none; vertical-align:baseline; cursor:pointer; }
+    select.fb:focus { background:#bfbcbc; }
+    select.fb.wlg  { width:260px; }
+    select.fb.wfull { display:block; width:100%; }
 </style>
 
 @if (!string.IsNullOrEmpty(ErrorMessage)) { <div class="err">⚠ @ErrorMessage</div> }
@@ -94,22 +100,46 @@
                 <textarea class="fb" rows="2"
                     placeholder='https://sponsor.com/id | EX2015/03 "exoticillin 100micrograms/dose dry powder inhaler"'
                     data-ctx="C218675" @bind="Model.C218675" @bind:event="oninput"></textarea>
+                <textarea class="fb" rows="2" style="margin-top:4px"
+                    placeholder="Enter nonproprietary name(s)"
+                    data-ctx="C97054" @bind="Model.C97054" @bind:event="oninput"></textarea>
             </td>
         </tr>
         <tr>
             <td class="lbl">Intervention Model:</td>
-            <td class="val"><input class="fb" type="text" placeholder='$NCIT#C82639 "Parallel Study"' data-ctx="C98746"  @bind="Model.C98746" @bind:event="oninput" /></td>
+            <td class="val">
+                <select class="fb wfull" data-ctx="C98746" @bind="Model.C98746">
+                    <option value="">— select —</option>
+                    <option value='$NCIT#C82640 "Single Group"'>Single Group</option>
+                    <option value='$NCIT#C82639 "Parallel Group"'>Parallel Group</option>
+                    <option value='$NCIT#C82637 "Cross-over"'>Cross-over</option>
+                    <option value='$NCIT#C82638 "Factorial"'>Factorial</option>
+                    <option value='$NCIT#C142568 "Sequential"'>Sequential</option>
+                    <option value='$NCIT#C17649 "Other"'>Other</option>
+                </select>
+            </td>
             <td class="lbl">Population Type:</td>
             <td class="val"><input class="fb" type="text" placeholder='$NCIT#C98596 "Patient"' data-ctx="C218703" @bind="Model.C218703" @bind:event="oninput" /></td>
         </tr>
         <tr>
             <td class="lbl">Control Type:</td>
-            <td class="val"><input class="fb" type="text" placeholder='$NCIT#C49648 "Placebo Control"' data-ctx="C49647"  @bind="Model.C49647" @bind:event="oninput" /></td>
+            <td class="val">
+                <select class="fb wfull" data-ctx="C49647" @bind="Model.C49647">
+                    <option value="">— select —</option>
+                    <option value='$NCIT#C49648 "Placebo"'>Placebo</option>
+                    <option value='$NCIT#C49649 "Active Comparator"'>Active Comparator</option>
+                    <option value='$NCIT#C120841 "Dose Response"'>Dose Response</option>
+                    <option value='$NCIT#C218505 "Different Dose or Regimen"'>Different Dose or Regimen</option>
+                    <option value='$NCIT#C218506 "External"'>External</option>
+                    <option value='$NCIT#C184727 "Sham Procedure"'>Sham Procedure</option>
+                    <option value='$NCIT#C28280 "No Control"'>No Control</option>
+                </select>
+            </td>
             <td class="lbl">Condition:</td>
             <td class="val"><input class="fb" type="text" placeholder='$SCT#9014002 "Psoriasis"' data-ctx="C112038" @bind="Model.C112038" @bind:event="oninput" /></td>
         </tr>
         <tr>
-            <td class="lbl">Control Description:</td>
+            <td class="lbl">Control Description:<br /><span style="color:#c00;font-size:8.5pt;font-weight:400">Potential Duplicate Field</span></td>
             <td class="val">
                 <textarea class="fb" rows="2" placeholder="Nonproprietary name / description of comparator"
                     data-ctx="C97054"  @bind="Model.C97054" @bind:event="oninput"></textarea>
@@ -126,27 +156,46 @@
         </tr>
         <tr>
             <td class="lbl">Intervention Assignment Method:</td>
-            <td class="val"><input class="fb" type="text" placeholder='$NCIT#C25196 "Randomisation"' data-ctx="C218475" @bind="Model.C218475" @bind:event="oninput" /></td>
+            <td class="val">
+                <select class="fb wfull" data-ctx="C218475" @bind="Model.C218475">
+                    <option value="">— select —</option>
+                    <option value='$NCIT#C25196 "Randomisation"'>Randomisation</option>
+                    <option value='$NCIT#C222801 "No Intervention Assignment Method"'>No Intervention Assignment Method</option>
+                    <option value='$NCIT#C17649 "Other"'>Other</option>
+                </select>
+            </td>
             <td class="lbl">Site Distribution:</td>
-            <td class="val"><input class="fb" type="text" placeholder='$NCIT#C217005 "Multicentre"' data-ctx="C218704" @bind="Model.C218704" @bind:event="oninput" /></td>
+            <td class="val">
+                <select class="fb wfull" data-ctx="C218704" @bind="Model.C218704">
+                    <option value="">— select —</option>
+                    <option value='$NCIT#C217004 "Single-Centre"'>Single-Centre</option>
+                    <option value='$NCIT#C217005 "Multicentre"'>Multicentre</option>
+                </select>
+            </td>
         </tr>
         <tr>
             <td class="lbl">Randomisation Type:</td>
             <td class="val"><input class="fb" type="text" placeholder="block randomisation" data-ctx="C223137" @bind="Model.C223137" @bind:event="oninput" /></td>
             <td class="lbl">Geographic Scope:</td>
-            <td class="val"><input class="fb" type="text" placeholder='$NCIT#C217007 "Multiple Countries"' data-ctx="C218705" @bind="Model.C218705" @bind:event="oninput" /></td>
+            <td class="val">
+                <select class="fb wfull" data-ctx="C218705" @bind="Model.C218705">
+                    <option value="">— select —</option>
+                    <option value='$NCIT#C217006 "Single Country"'>Single Country</option>
+                    <option value='$NCIT#C217007 "Multiple Countries"'>Multiple Countries</option>
+                </select>
+            </td>
         </tr>
         <tr>
             <td class="lbl">Stratification:</td>
             <td class="val"><input class="fb" type="text" placeholder='$NCIT#C49488 "Yes"' data-ctx="C223136" @bind="Model.C223136" @bind:event="oninput" /></td>
             <td class="lbl">Master Protocol:</td>
-            <td class="val"><input class="fb" type="text" placeholder='$NCIT#C49487 "No"' data-ctx="C218707" @bind="Model.C218707" @bind:event="oninput" /></td>
+            <td class="val"><PicklistSelect ValueSetId="C217046" CssClass="fb wfull" DataCtx="C218707" @bind-Value="Model.C218707" /></td>
         </tr>
         <tr>
+            <td class="lbl">Drug/Device Combination Product Indicator:</td>
+            <td class="val"><PicklistSelect ValueSetId="C217046" CssClass="fb wfull" DataCtx="C218708" @bind-Value="Model.C218708" /></td>
             <td class="lbl">Adaptive Trial Design:</td>
-            <td class="val"><input class="fb" type="text" placeholder='$NCIT#C49487 "No"' data-ctx="C218706" @bind="Model.C218706" @bind:event="oninput" /></td>
-            <td class="lbl"></td>
-            <td class="val"></td>
+            <td class="val"><PicklistSelect ValueSetId="C217046" CssClass="fb wfull" DataCtx="C218706" @bind-Value="Model.C218706" /></td>
         </tr>
     </table>
 
@@ -157,17 +206,23 @@
 
     <p class="doc">
         <span class="lbl-inline">Trial Blind Schema:</span>&nbsp;
-        <input class="fb wlg" type="text" placeholder='$NCIT#C187674 "Observer Blind"' data-ctx="C49658"  @bind="Model.C49658" @bind:event="oninput" />
+        <select class="fb wlg" data-ctx="C49658" @bind="Model.C49658">
+            <option value="">— select —</option>
+            <option value='$NCIT#C15228 "Double Blind"'>Double Blind</option>
+            <option value='$NCIT#C187674 "Observer Blind"'>Observer Blind</option>
+            <option value='$NCIT#C49659 "Open Label"'>Open Label</option>
+            <option value='$NCIT#C28233 "Single Blind"'>Single Blind</option>
+        </select>
     </p>
 
     <p class="doc">
         <span class="lbl-inline">Blinded Roles:</span> The following roles will not be made aware of the treatment group assignment:&nbsp;
-        <input class="fb wlg" type="text" placeholder='$NCIT#C142710 "Participant"' data-ctx="C218709" @bind="Model.C218709" @bind:event="oninput" />
+        <MultiPicklistSelect ValueSetId="C217281" DataCtx="C218709" @bind-Value="Model.C218709" />
     </p>
 
     <p class="doc">
         <span class="lbl-inline">Number of Participants:</span> A&nbsp;
-        <input class="fb wmed" type="text" placeholder='$UDP_Target#T "Target"' data-ctx="C218710" @bind="Model.C218710" @bind:event="oninput" />
+        <PicklistSelect ValueSetId="m11-target-Maximum-vs" CssClass="fb wlg" DataCtx="C218710" @bind-Value="Model.C218710" />
         &nbsp;of&nbsp;
         <input class="fb wnum" type="text" placeholder="200" data-ctx="C49692"  @bind="Model.C49692" @bind:event="oninput" />
         &nbsp;participants.
@@ -196,7 +251,7 @@
     <p class="doc"><span class="lbl-inline">Committees:</span></p>
     <p class="doc">
         Independent Committees:&nbsp;
-        <input class="fb wlg" type="text" placeholder='$NCIT#C142578 "IDMC"' data-ctx="C218718" @bind="Model.C218718" @bind:event="oninput" />.
+        <MultiPicklistSelect ValueSetId="C217282" DataCtx="C218718" @bind-Value="Model.C218718" />.
     </p>
     <p class="doc">
         Other Committees:&nbsp;
@@ -241,22 +296,46 @@
                     <textarea class="fb" rows="2"
                         placeholder='https://sponsor.com/id | EX2015/03 "exoticillin 100micrograms/dose dry powder inhaler"'
                         data-ctx="C218675" @bind="Model.C218675" @bind:event="oninput"></textarea>
+                    <textarea class="fb" rows="2" style="margin-top:4px"
+                        placeholder="Enter nonproprietary name(s)"
+                        data-ctx="C97054" @bind="Model.C97054" @bind:event="oninput"></textarea>
                 </td>
             </tr>
             <tr>
                 <td class="lbl">Intervention Model:</td>
-                <td class="val"><input class="fb" type="text" placeholder='$NCIT#C82639 "Parallel Study"' data-ctx="C98746"  @bind="Model.C98746" @bind:event="oninput" /></td>
+                <td class="val">
+                    <select class="fb wfull" data-ctx="C98746" @bind="Model.C98746">
+                        <option value="">— select —</option>
+                        <option value='$NCIT#C82640 "Single Group"'>Single Group</option>
+                        <option value='$NCIT#C82639 "Parallel Group"'>Parallel Group</option>
+                        <option value='$NCIT#C82637 "Cross-over"'>Cross-over</option>
+                        <option value='$NCIT#C82638 "Factorial"'>Factorial</option>
+                        <option value='$NCIT#C142568 "Sequential"'>Sequential</option>
+                        <option value='$NCIT#C17649 "Other"'>Other</option>
+                    </select>
+                </td>
                 <td class="lbl">Population Type:</td>
                 <td class="val"><input class="fb" type="text" placeholder='$NCIT#C98596 "Patient"' data-ctx="C218703" @bind="Model.C218703" @bind:event="oninput" /></td>
             </tr>
             <tr>
                 <td class="lbl">Control Type:</td>
-                <td class="val"><input class="fb" type="text" placeholder='$NCIT#C49648 "Placebo Control"' data-ctx="C49647"  @bind="Model.C49647" @bind:event="oninput" /></td>
+                <td class="val">
+                    <select class="fb wfull" data-ctx="C49647" @bind="Model.C49647">
+                        <option value="">— select —</option>
+                        <option value='$NCIT#C49648 "Placebo"'>Placebo</option>
+                        <option value='$NCIT#C49649 "Active Comparator"'>Active Comparator</option>
+                        <option value='$NCIT#C120841 "Dose Response"'>Dose Response</option>
+                        <option value='$NCIT#C218505 "Different Dose or Regimen"'>Different Dose or Regimen</option>
+                        <option value='$NCIT#C218506 "External"'>External</option>
+                        <option value='$NCIT#C184727 "Sham Procedure"'>Sham Procedure</option>
+                        <option value='$NCIT#C28280 "No Control"'>No Control</option>
+                    </select>
+                </td>
                 <td class="lbl">Condition:</td>
                 <td class="val"><input class="fb" type="text" placeholder='$SCT#9014002 "Psoriasis"' data-ctx="C112038" @bind="Model.C112038" @bind:event="oninput" /></td>
             </tr>
             <tr>
-                <td class="lbl">Control Description:</td>
+                <td class="lbl">Control Description:<br /><span style="color:#c00;font-size:8.5pt;font-weight:400">Potential Duplicate Field</span></td>
                 <td class="val">
                     <textarea class="fb" rows="2" placeholder="Nonproprietary name / description of comparator"
                         data-ctx="C97054"  @bind="Model.C97054" @bind:event="oninput"></textarea>
@@ -273,37 +352,69 @@
             </tr>
             <tr>
                 <td class="lbl">Intervention Assignment Method:</td>
-                <td class="val"><input class="fb" type="text" placeholder='$NCIT#C25196 "Randomisation"' data-ctx="C218475" @bind="Model.C218475" @bind:event="oninput" /></td>
+                <td class="val">
+                    <select class="fb wfull" data-ctx="C218475" @bind="Model.C218475">
+                        <option value="">— select —</option>
+                        <option value='$NCIT#C25196 "Randomisation"'>Randomisation</option>
+                        <option value='$NCIT#C222801 "No Intervention Assignment Method"'>No Intervention Assignment Method</option>
+                        <option value='$NCIT#C17649 "Other"'>Other</option>
+                    </select>
+                </td>
                 <td class="lbl">Site Distribution:</td>
-                <td class="val"><input class="fb" type="text" placeholder='$NCIT#C217005 "Multicentre"' data-ctx="C218704" @bind="Model.C218704" @bind:event="oninput" /></td>
+                <td class="val">
+                    <select class="fb wfull" data-ctx="C218704" @bind="Model.C218704">
+                        <option value="">— select —</option>
+                        <option value='$NCIT#C217004 "Single-Centre"'>Single-Centre</option>
+                        <option value='$NCIT#C217005 "Multicentre"'>Multicentre</option>
+                    </select>
+                </td>
             </tr>
             <tr>
                 <td class="lbl">Randomisation Type:</td>
                 <td class="val"><input class="fb" type="text" placeholder="block randomisation" data-ctx="C223137" @bind="Model.C223137" @bind:event="oninput" /></td>
                 <td class="lbl">Geographic Scope:</td>
-                <td class="val"><input class="fb" type="text" placeholder='$NCIT#C217007 "Multiple Countries"' data-ctx="C218705" @bind="Model.C218705" @bind:event="oninput" /></td>
+                <td class="val">
+                    <select class="fb wfull" data-ctx="C218705" @bind="Model.C218705">
+                        <option value="">— select —</option>
+                        <option value='$NCIT#C217006 "Single Country"'>Single Country</option>
+                        <option value='$NCIT#C217007 "Multiple Countries"'>Multiple Countries</option>
+                    </select>
+                </td>
             </tr>
             <tr>
                 <td class="lbl">Stratification:</td>
                 <td class="val"><input class="fb" type="text" placeholder='$NCIT#C49488 "Yes"' data-ctx="C223136" @bind="Model.C223136" @bind:event="oninput" /></td>
                 <td class="lbl">Master Protocol:</td>
-                <td class="val"><input class="fb" type="text" placeholder='$NCIT#C49487 "No"' data-ctx="C218707" @bind="Model.C218707" @bind:event="oninput" /></td>
+                <td class="val"><PicklistSelect ValueSetId="C217046" CssClass="fb wfull" DataCtx="C218707" @bind-Value="Model.C218707" /></td>
             </tr>
             <tr>
+                <td class="lbl">Drug/Device Combination Product Indicator:</td>
+                <td class="val"><PicklistSelect ValueSetId="C217046" CssClass="fb wfull" DataCtx="C218708" @bind-Value="Model.C218708" /></td>
                 <td class="lbl">Adaptive Trial Design:</td>
-                <td class="val"><input class="fb" type="text" placeholder='$NCIT#C49487 "No"' data-ctx="C218706" @bind="Model.C218706" @bind:event="oninput" /></td>
-                <td class="lbl"></td><td class="val"></td>
+                <td class="val"><PicklistSelect ValueSetId="C217046" CssClass="fb wfull" DataCtx="C218706" @bind-Value="Model.C218706" /></td>
             </tr>
         </table>
 
         <p class="doc"><span class="lbl-inline">Number of Arms:</span>&nbsp;<input class="fb wnum" type="text" placeholder="2" data-ctx="C98771"  @bind="Model.C98771" @bind:event="oninput" /></p>
-        <p class="doc"><span class="lbl-inline">Trial Blind Schema:</span>&nbsp;<input class="fb wlg" type="text" placeholder='$NCIT#C187674 "Observer Blind"' data-ctx="C49658"  @bind="Model.C49658" @bind:event="oninput" /></p>
-        <p class="doc"><span class="lbl-inline">Blinded Roles:</span> The following roles will not be made aware of the treatment group assignment:&nbsp;<input class="fb wlg" type="text" placeholder='$NCIT#C142710 "Participant"' data-ctx="C218709" @bind="Model.C218709" @bind:event="oninput" /></p>
-        <p class="doc"><span class="lbl-inline">Number of Participants:</span> A&nbsp;<input class="fb wmed" type="text" placeholder='$UDP_Target#T "Target"' data-ctx="C218710" @bind="Model.C218710" @bind:event="oninput" />&nbsp;of&nbsp;<input class="fb wnum" type="text" placeholder="200" data-ctx="C49692"  @bind="Model.C49692" @bind:event="oninput" />&nbsp;participants.</p>
+        <p class="doc"><span class="lbl-inline">Trial Blind Schema:</span>&nbsp;
+            <select class="fb wlg" data-ctx="C49658" @bind="Model.C49658">
+                <option value="">— select —</option>
+                <option value='$NCIT#C15228 "Double Blind"'>Double Blind</option>
+                <option value='$NCIT#C187674 "Observer Blind"'>Observer Blind</option>
+                <option value='$NCIT#C49659 "Open Label"'>Open Label</option>
+                <option value='$NCIT#C28233 "Single Blind"'>Single Blind</option>
+            </select>
+        </p>
+        <p class="doc"><span class="lbl-inline">Blinded Roles:</span> The following roles will not be made aware of the treatment group assignment:&nbsp;
+            <MultiPicklistSelect ValueSetId="C217281" DataCtx="C218709" @bind-Value="Model.C218709" />
+        </p>
+        <p class="doc"><span class="lbl-inline">Number of Participants:</span> A&nbsp;<PicklistSelect ValueSetId="m11-target-Maximum-vs" CssClass="fb wlg" DataCtx="C218710" @bind-Value="Model.C218710" />&nbsp;of&nbsp;<input class="fb wnum" type="text" placeholder="200" data-ctx="C49692"  @bind="Model.C49692" @bind:event="oninput" />&nbsp;participants.</p>
         <p class="doc"><span class="lbl-inline">Duration:</span> Total planned duration of trial <em>participation</em> for each participant:&nbsp;<input class="fb wmed" type="text" placeholder='9 $NCIT#C29846 "Months"' data-ctx="C218715" @bind="Model.C218715" @bind:event="oninput" />.</p>
         <p class="doc"><span class="lbl-inline">Alternate Duration Description:</span>&nbsp;<input class="fb wlg" type="text" placeholder="(if duration will vary)" data-ctx="C218714" @bind="Model.C218714" @bind:event="oninput" /></p>
         <p class="doc"><span class="lbl-inline">Committees:</span></p>
-        <p class="doc">Independent Committees:&nbsp;<input class="fb wlg" type="text" placeholder='$NCIT#C142578 "IDMC"' data-ctx="C218718" @bind="Model.C218718" @bind:event="oninput" />.</p>
+        <p class="doc">Independent Committees:&nbsp;
+            <MultiPicklistSelect ValueSetId="C217282" DataCtx="C218718" @bind-Value="Model.C218718" />.
+        </p>
         <p class="doc">Other Committees:&nbsp;<input class="fb wmed" type="text" placeholder="(other committee name)" data-ctx="C218719" @bind="Model.C218719" @bind:event="oninput" />.</p>
 
     </div>
@@ -314,6 +425,10 @@
     <div class="ctx-body">
         <div class="ctx-row"><label>Field name:</label><span>@CtxFieldName</span></div>
         <div class="ctx-row"><label>Original name:</label><span>@CtxOriginalName</span></div>
+        @if (!string.IsNullOrEmpty(CtxValueSetId))
+        {
+            <div class="ctx-row"><label>Value set:</label><span>@CtxValueSetId</span></div>
+        }
         <hr class="ctx-div" />
         <div class="ctx-guide"><strong>Guidance:</strong><br />@CtxGuidance</div>
     </div>
@@ -365,7 +480,24 @@
     private string ReqDialogMsg   = string.Empty;
     private string ErrorMessage   = string.Empty;
     private string? PendingAction = null;
-    private string CtxFieldName = string.Empty, CtxOriginalName = string.Empty, CtxGuidance = string.Empty;
+    private string CtxFieldName = string.Empty, CtxOriginalName = string.Empty, CtxGuidance = string.Empty, CtxValueSetId = string.Empty;
+
+    // Value set identifiers for picklist fields
+    private static readonly Dictionary<string, string> FieldValueSets = new()
+    {
+        ["C98746"]  = "C217277",  // Intervention Model
+        ["C49647"]  = "C217279",  // Control Type
+        ["C218475"] = "C217280",  // Intervention Assignment Method
+        ["C218704"] = "C217049",  // Site Distribution
+        ["C218705"] = "C217050",  // Site Geographic Scope
+        ["C49658"]  = "C217051",  // Trial Blind Schema
+        ["C218709"] = "C217281",  // Blinded Roles
+        ["C218718"] = "C217282",  // Independent Committees
+        ["C218707"] = "C217046",  // Master Protocol Indicator
+        ["C218708"] = "C217046",  // Drug/Device Combination Product Indicator
+        ["C218706"] = "C217046",  // Adaptive Trial Design Indicator
+        ["C218710"] = "m11-target-Maximum-vs",  // Target / Maximum
+    };
     private System.Threading.Timer? _statusTimer;
     private DotNetObjectReference<Section01>? _objRef;
 
@@ -455,7 +587,10 @@
 
     [JSInvokable] public async Task OnContextMenuJS(string fieldId, double x, double y)
     {
-        CtxFieldName = fieldId; CtxOriginalName = string.Empty; CtxGuidance = string.Empty;
+        CtxFieldName = fieldId;
+        CtxOriginalName = string.Empty;
+        CtxGuidance = string.Empty;
+        CtxValueSetId = FieldValueSets.TryGetValue(fieldId, out var vsId) ? vsId : string.Empty;
         StateHasChanged(); await JS.InvokeVoidAsync("udpShowCtxMenu", "s1-ctx-menu", x, y);
     }
     [JSInvokable] public void OnCtxMenuClosed() { }

@@ -1,0 +1,27 @@
+@*
+    Reusable picklist <select> driven by TerminologyService.
+    Usage:
+        <PicklistSelect ValueSetId="C217046" CssClass="fb wfull"
+                        DataCtx="C218706" @bind-Value="Model.C218706" />
+*@
+@using UDP_App.Services
+@inject TerminologyService TermSvc
+
+<select class="@CssClass" data-ctx="@DataCtx" value="@Value" @onchange="OnChanged">
+    <option value="">— select —</option>
+    @foreach (var opt in TermSvc.OptionsFor(ValueSetId))
+    {
+        <option value="@opt.FshValue">@opt.Display</option>
+    }
+</select>
+
+@code {
+    [Parameter] public string  ValueSetId { get; set; } = string.Empty;
+    [Parameter] public string  CssClass   { get; set; } = "fb wfull";
+    [Parameter] public string  DataCtx    { get; set; } = string.Empty;
+    [Parameter] public string? Value      { get; set; }
+    [Parameter] public EventCallback<string?> ValueChanged { get; set; }
+
+    private async Task OnChanged(ChangeEventArgs e)
+        => await ValueChanged.InvokeAsync(e.Value?.ToString());
+}

@@ -74,7 +74,9 @@ This desceribes an entirely ficticious protocol for an imaginary product with Br
 * extension[design].extension[trialBlindSchema].valueCodeableConcept = {{C49658}} //$NCIT#C187674 "Observer Blind"
 
 // XC217281 C218709 Blinded Roles"
-* extension[design].extension[blindedRoles][+].valueCodeableConcept = {{C218709}} //$NCIT#C142710 "Participant"  
+{{REPEAT
+* extension[design].extension[blindedRoles][+].valueCodeableConcept = {{C218709}}
+}}
 
 // C218710 Target-Maximum"
 * extension[design].extension[targetOrMaximum].valueCodeableConcept = {{C218710}} //$UDP_Target#T "Target"
@@ -100,7 +102,9 @@ This desceribes an entirely ficticious protocol for an imaginary product with Br
 // * extension[design].extension[additionalDescriptionofDuration].
 
 // XC217282 C218718 Independent Committees
-* extension[design].extension[independentCommittees][+].valueCodeableConcept = {{C218718}} //$NCIT#C142578 "Independent Data Monitoring Committee"
+{{REPEAT
+* extension[design].extension[independentCommittees][+].valueCodeableConcept = {{C218718}}
+}}
 
 // C218719 Other Committees
 * extension[design].extension[otherCommittees].valueString = {{C218719}} //"Exemplar Monitoring Board"
