@@ -68,6 +68,7 @@ Estimand[]
 * insert rs-copyright-structure
 * ^extension[$ext-fmm].valueInteger = 2
 * ^status = #active
+* value[x] 0..0
 
 * extension contains
   population 0..1 MS and

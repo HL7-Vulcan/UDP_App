@@ -8,8 +8,8 @@ Description: """M11 Table of interventions"""
 * ^extension[$ext-fmm].valueInteger = 2
 * ^extension[$ext-wg].valueCode = #brr
 * ^status = #active
-
 * value[x] 0..0
+
 * . ^short = "Intervention details"
 * . ^definition = "Intervention details that cannot be provided using ActivityDefinition."
 * . ^comment = "This is very specificd to M11 Section 06."

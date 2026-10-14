@@ -130,7 +130,8 @@ public static class TokenParser
                         else anyInner = false;
                     }
 
-                    // Substitute all remaining field tokens using this iteration's values
+                    // Drop lines whose single token resolves to null/empty, then substitute
+                    body = DropEmptyTokenLines(body, fieldValues);
                     body = Substitute(body, fieldValues);
                     sb.Append(body);
                 }

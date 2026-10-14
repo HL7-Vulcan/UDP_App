@@ -7,6 +7,7 @@ Description: """Profile of Basic resource to be used as Reporting details  accor
 * insert rs-copyright-structure
 * ^extension[$ext-fmm].valueInteger = 2
 * ^status = #active
+* value[x] 0..0
 
 * extension contains
   m11-objective named objective 0..* MS 
@@ -34,6 +35,7 @@ Objective[]
 * insert rs-copyright-structure
 * ^extension[$ext-fmm].valueInteger = 2
 * ^status = #active
+* value[x] 0..0
 
 * extension contains
   //section 1..1 MS and  // must be one of C218528 Primary Objective, C218530 Secondary Objective, C218532 Exploratory Objective
@@ -68,6 +70,7 @@ Estimand[]
 * insert rs-copyright-structure
 * ^extension[$ext-fmm].valueInteger = 2
 * ^status = #active
+* value[x] 0..0
 
 * extension contains
   population 0..1 MS and
@@ -102,6 +105,7 @@ usdm-route
 * insert rs-copyright-structure
 * ^extension[$ext-fmm].valueInteger = 2
 * ^status = #active
+* value[x] 0..0
   
 * extension contains
   treatment 0..1 MS and
@@ -135,6 +139,7 @@ ICE
 * insert rs-copyright-structure
 * ^extension[$ext-fmm].valueInteger = 2
 * ^status = #active
+* value[x] 0..0
   
 * extension contains
   event 1..1 MS and

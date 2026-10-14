@@ -49,7 +49,9 @@ Section_03_Template.fsh (Narrative-Composition-M11Section03)
         </div>
      """
     * entry[+] = Reference({{ESTIMANDS_TABLE_X}})
-  {{REPEAT    * entry[+] = Reference({{INTERCURRENTEVENTS_ROW_X}})}}
+
+//  {{REPEAT    * entry[+] = Reference({{INTERCURRENTEVENTS_ROW_X}})}}
+
 }} 
  
  

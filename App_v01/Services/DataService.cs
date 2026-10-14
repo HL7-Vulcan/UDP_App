@@ -189,6 +189,15 @@ public class DataService
     /// <summary>
     /// Generates FSH output for Section 03.
     /// Reads Section_03_Template.fsh and Section_03_Primary_Template.fsh from Templates/.
+    ///
+    /// Structure (updated):
+    ///   - Main template: one outer {{REPEAT}} per objective type (primary/secondary/exploratory).
+    ///     Each iteration emits a section[+] block referencing the ESTIMANDS_TABLE_X instance.
+    ///     ICE entry references in the main template are commented out — ICE rows now live
+    ///     inside the ESTIMANDS instance as extension[intercurrentEvents] repeats.
+    ///   - Instance template: one Instance block (ESTIMANDS_TABLE_X) containing:
+    ///       * A {{REPEAT}} for treatment rows (no _X token → expands once per treatment string)
+    ///       * A {{REPEAT}} for ICE rows (no _X token → we expand manually per ICE row)
     /// </summary>
     public string ToFsh(Section03Model model)
     {
@@ -204,12 +213,6 @@ public class DataService
             return $"Error: could not read Section 03 template files. {ex.Message}";
         }
 
-        // ── Expand the three outer REPEAT blocks in the main template ─────────
-        // Each outer REPEAT has no _X token; it fires once per objective instance
-        // with all field tokens substituted inline.  Any inner {{REPEAT...}} block
-        // (e.g. ICE entry references) is expanded first using that objective's iceIds.
-        //
-        // The three REPEATs appear in document order: primary, secondary, exploratory.
         var typeList = new[]
         {
             ("primary",     model.PrimaryObjectives,     "C85826"),
@@ -217,34 +220,35 @@ public class DataService
             ("exploratory", model.ExploratoryObjectives, "C163559"),
         };
 
+        // ── Expand the three outer REPEAT blocks in the main template ─────────
+        // ICE is no longer referenced in the main template (commented out in 3.1,
+        // still present in 3.2/3.3 but INTERCURRENTEVENTS_ROW_X resolves to null → dropped).
         foreach (var (typeName, objectives, objTextField) in typeList)
         {
             var iterations = objectives.Select((obj, i) =>
             {
                 int idx         = i + 1;
-                var prefix      = typeName;
-                var estimandsId = $"Estimands-{prefix}-{idx:D2}";
-                var iceIds      = obj.IceRows
-                    .Select((row, r) => new { row, r })
-                    .Where(x => !string.IsNullOrWhiteSpace(x.row.C188856) ||
-                                !string.IsNullOrWhiteSpace(x.row.C188857))
-                    .Select(x => $"ICE-{prefix}-{idx:D2}-{x.r + 1:D2}")
-                    .ToList();
+                var estimandsId = $"Estimands-{typeName}-{idx:D2}";
 
-                var fields = new Dictionary<string, string>
+                bool estimandsHasData = !string.IsNullOrWhiteSpace(obj.C70833)
+                                     || !string.IsNullOrWhiteSpace(obj.C49236)
+                                     || !string.IsNullOrWhiteSpace(obj.C25212)
+                                     || !string.IsNullOrWhiteSpace(obj.C188853)
+                                     || obj.IceRows.Any(r =>
+                                            !string.IsNullOrWhiteSpace(r.C188856) ||
+                                            !string.IsNullOrWhiteSpace(r.C188857));
+
+                var fields = new Dictionary<string, string?>
                 {
-                    { "ESTIMANDS_TABLE_X", estimandsId },
+                    { "ESTIMANDS_TABLE_X", estimandsHasData ? estimandsId : null },
                     { objTextField,        EscapeXml(obj.ObjectiveText) },
-                    { "C70833",            EscapeXml(obj.C70833)  },
-                    { "C49236",            EscapeXml(obj.C49236)  },
-                    { "C25212",            EscapeXml(obj.C25212)  },
-                    { "C188853",           EscapeXml(obj.C188853) },
                 };
 
                 Func<string, string?> resolver = key =>
                     fields.TryGetValue(key, out var v) ? v : null;
 
-                return (resolver, (IEnumerable<string>)iceIds);
+                // No ICE ids needed in the main template any more
+                return (resolver, Enumerable.Empty<string>());
             });
 
             var result = TokenParser.ExpandOuterRepeat(mainTemplate, iterations);
@@ -255,18 +259,14 @@ public class DataService
             }
         }
 
-        // ── Split instance template into individual Instance sections ────────────
-        // Section_03_Primary_Template.fsh has active sections for ESTIMANDS_TABLE_X
-        // and INTERCURRENTEVENTS_ROW_X, separated by "//---" dividers.
-        // We extract each section by its leading Instance token so we can substitute
-        // into just that section rather than the whole file.
+        // ── Extract the single active Instance block from the instance template ─
+        // The template now has one Instance block (ESTIMANDS_TABLE_X) plus commented-out
+        // legacy sections. SplitOnDividers returns only active (non-fully-commented) sections.
         var instanceSections = SplitOnDividers(instanceTemplate);
         var estimandsSection = instanceSections.FirstOrDefault(s =>
             s.Contains("Instance: {{ESTIMANDS_TABLE_X}}"));
-        var iceSection = instanceSections.FirstOrDefault(s =>
-            s.Contains("Instance: {{INTERCURRENTEVENTS_ROW_X}}"));
 
-        // ── Append ESTIMANDS and ICE Instance blocks ──────────────────────────
+        // ── Append one ESTIMANDS Instance block per objective ─────────────────
         var sb = new StringBuilder();
         sb.AppendLine(mainTemplate);
 
@@ -274,72 +274,122 @@ public class DataService
         {
             if (objectives.Count == 0) continue;
             sb.AppendLine();
-            sb.AppendLine($"// ── {char.ToUpper(typeName[0])}{typeName[1..]} Objective — Estimands & ICE Instances ──────────────────────");
+            sb.AppendLine($"// ── {char.ToUpper(typeName[0])}{typeName[1..]} Objective — Estimands Instances ──────────────────────────");
 
             for (int i = 0; i < objectives.Count; i++)
             {
                 var obj         = objectives[i];
                 int idx         = i + 1;
-                var prefix      = typeName;
-                var estimandsId = $"Estimands-{prefix}-{idx:D2}";
+                var estimandsId = $"Estimands-{typeName}-{idx:D2}";
 
-                // Estimands instance
-                if (estimandsSection != null)
+                if (estimandsSection == null) continue;
+
+                var estimandsBlock = estimandsSection;
+
+                // ── Expand {{REPEAT}} for ICE rows first ──────────────────────
+                // Must be done before the generic FindAndExpandRepeat loop because
+                // the ICE REPEAT has no _X token and would otherwise be emitted only
+                // once (as a "emit-once" block) with unresolved tokens.
+                estimandsBlock = ExpandIceRepeat(estimandsBlock, obj.IceRows);
+
+                // ── Expand remaining {{REPEAT}} blocks (e.g. treatment/C49236) ─
+                bool anyRepeat = true;
+                while (anyRepeat)
                 {
-                    var estimandsFields = new Dictionary<string, string>
+                    var rpt = TokenParser.FindAndExpandRepeat(estimandsBlock,
+                        Enumerable.Repeat(estimandsId, 1));
+                    if (rpt.HasValue)
                     {
-                        { "ESTIMANDS_TABLE_X", estimandsId },
-                        { "PRIMARY_TABLE_X",   estimandsId },
-                        { "C70833",            EscapeXml(obj.C70833)  },
-                        { "C49236",            EscapeXml(obj.C49236)  },
-                        { "C25212",            EscapeXml(obj.C25212)  },
-                        { "C188853",           EscapeXml(obj.C188853) },
-                    };
-                    var estimandsBlock = estimandsSection;
-                    // Expand any REPEAT inside the estimands section (e.g. treatment repeats)
-                    bool anyRepeat = true;
-                    while (anyRepeat)
-                    {
-                        var rpt = TokenParser.FindAndExpandRepeat(estimandsBlock,
-                            Enumerable.Repeat(estimandsId, 1));
-                        if (rpt.HasValue)
-                        {
-                            var (exp, ms, ml) = rpt.Value;
-                            estimandsBlock = estimandsBlock.Remove(ms, ml).Insert(ms, exp);
-                        }
-                        else anyRepeat = false;
+                        var (exp, ms, ml) = rpt.Value;
+                        estimandsBlock = estimandsBlock.Remove(ms, ml).Insert(ms, exp);
                     }
-                    estimandsBlock = TokenParser.Substitute(estimandsBlock, key =>
-                        estimandsFields.TryGetValue(key, out var v) ? v : null);
+                    else anyRepeat = false;
+                }
+
+                // ── Substitute remaining tokens and drop empty lines ──────────
+                var estimandsFields = new Dictionary<string, string?>
+                {
+                    { "ESTIMANDS_TABLE_X", estimandsId },
+                    { "C70833",            EscapeXml(obj.C70833)  },
+                    { "C49236",            EscapeXml(obj.C49236)  },
+                    { "C25212",            EscapeXml(obj.C25212)  },
+                    { "C188853",           EscapeXml(obj.C188853) },
+                };
+                Func<string, string?> estimandsResolver = key =>
+                    estimandsFields.TryGetValue(key, out var v) ? v : null;
+
+                estimandsBlock = TokenParser.DropEmptyTokenLines(estimandsBlock, estimandsResolver);
+                estimandsBlock = TokenParser.Substitute(estimandsBlock, estimandsResolver);
+
+                if (HasAnyDataLine(estimandsBlock))
                     sb.AppendLine(estimandsBlock);
-                }
-
-                // ICE instances
-                if (iceSection != null)
-                {
-                    int iceNum = 0;
-                    for (int r = 0; r < obj.IceRows.Count; r++)
-                    {
-                        var row = obj.IceRows[r];
-                        if (string.IsNullOrWhiteSpace(row.C188856) && string.IsNullOrWhiteSpace(row.C188857))
-                            continue;
-                        iceNum++;
-                        var iceId     = $"ICE-{prefix}-{idx:D2}-{iceNum:D2}";
-                        var iceFields = new Dictionary<string, string>
-                        {
-                            { "INTERCURRENTEVENTS_ROW_X", iceId },
-                            { "C188856", EscapeXml(row.C188856) },
-                            { "C188857", EscapeXml(row.C188857) },
-                        };
-                        var iceBlock = TokenParser.Substitute(iceSection, key =>
-                            iceFields.TryGetValue(key, out var v) ? v : null);
-                        sb.AppendLine(iceBlock);
-                    }
-                }
             }
         }
 
         return sb.ToString();
+    }
+
+    /// <summary>
+    /// Finds the ICE {{REPEAT...}} block inside the estimands template and replaces it
+    /// with one copy of the row pattern per non-empty ICE row, substituting C188856/C188857.
+    /// The REPEAT block has no _X tokens so FindAndExpandRepeat treats it as "emit once" —
+    /// we handle it here instead.
+    /// </summary>
+    private static string ExpandIceRepeat(string block, List<IceRow> iceRows)
+    {
+        // Find the REPEAT block that contains C188856 (ICE event field)
+        int i = 0;
+        while (i < block.Length)
+        {
+            int open = TokenParser.FindTokenStart(block, i);
+            if (open < 0) break;
+            int close = TokenParser.FindTokenEnd(block, open);
+            if (close < 0) break;
+
+            string content = block.Substring(open + 2, close - open - 4);
+            if (content.StartsWith("REPEAT", StringComparison.Ordinal) &&
+                content.Contains("C188856"))
+            {
+                // Determine match extent (include leading whitespace and trailing newline)
+                int lineStart = open;
+                while (lineStart > 0 && block[lineStart - 1] != '\n' && block[lineStart - 1] != '\r')
+                    lineStart--;
+                int blockEnd = close;
+                while (blockEnd < block.Length && (block[blockEnd] == ' ' || block[blockEnd] == '\t'))
+                    blockEnd++;
+                if (blockEnd < block.Length && block[blockEnd] == '\r') blockEnd++;
+                if (blockEnd < block.Length && block[blockEnd] == '\n') blockEnd++;
+
+                string rowPattern = content.Substring("REPEAT".Length);
+
+                // Build expansion: one copy per non-empty ICE row
+                var expansion = new StringBuilder();
+                bool first = true;
+                foreach (var row in iceRows)
+                {
+                    if (string.IsNullOrWhiteSpace(row.C188856) && string.IsNullOrWhiteSpace(row.C188857))
+                        continue;
+                    if (!first) expansion.AppendLine();
+                    first = false;
+                    var iceFields = new Dictionary<string, string?>
+                    {
+                        { "C188856", EscapeXml(row.C188856) },
+                        { "C188857", EscapeXml(row.C188857) },
+                    };
+                    Func<string, string?> resolver = key =>
+                        iceFields.TryGetValue(key, out var v) ? v : null;
+                    var substituted = TokenParser.DropEmptyTokenLines(rowPattern, resolver);
+                    substituted = TokenParser.Substitute(substituted, resolver);
+                    expansion.Append(substituted);
+                }
+
+                return block.Remove(lineStart, blockEnd - lineStart)
+                            .Insert(lineStart, expansion.ToString());
+            }
+
+            i = close;
+        }
+        return block; // no ICE REPEAT found — return unchanged
     }
 
     /// <summary>
@@ -367,8 +417,6 @@ public class DataService
 
         static void AddIfActive(List<string> list, string section)
         {
-            // A section is "active" if it has at least one non-blank line that does
-            // not start with "//" (i.e. not fully commented out).
             foreach (var l in section.Split('\n'))
             {
                 var t = l.TrimEnd('\r').Trim();
@@ -379,6 +427,27 @@ public class DataService
                 }
             }
         }
+    }
+
+    /// <summary>
+    /// Returns true if the substituted block contains at least one FSH data line
+    /// (i.e. a line with .valueString = "...") where the quoted value is non-empty.
+    /// Used to decide whether to emit an ESTIMANDS or ICE instance block.
+    /// </summary>
+    private static bool HasAnyDataLine(string block)
+    {
+        foreach (var raw in block.Split('\n'))
+        {
+            var line = raw.TrimEnd('\r').Trim();
+            // Match lines of the form: * ...valueString = "..."
+            int eq = line.IndexOf(".valueString = \"", StringComparison.Ordinal);
+            if (eq < 0) continue;
+            int valStart = eq + ".valueString = \"".Length;
+            int valEnd   = line.LastIndexOf('"');
+            if (valEnd > valStart && !string.IsNullOrWhiteSpace(line.Substring(valStart, valEnd - valStart)))
+                return true;
+        }
+        return false;
     }
 
     private static string EscapeXml(string? value) =>

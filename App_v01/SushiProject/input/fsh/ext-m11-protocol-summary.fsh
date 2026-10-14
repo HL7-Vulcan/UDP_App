@@ -19,8 +19,8 @@ Context: M11_ResearchStudyProfile
 * insert rs-copyright-structure
 * ^extension[$ext-fmm].valueInteger = 2
 * ^status = #active
-
 * value[x] 0..0
+
 * . ^short = "Design of a protocol"
 * . ^definition = "Representation of design of a study protocol."
 * . ^comment = "This is Section 1 of the ICH Technical Design and Guideline Documents"
