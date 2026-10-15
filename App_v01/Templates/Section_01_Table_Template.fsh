@@ -44,10 +44,10 @@ This desceribes an entirely ficticious protocol for an imaginary product with Br
 * extension[design].extension[interventionAssignmentMethod].valueCodeableConcept = {{C218475}} //$NCIT#C25196 "Randomisation"
 
 // C223137 Randomisation Type
-* extension[design].extension[randomisationType].valueCodeableConcept.text = {{C223137}} //"block randomisation"
+* extension[design].extension[randomisationType].valueCodeableConcept.text = "{{C223137}}" //"block randomisation"
 
 // C223138 Other Intervention Assignment Method (C223137 = Other)
-* extension[design].extension[otherInterventionAssignmentMethod].valueString = {{CC223138}} 	//""
+* extension[design].extension[otherInterventionAssignmentMethod].valueString = "{{C223138}}" 	//""
 
 // C223136 Stratification Indicator
 * extension[design].extension[stratificationIndicator].valueCodeableConcept = {{C223136}}  //$NCIT#C49488 "Yes"
@@ -87,13 +87,13 @@ This desceribes an entirely ficticious protocol for an imaginary product with Br
 // assigned vs enrolled
 
 // C218712/C218713 total planned duration of trial intervention value/units
-// * extension[design].extension[totalPlannedDurationOfTrialIntervention].valueQuantity =
+* extension[design].extension[totalPlannedDurationOfTrialIntervention].valueQuantity = {{C218712_C218713}}
 
 // C218714 alternate description of planned duration of trial intervention if duration will vary
-* extension[design].extension[alternateDescriptionOfPlannedDurationOfTrialIntervention].valueString = {{C218714}} //"""Will depend on response to treatment"""
+* extension[design].extension[alternateDescriptionOfPlannedDurationOfTrialIntervention].valueString = "{{C218714}}" //"""Will depend on response to treatment"""
 
 // C218715/C218716 total planned duration of trial participation value/units
-* extension[design].extension[totalPlannedDurationOfTrialParticipation].valueQuantity = {{C218715}} //3 $NCIT#C29846 "Months"
+* extension[design].extension[totalPlannedDurationOfTrialParticipation].valueQuantity = {{C218715_C218716}} //3 $NCIT#C29846 "Months"
 
 // C218717 alternate description of planned duration of trial participation if duration will vary
 // * [alternateDescriptionOfPlannedDurationOfTrialParticipation].
@@ -107,4 +107,4 @@ This desceribes an entirely ficticious protocol for an imaginary product with Br
 }}
 
 // C218719 Other Committees
-* extension[design].extension[otherCommittees].valueString = {{C218719}} //"Exemplar Monitoring Board"
+* extension[design].extension[otherCommittees].valueString = "{{C218719}}" //"Exemplar Monitoring Board"

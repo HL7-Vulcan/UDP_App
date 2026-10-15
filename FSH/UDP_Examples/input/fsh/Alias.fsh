@@ -26,6 +26,7 @@ Alias: $ERA_REG = https://exemplarRegulator.org/registry-identifier
 
 
 Alias: $SCT = http://snomed.info/sct
+Alias: $MedDRA = http://terminology.hl7.org/CodeSystem/mdr
 Alias: $SpID = https://exemplarSponsor.com/sponsor-identifier
 Alias: $study-role-vs = m11-blinded-roles-vs
 Alias: $party-role-vs = udp-party-role-type-vs

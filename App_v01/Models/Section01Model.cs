@@ -29,7 +29,7 @@ public class Section01Model
     [System.Text.Json.Serialization.JsonIgnore] public string C50400_max  { get; set; } = "C29848";   // default: Years
     [JsonPropertyName("C218475")]  public string? C218475  { get; set; }  // Intervention Assignment Method
     [JsonPropertyName("C223137")]  public string? C223137  { get; set; }  // Randomisation Type
-    [JsonPropertyName("CC223138")] public string? CC223138 { get; set; }  // Other Assignment Method
+    [JsonPropertyName("C223138")] public string? C223138 { get; set; }  // Other Assignment Method
     [JsonPropertyName("C223136")]  public string? C223136  { get; set; }  // Stratification Indicator
     [JsonPropertyName("C218704")]  public string? C218704  { get; set; }  // Site Distribution
     [JsonPropertyName("C218705")]  public string? C218705  { get; set; }  // Site Geographic Scope

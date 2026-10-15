@@ -21,6 +21,7 @@ builder.Services.AddSingleton<UDP_App.Services.TerminologyService>();
 builder.Services.AddScoped<UDP_App.Services.FhirBrowseService>();
 builder.Services.AddScoped<UDP_App.Services.BuildService>();
 builder.Services.AddScoped<UDP_App.Services.FhirPipelineService>();
+builder.Services.AddSingleton<UDP_App.Services.FhirQuantityService>();
 
 var app = builder.Build();
 

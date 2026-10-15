@@ -10,7 +10,7 @@ C97054 (Nonproprietary Name)  C142585 (INN) or not applicable
 // TODO Check Comparator product code type
 * identifier[+].type.coding[+] = $NCIT#C218675 "Sponsor's Investigational Product Code"
 * identifier[=].system = $SpID
-* identifier[=].value = {{C218675}} // " EX2010/12"
+* identifier[=].value = "{{C218675}}" // " EX2010/12"
 
 * name[+].productName = "{{C97054}}" // "exoticillin 10micrograms/1.5ml intramuscular injection"
 // TODO Must give guidance on identifying INN

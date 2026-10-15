@@ -30,45 +30,45 @@ Context: M11_ResearchStudyProfile
 
 * extension contains
 
-// objectiveAndEstimandDesign 1..1 MS and
-interventionModel 1..1 MS and
-populationType 1..1 MS and
-controlType 1..1 MS and
-populationDiagnosisOrCondition 1..* MS and
+// objectiveAndEstimandDesign 0..1 MS and
+interventionModel 0..1 MS and
+populationType 0..1 MS and
+controlType 0..1 MS and
+//populationDiagnosisOrCondition 0..* MS and
 
-comparator 1..* and
-// notapplicable 1..1 at least one of [Nonproprietary Name] or [INN] or <"Not applicable">  and
-minimumAge 1..1 MS and
-unitsOfMinimumAge 1..1 MS and
-maximumAge 1..1 MS and
-unitsOfMaximumAge 1..1 MS and
-interventionAssignmentMethod 1..1 MS and
-randomisationType 1..1 MS and // invarint MS if type is randomisation and //(0..1)
-otherInterventionAssignmentMethod 1..1 MS and // invariant  //(0..1)
-stratificationIndicator 1..1 MS and
-siteDistribution 1..1 MS and
-siteGeographicScope 1..1 MS and
-masterProtocolIndicator 1..1 MS and
-drug-DeviceCombinationProductIndicator 1..1 MS and
-adaptiveTrialDesignIndicator 1..1 MS and
-numberOfArms 1..1 MS and
-trialBlindSchema 1..1 MS and
-blindedRoles 1..* MS and
-targetOrMaximum 1..1 MS and
-numberOfParticipants 1..1 MS and
-//randomlyassignedtotrialintervention-enrolled 1..1 MS and
-totalPlannedDurationOfTrialIntervention 1..1 and // invariant either quantity or alterative text  //(0..1)
-//totalPlannedDurationOfTrialInterventionUnitOfTime 1..1 and // invariant either quantity or alterative text  //(0..1)
-alternateDescriptionOfPlannedDurationOfTrialIntervention 1..1 and // invariant ifdurationwillvary either quantity or alterative text  //(0..1)
-totalPlannedDurationOfTrialParticipation 1..1 and // invariant either quantity or alterative text and  //(0..1)
-//totalPlannedDurationOfTrialParticipationUnitOfTime 1..1 and // invariant either quantity or alterative text  //(0..1)
-alternateDescriptionOfPlannedDurationOfTrialParticipation 1..1 and // invariant ifdurationwillvary either quantity or alterative text and
-additionalDescriptionofDuration 1..1  and  //(0..1)
-independentCommittees 1..* MS and //(1..*)
-otherCommittees 1..* // and  //(0..*)
-/* trialSchema 1..1 MS and
-schemaNotes 1..1 and  //(0..1)
-scheduleofActivities 1..1 MS */
+comparator 0..* and
+// notapplicable 0..1 at least one of [Nonproprietary Name] or [INN] or <"Not applicable">  and
+minimumAge 0..1 MS and
+//unitsOfMinimumAge 0..1 MS and
+maximumAge 0..1 MS and
+//unitsOfMaximumAge 0..1 MS and
+interventionAssignmentMethod 0..1 MS and
+randomisationType 0..1 MS and // invarint MS if type is randomisation and //(0..1)
+otherInterventionAssignmentMethod 0..1 MS and // invariant  //(0..1)
+stratificationIndicator 0..1 MS and
+siteDistribution 0..1 MS and
+siteGeographicScope 0..1 MS and
+masterProtocolIndicator 0..1 MS and
+drug-DeviceCombinationProductIndicator 0..1 MS and
+adaptiveTrialDesignIndicator 0..1 MS and
+numberOfArms 0..1 MS and
+trialBlindSchema 0..1 MS and
+blindedRoles 0..* MS and
+targetOrMaximum 0..1 MS and
+numberOfParticipants 0..1 MS and
+//randomlyassignedtotrialintervention-enrolled 0..1 MS and
+totalPlannedDurationOfTrialIntervention 0..1 and // invariant either quantity or alterative text  //(0..1)
+//totalPlannedDurationOfTrialInterventionUnitOfTime 0..1 and // invariant either quantity or alterative text  //(0..1)
+alternateDescriptionOfPlannedDurationOfTrialIntervention 0..1 and // invariant ifdurationwillvary either quantity or alterative text  //(0..1)
+totalPlannedDurationOfTrialParticipation 0..1 and // invariant either quantity or alterative text and  //(0..1)
+totalPlannedDurationOfTrialParticipationUnitOfTime 0..1 and // invariant either quantity or alterative text  //(0..1)
+alternateDescriptionOfPlannedDurationOfTrialParticipation 0..1 and // invariant ifdurationwillvary either quantity or alterative text and
+additionalDescriptionofDuration 0..1  and  //(0..1)
+independentCommittees 0..* MS and //(0..*)
+otherCommittees 0..* // and  //(0..*)
+/* trialSchema 0..1 MS and
+schemaNotes 0..1 and  //(0..1)
+scheduleofActivities 0..1 MS */
 
 
 /* * extension[objectiveAndEstimandDesign].value[x] only string or markdown

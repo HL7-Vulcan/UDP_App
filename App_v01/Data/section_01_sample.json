@@ -6,12 +6,12 @@
   "C98746": "$NCIT#C82639 \"Parallel Group\"",
   "C218703": "$NCIT#C218503 \"With Disease\"",
   "C49647": "$NCIT#C49648 \"Placebo\"",
-  "C112038": "Plaque psoriasis (MedDRA 10037156 / SNOMED CT 9014002)",
+  "C112038": "$SCT#56246009 \"Plaque psoriasis\"",
   "C49693": "18 $NCIT#C29848 \"Years\"",
   "C49694": "75 $NCIT#C29848 \"Years\"",
   "C218475": "$NCIT#C25196 \"Randomisation\"",
   "C223137": "Block randomisation with a block size of 6",
-  "CC223138": "",
+  "C223138": "",
   "C223136": "$NCIT#C49488 \"Yes\"",
   "C218704": "$NCIT#C217005 \"Multicentre\"",
   "C218705": "$NCIT#C217007 \"Multiple Countries\"",
@@ -20,7 +20,10 @@
   "C218708": "$NCIT#C49487 \"No\"",
   "C98771": "2",
   "C49658": "$NCIT#C187674 \"Observer Blind\"",
-  "C218709": [ "$NCIT#C142710 \"Participant\"", "$NCIT#C25936 \"Investigator\"" ],
+  "C218709": [
+    "$NCIT#C142710 \"Participant\"",
+    "$NCIT#C25936 \"Investigator\""
+  ],
   "C218710": "$UDP_Target#1 \"Target\"",
   "C49692": "180",
   "C218711": "will be randomly assigned to trial intervention",
@@ -29,7 +32,10 @@
   "C218714": "",
   "C218715": "9",
   "C218716": "$NCIT#C29846 \"Months\"",
-  "C218718": [ "$NCIT#C142578 \"Independent Data Monitoring Committee\"", "$NCIT#C78726 \"Endpoint Adjudication Committee\"" ],
+  "C218718": [
+    "$NCIT#C142578 \"Independent Data Monitoring Committee\"",
+    "$NCIT#C78726 \"Endpoint Adjudication Committee\""
+  ],
   "C218719": "Exemplar Safety Review Board",
   "COMPARATOR_PRODUCT": "ComparatorProduct-01",
   "C218675": "EX2010/12-PBO",

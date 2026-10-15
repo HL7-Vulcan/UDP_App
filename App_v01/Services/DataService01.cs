@@ -8,8 +8,13 @@ public class DataService01
 {
     private static readonly JsonSerializerOptions JsonOpts = new() { WriteIndented = true };
     private readonly IWebHostEnvironment _env;
+    private readonly FhirQuantityService _qty;
 
-    public DataService01(IWebHostEnvironment env) => _env = env;
+    public DataService01(IWebHostEnvironment env, FhirQuantityService qty)
+    {
+        _env = env;
+        _qty = qty;
+    }
 
     public string ToJson(Section01Model model) => JsonSerializer.Serialize(model, JsonOpts);
 
@@ -48,7 +53,7 @@ public class DataService01
         L("Maximum Age",                          model.C49694);
         L("Intervention Assignment Method",       model.C218475);
         L("Randomisation Type",                   model.C223137);
-        L("Other Assignment Method",              model.CC223138);
+        L("Other Assignment Method",              model.C223138);
         L("Stratification Indicator",             model.C223136);
         L("Site Distribution",                    model.C218704);
         L("Site Geographic Scope",                model.C218705);
@@ -100,6 +105,11 @@ public class DataService01
         tbl = ExpandListRepeat(tbl, "C218709", model.C218709);
         tbl = ExpandListRepeat(tbl, "C218718", model.C218718);
 
+        // C218712+C218713 → totalPlannedDurationOfTrialIntervention Quantity
+        var durationIntervention = _qty.Build(model.C218712, model.C218713);
+        // C218715+C218716 → totalPlannedDurationOfTrialParticipation Quantity
+        var durationParticipation = _qty.Build(model.C218715, model.C218716);
+
         foreach (var (k, v) in new Dictionary<string, string?>
         {
             {"TABLE_X",    tableId},       {"COMPARATOR_PRODUCT", comparatorId},
@@ -107,16 +117,16 @@ public class DataService01
             {"C49647",     model.C49647},  {"C112038",  model.C112038},
             {"C49693",     model.C49693},  {"C49694",   model.C49694},
             {"C218475",    model.C218475}, {"C223137",  model.C223137},
-            {"CC223138",   model.CC223138},{"C223136",  model.C223136},
+            {"C223138",    model.C223138},{"C223136",  model.C223136},
             {"C218704",    model.C218704}, {"C218705",  model.C218705},
             {"C218707",    model.C218707}, {"C218706",  model.C218706},
             {"C218708",    model.C218708},
             {"C98771",     model.C98771},  {"C49658",   model.C49658},
             {"C218710",    model.C218710},
             {"C49692",     model.C49692},  {"C218711",  model.C218711},
-            {"C218712",    model.C218712}, {"C218713",  model.C218713},
+            {"C218712_C218713", durationIntervention},
             {"C218714",    model.C218714},
-            {"C218715",    model.C218715}, {"C218716",  model.C218716},
+            {"C218715_C218716", durationParticipation},
             {"C218719",    model.C218719},
         })
             tbl = tbl.Replace("{{" + k + "}}", v ?? string.Empty);
@@ -129,6 +139,10 @@ public class DataService01
             {"C97054",  model.C97054},
         })
             comp = comp.Replace("{{" + k + "}}", v ?? string.Empty);
+
+        main = _qty.StripEmptyLines(main);
+        tbl  = _qty.StripEmptyLines(tbl);
+        comp = _qty.StripEmptyLines(comp);
 
         return main + "\r\n" + tbl + "\r\n" + comp;
     }
@@ -143,26 +157,54 @@ public class DataService01
         const string repeatOpen  = "{{REPEAT";
         const string repeatClose = "}}";
 
-        int start = template.IndexOf(repeatOpen, StringComparison.Ordinal);
-        if (start < 0) return template;
+        // Search for the REPEAT block that contains our specific fieldToken
+        int searchFrom = 0;
+        int start, end;
+        string rowPattern;
+        while (true)
+        {
+            start = template.IndexOf(repeatOpen, searchFrom, StringComparison.Ordinal);
+            if (start < 0) return template;
 
-        // Find the matching closing }}
-        int end = template.IndexOf(repeatClose, start + repeatOpen.Length, StringComparison.Ordinal);
-        if (end < 0) return template;
+            // Find the closing }} that is on its own line (not a token inside the block).
+            // We do this by scanning line by line after {{REPEAT for a line that is just "}}".
+            int lineStart = start + repeatOpen.Length;
+            // skip to end of the {{REPEAT line
+            int eol = template.IndexOf('\n', lineStart);
+            if (eol < 0) return template;
+            int scanPos = eol + 1;
+            end = -1;
+            while (scanPos < template.Length)
+            {
+                int nextEol = template.IndexOf('\n', scanPos);
+                int lineEnd = nextEol < 0 ? template.Length : nextEol;
+                string line = template.Substring(scanPos, lineEnd - scanPos).Trim('\r', '\n', ' ', '\t');
+                if (line == "}}")
+                {
+                    // closing }} found at scanPos
+                    end = scanPos;
+                    break;
+                }
+                if (nextEol < 0) break;
+                scanPos = nextEol + 1;
+            }
+            if (end < 0) return template;
 
-        // The row pattern is the text between {{REPEAT and }}
-        int patternStart = start + repeatOpen.Length;
-        string rowPattern = template.Substring(patternStart, end - patternStart);
+            int patternStart = start + repeatOpen.Length;
+            rowPattern = template.Substring(patternStart, end - patternStart);
 
-        // Only process this REPEAT block if it contains our fieldToken
-        if (!rowPattern.Contains("{{" + fieldToken + "}}"))
-            return template;
+            // Only process this REPEAT block if it contains our fieldToken
+            if (rowPattern.Contains("{{" + fieldToken + "}}"))
+                break;
 
-        // Consume the trailing newline of the }} line
-        int blockEnd = end + repeatClose.Length;
-        while (blockEnd < template.Length && template[blockEnd] is ' ' or '\t') blockEnd++;
-        if (blockEnd < template.Length && template[blockEnd] == '\r') blockEnd++;
-        if (blockEnd < template.Length && template[blockEnd] == '\n') blockEnd++;
+            // Otherwise advance past this block and keep searching
+            searchFrom = end + repeatClose.Length;
+        }
+
+        // Consume the entire closing }} line (including its newline)
+        int blockEnd = end;
+        while (blockEnd < template.Length && template[blockEnd] != '\n') blockEnd++;
+        if (blockEnd < template.Length) blockEnd++; // consume the \n
 
         // Also strip the leading newline/whitespace before {{REPEAT so we don't leave a blank line
         int blockStart = start;

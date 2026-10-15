@@ -210,9 +210,9 @@
                        @bind="Model.C223137" @bind:event="oninput"
                        disabled="@(!IsRandomisation)" />
                 <input class="fb @(IsOtherAssignment ? "" : "disabled")" type="text"
-                       placeholder="describe other method" data-ctx="CC223138"
+                       placeholder="describe other method" data-ctx="C223138"
                        style="margin-top:4px"
-                       @bind="Model.CC223138" @bind:event="oninput"
+                       @bind="Model.C223138" @bind:event="oninput"
                        disabled="@(!IsOtherAssignment)" />
             </td>
             <td class="lbl">Geographic Scope:</td>
@@ -432,9 +432,9 @@
                            @bind="Model.C223137" @bind:event="oninput"
                            disabled="@(!IsRandomisation)" />
                     <input class="fb @(IsOtherAssignment ? "" : "disabled")" type="text"
-                           placeholder="describe other method" data-ctx="CC223138"
+                           placeholder="describe other method" data-ctx="C223138"
                            style="margin-top:4px"
-                           @bind="Model.CC223138" @bind:event="oninput"
+                           @bind="Model.C223138" @bind:event="oninput"
                            disabled="@(!IsOtherAssignment)" />
                 </td>
                 <td class="lbl">Geographic Scope:</td>
@@ -577,7 +577,7 @@
     private bool IsRandomisation =>
         Model.C218475?.Contains("C25196") == true;
 
-    // CC223138 is only active when C218475 is "Other" ($NCIT#C17649)
+    // C223138 is only active when C218475 is "Other" ($NCIT#C17649)
     private bool IsOtherAssignment =>
         Model.C218475?.Contains("C17649") == true;
     private System.Threading.Timer? _statusTimer;
