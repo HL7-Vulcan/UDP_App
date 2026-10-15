@@ -415,6 +415,31 @@ public class SushiService
         return safe;
     }
 
+    /// <summary>
+    /// After a successful Sushi build, copies all files from
+    /// SushiProject/fsh-generated/resources/ into the top-level Examples/ folder,
+    /// overwriting any file with the same name.
+    /// Returns the number of files copied.
+    /// </summary>
+    /// <summary>
+    /// Copies only the study-specific generated files (those shown to the user,
+    /// i.e. not in the support-files baseline) to the main Examples folder.
+    /// </summary>
+    public int CopyGeneratedToMainExamples(IEnumerable<SushiOutputFile> studyFiles)
+    {
+        var dest = Path.Combine(_env.ContentRootPath, "Examples");
+        Directory.CreateDirectory(dest);
+        int count = 0;
+        foreach (var file in studyFiles)
+        {
+            if (!File.Exists(file.FullPath)) continue;
+            var target = Path.Combine(dest, file.FileName);
+            File.Copy(file.FullPath, target, overwrite: true);
+            count++;
+        }
+        return count;
+    }
+
     /// <summary>Lists all .fsh files currently in the Examples folder.</summary>
     public List<string> ListExampleFiles()
     {

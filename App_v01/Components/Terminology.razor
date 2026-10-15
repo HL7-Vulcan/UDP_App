@@ -26,12 +26,17 @@
     .act-btn:hover { background: #eee; }
     .act-btn.danger { border-color: #c00; color: #c00; }
     .act-btn.danger:hover { background: #fee; }
+    .act-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+    .act-btn:disabled:hover { background: none; }
+    .act-btn.danger:disabled:hover { background: none; }
     .add-row   { padding: 10px 14px; background: #f0f4fb; border-top: 1px solid #dde; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
     .add-row input { background: #d0cece; color: #1a7a1a; border: none; border-bottom: 1.5px solid #999; font-family: 'Calibri', Arial, sans-serif; font-size: 10pt; padding: 2px 6px; outline: none; width: 160px; }
     .add-row input:focus { background: #bfbcbc; }
     .add-row label { font-size: 9.5pt; color: #444; white-space: nowrap; }
     .add-btn   { background: #1f3864; color: #fff; border: none; border-radius: 3px; padding: 4px 14px; font-size: 10pt; cursor: pointer; }
     .add-btn:hover { background: #162a4e; }
+    .add-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+    .add-btn:disabled:hover { background: #1f3864; }
     .new-vs-section { border: 1px dashed #bbb; border-radius: 5px; padding: 14px 16px; margin-bottom: 24px; background: #f9f9fc; }
     .new-vs-section h3 { font-size: 11pt; font-weight: 700; color: #1f3864; margin: 0 0 10px; }
     .field-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 8px; }
@@ -42,6 +47,9 @@
     .btn { padding: 7px 20px; border: none; border-radius: 3px; font-size: 10pt; font-family: inherit; cursor: pointer; }
     .btn-primary   { background: #1f3864; color: #fff; } .btn-primary:hover { background: #162a4e; }
     .btn-secondary { background: #eee; color: #333; border: 1px solid #ccc; } .btn-secondary:hover { background: #ddd; }
+    .btn:disabled { opacity: 0.35; cursor: not-allowed; }
+    .btn-primary:disabled:hover { background: #1f3864; }
+    .btn-secondary:disabled:hover { background: #eee; }
     .sbar { position: fixed; bottom: 0; left: 0; right: 0; background: #1f3864; color: #fff; font-size: 9pt; padding: 5px 18px; display: flex; justify-content: space-between; align-items: center; z-index: 100; }
     .msg-ok  { color: #7fda7f; }
     .msg-err { color: #ffaaaa; }
@@ -88,11 +96,11 @@
                             <td><span class="code-badge">@opt.Code</span></td>
                             <td><span class="fsh-val">@opt.FshValue</span></td>
                             <td>
-                                <button class="act-btn" title="Move up"
+                                <button class="act-btn" title="Move up" disabled
                                     @onclick="() => Move(vsId, code, -1)">▲</button>
-                                <button class="act-btn" title="Move down"
+                                <button class="act-btn" title="Move down" disabled
                                     @onclick="() => Move(vsId, code, +1)">▼</button>
-                                <button class="act-btn danger" title="Remove"
+                                <button class="act-btn danger" title="Remove" disabled
                                     @onclick="() => Remove(vsId, code)">✕</button>
                             </td>
                         </tr>
@@ -106,7 +114,7 @@
                 <input type="text" placeholder="Display text" @bind="_newDisplay[vsId]" @bind:event="oninput" />
                 <input type="text" placeholder="System (e.g. $NCIT)" @bind="_newSystem[vsId]" @bind:event="oninput" style="width:110px" />
                 <input type="text" placeholder="Code (e.g. C12345)" @bind="_newCode[vsId]" @bind:event="oninput" />
-                <button class="add-btn" @onclick="() => AddOption(vsId)">+ Add</button>
+                <button class="add-btn" disabled @onclick="() => AddOption(vsId)">+ Add</button>
             </div>
         </div>
     }
@@ -127,8 +135,8 @@
             <input type="text" placeholder="(optional)" @bind="_newVsDesc" @bind:event="oninput" style="width:380px" />
         </div>
         <div class="toolbar">
-            <button class="btn btn-secondary" @onclick="ClearNewVsForm">Clear</button>
-            <button class="btn btn-primary" @onclick="CreateValueSet">Create Value Set</button>
+            <button class="btn btn-secondary" disabled @onclick="ClearNewVsForm">Clear</button>
+            <button class="btn btn-primary" disabled @onclick="CreateValueSet">Create Value Set</button>
         </div>
     </div>
 

@@ -98,7 +98,6 @@
         <button class="btn btn-secondary" @onclick="LoadSample">Load Sample</button>
         <button class="btn btn-secondary" @onclick="OpenSaveDialog">⬇ Save to File…</button>
         <button class="btn btn-secondary" @onclick="OpenLoadDialog">⬆ Load from File</button>
-        <button class="btn btn-primary"   @onclick="SaveToBrowser">Save to Browser</button>
     </div>
 </div>
 
@@ -119,10 +118,10 @@
         <input type="text" @bind="SaveFileName" @bind:event="oninput" />
         <label style="display:block;font-weight:700;margin:10px 0 6px;">Format</label>
         <div class="fmt-row">
+            <label><input type="radio" name="s8fmt" checked="@IsFhir" @onchange="SetFmtFhir" /> FSH</label>
             <label><input type="radio" name="s8fmt" checked="@IsJson" @onchange="SetFmtJson" /> JSON</label>
             <label><input type="radio" name="s8fmt" checked="@IsCsv"  @onchange="SetFmtCsv"  /> CSV</label>
             <label><input type="radio" name="s8fmt" checked="@IsTxt"  @onchange="SetFmtTxt"  /> Plain Text</label>
-            <label><input type="radio" name="s8fmt" checked="@IsFhir" @onchange="SetFmtFhir" /> FHIR</label>
         </div>
         <div class="dbr">
             <button class="btn btn-secondary" @onclick="CloseSaveDialog">Cancel</button>
@@ -153,7 +152,7 @@
     private bool   ShowSaveDialog = false;
     private bool   ShowReqDialog  = false;
     private string SaveFileName   = "section8_data";
-    private string SaveFormat     = "json";
+    private string SaveFormat     = "fsh";
     private string StatusMessage  = string.Empty;
     private string ReqDialogMsg   = string.Empty;
     private string ErrorMessage   = string.Empty;
@@ -165,11 +164,11 @@
     private string SaveDialogCss => ShowSaveDialog ? "overlay show" : "overlay";
     private string ReqDialogCss  => ShowReqDialog  ? "overlay show" : "overlay";
     private bool IsJson => SaveFormat == "json"; private bool IsCsv  => SaveFormat == "csv";
-    private bool IsTxt  => SaveFormat == "txt";  private bool IsFhir => SaveFormat == "fhir";
+    private bool IsTxt  => SaveFormat == "txt";  private bool IsFhir => SaveFormat == "fsh";
     private void SetFmtJson(ChangeEventArgs e) => SaveFormat = "json";
     private void SetFmtCsv(ChangeEventArgs e)  => SaveFormat = "csv";
     private void SetFmtTxt(ChangeEventArgs e)  => SaveFormat = "txt";
-    private void SetFmtFhir(ChangeEventArgs e) => SaveFormat = "fhir";
+    private void SetFmtFhir(ChangeEventArgs e) => SaveFormat = "fsh";
     private string ReqClass(string? v) => ShowValidation && string.IsNullOrWhiteSpace(v) ? "fb req-empty" : "fb";
 
     private bool HasRequiredEmpty() => new[]
@@ -226,11 +225,11 @@
         {
             "csv"  => (DataSvc.ToCsv(Model),      "text/csv",         ".csv"),
             "txt"  => (DataSvc.ToPlainText(Model), "text/plain",       ".txt"),
-            "fhir" => (DataSvc.ToFsh(Model),       "text/plain",       ".fsh"),
+            "fsh"  => (DataSvc.ToFsh(Model),       "text/plain",       ".fsh"),
             _      => (DataSvc.ToJson(Model),      "application/json", ".json"),
         };
         var fn = (SaveFileName.Trim().Length > 0 ? SaveFileName.Trim() : "section8_data") + ext;
-        if (SaveFormat == "fhir") SushiSvc.SaveToExamples(fn, content);
+        if (SaveFormat == "fsh") SushiSvc.SaveToExamples(fn, content);
         await JS.InvokeVoidAsync("udpDownload", fn, content, mime);
         SetStatus("⬇ Downloaded " + fn);
     }

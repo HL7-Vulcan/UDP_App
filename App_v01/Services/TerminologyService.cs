@@ -144,6 +144,33 @@ public class TerminologyService
             }
         });
 
+        Add(new ValueSet
+        {
+            Id = "C217048",
+            Name = "Time Unit",
+            Description = "Units of time used for age and duration quantities.",
+            Options = new List<PicklistOption>
+            {
+                new() { System = "$NCIT", Code = "C25529", Display = "Hours"  },
+                new() { System = "$NCIT", Code = "C25301", Display = "Days"   },
+                new() { System = "$NCIT", Code = "C29844", Display = "Weeks"  },
+                new() { System = "$NCIT", Code = "C29846", Display = "Months" },
+                new() { System = "$NCIT", Code = "C29848", Display = "Years"  },
+            }
+        });
+
+        Add(new ValueSet
+        {
+            Id = "C217278",
+            Name = "Population Type",
+            Description = "Characterises the study population by disease status.",
+            Options = new List<PicklistOption>
+            {
+                new() { System = "$NCIT", Code = "C218503", Display = "With Disease"    },
+                new() { System = "$NCIT", Code = "C218504", Display = "Without Disease" },
+            }
+        });
+
         // ── Additional value sets will be added here as the app grows ─────────
     }
 

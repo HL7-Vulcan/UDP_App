@@ -25,16 +25,24 @@
     input.fb.wnum { width:52px; }
     input.fb.wmed { width:180px; }
     input.fb.wlg  { width:260px; }
+    input.fb.wfull-inline { flex:1; min-width:200px; }
+    input.fb.wxl  { width:420px; }
     input.fb.wfull { width:100%; }
     /* 4-column design table */
     .dtbl { width:100%; border-collapse:collapse; font-size:10pt; margin:8px 0 12px; }
     .dtbl td { border:1px solid #bbb; padding:4px 7px; vertical-align:top; }
-    .dtbl td.lbl { font-weight:700; white-space:nowrap; width:18%; background:#f5f5f5; color:#1f3864; }
-    .dtbl td.val { width:32%; }
+    .dtbl td.lbl { font-weight:700; width:16%; background:#f5f5f5; color:#1f3864; }
+    .dtbl td.val { width:34%; }
     .dtbl td.val input.fb { display:block; width:100%; }
     .dtbl td.val textarea.fb { min-height:36px; }
     .age-wrap { display:flex; align-items:baseline; gap:5px; }
     .age-wrap input.fb { width:52px; }
+    .age-block { display:flex; flex-direction:column; gap:4px; }
+    .age-row   { display:flex; align-items:baseline; gap:5px; font-size:9.5pt; }
+    .age-lbl   { min-width:28px; font-weight:700; color:#1f3864; font-size:9pt; }
+    select.unit-sel { background:#d0cece; color:#1a7a1a; border:none; border-bottom:1.5px solid #999; font-family:'Calibri',Arial,sans-serif; font-size:10pt; padding:2px 3px; outline:none; cursor:pointer; width:74px; }
+    select.unit-sel:focus { background:#bfbcbc; }
+    input.fb.disabled, select.fb.disabled, select.unit-sel.disabled { opacity:0.45; pointer-events:none; }
     /* Inline paragraph fields */
     p.doc { margin-bottom:8px; line-height:1.8; }
     .lbl-inline { font-weight:700; }
@@ -119,7 +127,7 @@
                 </select>
             </td>
             <td class="lbl">Population Type:</td>
-            <td class="val"><input class="fb" type="text" placeholder='$NCIT#C98596 "Patient"' data-ctx="C218703" @bind="Model.C218703" @bind:event="oninput" /></td>
+            <td class="val"><PicklistSelect ValueSetId="C217278" CssClass="fb wfull" DataCtx="C218703" @bind-Value="Model.C218703" /></td>
         </tr>
         <tr>
             <td class="lbl">Control Type:</td>
@@ -135,8 +143,8 @@
                     <option value='$NCIT#C28280 "No Control"'>No Control</option>
                 </select>
             </td>
-            <td class="lbl">Condition:</td>
-            <td class="val"><input class="fb" type="text" placeholder='$SCT#9014002 "Psoriasis"' data-ctx="C112038" @bind="Model.C112038" @bind:event="oninput" /></td>
+            <td class="lbl">Population Diagnosis or Condition:<br /><span style="color:#c00;font-size:8.5pt;font-weight:400">Need external MedDRA or Snomed CT lookup</span></td>
+            <td class="val"><input class="fb wfull" type="text" placeholder='$SCT#9014002 "Psoriasis"' data-ctx="C112038" @bind="Model.C112038" @bind:event="oninput" /></td>
         </tr>
         <tr>
             <td class="lbl">Control Description:<br /><span style="color:#c00;font-size:8.5pt;font-weight:400">Potential Duplicate Field</span></td>
@@ -144,13 +152,33 @@
                 <textarea class="fb" rows="2" placeholder="Nonproprietary name / description of comparator"
                     data-ctx="C97054"  @bind="Model.C97054" @bind:event="oninput"></textarea>
             </td>
-            <td class="lbl">Population Age:</td>
+            <td class="lbl">Population Age:<br /><span style="color:#c00;font-size:8.5pt;font-weight:400">May need multiple age ranges</span></td>
             <td class="val">
-                <div class="age-wrap">
-                    <input class="fb" type="text" placeholder="18" data-ctx="C49693"  @bind="Model.C49693" @bind:event="oninput" />
-                    <span>years –</span>
-                    <input class="fb" type="text" placeholder="75" data-ctx="C49694"  @bind="Model.C49694" @bind:event="oninput" />
-                    <span>years</span>
+                <div class="age-block">
+                    <div class="age-row">
+                        <span class="age-lbl">min:</span>
+                        <input class="fb" type="text" style="width:52px" placeholder="18" data-ctx="C49693"
+                               value="@Model.C49693_qty"
+                               @oninput="e => { Model.C49693_qty = e.Value?.ToString() ?? string.Empty; SyncMinAge(); }" />
+                        <select class="unit-sel" data-ctx="C50400_min" @bind="Model.C50400_min" @bind:after="SyncMinAge">
+                            @foreach (var opt in TermSvc.OptionsFor("C217048"))
+                            {
+                                <option value="@opt.Code">@opt.Display</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="age-row">
+                        <span class="age-lbl">max:</span>
+                        <input class="fb" type="text" style="width:52px" placeholder="75" data-ctx="C49694"
+                               value="@Model.C49694_qty"
+                               @oninput="e => { Model.C49694_qty = e.Value?.ToString() ?? string.Empty; SyncMaxAge(); }" />
+                        <select class="unit-sel" data-ctx="C50400_max" @bind="Model.C50400_max" @bind:after="SyncMaxAge">
+                            @foreach (var opt in TermSvc.OptionsFor("C217048"))
+                            {
+                                <option value="@opt.Code">@opt.Display</option>
+                            }
+                        </select>
+                    </div>
                 </div>
             </td>
         </tr>
@@ -174,8 +202,18 @@
             </td>
         </tr>
         <tr>
-            <td class="lbl">Randomisation Type:</td>
-            <td class="val"><input class="fb" type="text" placeholder="block randomisation" data-ctx="C223137" @bind="Model.C223137" @bind:event="oninput" /></td>
+            <td class="lbl">Randomisation Type or Other Intervention:</td>
+            <td class="val">
+                <input class="fb @(IsRandomisation ? "" : "disabled")" type="text"
+                       placeholder="randomisation type" data-ctx="C223137"
+                       @bind="Model.C223137" @bind:event="oninput"
+                       disabled="@(!IsRandomisation)" />
+                <input class="fb @(IsOtherAssignment ? "" : "disabled")" type="text"
+                       placeholder="describe other method" data-ctx="CC223138"
+                       style="margin-top:4px"
+                       @bind="Model.CC223138" @bind:event="oninput"
+                       disabled="@(!IsOtherAssignment)" />
+            </td>
             <td class="lbl">Geographic Scope:</td>
             <td class="val">
                 <select class="fb wfull" data-ctx="C218705" @bind="Model.C218705">
@@ -187,7 +225,7 @@
         </tr>
         <tr>
             <td class="lbl">Stratification:</td>
-            <td class="val"><input class="fb" type="text" placeholder='$NCIT#C49488 "Yes"' data-ctx="C223136" @bind="Model.C223136" @bind:event="oninput" /></td>
+            <td class="val"><PicklistSelect ValueSetId="C217046" CssClass="fb wfull" DataCtx="C223136" @bind-Value="Model.C223136" /></td>
             <td class="lbl">Master Protocol:</td>
             <td class="val"><PicklistSelect ValueSetId="C217046" CssClass="fb wfull" DataCtx="C218707" @bind-Value="Model.C218707" /></td>
         </tr>
@@ -220,33 +258,30 @@
         <MultiPicklistSelect ValueSetId="C217281" DataCtx="C218709" @bind-Value="Model.C218709" />
     </p>
 
-    <p class="doc">
-        <span class="lbl-inline">Number of Participants:</span> A&nbsp;
-        <PicklistSelect ValueSetId="m11-target-Maximum-vs" CssClass="fb wlg" DataCtx="C218710" @bind-Value="Model.C218710" />
+    <p class="doc" style="display:flex;align-items:baseline;flex-wrap:wrap;gap:4px">
+        <span class="lbl-inline">Number of Participants:</span>&nbsp;A&nbsp;
+        <PicklistSelect ValueSetId="m11-target-Maximum-vs" CssClass="fb" Style="width:auto;min-width:80px" DataCtx="C218710" @bind-Value="Model.C218710" />
         &nbsp;of&nbsp;
-        <input class="fb wnum" type="text" placeholder="200" data-ctx="C49692"  @bind="Model.C49692" @bind:event="oninput" />
-        &nbsp;participants.
+        <input class="fb wnum" type="text" placeholder="200" data-ctx="C49692" @bind="Model.C49692" @bind:event="oninput" />
+        &nbsp;participants&nbsp;<span style="color:#888;font-style:italic;font-size:9.5pt">[will be randomly assigned to trial intervention/enrolled]</span>.
     </p>
 
     <p class="doc">
-        <span class="lbl-inline">Duration:</span> Total planned duration of trial <em>participation</em> for each participant:&nbsp;
-        <input class="fb wmed" type="text" placeholder='9 $NCIT#C29846 "Months"' data-ctx="C218715" @bind="Model.C218715" @bind:event="oninput" />.
+        <span class="lbl-inline">Duration:</span> Total planned duration of trial <em>intervention</em> for each participant:&nbsp;
+        <input class="fb wnum" type="text" placeholder="9" data-ctx="C218712" @bind="Model.C218712" @bind:event="oninput" />&nbsp;
+        <PicklistSelect ValueSetId="C217048" CssClass="fb" Style="width:auto;min-width:80px" DataCtx="C218713" @bind-Value="Model.C218713" />.
     </p>
 
-    @if (!string.IsNullOrWhiteSpace(Model.C218714))
-    {
-        <p class="doc">
-            <span class="lbl-inline">Alternate Duration Description:</span>&nbsp;
-            <input class="fb wlg" type="text" data-ctx="C218714" @bind="Model.C218714" @bind:event="oninput" />
-        </p>
-    }
-    else
-    {
-        <p class="doc">
-            <span class="lbl-inline">Alternate Duration Description:</span>&nbsp;
-            <input class="fb wlg" type="text" placeholder="(if duration will vary)" data-ctx="C218714" @bind="Model.C218714" @bind:event="oninput" />
-        </p>
-    }
+    <p class="doc">
+        Total planned duration of trial <em>participation</em> for each participant:&nbsp;
+        <input class="fb wnum" type="text" placeholder="9" data-ctx="C218715" @bind="Model.C218715" @bind:event="oninput" />&nbsp;
+        <PicklistSelect ValueSetId="C217048" CssClass="fb" Style="width:auto;min-width:80px" DataCtx="C218716" @bind-Value="Model.C218716" />.
+    </p>
+
+    <p class="doc" style="display:flex;align-items:baseline;gap:4px">
+        <span class="lbl-inline" style="white-space:nowrap">Alternate Duration Description:</span>&nbsp;
+        <input class="fb" type="text" style="flex:1" placeholder="(if duration will vary)" data-ctx="C218714" @bind="Model.C218714" @bind:event="oninput" />
+    </p>
 
     <p class="doc"><span class="lbl-inline">Committees:</span></p>
     <p class="doc">
@@ -277,7 +312,6 @@
         <button class="btn btn-secondary" @onclick="LoadSample">Load Sample</button>
         <button class="btn btn-secondary" @onclick="OpenSaveDialog">⬇ Save to File…</button>
         <button class="btn btn-secondary" @onclick="OpenLoadDialog">⬆ Load from File</button>
-        <button class="btn btn-primary"   @onclick="SaveToBrowser">Save to Browser</button>
     </div>
 </div>
 
@@ -315,7 +349,7 @@
                     </select>
                 </td>
                 <td class="lbl">Population Type:</td>
-                <td class="val"><input class="fb" type="text" placeholder='$NCIT#C98596 "Patient"' data-ctx="C218703" @bind="Model.C218703" @bind:event="oninput" /></td>
+                <td class="val"><PicklistSelect ValueSetId="C217278" CssClass="fb wfull" DataCtx="C218703" @bind-Value="Model.C218703" /></td>
             </tr>
             <tr>
                 <td class="lbl">Control Type:</td>
@@ -331,8 +365,8 @@
                         <option value='$NCIT#C28280 "No Control"'>No Control</option>
                     </select>
                 </td>
-                <td class="lbl">Condition:</td>
-                <td class="val"><input class="fb" type="text" placeholder='$SCT#9014002 "Psoriasis"' data-ctx="C112038" @bind="Model.C112038" @bind:event="oninput" /></td>
+                <td class="lbl">Population Diagnosis or Condition:<br /><span style="color:#c00;font-size:8.5pt;font-weight:400">Need external MedDRA or Snomed CT lookup</span></td>
+                <td class="val"><input class="fb wfull" type="text" placeholder='$SCT#9014002 "Psoriasis"' data-ctx="C112038" @bind="Model.C112038" @bind:event="oninput" /></td>
             </tr>
             <tr>
                 <td class="lbl">Control Description:<br /><span style="color:#c00;font-size:8.5pt;font-weight:400">Potential Duplicate Field</span></td>
@@ -340,13 +374,33 @@
                     <textarea class="fb" rows="2" placeholder="Nonproprietary name / description of comparator"
                         data-ctx="C97054"  @bind="Model.C97054" @bind:event="oninput"></textarea>
                 </td>
-                <td class="lbl">Population Age:</td>
+                <td class="lbl">Population Age:<br /><span style="color:#c00;font-size:8.5pt;font-weight:400">May need multiple age ranges</span></td>
                 <td class="val">
-                    <div class="age-wrap">
-                        <input class="fb" type="text" placeholder="18" data-ctx="C49693"  @bind="Model.C49693" @bind:event="oninput" />
-                        <span>years –</span>
-                        <input class="fb" type="text" placeholder="75" data-ctx="C49694"  @bind="Model.C49694" @bind:event="oninput" />
-                        <span>years</span>
+                    <div class="age-block">
+                        <div class="age-row">
+                            <span class="age-lbl">min:</span>
+                            <input class="fb" type="text" style="width:52px" placeholder="18" data-ctx="C49693"
+                                   value="@Model.C49693_qty"
+                                   @oninput="e => { Model.C49693_qty = e.Value?.ToString() ?? string.Empty; SyncMinAge(); }" />
+                            <select class="unit-sel" data-ctx="C50400_min" @bind="Model.C50400_min" @bind:after="SyncMinAge">
+                                @foreach (var opt in TermSvc.OptionsFor("C217048"))
+                                {
+                                    <option value="@opt.Code">@opt.Display</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="age-row">
+                            <span class="age-lbl">max:</span>
+                            <input class="fb" type="text" style="width:52px" placeholder="75" data-ctx="C49694"
+                                   value="@Model.C49694_qty"
+                                   @oninput="e => { Model.C49694_qty = e.Value?.ToString() ?? string.Empty; SyncMaxAge(); }" />
+                            <select class="unit-sel" data-ctx="C50400_max" @bind="Model.C50400_max" @bind:after="SyncMaxAge">
+                                @foreach (var opt in TermSvc.OptionsFor("C217048"))
+                                {
+                                    <option value="@opt.Code">@opt.Display</option>
+                                }
+                            </select>
+                        </div>
                     </div>
                 </td>
             </tr>
@@ -370,8 +424,18 @@
                 </td>
             </tr>
             <tr>
-                <td class="lbl">Randomisation Type:</td>
-                <td class="val"><input class="fb" type="text" placeholder="block randomisation" data-ctx="C223137" @bind="Model.C223137" @bind:event="oninput" /></td>
+                <td class="lbl">Randomisation Type or Other Intervention:</td>
+                <td class="val">
+                    <input class="fb @(IsRandomisation ? "" : "disabled")" type="text"
+                           placeholder="randomisation type" data-ctx="C223137"
+                           @bind="Model.C223137" @bind:event="oninput"
+                           disabled="@(!IsRandomisation)" />
+                    <input class="fb @(IsOtherAssignment ? "" : "disabled")" type="text"
+                           placeholder="describe other method" data-ctx="CC223138"
+                           style="margin-top:4px"
+                           @bind="Model.CC223138" @bind:event="oninput"
+                           disabled="@(!IsOtherAssignment)" />
+                </td>
                 <td class="lbl">Geographic Scope:</td>
                 <td class="val">
                     <select class="fb wfull" data-ctx="C218705" @bind="Model.C218705">
@@ -383,7 +447,7 @@
             </tr>
             <tr>
                 <td class="lbl">Stratification:</td>
-                <td class="val"><input class="fb" type="text" placeholder='$NCIT#C49488 "Yes"' data-ctx="C223136" @bind="Model.C223136" @bind:event="oninput" /></td>
+                <td class="val"><PicklistSelect ValueSetId="C217046" CssClass="fb wfull" DataCtx="C223136" @bind-Value="Model.C223136" /></td>
                 <td class="lbl">Master Protocol:</td>
                 <td class="val"><PicklistSelect ValueSetId="C217046" CssClass="fb wfull" DataCtx="C218707" @bind-Value="Model.C218707" /></td>
             </tr>
@@ -408,9 +472,10 @@
         <p class="doc"><span class="lbl-inline">Blinded Roles:</span> The following roles will not be made aware of the treatment group assignment:&nbsp;
             <MultiPicklistSelect ValueSetId="C217281" DataCtx="C218709" @bind-Value="Model.C218709" />
         </p>
-        <p class="doc"><span class="lbl-inline">Number of Participants:</span> A&nbsp;<PicklistSelect ValueSetId="m11-target-Maximum-vs" CssClass="fb wlg" DataCtx="C218710" @bind-Value="Model.C218710" />&nbsp;of&nbsp;<input class="fb wnum" type="text" placeholder="200" data-ctx="C49692"  @bind="Model.C49692" @bind:event="oninput" />&nbsp;participants.</p>
-        <p class="doc"><span class="lbl-inline">Duration:</span> Total planned duration of trial <em>participation</em> for each participant:&nbsp;<input class="fb wmed" type="text" placeholder='9 $NCIT#C29846 "Months"' data-ctx="C218715" @bind="Model.C218715" @bind:event="oninput" />.</p>
-        <p class="doc"><span class="lbl-inline">Alternate Duration Description:</span>&nbsp;<input class="fb wlg" type="text" placeholder="(if duration will vary)" data-ctx="C218714" @bind="Model.C218714" @bind:event="oninput" /></p>
+        <p class="doc" style="display:flex;align-items:baseline;flex-wrap:wrap;gap:4px"><span class="lbl-inline">Number of Participants:</span>&nbsp;A&nbsp;<PicklistSelect ValueSetId="m11-target-Maximum-vs" CssClass="fb" Style="width:auto;min-width:80px" DataCtx="C218710" @bind-Value="Model.C218710" />&nbsp;of&nbsp;<input class="fb wnum" type="text" placeholder="200" data-ctx="C49692" @bind="Model.C49692" @bind:event="oninput" />&nbsp;participants&nbsp;<span style="color:#888;font-style:italic;font-size:9.5pt">[will be randomly assigned to trial intervention/enrolled]</span>.</p>
+        <p class="doc"><span class="lbl-inline">Duration:</span> Total planned duration of trial <em>intervention</em> for each participant:&nbsp;<input class="fb wnum" type="text" placeholder="9" data-ctx="C218712" @bind="Model.C218712" @bind:event="oninput" />&nbsp;<PicklistSelect ValueSetId="C217048" CssClass="fb" Style="width:auto;min-width:80px" DataCtx="C218713" @bind-Value="Model.C218713" />.</p>
+        <p class="doc">Total planned duration of trial <em>participation</em> for each participant:&nbsp;<input class="fb wnum" type="text" placeholder="9" data-ctx="C218715" @bind="Model.C218715" @bind:event="oninput" />&nbsp;<PicklistSelect ValueSetId="C217048" CssClass="fb" Style="width:auto;min-width:80px" DataCtx="C218716" @bind-Value="Model.C218716" />.</p>
+        <p class="doc" style="display:flex;align-items:baseline;gap:4px"><span class="lbl-inline" style="white-space:nowrap">Alternate Duration Description:</span>&nbsp;<input class="fb" type="text" style="flex:1" placeholder="(if duration will vary)" data-ctx="C218714" @bind="Model.C218714" @bind:event="oninput" /></p>
         <p class="doc"><span class="lbl-inline">Committees:</span></p>
         <p class="doc">Independent Committees:&nbsp;
             <MultiPicklistSelect ValueSetId="C217282" DataCtx="C218718" @bind-Value="Model.C218718" />.
@@ -441,10 +506,10 @@
         <input type="text" @bind="SaveFileName" @bind:event="oninput" />
         <label style="display:block;font-weight:700;margin:10px 0 6px;">Format</label>
         <div class="fmt-row">
+            <label><input type="radio" name="s1fmt" checked="@IsFhir" @onchange="SetFmtFhir" /> FSH</label>
             <label><input type="radio" name="s1fmt" checked="@IsJson" @onchange="SetFmtJson" /> JSON</label>
             <label><input type="radio" name="s1fmt" checked="@IsCsv"  @onchange="SetFmtCsv"  /> CSV</label>
             <label><input type="radio" name="s1fmt" checked="@IsTxt"  @onchange="SetFmtTxt"  /> Plain Text</label>
-            <label><input type="radio" name="s1fmt" checked="@IsFhir" @onchange="SetFmtFhir" /> FHIR</label>
         </div>
         <div class="dbr">
             <button class="btn btn-secondary" @onclick="CloseSaveDialog">Cancel</button>
@@ -475,7 +540,7 @@
     private bool   ShowSaveDialog = false;
     private bool   ShowReqDialog  = false;
     private string SaveFileName   = "section1_data";
-    private string SaveFormat     = "json";
+    private string SaveFormat     = "fsh";
     private string StatusMessage  = string.Empty;
     private string ReqDialogMsg   = string.Empty;
     private string ErrorMessage   = string.Empty;
@@ -497,24 +562,87 @@
         ["C218708"] = "C217046",  // Drug/Device Combination Product Indicator
         ["C218706"] = "C217046",  // Adaptive Trial Design Indicator
         ["C218710"] = "m11-target-Maximum-vs",  // Target / Maximum
+        ["C218703"] = "C217278",  // Population Type
+        ["C223136"] = "C217046",  // Stratification Indicator
+        ["C50400_min"] = "C217048",  // Min age unit
+        ["C50400_max"] = "C217048",  // Max age unit
     };
+
+    // C223137 is only active when C218475 is "Randomisation" ($NCIT#C25196)
+    private bool IsRandomisation =>
+        Model.C218475?.Contains("C25196") == true;
+
+    // CC223138 is only active when C218475 is "Other" ($NCIT#C17649)
+    private bool IsOtherAssignment =>
+        Model.C218475?.Contains("C17649") == true;
     private System.Threading.Timer? _statusTimer;
     private DotNetObjectReference<Section01>? _objRef;
 
     private string SaveDialogCss => ShowSaveDialog ? "overlay show" : "overlay";
     private string ReqDialogCss  => ShowReqDialog  ? "overlay show" : "overlay";
     private bool IsJson => SaveFormat == "json"; private bool IsCsv  => SaveFormat == "csv";
-    private bool IsTxt  => SaveFormat == "txt";  private bool IsFhir => SaveFormat == "fhir";
+    private bool IsTxt  => SaveFormat == "txt";  private bool IsFhir => SaveFormat == "fsh";
     private void SetFmtJson(ChangeEventArgs e) => SaveFormat = "json";
     private void SetFmtCsv(ChangeEventArgs e)  => SaveFormat = "csv";
     private void SetFmtTxt(ChangeEventArgs e)  => SaveFormat = "txt";
-    private void SetFmtFhir(ChangeEventArgs e) => SaveFormat = "fhir";
+    private void SetFmtFhir(ChangeEventArgs e) => SaveFormat = "fsh";
     private string ReqClass(string? v) => ShowValidation && string.IsNullOrWhiteSpace(v) ? "fb req-empty" : "fb";
 
     private bool HasRequiredEmpty() =>
         new[] { Model.C218839, Model.C218720, Model.C132349 }.Any(string.IsNullOrWhiteSpace);
     private int RequiredEmptyCount() =>
         new[] { Model.C218839, Model.C218720, Model.C132349 }.Count(string.IsNullOrWhiteSpace);
+
+    // ── Age qty+unit helpers ──────────────────────────────────────────────────
+
+    // C217048 code → display name lookup (mirrors TerminologyService seed)
+    private static readonly Dictionary<string, string> TimeUnitDisplay = new()
+    {
+        ["C25529"] = "Hours",
+        ["C25301"] = "Days",
+        ["C29844"] = "Weeks",
+        ["C29846"] = "Months",
+        ["C29848"] = "Years",
+    };
+
+    /// <summary>
+    /// Build the FSH Quantity string stored in C49693/C49694.
+    /// Format: "&lt;qty&gt; $NCIT#&lt;code&gt; \"&lt;display&gt;\""  e.g. 18 $NCIT#C29848 "Years"
+    /// </summary>
+    private static string BuildAgeQuantity(string qty, string unitCode)
+    {
+        if (string.IsNullOrWhiteSpace(qty)) return string.Empty;
+        var display = TimeUnitDisplay.TryGetValue(unitCode, out var d) ? d : "Years";
+        var code    = string.IsNullOrWhiteSpace(unitCode) ? "C29848" : unitCode;
+        return $"{qty} $NCIT#{code} \"{display}\"";
+    }
+
+    /// <summary>Parse a stored FSH Quantity back into qty and NCIT unit code.</summary>
+    private static (string qty, string unitCode) ParseAgeQuantity(string? stored)
+    {
+        if (string.IsNullOrWhiteSpace(stored)) return (string.Empty, "C29848");
+        var parts    = stored.Split(' ', 2);
+        var qty      = parts[0];
+        var unitCode = "C29848"; // default Years
+        foreach (var code in TimeUnitDisplay.Keys)
+            if (stored.Contains(code)) { unitCode = code; break; }
+        return (qty, unitCode);
+    }
+
+    private void SyncMinAge() =>
+        Model.C49693 = BuildAgeQuantity(Model.C49693_qty, Model.C50400_min);
+
+    private void SyncMaxAge() =>
+        Model.C49694 = BuildAgeQuantity(Model.C49694_qty, Model.C50400_max);
+
+    /// <summary>Populate UI sub-fields from the stored model (e.g. after Load).</summary>
+    private void DecomposeAgeFields()
+    {
+        (Model.C49693_qty, Model.C50400_min) = ParseAgeQuantity(Model.C49693);
+        (Model.C49694_qty, Model.C50400_max) = ParseAgeQuantity(Model.C49694);
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
 
     private void ClearAll()
     {
@@ -526,7 +654,7 @@
     private void LoadSample()
     {
         var s = DataSvc.LoadSample();
-        if (s != null) { Model = s; ShowValidation = false; SetStatus("Sample data loaded"); }
+        if (s != null) { Model = s; DecomposeAgeFields(); ShowValidation = false; SetStatus("Sample data loaded"); }
         else ErrorMessage = "Could not load sample file.";
     }
 
@@ -568,11 +696,11 @@
         {
             "csv"  => (DataSvc.ToCsv(Model),      "text/csv",         ".csv"),
             "txt"  => (DataSvc.ToPlainText(Model), "text/plain",       ".txt"),
-            "fhir" => (DataSvc.ToFsh(Model),       "text/plain",       ".fsh"),
+            "fsh"  => (DataSvc.ToFsh(Model),       "text/plain",       ".fsh"),
             _      => (DataSvc.ToJson(Model),      "application/json", ".json"),
         };
         var fn = (SaveFileName.Trim().Length > 0 ? SaveFileName.Trim() : "section1_data") + ext;
-        if (SaveFormat == "fhir") SushiSvc.SaveToExamples(fn, content);
+        if (SaveFormat == "fsh") SushiSvc.SaveToExamples(fn, content);
         await JS.InvokeVoidAsync("udpDownload", fn, content, mime);
         SetStatus("⬇ Downloaded " + fn);
     }
@@ -582,7 +710,7 @@
     [JSInvokable] public void ReceiveFileContent(string json)
     {
         var l = DataSvc.FromJson(json);
-        if (l != null) { Model = l; ShowValidation = false; SetStatus("⬆ Loaded from file"); InvokeAsync(StateHasChanged); }
+        if (l != null) { Model = l; DecomposeAgeFields(); ShowValidation = false; SetStatus("⬆ Loaded from file"); InvokeAsync(StateHasChanged); }
     }
 
     [JSInvokable] public async Task OnContextMenuJS(string fieldId, double x, double y)
@@ -608,7 +736,7 @@
             if (!string.IsNullOrEmpty(json))
             {
                 var l = DataSvc.FromJson(json);
-                if (l != null) { Model = l; StateHasChanged(); }
+                if (l != null) { Model = l; DecomposeAgeFields(); StateHasChanged(); }
             }
         }
         catch (JSDisconnectedException) { } catch (TaskCanceledException) { }

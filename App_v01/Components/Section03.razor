@@ -152,7 +152,6 @@
         <button class="btn btn-secondary"  @onclick="LoadSample">Fill with Sample Data</button>
         <button class="btn btn-secondary"  @onclick="OpenImport">⬆ Load from File</button>
         <button class="btn btn-secondary"  @onclick="() => _showExport = true">⬇ Save to File…</button>
-        <button class="btn btn-primary"    @onclick="SaveToBrowser">Save to Browser</button>
     </div>
 </div>
 
@@ -181,7 +180,7 @@
         <input type="text" @bind="_exportName" />
         <label style="font-size:10pt;font-weight:700;display:block;margin:10px 0 6px;">Format</label>
         <div class="fmt-row">
-            <label><input type="radio" name="efmt" value="fhir" @onchange='() => _exportFmt = "fhir"' checked="@(_exportFmt == "fhir")" /> FHIR</label>
+            <label><input type="radio" name="efmt" value="fhir" @onchange='() => _exportFmt = "fhir"' checked="@(_exportFmt == "fhir")" /> FSH</label>
             <label><input type="radio" name="efmt" value="json" @onchange='() => _exportFmt = "json"' checked="@(_exportFmt == "json")" /> JSON</label>
             <label><input type="radio" name="efmt" value="csv"  @onchange='() => _exportFmt = "csv"'  checked="@(_exportFmt == "csv")"  /> CSV</label>
             <label><input type="radio" name="efmt" value="txt"  @onchange='() => _exportFmt = "txt"'  checked="@(_exportFmt == "txt")"  /> Plain Text</label>
@@ -362,7 +361,7 @@
             {
                 "csv"  => (DataSvc.ToCsv(_model),       "text/csv",         ".csv"),
                 "txt"  => (DataSvc.ToPlainText(_model),  "text/plain",       ".txt"),
-                "fhir" => (DataSvc.ToFsh(_model),        "text/fsh",         ".fsh"),
+                "fsh"  => (DataSvc.ToFsh(_model),        "text/fsh",         ".fsh"),
                 _      => (DataSvc.ToJson(_model),       "application/json", ".json"),
             };
             var fn = (_exportName.Trim().Length > 0 ? _exportName.Trim() : "section3_data") + ext;

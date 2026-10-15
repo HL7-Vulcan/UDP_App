@@ -352,6 +352,15 @@
         RunResult = await SushiSvc.RunAsync(null, null, OnLine);
         Running   = false;
         ExampleFiles = SushiSvc.ListExampleFiles();
+
+        // On success, copy generated resources to the top-level Examples folder
+        if (RunResult.Success)
+        {
+            var copied = SushiSvc.CopyGeneratedToMainExamples(RunResult.GeneratedFiles);
+            if (copied > 0)
+                OnLine($"[INFO] Copied {copied} generated file{(copied == 1 ? "" : "s")} to Examples/");
+        }
+
         StateHasChanged();
     }
 

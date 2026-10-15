@@ -1,0 +1,137 @@
+picklist
+field C98746
+Value set C217277
+Single Group C82640
+Parallel Group C82639
+Cross-over C82637
+Factorial C82638
+Sequential C142568
+Other C17649 
+
+picklist
+field C98746
+Value set C217279
+Placebo C49648
+Active Comparator C49649
+Dose Response C120841
+Different Dose or Regimen C218505
+External C218506
+Sham Procedure C184727
+No Control C28280 
+
+
+picklist
+field C218475 
+Value set C217280
+Randomisation C25196
+No Intervention Assignment Method C222801
+Other C17649 
+
+picklist
+field  C218704 
+Value set C217049
+Single-Centre C217004
+Multicentre C217005 
+
+picklist
+field C218705 
+Value set C217050
+Single Country C217006
+Multiple Countries C217007 
+
+picklist
+field C49658
+Value set C217051
+Double Blind C15228
+Observer Blind C187674
+Open Label C49659
+Single Blind C28233 
+
+
+picklist
+field C218709 
+Value set C217281
+Participant C142710
+Care Provider C17445
+Investigator C25936
+Outcomes Assessor C207599
+Sponsor C70793
+Not Applicable C48660 
+
+picklist
+field C218718
+Value set C217282
+Independent Data Monitoring Committee C142578
+Dose Escalation Committee C215671
+Endpoint Adjudication Committee C78726
+Other C17649
+None C41132  
+
+What is different here is that all three use the same picklist - and it is also used in other sections.  Define the picklist only once in a separate section called Terminology.  There will be more picklist definitions to be added to this section in future and we will also want to add facilities to edit these picklists
+
+"Good plan. I’ll create a shared Terminology.razor component that holds the Yes/No picklist (and future ones), then reference it from Section01.razor for those three fields.
+
+Let me first check the existing structure to understand where to place things.
+
+Good. The plan is:
+
+TerminologyService.cs — a singleton service holding all picklist definitions (editable at runtime)
+Terminology.razor — a page at /terminology for viewing and editing picklists
+Section01.razor — three fields use <PicklistSelect> referencing value set C217046
+PicklistSelect.razor — a small reusable component that renders a <select> from the service
+Add Terminology to the nav"
+
+picklist
+field C218707
+Value set C217046:
+Yes C49488
+No C49487 
+
+picklist
+field C218708
+Value set C217046:
+Yes C49488
+No C49487
+
+picklist
+field C218706
+Value set C217046:
+Yes C49488
+No C49487
+
+
+
+picklist
+field C218710
+Value set m11-target-Maximum-vs
+Target $UDP_Target#1
+Maximum $UDP_Target#2
+
+--------------------------------------------------
+
+For fields C49693 and C49464 the data entry needs to be restructured to two lines:
+min: qty+units
+max: qty+units
+where qty+units is a number followed by one of d, m or y.
+min qty is field C49693 and max qty is C49694
+
+Field C223137 is only active if C218475 has a code of $NCIT#C17649 
+
+Field C223136 is a picklist using C217046 that is already defined
+
+Two more picklists.  For field C218703 the picklist is empty
+
+picklist
+field C218703
+Value set C217278
+With Disease C218503
+Without Disease C218504 
+
+picklist
+field C112038 
+Value set external
+Chaange heading to "Population Diagnosis or Condition"
+Add "Need external MedDRA or Snomed CT lookup" in red beneath heading
+
+
+

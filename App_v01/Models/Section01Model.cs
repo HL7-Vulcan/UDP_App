@@ -18,8 +18,15 @@ public class Section01Model
     [JsonPropertyName("C218703")]  public string? C218703  { get; set; }  // Population Type
     [JsonPropertyName("C49647")]   public string? C49647   { get; set; }  // Control Type
     [JsonPropertyName("C112038")]  public string? C112038  { get; set; }  // Condition
-    [JsonPropertyName("C49693")]   public string? C49693   { get; set; }  // Minimum Age
-    [JsonPropertyName("C49694")]   public string? C49694   { get; set; }  // Maximum Age
+    [JsonPropertyName("C49693")]   public string? C49693   { get; set; }  // Minimum Age (full FSH quantity)
+    [JsonPropertyName("C49694")]   public string? C49694   { get; set; }  // Maximum Age (full FSH quantity)
+
+    // UI decomposition helpers — not persisted to JSON
+    // C50400_min / C50400_max hold the selected NCIT unit code (e.g. "C29848" for Years)
+    [System.Text.Json.Serialization.JsonIgnore] public string C49693_qty  { get; set; } = string.Empty;
+    [System.Text.Json.Serialization.JsonIgnore] public string C50400_min  { get; set; } = "C29848";   // default: Years
+    [System.Text.Json.Serialization.JsonIgnore] public string C49694_qty  { get; set; } = string.Empty;
+    [System.Text.Json.Serialization.JsonIgnore] public string C50400_max  { get; set; } = "C29848";   // default: Years
     [JsonPropertyName("C218475")]  public string? C218475  { get; set; }  // Intervention Assignment Method
     [JsonPropertyName("C223137")]  public string? C223137  { get; set; }  // Randomisation Type
     [JsonPropertyName("CC223138")] public string? CC223138 { get; set; }  // Other Assignment Method
@@ -34,8 +41,12 @@ public class Section01Model
     [JsonPropertyName("C218709")]  public List<string> C218709  { get; set; } = new();  // Blinded Roles (multi-value)
     [JsonPropertyName("C218710")]  public string? C218710  { get; set; }  // Target-Maximum
     [JsonPropertyName("C49692")]   public string? C49692   { get; set; }  // Number of Participants
+    [JsonPropertyName("C218711")]  public string? C218711  { get; set; }  // Number of Participants additional text
+    [JsonPropertyName("C218712")]  public string? C218712  { get; set; }  // Total planned duration intervention (qty)
+    [JsonPropertyName("C218713")]  public string? C218713  { get; set; }  // Total planned duration intervention (unit)
     [JsonPropertyName("C218714")]  public string? C218714  { get; set; }  // Alt duration description
-    [JsonPropertyName("C218715")]  public string? C218715  { get; set; }  // Total planned duration participation
+    [JsonPropertyName("C218715")]  public string? C218715  { get; set; }  // Total planned duration participation (qty)
+    [JsonPropertyName("C218716")]  public string? C218716  { get; set; }  // Total planned duration participation (unit)
     [JsonPropertyName("C218718")]  public List<string> C218718  { get; set; } = new();  // Independent Committees (multi-value)
     [JsonPropertyName("C218719")]  public string? C218719  { get; set; }  // Other Committees
 

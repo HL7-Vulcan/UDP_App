@@ -60,8 +60,12 @@ public class DataService01
         L("Blinded Roles",                        string.Join("; ", model.C218709));
         L("Target-Maximum",                       model.C218710);
         L("Number of Participants",               model.C49692);
+        L("Number of Participants (text)",        model.C218711);
+        L("Total Planned Duration (Intervention)",model.C218712);
+        L("Duration Intervention Unit",           model.C218713);
         L("Alt. Duration Description",            model.C218714);
         L("Total Planned Duration (Participation)",model.C218715);
+        L("Duration Participation Unit",          model.C218716);
         L("Independent Committees",               string.Join("; ", model.C218718));
         L("Other Committees",                     model.C218719);
         sb.AppendLine("── Comparator Product ──");
@@ -109,8 +113,10 @@ public class DataService01
             {"C218708",    model.C218708},
             {"C98771",     model.C98771},  {"C49658",   model.C49658},
             {"C218710",    model.C218710},
-            {"C49692",     model.C49692},  {"C218714",  model.C218714},
-            {"C218715",    model.C218715},
+            {"C49692",     model.C49692},  {"C218711",  model.C218711},
+            {"C218712",    model.C218712}, {"C218713",  model.C218713},
+            {"C218714",    model.C218714},
+            {"C218715",    model.C218715}, {"C218716",  model.C218716},
             {"C218719",    model.C218719},
         })
             tbl = tbl.Replace("{{" + k + "}}", v ?? string.Empty);
