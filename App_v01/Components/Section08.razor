@@ -4,6 +4,7 @@
 @using UDP_App.Services
 @inject DataService08 DataSvc
 @inject SushiService SushiSvc
+@inject FhirPipelineService PipelineSvc
 @inject IJSRuntime JS
 @implements IDisposable
 
@@ -111,6 +112,8 @@
     </div>
 </div>
 
+<FhirPipelineDialog @ref="_pipeline" />
+
 <div class="overlay @SaveDialogCss">
     <div class="dbox">
         <h3>Save Data to File</h3>
@@ -118,14 +121,15 @@
         <input type="text" @bind="SaveFileName" @bind:event="oninput" />
         <label style="display:block;font-weight:700;margin:10px 0 6px;">Format</label>
         <div class="fmt-row">
-            <label><input type="radio" name="s8fmt" checked="@IsFhir" @onchange="SetFmtFhir" /> FSH</label>
-            <label><input type="radio" name="s8fmt" checked="@IsJson" @onchange="SetFmtJson" /> JSON</label>
-            <label><input type="radio" name="s8fmt" checked="@IsCsv"  @onchange="SetFmtCsv"  /> CSV</label>
-            <label><input type="radio" name="s8fmt" checked="@IsTxt"  @onchange="SetFmtTxt"  /> Plain Text</label>
+            <label><input type="radio" name="s8fmt" checked="@IsPipeline" @onchange="SetFmtPipeline" /> FHIR</label>
+            <label><input type="radio" name="s8fmt" checked="@IsFhir"     @onchange="SetFmtFhir"     /> FSH</label>
+            <label><input type="radio" name="s8fmt" checked="@IsJson"     @onchange="SetFmtJson"     /> JSON</label>
+            <label><input type="radio" name="s8fmt" checked="@IsCsv"      @onchange="SetFmtCsv"      /> CSV</label>
+            <label><input type="radio" name="s8fmt" checked="@IsTxt"      @onchange="SetFmtTxt"      /> Plain Text</label>
         </div>
         <div class="dbr">
             <button class="btn btn-secondary" @onclick="CloseSaveDialog">Cancel</button>
-            <button class="btn btn-primary"   @onclick="DoSaveToFile">Download</button>
+            <button class="btn btn-primary"   @onclick="DoSaveToFile">@(IsPipeline ? "Publish" : "Download")</button>
         </div>
     </div>
 </div>
@@ -152,7 +156,8 @@
     private bool   ShowSaveDialog = false;
     private bool   ShowReqDialog  = false;
     private string SaveFileName   = "section8_data";
-    private string SaveFormat     = "fsh";
+    private string SaveFormat     = "fhir-pipeline";
+    private FhirPipelineDialog _pipeline = default!;
     private string StatusMessage  = string.Empty;
     private string ReqDialogMsg   = string.Empty;
     private string ErrorMessage   = string.Empty;
@@ -163,8 +168,11 @@
 
     private string SaveDialogCss => ShowSaveDialog ? "overlay show" : "overlay";
     private string ReqDialogCss  => ShowReqDialog  ? "overlay show" : "overlay";
+    private bool IsPipeline => SaveFormat == "fhir-pipeline";
+    private bool IsFhir => SaveFormat == "fsh";
     private bool IsJson => SaveFormat == "json"; private bool IsCsv  => SaveFormat == "csv";
-    private bool IsTxt  => SaveFormat == "txt";  private bool IsFhir => SaveFormat == "fsh";
+    private bool IsTxt  => SaveFormat == "txt";
+    private void SetFmtPipeline(ChangeEventArgs e) => SaveFormat = "fhir-pipeline";
     private void SetFmtJson(ChangeEventArgs e) => SaveFormat = "json";
     private void SetFmtCsv(ChangeEventArgs e)  => SaveFormat = "csv";
     private void SetFmtTxt(ChangeEventArgs e)  => SaveFormat = "txt";
@@ -221,6 +229,14 @@
     private async Task DoSaveToFile()
     {
         ShowSaveDialog = false;
+        if (SaveFormat == "fhir-pipeline")
+        {
+            var fshContent = DataSvc.ToFsh(Model);
+            var baseName   = SaveFileName.Trim().Length > 0 ? SaveFileName.Trim() : "section8_data";
+            await _pipeline.RunAsync(baseName + ".fsh", fshContent);
+            SetStatus("✓ FHIR pipeline complete");
+            return;
+        }
         var (content, mime, ext) = SaveFormat switch
         {
             "csv"  => (DataSvc.ToCsv(Model),      "text/csv",         ".csv"),

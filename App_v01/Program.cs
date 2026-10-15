@@ -20,6 +20,7 @@ builder.Services.AddSingleton<UDP_App.Services.SettingsService>();
 builder.Services.AddSingleton<UDP_App.Services.TerminologyService>();
 builder.Services.AddScoped<UDP_App.Services.FhirBrowseService>();
 builder.Services.AddScoped<UDP_App.Services.BuildService>();
+builder.Services.AddScoped<UDP_App.Services.FhirPipelineService>();
 
 var app = builder.Build();
 

@@ -1,0 +1,111 @@
+@* Shared FHIR pipeline progress dialog.
+   Usage:
+     <FhirPipelineDialog @ref="_pipelineDialog" />
+   Then call:
+     await _pipelineDialog.RunAsync(fshFileName, fshContent);
+*@
+@using UDP_App.Services
+@inject FhirPipelineService PipelineSvc
+
+<style>
+    .pipe-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:500; align-items:center; justify-content:center; }
+    .pipe-overlay.show { display:flex; }
+    .pipe-box { background:#fff; border-radius:6px; padding:24px 28px; width:600px; max-width:94vw; box-shadow:0 8px 40px rgba(0,0,0,0.28); display:flex; flex-direction:column; gap:12px; }
+    .pipe-title { font-size:13pt; font-weight:700; color:#1f3864; margin:0; }
+    .pipe-log { background:#1e1e2e; color:#cdd6f4; font-family:'Cascadia Code','Consolas',monospace; font-size:8.5pt; border-radius:4px; padding:10px 12px; min-height:160px; max-height:320px; overflow-y:auto; white-space:pre-wrap; word-break:break-all; }
+    .pipe-log .ok    { color:#a6e3a1; }
+    .pipe-log .err   { color:#f38ba8; font-weight:700; }
+    .pipe-log .step  { color:#89b4fa; font-weight:700; }
+    .pipe-log .info  { color:#fab387; }
+    .pipe-log .done  { color:#a6e3a1; font-weight:700; }
+    .pipe-status { font-size:10pt; min-height:20px; }
+    .pipe-status.running { color:#1f3864; }
+    .pipe-status.success { color:#166534; font-weight:700; }
+    .pipe-status.failed  { color:#c00;    font-weight:700; }
+    .pipe-footer { display:flex; justify-content:flex-end; }
+    .pipe-spinner { display:inline-block; width:14px; height:14px; border:2px solid #ccc; border-top-color:#1f3864; border-radius:50%; animation:pipe-spin 0.7s linear infinite; margin-right:6px; vertical-align:middle; }
+    @@keyframes pipe-spin { to { transform:rotate(360deg); } }
+</style>
+
+<div class="pipe-overlay @(_show ? "show" : "")">
+    <div class="pipe-box">
+        <p class="pipe-title">⚙ FHIR Pipeline</p>
+        <div class="pipe-log" id="pipe-log-scroll">@((MarkupString)_logHtml)</div>
+        <div class="pipe-status @_statusCss">
+            @if (_running) { <span class="pipe-spinner"></span> }
+            @_statusMsg
+        </div>
+        <div class="pipe-footer">
+            <button class="btn btn-secondary" style="padding:6px 20px;font-size:10pt;"
+                    disabled="@_running" @onclick="Close">Close</button>
+        </div>
+    </div>
+</div>
+
+@code {
+    private bool   _show      = false;
+    private bool   _running   = false;
+    private string _logHtml   = "";
+    private string _statusMsg = "";
+    private string _statusCss = "running";
+    private CancellationTokenSource? _cts;
+
+    /// <summary>
+    /// Runs the full FHIR pipeline: save FSH → SUSHI → GenerateBundle.
+    /// Shows a progress dialog while running. Returns when complete.
+    /// </summary>
+    public async Task RunAsync(string fshFileName, string fshContent)
+    {
+        _logHtml   = "";
+        _statusMsg = "Running…";
+        _statusCss = "running";
+        _running   = true;
+        _show      = true;
+        StateHasChanged();
+
+        _cts = new CancellationTokenSource();
+
+        var result = await PipelineSvc.RunAsync(
+            fshFileName, fshContent,
+            line =>
+            {
+                _logHtml += FormatLine(line) + "\n";
+                InvokeAsync(StateHasChanged);
+            },
+            _cts.Token);
+
+        _running = false;
+        if (result.Success)
+        {
+            _statusMsg = "Pipeline completed successfully.";
+            _statusCss = "success";
+        }
+        else
+        {
+            _statusMsg = $"Pipeline failed at step \"{result.Step}\": {result.ErrorMessage}";
+            _statusCss = "failed";
+        }
+        StateHasChanged();
+    }
+
+    private void Close()
+    {
+        _show = false;
+        StateHasChanged();
+    }
+
+    private static string FormatLine(string line)
+    {
+        var esc = System.Net.WebUtility.HtmlEncode(line);
+        if (esc.StartsWith("[STEP"))   return $"<span class=\"step\">{esc}</span>";
+        if (esc.StartsWith("[OK]"))    return $"<span class=\"ok\">{esc}</span>";
+        if (esc.StartsWith("[DONE]"))  return $"<span class=\"done\">{esc}</span>";
+        if (esc.StartsWith("[ERROR]") || esc.StartsWith("[FAILED]") || esc.StartsWith("[ERR]"))
+                                       return $"<span class=\"err\">{esc}</span>";
+        if (esc.StartsWith("[INFO]") || esc.StartsWith("[WARN]"))
+                                       return $"<span class=\"info\">{esc}</span>";
+        return esc;
+    }
+
+    public void Dispose() => _cts?.Dispose();
+}

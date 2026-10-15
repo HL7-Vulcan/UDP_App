@@ -4,6 +4,7 @@
 @using UDP_App.Services
 @inject DataService DataSvc
 @inject SushiService SushiSvc
+@inject FhirPipelineService PipelineSvc
 @inject IJSRuntime JS
 @implements IDisposable
 
@@ -147,6 +148,8 @@
 </div>
 
 <!-- Save dialog -->
+<FhirPipelineDialog @ref="_pipeline" />
+
 <div class="overlay @SaveDialogCss">
     <div class="dbox">
         <h3>Save Data to File</h3>
@@ -154,14 +157,15 @@
         <input type="text" @bind="SaveFileName" @bind:event="oninput" />
         <label style="display:block;font-weight:700;margin:10px 0 6px;">Format</label>
         <div class="fmt-row">
-            <label><input type="radio" name="fmt" value="fhir" checked="@IsFhir" @onchange="SetFormatFhir" /> FSH</label>
-            <label><input type="radio" name="fmt" value="json" checked="@IsJson" @onchange="SetFormatJson" /> JSON</label>
-            <label><input type="radio" name="fmt" value="csv"  checked="@IsCsv"  @onchange="SetFormatCsv"  /> CSV</label>
-            <label><input type="radio" name="fmt" value="txt"  checked="@IsTxt"  @onchange="SetFormatTxt"  /> Plain Text</label>
+            <label><input type="radio" name="s2fmt" checked="@IsPipeline"  @onchange="SetFmtPipeline"  /> FHIR</label>
+            <label><input type="radio" name="s2fmt" checked="@IsFhir"      @onchange="SetFormatFhir"   /> FSH</label>
+            <label><input type="radio" name="s2fmt" checked="@IsJson"      @onchange="SetFormatJson"   /> JSON</label>
+            <label><input type="radio" name="s2fmt" checked="@IsCsv"       @onchange="SetFormatCsv"    /> CSV</label>
+            <label><input type="radio" name="s2fmt" checked="@IsTxt"       @onchange="SetFormatTxt"    /> Plain Text</label>
         </div>
         <div class="dbr">
             <button class="btn btn-secondary" @onclick="CloseSaveDialog">Cancel</button>
-            <button class="btn btn-primary"   @onclick="DoSaveToFile">Save</button>
+            <button class="btn btn-primary"   @onclick="DoSaveToFile">@(IsPipeline ? "Publish" : "Save")</button>
         </div>
     </div>
 </div>
@@ -251,7 +255,8 @@
     private bool   ShowSaveDialog  = false;
     private bool   ShowReqDialog   = false;
     private string SaveFileName    = "section2_data";
-    private string SaveFormat      = "fsh";
+    private string SaveFormat      = "fhir-pipeline";
+    private FhirPipelineDialog _pipeline = default!;
     private string StatusMessage   = string.Empty;
     private string ReqDialogMessage = string.Empty;
     private string ErrorMessage    = string.Empty;
@@ -267,10 +272,12 @@
                                     ? "fb req-empty" : "fb";
 
     // ── Radio helpers ─────────────────────────────────────────────
+    private bool IsPipeline => SaveFormat == "fhir-pipeline";
+    private bool IsFhir => SaveFormat == "fsh";
     private bool IsJson => SaveFormat == "json";
     private bool IsCsv  => SaveFormat == "csv";
     private bool IsTxt  => SaveFormat == "txt";
-    private bool IsFhir => SaveFormat == "fsh";
+    private void SetFmtPipeline(ChangeEventArgs e)  => SaveFormat = "fhir-pipeline";
     private void SetFormatJson(ChangeEventArgs e) => SaveFormat = "json";
     private void SetFormatCsv(ChangeEventArgs e)  => SaveFormat = "csv";
     private void SetFormatTxt(ChangeEventArgs e)  => SaveFormat = "txt";
@@ -370,11 +377,19 @@
         try
         {
             ShowSaveDialog = false;
+            if (SaveFormat == "fhir-pipeline")
+            {
+                var fshContent = DataSvc.ToFsh(Model);
+                var baseName   = SaveFileName.Trim().Length > 0 ? SaveFileName.Trim() : "section2_data";
+                await _pipeline.RunAsync(baseName + ".fsh", fshContent);
+                SetStatus("✓ FHIR pipeline complete");
+                return;
+            }
             var (content, mime, ext) = SaveFormat switch
             {
                 "csv"  => (DataSvc.ToCsv(Model),      "text/csv",         ".csv"),
                 "txt"  => (DataSvc.ToPlainText(Model), "text/plain",       ".txt"),
-                "fsh"  => (DataSvc.ToFsh(Model), "text/fsh",       ".fsh"),
+                "fsh"  => (DataSvc.ToFsh(Model),       "text/fsh",         ".fsh"),
                 _      => (DataSvc.ToJson(Model),      "application/json", ".json"),
             };
             var fn = (SaveFileName.Trim().Length > 0 ? SaveFileName.Trim() : "section2_data") + ext;

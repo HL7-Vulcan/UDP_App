@@ -4,6 +4,7 @@
 @using UDP_App.Services
 @inject DataService DataSvc
 @inject SushiService SushiSvc
+@inject FhirPipelineService PipelineSvc
 @inject IJSRuntime JS
 @implements IDisposable
 
@@ -172,6 +173,8 @@
 </div>
 @if (_ctxOpen) { <div style="position:fixed;inset:0;z-index:999" @onclick="CloseCtx"></div> }
 
+<FhirPipelineDialog @ref="_pipeline" />
+
 <!-- ── Export modal ──────────────────────────────────────────────────────── -->
 <div class="overlay @(_showExport ? "show" : "")">
     <div class="dbox">
@@ -180,14 +183,15 @@
         <input type="text" @bind="_exportName" />
         <label style="font-size:10pt;font-weight:700;display:block;margin:10px 0 6px;">Format</label>
         <div class="fmt-row">
-            <label><input type="radio" name="efmt" value="fhir" @onchange='() => _exportFmt = "fhir"' checked="@(_exportFmt == "fhir")" /> FSH</label>
-            <label><input type="radio" name="efmt" value="json" @onchange='() => _exportFmt = "json"' checked="@(_exportFmt == "json")" /> JSON</label>
-            <label><input type="radio" name="efmt" value="csv"  @onchange='() => _exportFmt = "csv"'  checked="@(_exportFmt == "csv")"  /> CSV</label>
-            <label><input type="radio" name="efmt" value="txt"  @onchange='() => _exportFmt = "txt"'  checked="@(_exportFmt == "txt")"  /> Plain Text</label>
+            <label><input type="radio" name="efmt" @onchange='() => _exportFmt = "fhir-pipeline"' checked="@(_exportFmt == "fhir-pipeline")" /> FHIR</label>
+            <label><input type="radio" name="efmt" @onchange='() => _exportFmt = "fhir"'          checked="@(_exportFmt == "fhir")"          /> FSH</label>
+            <label><input type="radio" name="efmt" @onchange='() => _exportFmt = "json"'          checked="@(_exportFmt == "json")"          /> JSON</label>
+            <label><input type="radio" name="efmt" @onchange='() => _exportFmt = "csv"'           checked="@(_exportFmt == "csv")"           /> CSV</label>
+            <label><input type="radio" name="efmt" @onchange='() => _exportFmt = "txt"'           checked="@(_exportFmt == "txt")"           /> Plain Text</label>
         </div>
         <div class="dbr">
             <button class="btn btn-secondary" @onclick="() => _showExport = false">Cancel</button>
-            <button class="btn btn-primary"   @onclick="DoExport">Download</button>
+            <button class="btn btn-primary"   @onclick="DoExport">@(_exportFmt == "fhir-pipeline" ? "Publish" : "Download")</button>
         </div>
     </div>
 </div>
@@ -216,7 +220,8 @@
     private bool   _showExport = false;
     private bool   _showReq    = false;
     private string _exportName = "section3_data";
-    private string _exportFmt  = "fhir";
+    private string _exportFmt  = "fhir-pipeline";
+    private FhirPipelineDialog _pipeline = default!;
     private string _statusMsg  = string.Empty;
     private string _reqMsg     = string.Empty;
     private bool   _pendingExport = false;
@@ -357,6 +362,14 @@
         _showExport = false;
         try
         {
+            if (_exportFmt == "fhir-pipeline")
+            {
+                var fshContent = DataSvc.ToFsh(_model);
+                var baseName   = _exportName.Trim().Length > 0 ? _exportName.Trim() : "section3_data";
+                await _pipeline.RunAsync(baseName + ".fsh", fshContent);
+                SetStatus("✓ FHIR pipeline complete", 4000);
+                return;
+            }
             var (content, mime, ext) = _exportFmt switch
             {
                 "csv"  => (DataSvc.ToCsv(_model),       "text/csv",         ".csv"),
