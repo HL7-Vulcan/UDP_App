@@ -473,6 +473,22 @@ public class SushiService
         return safe;
     }
 
+    /// <summary>
+    /// Deletes all .fsh files from the Examples folder.
+    /// Returns the number of files deleted.
+    /// </summary>
+    public int ClearExamplesFolder()
+    {
+        if (!Directory.Exists(ExamplesFolder)) return 0;
+        int count = 0;
+        foreach (var file in Directory.GetFiles(ExamplesFolder, "*.fsh", SearchOption.TopDirectoryOnly))
+        {
+            File.Delete(file);
+            count++;
+        }
+        return count;
+    }
+
     // ── Helpers ────────────────────────────────────────────────────────────────
 
     /// <summary>

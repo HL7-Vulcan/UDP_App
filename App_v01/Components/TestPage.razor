@@ -99,9 +99,8 @@
             ExclRows = 0,
             ExclData = new Dictionary<string, string>(),
         };
-        var (std, r5) = DataSvc.ToFsh(model);
+        var std = DataSvc.ToFsh(model);
         var baseName = "test_groups_" + DateTime.Now.ToString("yyyy-MM-dd");
-        await JS.InvokeVoidAsync("udpDownload", baseName + ".fsh",      std, "text/plain");
-        await JS.InvokeVoidAsync("udpDownload", baseName + "_R5" + ".fsh", r5, "text/plain");
+        await JS.InvokeVoidAsync("udpDownload", baseName + ".fsh", std, "text/plain");
     }
 }

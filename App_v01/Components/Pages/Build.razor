@@ -19,6 +19,7 @@ else
     <div class="d-flex align-items-center gap-2 mb-2 flex-wrap">
         <span class="text-muted">Folder: <code>@SettingsSvc.Settings.ExamplesFolder</code></span>
         <button class="btn btn-sm btn-outline-secondary" @onclick="Reload">↺ Reload</button>
+        <button class="btn btn-sm btn-outline-danger" @onclick="ClearFolder" disabled="@(_generating || _sending)">🗑 Clear Folder</button>
         <button class="btn btn-sm btn-success" @onclick="GenerateBundle" disabled="@(_generating || _sending)">
             @if (_generating) { <span class="spinner-border spinner-border-sm me-1"></span> }
             Generate Bundle
@@ -89,6 +90,16 @@ else
     protected override void OnInitialized() => Load();
 
     private void Reload() => Load();
+
+    private void ClearFolder()
+    {
+        var folder = SettingsSvc.Settings.ExamplesFolder;
+        if (string.IsNullOrWhiteSpace(folder)) return;
+        var deleted = BuildSvc.ClearExamplesFolder(folder);
+        _bundleMessage = $"✓ Cleared {deleted} file(s) from folder.";
+        _bundleError   = false;
+        Load();
+    }
 
     private void Load()
     {

@@ -131,17 +131,17 @@ public class DataService05
         }
     }
 
-    /// <summary>Returns (fshStandard, fshR5) — both FHIR outputs from the same model.</summary>
-    public (string Standard, string R5) ToFsh(Section05Model model)
+    /// <summary>Returns the standard FSH output for Section 05.
+    /// The R5 eligibility template (Section_05_R5_Eligibility_Template.fsh) is retained for
+    /// future use but is not currently generated — see ToFshR5() below.</summary>
+    public string ToFsh(Section05Model model)
     {
-        var mainPath  = Path.Combine(_env.ContentRootPath, "Templates", "Section_05_Template.fsh");
-        var eligPath  = Path.Combine(_env.ContentRootPath, "Templates", "Section_05_Eligibility_Template.fsh");
-        var eligR5Path = Path.Combine(_env.ContentRootPath, "Templates", "Section_05_R5_Eligibility_Template.fsh");
+        var mainPath = Path.Combine(_env.ContentRootPath, "Templates", "Section_05_Template.fsh");
+        var eligPath = Path.Combine(_env.ContentRootPath, "Templates", "Section_05_Eligibility_Template.fsh");
 
-        string main, eligTpl, eligR5Tpl;
-        try { main      = File.ReadAllText(mainPath);   } catch { main      = $"Error: could not read {mainPath}";   }
-        try { eligTpl   = File.ReadAllText(eligPath);   } catch { eligTpl   = $"Error: could not read {eligPath}";   }
-        try { eligR5Tpl = File.ReadAllText(eligR5Path); } catch { eligR5Tpl = $"Error: could not read {eligR5Path}"; }
+        string main, eligTpl;
+        try { main    = File.ReadAllText(mainPath); } catch { main    = $"Error: could not read {mainPath}"; }
+        try { eligTpl = File.ReadAllText(eligPath); } catch { eligTpl = $"Error: could not read {eligPath}"; }
 
         // Fixed fields — applied to main template
         var fields = new Dictionary<string, string?>
@@ -166,7 +166,7 @@ public class DataService05
             return string.IsNullOrWhiteSpace(name) ? $"exclusion-group-row{r}" : $"exclusion-group-{name}";
         }).ToList();
 
-        // Expand REPEAT in main template (shared by both outputs)
+        // Expand REPEAT in main template
         var repeatResult = TokenParser.FindAndExpandRepeat(main, inclRowIds.Concat(exclRowIds));
         if (repeatResult.HasValue)
         {
@@ -174,14 +174,58 @@ public class DataService05
             main = main.Remove(mStart, mLen).Insert(mStart, expanded);
         }
 
-        // Build group instance blocks for both eligibility templates
-        var inclBlocks   = BuildGroupBlocks(eligTpl,   model.InclData, Math.Max(1, model.InclRows), inclRowIds);
-        var exclBlocks   = BuildGroupBlocks(eligTpl,   model.ExclData, Math.Max(1, model.ExclRows), exclRowIds);
+        // Build group instance blocks from the standard eligibility template
+        var inclBlocks = BuildGroupBlocks(eligTpl, model.InclData, Math.Max(1, model.InclRows), inclRowIds);
+        var exclBlocks = BuildGroupBlocks(eligTpl, model.ExclData, Math.Max(1, model.ExclRows), exclRowIds);
+
+        return main + inclBlocks + exclBlocks;
+    }
+
+    /// <summary>
+    /// Generates the R5 FSH output using Section_05_R5_Eligibility_Template.fsh.
+    /// Retained for future use — not currently called by the UI.
+    /// </summary>
+    public string ToFshR5(Section05Model model)
+    {
+        var mainPath   = Path.Combine(_env.ContentRootPath, "Templates", "Section_05_Template.fsh");
+        var eligR5Path = Path.Combine(_env.ContentRootPath, "Templates", "Section_05_R5_Eligibility_Template.fsh");
+
+        string main, eligR5Tpl;
+        try { main      = File.ReadAllText(mainPath);   } catch { main      = $"Error: could not read {mainPath}";   }
+        try { eligR5Tpl = File.ReadAllText(eligR5Path); } catch { eligR5Tpl = $"Error: could not read {eligR5Path}"; }
+
+        var fields = new Dictionary<string, string?>
+        {
+            {"C218739",model.C218739},{"C25532",model.C25532},  {"C25370",model.C25370},
+            {"C218740",model.C218740},{"C218741",model.C218741},{"C218742",model.C218742},
+            {"C218743",model.C218743},{"C218744",model.C218744},{"C218745",model.C218745},
+            {"C218746",model.C218746},{"C49628",model.C49628},  {"C179373",model.C179373},
+        };
+        foreach (var (k, v) in fields)
+            main = main.Replace("{{" + k + "}}", v ?? string.Empty);
+
+        var inclRowIds = Enumerable.Range(1, Math.Max(1, model.InclRows)).Select(r =>
+        {
+            var name = Get(model.InclData, $"name_r{r}").Replace(" ", "-").ToLowerInvariant();
+            return string.IsNullOrWhiteSpace(name) ? $"eligibility-group-row{r}" : $"eligibility-group-{name}";
+        }).ToList();
+        var exclRowIds = Enumerable.Range(1, Math.Max(1, model.ExclRows)).Select(r =>
+        {
+            var name = Get(model.ExclData, $"name_r{r}").Replace(" ", "-").ToLowerInvariant();
+            return string.IsNullOrWhiteSpace(name) ? $"exclusion-group-row{r}" : $"exclusion-group-{name}";
+        }).ToList();
+
+        var repeatResult = TokenParser.FindAndExpandRepeat(main, inclRowIds.Concat(exclRowIds));
+        if (repeatResult.HasValue)
+        {
+            var (expanded, mStart, mLen) = repeatResult.Value;
+            main = main.Remove(mStart, mLen).Insert(mStart, expanded);
+        }
+
         var inclBlocksR5 = BuildGroupBlocks(eligR5Tpl, model.InclData, Math.Max(1, model.InclRows), inclRowIds);
         var exclBlocksR5 = BuildGroupBlocks(eligR5Tpl, model.ExclData, Math.Max(1, model.ExclRows), exclRowIds);
 
-        return (main + inclBlocks + exclBlocks,
-                main + inclBlocksR5 + exclBlocksR5);
+        return main + inclBlocksR5 + exclBlocksR5;
     }
 
     private string BuildGroupBlocks(

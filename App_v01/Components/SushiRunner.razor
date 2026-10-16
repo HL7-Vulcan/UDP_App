@@ -38,10 +38,16 @@
             <div class="col-md-4">
                 <div class="d-flex align-items-center mb-2 gap-2">
                     <label class="form-label fw-semibold mb-0">Examples Folder</label>
-                    <button class="btn btn-outline-primary btn-sm ms-auto text-nowrap"
-                            @onclick="ImportExample" disabled="@Running">
-                        ⬆ Import
-                    </button>
+                    <div class="ms-auto d-flex gap-2">
+                        <button class="btn btn-outline-primary btn-sm text-nowrap"
+                                @onclick="ImportExample" disabled="@Running">
+                            ⬆ Import
+                        </button>
+                        <button class="btn btn-outline-danger btn-sm text-nowrap"
+                                @onclick="ClearExamplesFolder" disabled="@Running">
+                            🗑 Clear
+                        </button>
+                    </div>
                 </div>
                 @if (!string.IsNullOrEmpty(ExamplesMessage))
                 {
@@ -450,6 +456,17 @@
             ExamplesSuccess = false;
             ExamplesMessage = $"Could not delete {fileName}.";
         }
+        _ = Task.Delay(3000).ContinueWith(_ => { ExamplesMessage = ""; InvokeAsync(StateHasChanged); });
+    }
+
+    private void ClearExamplesFolder()
+    {
+        var deleted = SushiSvc.ClearExamplesFolder();
+        ExampleFiles = SushiSvc.ListExampleFiles();
+        FshContent   = "";
+        SelectedExample = "";
+        ExamplesSuccess = true;
+        ExamplesMessage = $"✓ Cleared {deleted} file(s) from folder.";
         _ = Task.Delay(3000).ContinueWith(_ => { ExamplesMessage = ""; InvokeAsync(StateHasChanged); });
     }
 

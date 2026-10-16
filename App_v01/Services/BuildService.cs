@@ -188,4 +188,24 @@ public class BuildService
 
         results.Add(new FhirResourceBlock(fileName, resourceType, id, pretty));
     }
+
+    /// <summary>
+    /// Deletes all .json files from the Examples folder.
+    /// Returns the number of files deleted.
+    /// </summary>
+    public int ClearExamplesFolder(string folderPath)
+    {
+        if (string.IsNullOrWhiteSpace(folderPath)) return 0;
+        if (!Path.IsPathRooted(folderPath))
+            folderPath = Path.Combine(_env.ContentRootPath, folderPath);
+        if (!Directory.Exists(folderPath)) return 0;
+
+        int count = 0;
+        foreach (var file in Directory.GetFiles(folderPath, "*.json", SearchOption.TopDirectoryOnly))
+        {
+            File.Delete(file);
+            count++;
+        }
+        return count;
+    }
 }

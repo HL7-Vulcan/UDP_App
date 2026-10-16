@@ -308,12 +308,9 @@
         ShowSaveDialog = false;
         if (SaveFormat == "fhir-pipeline")
         {
-            var (std, r5) = DataSvc.ToFsh(Model);
-            var baseName  = SaveFileName.Trim().Length > 0 ? SaveFileName.Trim() : "section5_data";
-            // Save both FSH files then run pipeline (pipeline picks up all .fsh in Examples folder)
-            SushiSvc.SaveToExamples(baseName + ".fsh",     std);
-            SushiSvc.SaveToExamples(baseName + "_R5.fsh",  r5);
-            // Run pipeline using the primary file name (SUSHI compiles all files in the folder)
+            var std      = DataSvc.ToFsh(Model);
+            var baseName = SaveFileName.Trim().Length > 0 ? SaveFileName.Trim() : "section5_data";
+            SushiSvc.SaveToExamples(baseName + ".fsh", std);
             await _pipeline.RunAsync(baseName + ".fsh", std);
             SetStatus("✓ FHIR pipeline complete");
             return;
@@ -328,13 +325,11 @@
         var fn = (SaveFileName.Trim().Length > 0 ? SaveFileName.Trim() : "section5_data") + ext;
         if (SaveFormat == "fsh")
         {
-            var (std, r5) = DataSvc.ToFsh(Model);
-            var baseName  = SaveFileName.Trim().Length > 0 ? SaveFileName.Trim() : "section5_data";
+            var std      = DataSvc.ToFsh(Model);
+            var baseName = SaveFileName.Trim().Length > 0 ? SaveFileName.Trim() : "section5_data";
             SushiSvc.SaveToExamples(baseName + ".fsh", std);
-            SushiSvc.SaveToExamples(baseName + "_R5.fsh", r5);
-            await JS.InvokeVoidAsync("udpDownload", baseName + ".fsh",         std, "text/plain");
-            await JS.InvokeVoidAsync("udpDownload", baseName + "_R5" + ".fsh", r5,  "text/plain");
-            SetStatus("⬇ Downloaded standard + R5 FHIR files");
+            await JS.InvokeVoidAsync("udpDownload", baseName + ".fsh", std, "text/plain");
+            SetStatus("⬇ Downloaded FHIR file");
         }
         else
         {
