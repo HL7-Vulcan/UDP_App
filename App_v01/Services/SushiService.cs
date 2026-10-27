@@ -359,6 +359,29 @@ public class SushiService
         return result;
     }
 
+    /// <summary>Zips all generated resource files and returns the zip as bytes.</summary>
+    public byte[]? ReadAllGeneratedAsZip(IEnumerable<string> fileNames)
+    {
+        var files = fileNames.ToList();
+        if (files.Count == 0) return null;
+
+        using var ms  = new System.IO.MemoryStream();
+        using var zip = new System.IO.Compression.ZipArchive(ms, System.IO.Compression.ZipArchiveMode.Create, leaveOpen: true);
+        foreach (var fileName in files)
+        {
+            var safe = Path.GetFileName(fileName);
+            if (string.IsNullOrEmpty(safe)) continue;
+            var path = Path.Combine(GeneratedResourcesFolder, safe);
+            if (!File.Exists(path)) continue;
+            var entry = zip.CreateEntry(safe, System.IO.Compression.CompressionLevel.Optimal);
+            using var es = entry.Open();
+            using var fs = File.OpenRead(path);
+            fs.CopyTo(es);
+        }
+        zip.Dispose();
+        return ms.ToArray();
+    }
+
     /// <summary>Reads one generated resource file as bytes for download.</summary>
     public byte[]? ReadGeneratedFile(string fileName)
     {
@@ -402,6 +425,41 @@ public class SushiService
 
     /// <summary>
     /// Saves FSH content into the Examples folder (used when a section saves in FHIR format).
+    /// Reads a single .fsh file from the Examples folder and returns its bytes.
+    /// Returns null if not found or path is unsafe.
+    /// </summary>
+    public byte[]? ReadExampleFile(string fileName)
+    {
+        var safe = Path.GetFileName(fileName);
+        if (string.IsNullOrEmpty(safe) || safe.Contains("..")) return null;
+        var path = Path.Combine(ExamplesFolder, safe);
+        return File.Exists(path) ? File.ReadAllBytes(path) : null;
+    }
+
+    /// <summary>
+    /// Zips all .fsh files in the Examples folder and returns the zip as bytes.
+    /// </summary>
+    public byte[]? ReadAllExamplesAsZip()
+    {
+        if (!Directory.Exists(ExamplesFolder)) return null;
+        var files = Directory.GetFiles(ExamplesFolder, "*.fsh", SearchOption.TopDirectoryOnly)
+                             .OrderBy(f => f).ToList();
+        if (files.Count == 0) return null;
+
+        using var ms  = new System.IO.MemoryStream();
+        using var zip = new System.IO.Compression.ZipArchive(ms, System.IO.Compression.ZipArchiveMode.Create, leaveOpen: true);
+        foreach (var file in files)
+        {
+            var entry = zip.CreateEntry(Path.GetFileName(file), System.IO.Compression.CompressionLevel.Optimal);
+            using var es = entry.Open();
+            using var fs = File.OpenRead(file);
+            fs.CopyTo(es);
+        }
+        zip.Dispose();
+        return ms.ToArray();
+    }
+
+    /// <summary>
     /// Returns the full path written.
     /// </summary>
     public string SaveToExamples(string fileName, string content)

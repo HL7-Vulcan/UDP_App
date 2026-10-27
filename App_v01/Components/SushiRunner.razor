@@ -43,6 +43,13 @@
                                 @onclick="ImportExample" disabled="@Running">
                             ⬆ Import
                         </button>
+                        @if (ExampleFiles.Count > 0)
+                        {
+                            <button class="btn btn-outline-success btn-sm text-nowrap"
+                                    @onclick="DownloadAllExamples" disabled="@Running">
+                                ⬇ All FSH
+                            </button>
+                        }
                         <button class="btn btn-outline-danger btn-sm text-nowrap"
                                 @onclick="ClearExamplesFolder" disabled="@Running">
                             🗑 Clear
@@ -71,7 +78,13 @@
                                             style="cursor:pointer" @onclick="() => SelectExample(f)">
                                             @f
                                         </td>
-                                        <td style="width:36px;" class="text-end pe-2">
+                                        <td style="width:64px;" class="text-end pe-2">
+                                            <button class="btn btn-link btn-sm text-success p-0 me-1"
+                                                    title="Download @f" disabled="@Running"
+                                                    @onclick="() => DownloadExampleFile(f)"
+                                                    @onclick:stopPropagation>
+                                                ⬇
+                                            </button>
                                             <button class="btn btn-link btn-sm text-danger p-0"
                                                     title="Delete" disabled="@Running"
                                                     @onclick="() => DeleteExample(f)"
@@ -164,19 +177,30 @@
         @if (RunResult != null)
         {
             @* Status banner *@
-            <div class="alert @(RunResult.Success ? "alert-success" : "alert-danger") py-2 mb-3">
+            <div class="alert @(RunResult.Success ? "alert-success" : "alert-danger") py-2 mb-3 d-flex align-items-center gap-3">
                 @if (RunResult.Success)
                 {
-                    <strong>✓ SUSHI completed successfully.</strong>
-                    <span class="ms-2">@RunResult.Files.Count resource file(s) generated.</span>
+                    <div>
+                        <strong>✓ SUSHI completed successfully.</strong>
+                        <span class="ms-2">@RunResult.Files.Count resource file(s) generated.</span>
+                    </div>
+                    @if (RunResult.GeneratedFiles.Any())
+                    {
+                        <button class="btn btn-success btn-sm ms-auto text-nowrap"
+                                @onclick="DownloadAllGenerated">
+                            ⬇ Download All (@RunResult.GeneratedFiles.Count)
+                        </button>
+                    }
                 }
                 else
                 {
-                    <strong>✗ SUSHI failed.</strong>
-                    @if (!string.IsNullOrWhiteSpace(RunResult.Error))
-                    {
-                        <span class="ms-2">@RunResult.Error</span>
-                    }
+                    <div>
+                        <strong>✗ SUSHI failed.</strong>
+                        @if (!string.IsNullOrWhiteSpace(RunResult.Error))
+                        {
+                            <span class="ms-2">@RunResult.Error</span>
+                        }
+                    </div>
                 }
             </div>
 
@@ -376,6 +400,31 @@
         if (bytes == null) return;
         var b64 = Convert.ToBase64String(bytes);
         await JS.InvokeVoidAsync("udpDownloadBase64", fileName, b64);
+    }
+
+    private async Task DownloadExampleFile(string fileName)
+    {
+        var bytes = SushiSvc.ReadExampleFile(fileName);
+        if (bytes == null) return;
+        var b64 = Convert.ToBase64String(bytes);
+        await JS.InvokeVoidAsync("udpDownloadBase64", fileName, b64);
+    }
+
+    private async Task DownloadAllExamples()
+    {
+        var bytes = SushiSvc.ReadAllExamplesAsZip();
+        if (bytes == null) return;
+        var b64 = Convert.ToBase64String(bytes);
+        await JS.InvokeVoidAsync("udpDownloadZip", "fsh-examples.zip", b64);
+    }
+
+    private async Task DownloadAllGenerated()
+    {
+        if (RunResult == null || !RunResult.GeneratedFiles.Any()) return;
+        var bytes = SushiSvc.ReadAllGeneratedAsZip(RunResult.GeneratedFiles.Select(f => f.FileName));
+        if (bytes == null) return;
+        var b64 = Convert.ToBase64String(bytes);
+        await JS.InvokeVoidAsync("udpDownloadZip", "sushi-generated.zip", b64);
     }
 
     // ── Examples file selection / editing ───────────────────────────────────

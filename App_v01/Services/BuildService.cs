@@ -208,4 +208,46 @@ public class BuildService
         }
         return count;
     }
+
+    /// <summary>
+    /// Reads a single .json file from the examples folder and returns its bytes.
+    /// Returns null if the file does not exist or the path is unsafe.
+    /// </summary>
+    public byte[]? ReadExampleFile(string folderPath, string fileName)
+    {
+        if (string.IsNullOrWhiteSpace(folderPath)) return null;
+        var safe = Path.GetFileName(fileName);
+        if (string.IsNullOrEmpty(safe) || safe.Contains("..")) return null;
+        if (!Path.IsPathRooted(folderPath))
+            folderPath = Path.Combine(_env.ContentRootPath, folderPath);
+        var path = Path.Combine(folderPath, safe);
+        return File.Exists(path) ? File.ReadAllBytes(path) : null;
+    }
+
+    /// <summary>
+    /// Zips all .json files in the examples folder and returns the zip as bytes.
+    /// </summary>
+    public byte[]? ReadFolderAsZip(string folderPath)
+    {
+        if (string.IsNullOrWhiteSpace(folderPath)) return null;
+        if (!Path.IsPathRooted(folderPath))
+            folderPath = Path.Combine(_env.ContentRootPath, folderPath);
+        if (!Directory.Exists(folderPath)) return null;
+
+        var files = Directory.GetFiles(folderPath, "*.json", SearchOption.TopDirectoryOnly)
+                             .OrderBy(f => f).ToList();
+        if (files.Count == 0) return null;
+
+        using var ms  = new System.IO.MemoryStream();
+        using var zip = new System.IO.Compression.ZipArchive(ms, System.IO.Compression.ZipArchiveMode.Create, leaveOpen: true);
+        foreach (var file in files)
+        {
+            var entry = zip.CreateEntry(Path.GetFileName(file), System.IO.Compression.CompressionLevel.Optimal);
+            using var es = entry.Open();
+            using var fs = File.OpenRead(file);
+            fs.CopyTo(es);
+        }
+        zip.Dispose();
+        return ms.ToArray();
+    }
 }

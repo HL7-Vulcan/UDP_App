@@ -3,6 +3,7 @@
 @using UDP_App.Services
 @inject SettingsService SettingsSvc
 @inject BuildService BuildSvc
+@inject IJSRuntime JS
 
 <PageTitle>Build — UDP Browse</PageTitle>
 
@@ -28,6 +29,12 @@ else
             @if (_sending) { <span class="spinner-border spinner-border-sm me-1"></span> }
             To Server
         </button>
+        @if (_blocks.Count > 0)
+        {
+            <button class="btn btn-sm btn-outline-success ms-2" @onclick="DownloadAll" disabled="@(_generating || _sending)">
+                ⬇ Download All
+            </button>
+        }
     </div>
 
     @if (_bundleMessage is not null)
@@ -61,8 +68,16 @@ else
                             <span class="badge bg-secondary me-2">@block.ResourceType</span>
                             <code>@block.Id</code>
                         </span>
-                        <span class="text-muted" style="font-size:0.85em;">
-                            @(_expanded.Contains(block) ? "▲ hide" : "▼ show")
+                        <span class="d-flex align-items-center gap-3">
+                            <button class="btn btn-outline-success btn-sm py-0 px-2"
+                                    title="Download @block.FileName"
+                                    @onclick="() => DownloadFile(block.FileName)"
+                                    @onclick:stopPropagation>
+                                ⬇
+                            </button>
+                            <span class="text-muted" style="font-size:0.85em;">
+                                @(_expanded.Contains(block) ? "▲ hide" : "▼ show")
+                            </span>
                         </span>
                     </div>
                     @if (_expanded.Contains(block))
@@ -148,6 +163,22 @@ else
         {
             _sending = false;
         }
+    }
+
+    private async Task DownloadFile(string fileName)
+    {
+        var bytes = BuildSvc.ReadExampleFile(SettingsSvc.Settings.ExamplesFolder, fileName);
+        if (bytes == null) return;
+        var b64 = Convert.ToBase64String(bytes);
+        await JS.InvokeVoidAsync("udpDownloadBase64", fileName, b64);
+    }
+
+    private async Task DownloadAll()
+    {
+        var bytes = BuildSvc.ReadFolderAsZip(SettingsSvc.Settings.ExamplesFolder);
+        if (bytes == null) return;
+        var b64 = Convert.ToBase64String(bytes);
+        await JS.InvokeVoidAsync("udpDownloadZip", "fhir-resources.zip", b64);
     }
 
     private async Task GenerateBundle()

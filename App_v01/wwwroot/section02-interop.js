@@ -10,11 +10,28 @@ window.udpDownload = function (filename, content, mimeType) {
 };
 
 // ── File download (base-64 binary, e.g. JSON from SUSHI) ──────────
-window.udpDownloadBase64 = function (filename, base64) {
+window.udpDownloadBase64 = function (filename, base64, mimeType) {
     const byteChars = atob(base64);
     const bytes = new Uint8Array(byteChars.length);
     for (let i = 0; i < byteChars.length; i++) bytes[i] = byteChars.charCodeAt(i);
-    const blob = new Blob([bytes], { type: 'application/json' });
+    const mime = mimeType || (filename.endsWith('.fsh') ? 'text/plain' : 'application/json');
+    const blob = new Blob([bytes], { type: mime });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href     = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+};
+
+// ── Zip download (base-64 encoded zip blob) ────────────────────────
+window.udpDownloadZip = function (filename, base64) {
+    const byteChars = atob(base64);
+    const bytes = new Uint8Array(byteChars.length);
+    for (let i = 0; i < byteChars.length; i++) bytes[i] = byteChars.charCodeAt(i);
+    const blob = new Blob([bytes], { type: 'application/zip' });
     const url  = URL.createObjectURL(blob);
     const a    = document.createElement('a');
     a.href     = url;
