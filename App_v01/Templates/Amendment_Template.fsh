@@ -21,6 +21,7 @@ xxx
 
 * version = "{{C181232}}" //"(a)"
 * extension[m11-research-study].extension[versionDate].valueDate = {{C93813}} //2017-10-01
+* extension[m11-research-study].extension[originalProtocol].valueCodeableConcept = {{C218672}}  //$NCIT#C21848 "Protocol Previously Amended See Summary of Changes Before the Table of Contents"
 
 //----------------------------------
 
@@ -28,33 +29,50 @@ xxx
 // Title Page Amemndment Summary
 //
 
-* extension[m11-protocol-amendment][+].extension[previous].valueCodeableConcept = $NCIT#C218488	"Protocol Previously Amended See Summary of Changes Before the Table of Contents"
+* extension[m11-protocol-amendment][+].extension[identifier][+].valueIdentifier.type.text = "Amendment Identifier"
+* extension[m11-protocol-amendment][=].extension[identifier][=].valueIdentifier.type.coding[+].system = $NCIT
+* extension[m11-protocol-amendment][=].extension[identifier][=].valueIdentifier.type.coding[=].code = #C218477
+* extension[m11-protocol-amendment][=].extension[identifier][=].valueIdentifier.system = $AmdID
+* extension[m11-protocol-amendment][=].extension[identifier][=].valueIdentifier.value = "{{C218477}}" //"ABC-Exemplar(a)"
 
 * extension[m11-protocol-amendment][=].extension[scope].valueCodeableConcept = {{C218673}} //$NCIT#C217026	"Not Global"
+
+* extension[m11-protocol-amendment][=].extension[country].valueCodeableConcept = {{C20108}} //$iso3166-2#DE-Germany "Germany"
 * extension[m11-protocol-amendment][=].extension[region].valueCodeableConcept = {{C218674}} //$iso3166-2#AU-NSW "New South Wales"
 //* extension[m11-protocol-amendment][=].extension[site][+].valueIdentifier.system = $AmdSite
 * extension[m11-protocol-amendment][=].extension[site][=].valueIdentifier.value = {{C83081}} //"exemplarSite-14"
 
+//..........
 
+* extension[m11-protocol-amendment][=].extension[previous].valueCodeableConcept =  {{C218694}}  // $NCIT#C218488	"Protocol Previously Amended See Summary of Changes Before the Table of Contents"
 
-* extension[m11-protocol-amendment][=].extension[scopeImpact][+].extension[scope].valueCodeableConcept = {{C218673}} //$NCIT#C41065  "Locally"
-// TODO These scopes are different
-* extension[m11-protocol-amendment][=].extension[scopeImpact][+].extension[scope].valueCodeableConcept = {{C218695}} //$NCIT#C41065  "Locally"
-* extension[m11-protocol-amendment][=].extension[scopeImpact][=].extension[number].valuePositiveInt = {{C218874}} //234
-//* extension[m11-protocol-amendment][=].extension[scopeImpact][+].extension[scope].valueCodeableConcept = $NCIT#C68846  "Global"
-//* extension[m11-protocol-amendment][=].extension[scopeImpact][=].extension[number].valuePositiveInt = 983
+// Approx. Enrolled at Time of Sponsor Approval:
+* extension[m11-protocol-amendment][=].extension[scopeImpact][+].extension[number].valuePositiveInt = {{C218478}} //234
+* extension[m11-protocol-amendment][=].extension[scopeImpact][=].extension[scope].valueCodeableConcept = {{C218695}} //$NCIT#C41065  "Locally"
 
+// Primary Reason for Amendment:
 * extension[m11-protocol-amendment][=].extension[primaryReason].valueCodeableConcept = {{C218696}} //$NCIT#C218490  "Regulatory Agency Request to Amend Amendment Reason"
-* extension[m11-protocol-amendment][=].extension[primaryReason][=].valueCodeableConcept.text = "{{C17649}}" //"Packaging revision"
+* extension[m11-protocol-amendment][=].extension[primaryReason].valueCodeableConcept.text = "{{C17649}}" //"Packaging revision"
+
+// Secondary Reason for Amendment:
+// TODO Make this ..*
+{{REPEAT
 * extension[m11-protocol-amendment][=].extension[secondaryReason][+].valueCodeableConcept = {{C218697}} //$NCIT#C218494  "Manufacturing Change Amendment Reason"
-* extension[m11-protocol-amendment][=].extension[secondaryReason][=].valueCodeableConcept.text = "{{C17649}}" //"Packaging revision"
+* extension[m11-protocol-amendment][=].extension[secondaryReason][=].valueCodeableConcept.text = "{{C17649_2}}" //"Packaging revision"
+}}
+
+// Amendment Summary:
 * extension[m11-protocol-amendment][=].extension[summary].valueString = "{{C42581}}" //"Manufacturing chanage to enable packaging change to recyclable materials."
 
+// Substantial Impact on Safety or Rights?
 * extension[m11-protocol-amendment][=].extension[substantialImpactSafety].valueCodeableConcept = {{C218698}} // $NCIT#C49488  "Yes"
 * extension[m11-protocol-amendment][=].extension[substantialImpactSafetyComment].valueString = "{{C218699}}" // "Specifically implemented to decrease safety risks."
+
+// Substantial Impact on Reliability and Robustness?
 * extension[m11-protocol-amendment][=].extension[substantialImpactReliability].valueCodeableConcept = {{C218700}} //$NCIT#C49487  "No"
 * extension[m11-protocol-amendment][=].extension[substantialImpactReliabilityComment].valueString = "{{C218701}}" // "Specifically implemented to decrease compliance risks."
 
+// Table Overview of Changes in the Current Amendment
 {{REPEAT
 * extension[m11-protocol-amendment][=].extension[details][+].extension[detail].valueString = "{{C218483}}" //"Clarification"
 * extension[m11-protocol-amendment][=].extension[details][=].extension[rationale].valueString = "{{C181233}}" //"Clarification of synopsis at request of regulator"
@@ -62,7 +80,8 @@ xxx
 }}
 
 
-
+//* extension[m11-protocol-amendment][=].extension[scopeImpact][+].extension[scope].valueCodeableConcept = $NCIT#C68846  "Global"
+//* extension[m11-protocol-amendment][=].extension[scopeImpact][=].extension[number].valuePositiveInt = 983
 
 // * extension[m11-protocol-amendment][=].extension[rationale].valueString = "Updates to address safety concern & align with product guidelines."
 // * extension[m11-protocol-amendment][=].extension[description].valueMarkdown = """#Protocol ABC-Exemplar A Phase 3 Study of Inhaled Exoticillin compared to Intramuscular Exoticillin for Treatment of Bronchtis Japanese Patients with Iatrogenic Diabetes Mellitus

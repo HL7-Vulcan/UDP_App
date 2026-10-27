@@ -71,10 +71,9 @@ Description: """
 * identifier[=].value = "{{C218477}}" //"ABC-Exemplar(a)"
 // for rendition if there is an amendment at this level need to go and find the amendment with this ID and display the scope
 
-* extension[m11-research-study].extension[originalProtocol].valueCodeableConcept = {{C218672}}  //$NCIT#C21848 "Protocol Previously Amended See Summary of Changes Before the Table of Contents"
-
 * version = "{{C181232}}" //"(a)"
 * extension[m11-research-study].extension[versionDate].valueDate = {{C93813}} //2017-10-01
+* extension[m11-research-study].extension[originalProtocol].valueCodeableConcept = {{C218672}}  //$NCIT#C21848 "Protocol Previously Amended See Summary of Changes Before the Table of Contents"
 
 * title = "{{C132346}}" //"A Phase 3 Study of Inhaled Exoticillin compared to Intramuscular Exoticillin for Treatment of Bronchtis Japanese Patients with Iatrogenic Diabetes Mellitus"
 * label[+].type = $NCIT#C207646 "Study Acronym"

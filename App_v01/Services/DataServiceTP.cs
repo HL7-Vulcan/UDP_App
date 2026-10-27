@@ -79,6 +79,7 @@ public class DataServiceTP
         L("Primary Reason",                model.C218696);
         L("Secondary Reason",              model.C218697);
         L("Other Reason Text",             model.C17649);
+        L("Secondary Other Reason Text",   model.C17649_2);
         L("Amendment Summary",             model.C42581);
         L("Substantial Impact Safety",     model.C218698);
         L("Impact Safety Comment",         model.C218699);
@@ -164,9 +165,9 @@ public class DataServiceTP
             !string.IsNullOrWhiteSpace(model.C218682),
             new[] { "DevicesOrganization" });
 
-        // Amendment block: expand if C218694 non-empty and not "U101"
+        // Amendment block: expand if C218694 non-empty and not the "not amended" code
         result = ExpandOrSuppress(result, "Protocol-Amendment",
-            !string.IsNullOrWhiteSpace(model.C218694) && model.C218694 != "U101",
+            !string.IsNullOrWhiteSpace(model.C218694) && !model.C218694.Contains("C218485"),
             new[] { "Amendment-001" });
 
         // Before substitution, tokenise the hardcoded Sponsor reference lines
@@ -182,7 +183,7 @@ public class DataServiceTP
         result = DropOrphanedContinuationLines(result);
 
         // Append Amendment instance (if applicable)
-        if (!string.IsNullOrWhiteSpace(model.C218694) && model.C218694 != "U101")
+        if (!string.IsNullOrWhiteSpace(model.C218694) && !model.C218694.Contains("C218485"))
             result += BuildAmendmentInstance(model);
 
         // Append Product instance
@@ -203,61 +204,62 @@ public class DataServiceTP
         var baseFields = new Dictionary<string, string?>(StringComparer.OrdinalIgnoreCase)
         {
             {"Protocol-Amendment", "Amendment-001"},
-            {"C132351", model.C132351}, {"C218477", model.C218477},
+            {"C132351", model.C132351}, {"C218477", model.C218477}, {"C218672", model.C218672},
             {"C181232", model.C181232}, {"C93813",  model.C93813},
             {"C218673", model.C218673}, {"C218674", model.C218674},
-            {"C83081",  model.C83081},  {"C218695", model.C218695},
-            {"C218874", model.C218874}, {"C218696", model.C218696},
-            {"C218697", model.C218697}, {"C17649",  model.C17649},
+            {"C83081",  model.C83081},  {"C218694", model.C218694},
+            {"C218695", model.C218695},
+            {"C218478", model.C218478}, {"C218696", model.C218696},
+            {"C218697", model.C218697}, {"C17649",  model.C17649}, {"C17649_2", model.C17649_2},
             {"C42581",  model.C42581},  {"C218698", model.C218698},
             {"C218699", model.C218699}, {"C218700", model.C218700},
             {"C218701", model.C218701},
         };
 
-        // Find the REPEAT block and extract its inner template
-        int repIdx = tpl.IndexOf("{{REPEAT", StringComparison.Ordinal);
-        if (repIdx >= 0)
-        {
-            // braceOpen points at the first { of {{REPEAT so FindTokenEnd counts correctly
-            int braceOpen  = repIdx;
-            int braceClose = TokenParser.FindTokenEnd(tpl, braceOpen);
-            if (braceClose >= 0)
+        // ── REPEAT block 1: Secondary Reason (C218697 multi-select) ──────────────
+        // C218697 holds semicolon-separated coded values, e.g. "$NCIT#C218494 \"...\";$NCIT#C17649 \"...\""
+        // Expand one {{secondaryReason}} iteration per selected value.
+        // The text field C17649_2 is output only on the C17649 ("Other") iteration and only
+        // when C17649_2 is non-blank; on all other iterations the text line is dropped.
+        tpl = ExpandRepeatByField(tpl, "C218697",
+            expandFn: (innerTpl, selectedValue) =>
             {
-                // Inner content is after "{{REPEAT" and before the closing "}}"
-                int innerStart = repIdx + "{{REPEAT".Length;
-                string innerTpl = tpl.Substring(innerStart, braceClose - innerStart - 2);
-
-                // Expand one block per change row
-                var rowsSb = new System.Text.StringBuilder();
-                int chgCount = Math.Max(1, model.ChgRows);
-                for (int r = 1; r <= chgCount; r++)
+                bool isOther = selectedValue.Contains("C17649", StringComparison.OrdinalIgnoreCase);
+                string? otherText = (isOther && !string.IsNullOrWhiteSpace(model.C17649_2))
+                                    ? model.C17649_2
+                                    : null;   // null → DropEmptyTokenLines will remove the .text line
+                var rf = new Dictionary<string, string?>(baseFields, StringComparer.OrdinalIgnoreCase)
                 {
-                    if (r > 1) rowsSb.AppendLine();
-                    var rowFields = new Dictionary<string, string?>(baseFields, StringComparer.OrdinalIgnoreCase)
-                    {
-                        ["C218483"] = GetChg(model, $"C218483_r{r}"),
-                        ["C181233"] = GetChg(model, $"C181233_r{r}"),
-                        ["C218479"] = GetChg(model, $"C218479_r{r}"),
-                    };
-                    string? getRow(string key) =>
-                        rowFields.TryGetValue(key.Trim(), out var v) ? v : null;
-                    rowsSb.Append(TokenParser.Substitute(TokenParser.DropEmptyTokenLines(innerTpl, getRow), getRow));
-                }
+                    ["C218697"]  = selectedValue,
+                    ["C17649_2"] = otherText,
+                };
+                string? getR(string key) => rf.TryGetValue(key.Trim(), out var v) ? v : null;
+                return TokenParser.Substitute(TokenParser.DropEmptyTokenLines(innerTpl, getR), getR);
+            },
+            values: (model.C218697 ?? "").Split(';', StringSplitOptions.RemoveEmptyEntries)
+                                          .Select(v => v.Trim()).Where(v => v.Length > 0)
+                                          .ToList());
 
-                // Replace the REPEAT block (from its line start) with the expanded rows
-                int lineStart = repIdx;
-                while (lineStart > 0 && tpl[lineStart - 1] != '\n' && tpl[lineStart - 1] != '\r')
-                    lineStart--;
-                // blockEnd: skip past trailing whitespace/tabs on the closing }} line, then the newline
-                int blockEnd = braceClose;
-                while (blockEnd < tpl.Length && (tpl[blockEnd] == ' ' || tpl[blockEnd] == '\t'))
-                    blockEnd++;
-                if (blockEnd < tpl.Length && tpl[blockEnd] == '\r') blockEnd++;
-                if (blockEnd < tpl.Length && tpl[blockEnd] == '\n') blockEnd++;
-
-                tpl = tpl.Substring(0, lineStart) + rowsSb + tpl.Substring(blockEnd);
-            }
-        }
+        // ── REPEAT block 2: Change-details rows (one per ChgRows) ────────────────
+        // Build list of row-index strings so ExpandRepeatByField can iterate them;
+        // the expandFn substitutes the per-row fields.
+        var chgRowIndices = Enumerable.Range(1, Math.Max(1, model.ChgRows))
+                                      .Select(r => r.ToString()).ToList();
+        tpl = ExpandRepeatByField(tpl, "C218483",
+            expandFn: (innerTpl, rowStr) =>
+            {
+                int r = int.Parse(rowStr);
+                var rowFields = new Dictionary<string, string?>(baseFields, StringComparer.OrdinalIgnoreCase)
+                {
+                    ["C218483"] = GetChg(model, $"C218483_r{r}"),
+                    ["C181233"] = GetChg(model, $"C181233_r{r}"),
+                    ["C218479"] = GetChg(model, $"C218479_r{r}"),
+                };
+                string? getRow(string key) =>
+                    rowFields.TryGetValue(key.Trim(), out var v) ? v : null;
+                return TokenParser.Substitute(TokenParser.DropEmptyTokenLines(innerTpl, getRow), getRow);
+            },
+            values: chgRowIndices);
 
         string? get(string key) =>
             baseFields.TryGetValue(key.Trim(), out var v) ? v : null;
@@ -466,6 +468,53 @@ public class DataServiceTP
         if (!instances.TryGetValue(name, out var block)) return;
         sb.AppendLine();
         sb.AppendLine(TokenParser.Substitute(TokenParser.DropEmptyTokenLines(block, get), get));
+    }
+
+    // Expand the first REPEAT block whose inner content contains `sentinel`.
+    // If `values` is non-null and non-empty: expand one copy per value, calling expandFn
+    //   with (innerTemplate, value) for each; separate copies with a blank line.
+    // If `values` is null: the block is left intact (caller will handle it).
+    // If `values` is non-null but empty: the block is removed entirely (suppress).
+    private static string ExpandRepeatByField(string tpl, string sentinel,
+        Func<string, string, string> expandFn, List<string>? values)
+    {
+        int idx = tpl.IndexOf("{{REPEAT", StringComparison.Ordinal);
+        while (idx >= 0)
+        {
+            int braceClose = TokenParser.FindTokenEnd(tpl, idx);
+            if (braceClose < 0) break;
+
+            int innerStart = idx + "{{REPEAT".Length;
+            string inner   = tpl.Substring(innerStart, braceClose - innerStart - 2);
+
+            if (inner.Contains(sentinel, StringComparison.Ordinal))
+            {
+                int lineStart = idx;
+                while (lineStart > 0 && tpl[lineStart - 1] != '\n' && tpl[lineStart - 1] != '\r')
+                    lineStart--;
+                int blockEnd = braceClose;
+                while (blockEnd < tpl.Length && (tpl[blockEnd] == ' ' || tpl[blockEnd] == '\t'))
+                    blockEnd++;
+                if (blockEnd < tpl.Length && tpl[blockEnd] == '\r') blockEnd++;
+                if (blockEnd < tpl.Length && tpl[blockEnd] == '\n') blockEnd++;
+
+                if (values == null)
+                    return tpl;   // leave block intact — caller will process it
+
+                if (values.Count == 0)
+                    return tpl.Substring(0, lineStart) + tpl.Substring(blockEnd);  // suppress
+
+                var sb = new System.Text.StringBuilder();
+                for (int i = 0; i < values.Count; i++)
+                {
+                    if (i > 0) sb.AppendLine();
+                    sb.Append(expandFn(inner, values[i]));
+                }
+                return tpl.Substring(0, lineStart) + sb + tpl.Substring(blockEnd);
+            }
+            idx = tpl.IndexOf("{{REPEAT", idx + 1, StringComparison.Ordinal);
+        }
+        return tpl;
     }
 
     // Find the REPEAT block containing the sentinel and either expand it (one row per rowId)

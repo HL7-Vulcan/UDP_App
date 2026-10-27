@@ -1,0 +1,16 @@
+{
+  "resourceType": "Practitioner",
+  "id": "SponsorPractitioner",
+  "name": [
+    {
+      "text": "Exemplar Pharmaceuticals Ltd"
+    }
+  ],
+  "address": [
+    {
+      "line": [
+        "1 Science Park, Cambridge, CB4 0WA, United Kingdom"
+      ]
+    }
+  ]
+}

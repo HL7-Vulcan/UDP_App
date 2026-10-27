@@ -101,8 +101,10 @@
                 <select data-ctx="C218672" class="@SelReqClass(Model.C218672)"
                     value="@Model.C218672" @onchange="@(e => { Model.C218672 = e.Value?.ToString(); })">
                     <option value="">-- select --</option>
-                    <option value='$NCIT#C49488 "Yes"'>Yes</option>
-                    <option value='$NCIT#C49487 "No"'>No</option>
+                    <option value='$NCIT#C218486 "First Protocol Amendment"'>First Protocol Amendment</option>
+                    <option value='$NCIT#C218485 "Protocol Not Amended"'>Protocol Not Amended</option>
+                    <option value='$NCIT#C218488 "Protocol Previously Amended See Summary of Changes Before the Table of Contents"'>Protocol Previously Amended See Summary of Changes Before the Table of Contents</option>
+                    <option value='$NCIT#C218487 "Protocol Previously Amended, Details Presented"'>Protocol Previously Amended, Details Presented</option>
                 </select></td>
         </tr>
         <tr>
@@ -310,14 +312,28 @@
                 <select data-ctx="C218694" class="fb-sel"
                     value="@Model.C218694" @onchange="@(e => { Model.C218694 = e.Value?.ToString(); })">
                     <option value="">-- select --</option>
-                    <option value="U101">This protocol has not been amended</option>
-                    <option value="U102">This is the first protocol amendment</option>
-                    <option value="U103">This protocol has been amended previously. Details of prior amendments are presented in Section 12.3 Prior Protocol Amendment(s).</option>
+                    <option value='$NCIT#C218485 "This protocol has not been amended."'>This protocol has not been amended.</option>
+                    <option value='$NCIT#C218486 "This is the first protocol amendment."'>This is the first protocol amendment.</option>
+                    <option value='$NCIT#C218487 "This protocol has been amended previously. Details of prior amendments are presented in Section 12.3 Prior Protocol Amendment(s)."'>This protocol has been amended previously. Details of prior amendments are presented in Section 12.3 Prior Protocol Amendment(s).</option>
+
                 </select></td>
         </tr>
     </table>
 
     <p style="font-style:italic;font-size:10pt;color:#555;margin:6px 0 12px;">The table below describes the current amendment. Complete only if an amendment applies.</p>
+
+    <table class="tp-tbl">
+        <tr>
+            <td class="lbl cond">Amendment Identifier:</td>
+            <td><div class="type-badge">read-only</div>
+                <span style="display:block;padding:3px 5px;font-size:10.5pt;">@Model.C218477</span></td>
+        </tr>
+        <tr>
+            <td class="lbl cond">Amendment Scope:</td>
+            <td><div class="type-badge">read-only</div>
+                <span style="display:block;padding:3px 5px;font-size:10.5pt;">@Model.C218673</span></td>
+        </tr>
+    </table>
 
     <table class="tp-tbl">
         <tr>
@@ -341,12 +357,19 @@
                 @ReasonSelect("C218696", Model.C218696, v => Model.C218696 = v)
                 <div class="type-badge" style="margin-top:6px;">Other reason text (conditional string)</div>
                 <input data-ctx="C17649" class="fb" type="text" placeholder="Enter other reason"
+                    disabled="@(!PrimaryOtherActive)"
+                    style="@(PrimaryOtherActive ? "" : "opacity:0.4;cursor:not-allowed;")"
                     @bind="Model.C17649" @bind:event="oninput" /></td>
         </tr>
         <tr>
             <td class="lbl cond">Secondary Reason for Amendment:</td>
-            <td><div class="type-badge">conditional picklist</div>
-                @ReasonSelect("C218697", Model.C218697, v => Model.C218697 = v)</td>
+            <td><div class="type-badge">conditional multi-select</div>
+                @ReasonMultiSelect("C218697", Model.C218697, v => { Model.C218697 = v; StateHasChanged(); })
+                <div class="type-badge" style="margin-top:6px;">Other reason text (conditional string)</div>
+                <input data-ctx="C17649_2" class="fb" type="text" placeholder="Enter other reason"
+                    disabled="@(!SecondaryOtherActive)"
+                    style="@(SecondaryOtherActive ? "" : "opacity:0.4;cursor:not-allowed;")"
+                    @bind="Model.C17649_2" @bind:event="oninput" /></td>
         </tr>
         <tr>
             <td class="lbl cond">Amendment Summary:</td>
@@ -400,14 +423,14 @@
                     <td style="text-align:center;vertical-align:middle;">
                         <button class="del-btn" @onclick="@(() => DeleteChgRow(r))">✕</button>
                     </td>
-                    <td><textarea class="fb" rows="2" placeholder="Description of Change"
+                    <td><textarea data-ctx="C218483" class="fb" rows="2" placeholder="Description of Change"
                         value="@GetChg($"C218483_r{r}")"
                         @oninput="@(e => SetChg($"C218483_r{r}", e.Value?.ToString()))"></textarea></td>
-                    <td><textarea class="fb" rows="2" placeholder="Brief Rationale for Change"
+                    <td><textarea data-ctx="C181233" class="fb" rows="2" placeholder="Brief Rationale for Change"
                         value="@GetChg($"C181233_r{r}")"
                         @oninput="@(e => SetChg($"C181233_r{r}", e.Value?.ToString()))"></textarea></td>
                     <td>
-                        <select class="fb-sel"
+                        <select data-ctx="C218479" class="fb-sel"
                             value="@GetChg($"C218479_r{r}")"
                             @onchange="@(e => SetChg($"C218479_r{r}", e.Value?.ToString()))">
                             <option value="">-- select --</option>
@@ -570,6 +593,56 @@
                 <option value="@val">@lbl</option>
             }
         </select>;
+    };
+
+    private bool PrimaryOtherActive =>
+        !string.IsNullOrWhiteSpace(Model.C218696) &&
+        Model.C218696.Contains("C17649", StringComparison.OrdinalIgnoreCase);
+
+    private bool SecondaryOtherActive =>
+        !string.IsNullOrWhiteSpace(Model.C218697) &&
+        Model.C218697.Split(';', StringSplitOptions.RemoveEmptyEntries)
+             .Any(v => v.Trim().Contains("C17649"));
+
+    private RenderFragment ReasonMultiSelect(string ctxId, string? current, Action<string?> setter) => __builder =>
+    {
+        var opts = new[]
+        {
+            ("$NCIT#C218490 \"Regulatory Agency Request To Amend\"", "Regulatory Agency Request To Amend"),
+            ("$NCIT#C218491 \"New Regulatory Guidance\"",           "New Regulatory Guidance"),
+            ("$NCIT#C218492 \"IRB/IEC Feedback\"",                  "IRB/IEC Feedback"),
+            ("$NCIT#C218493 \"New Safety Information Available\"",   "New Safety Information Available"),
+            ("$NCIT#C218494 \"Manufacturing Change\"",              "Manufacturing Change"),
+            ("$NCIT#C218495 \"IMP Addition\"",                      "IMP Addition"),
+            ("$NCIT#C218496 \"Change In Strategy\"",                "Change In Strategy"),
+            ("$NCIT#C218497 \"Change In Standard Of Care\"",        "Change In Standard Of Care"),
+            ("$NCIT#C218498 \"New Data Available (Other Than Safety Data)\"", "New Data Available (Other Than Safety Data)"),
+            ("$NCIT#C218499 \"Investigator/Site Feedback\"",        "Investigator/Site Feedback"),
+            ("$NCIT#C218500 \"Recruitment Difficulty\"",            "Recruitment Difficulty"),
+            ("$NCIT#C218501 \"Inconsistency And/Or Error In The Protocol\"", "Inconsistency And/Or Error In The Protocol"),
+            ("$NCIT#C218502 \"Protocol Design Error\"",             "Protocol Design Error"),
+            ("$NCIT#C17649 \"Other\"",                              "Other"),
+            ("$NCIT#C48660 \"Not Applicable\"",                     "Not Applicable"),
+        };
+        var selected = (current ?? "").Split(';', StringSplitOptions.RemoveEmptyEntries)
+                                      .Select(v => v.Trim()).ToHashSet();
+        <div data-ctx="@ctxId" style="display:flex;flex-direction:column;gap:3px;padding:4px 0;">
+        @foreach (var (val, lbl) in opts)
+        {
+            var isChecked = selected.Contains(val);
+            var capturedVal = val;
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:10.5pt;padding:1px 0;">
+                <input type="checkbox" checked="@isChecked"
+                    @onchange="@(e => {
+                        var nowChecked = (bool)(e.Value ?? false);
+                        if (nowChecked) selected.Add(capturedVal);
+                        else            selected.Remove(capturedVal);
+                        setter(string.Join(";", selected));
+                    })" />
+                @lbl
+            </label>
+        }
+        </div>;
     };
 
     private bool HasRequiredEmpty() =>

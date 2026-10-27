@@ -1,0 +1,247 @@
+{
+  "resourceType": "ResearchStudy",
+  "id": "Amendment-001",
+  "meta": {
+    "profile": [
+      "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-research-study-profile"
+    ]
+  },
+  "identifier": [
+    {
+      "type": {
+        "coding": [
+          {
+            "code": "C132351",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "Sponsor Protocol Identifier"
+          }
+        ]
+      },
+      "system": "https://exemplarSponsor.com/sponsor-identifier",
+      "value": "EX2010/12"
+    },
+    {
+      "type": {
+        "coding": [
+          {
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "code": "C218477"
+          }
+        ],
+        "text": "Amendment Identifier"
+      },
+      "system": "https://example.org/amendment-identifier",
+      "value": "EX2010/12(a)"
+    }
+  ],
+  "extension": [
+    {
+      "extension": [
+        {
+          "url": "versionDate",
+          "valueDate": "2024-03-15"
+        },
+        {
+          "url": "originalProtocol",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "code": "C218485",
+                "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+                "display": "Protocol Not Amended"
+              }
+            ]
+          }
+        }
+      ],
+      "url": "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-research-study"
+    },
+    {
+      "extension": [
+        {
+          "valueIdentifier": {
+            "type": {
+              "coding": [
+                {
+                  "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+                  "code": "C218477"
+                }
+              ],
+              "text": "Amendment Identifier"
+            },
+            "system": "https://example.org/amendment-identifier",
+            "value": "EX2010/12(a)"
+          },
+          "url": "identifier"
+        },
+        {
+          "url": "scope",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "code": "C68846",
+                "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+                "display": "Global"
+              }
+            ]
+          }
+        },
+        {
+          "url": "previous",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "code": "C218486",
+                "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+                "display": "This is the first protocol amendment."
+              }
+            ]
+          }
+        },
+        {
+          "extension": [
+            {
+              "url": "number",
+              "valuePositiveInt": 45
+            },
+            {
+              "url": "scope",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "code": "C68846",
+                    "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+                    "display": "Globally"
+                  }
+                ]
+              }
+            }
+          ],
+          "url": "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-amendment-scope-impact"
+        },
+        {
+          "url": "primaryReason",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "code": "C218493",
+                "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+                "display": "New Safety Information Available"
+              }
+            ]
+          }
+        },
+        {
+          "url": "secondaryReason",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "code": "C218494",
+                "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+                "display": "Manufacturing Change"
+              }
+            ]
+          }
+        },
+        {
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "code": "C17649",
+                "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+                "display": "Other"
+              }
+            ],
+            "text": "Packaging artwork update to comply with new regional labelling regulations."
+          },
+          "url": "secondaryReason"
+        },
+        {
+          "url": "summary",
+          "valueString": "Amendment (a) introduces updated safety monitoring requirements following review of interim safety data, and clarifies the rescue medication protocol."
+        },
+        {
+          "url": "substantialImpactSafety",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "code": "C49488",
+                "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+                "display": "Yes"
+              }
+            ]
+          }
+        },
+        {
+          "url": "substantialImpactSafetyComment",
+          "valueString": "Updated safety monitoring frequency introduced to detect potential adverse effects earlier."
+        },
+        {
+          "url": "substantialImpactReliability",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "code": "C49487",
+                "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+                "display": "No"
+              }
+            ]
+          }
+        },
+        {
+          "extension": [
+            {
+              "url": "detail",
+              "valueString": "Updated safety monitoring schedule — DSMB review frequency increased from 6-monthly to 3-monthly."
+            },
+            {
+              "url": "rationale",
+              "valueString": "Interim safety data indicated a need for more frequent safety oversight."
+            },
+            {
+              "url": "section",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "code": "C217349",
+                    "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+                    "display": "Section 8"
+                  }
+                ]
+              }
+            }
+          ],
+          "url": "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-amendment-detail"
+        },
+        {
+          "extension": [
+            {
+              "url": "detail",
+              "valueString": "Rescue medication protocol clarified to include oral corticosteroids as second-line option."
+            },
+            {
+              "url": "rationale",
+              "valueString": "Feedback from investigator sites indicated ambiguity in the original wording."
+            },
+            {
+              "url": "section",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "code": "C217347",
+                    "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+                    "display": "Section 6"
+                  }
+                ]
+              }
+            }
+          ],
+          "url": "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-amendment-detail"
+        }
+      ],
+      "url": "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-protocol-amendment"
+    }
+  ],
+  "status": "active",
+  "version": "(a)"
+}

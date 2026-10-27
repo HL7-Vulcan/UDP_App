@@ -78,11 +78,11 @@ Context: M11_ResearchStudyProfile
   country 0..* and
   region 0..* and
   site 0..* and
-  approvalDate 0..1 and
-  signature 0..1 and //Signature
-  signatureUrl 0..1 and
-  signatureMethod 0..1 and
-  M11_AmendmentScopeImpact named scopeImpact 0..3 MS and
+  // approvalDate 0..1 and
+  // signature 0..1 and //Signature // ?
+  // signatureUrl 0..1 and  // ?
+  // signatureMethod 0..1 and  // ?
+  M11_AmendmentScopeImpact named scopeImpact 0..* MS and 
   primaryReason 0..1 MS and
   secondaryReason 0..* MS and
   summary 0..1 MS and 
@@ -90,9 +90,9 @@ Context: M11_ResearchStudyProfile
   substantialImpactSafetyComment 0..1 MS and 
   substantialImpactReliability 0..1 and 
   substantialImpactReliabilityComment 0..1 and
-  M11_AmendmentDetails named details 0..* MS and 
-  rationale 0..1 and
-  description 0..1
+  M11_AmendmentDetails named details 0..* MS // and 
+  // rationale 0..1 and  // ??
+  // description 0..1  // ?
 
 * extension[identifier].value[x] only Identifier
   * ^short = "Amendment identifier"
@@ -121,11 +121,11 @@ Context: M11_ResearchStudyProfile
 * extension[site].value[x] only Identifier or Reference // Changed from code in EBM
   * ^definition = "C83081"
 
-* extension[approvalDate].value[x] only date
+// * extension[approvalDate].value[x] only date
 
-* extension[signature].value[x] only Signature
-* extension[signatureUrl].value[x] only string or url
-* extension[signatureMethod].value[x] only string
+// * extension[signature].value[x] only Signature
+// * extension[signatureUrl].value[x] only string or url
+// * extension[signatureMethod].value[x] only string
 
 //* extension[scopeImpact].value[x] only M11_AmendmentScopeImpact
 
@@ -161,8 +161,8 @@ Context: M11_ResearchStudyProfile
   * ^short = "Comment on substantial impact on reliability"
   * ^definition = "Comment on substantial impact on reliability."
 
-* extension[rationale].value[x] only string
-* extension[description].value[x] only string or markdown
+// * extension[rationale].value[x] only string
+// * extension[description].value[x] only string or markdown
 
 // Invariant: scope-required
 // Description: "At least one of country, region and site SHALL be populated"

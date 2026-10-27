@@ -11,9 +11,8 @@ This is ICH M11 Value Set C217274 drawn from the NCI Thesaurus and represented h
 //* ^caseSensitive = false
 * ^publisher = "ICH M11"
 
-* $NCIT#C218486	"First Protocol Amendment"
-* $NCIT#C218485	"Protocol Not Amended"
-* $NCIT#C218488	"Protocol Previously Amended See Summary of Changes Before the Table of Contents"
-* $NCIT#C218487	"Protocol Previously Amended, Details Presented"
+* $NCIT#C218485 "This protocol has not been amended."
+* $NCIT#C218486 "This is the first protocol amendment." 
+* $NCIT#C218487 "This protocol has been amended previously. Details of prior amendments are presented in Section 12.3 Prior Protocol Amendment(s)."
 
 
