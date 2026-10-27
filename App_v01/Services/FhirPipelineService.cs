@@ -20,15 +20,15 @@ public class FhirPipelineResult
 /// </summary>
 public class FhirPipelineService
 {
-    private readonly SushiService   _sushi;
-    private readonly BuildService   _build;
-    private readonly SettingsService _settings;
+    private readonly SushiService    _sushi;
+    private readonly BuildService    _build;
+    private readonly SessionWorkspace _workspace;
 
-    public FhirPipelineService(SushiService sushi, BuildService build, SettingsService settings)
+    public FhirPipelineService(SushiService sushi, BuildService build, SessionWorkspace workspace)
     {
-        _sushi    = sushi;
-        _build    = build;
-        _settings = settings;
+        _sushi     = sushi;
+        _build     = build;
+        _workspace = workspace;
     }
 
     public async Task<FhirPipelineResult> RunAsync(
@@ -88,7 +88,7 @@ public class FhirPipelineService
         onLine("[STEP 3/3] Generating bundle…");
         try
         {
-            var examplesFolder  = _settings.Settings.ExamplesFolder;
+            var examplesFolder  = _workspace.BuildOutputFolder;
             var templatesFolder = "Templates";
             var outputPath = await Task.Run(
                 () => _build.GenerateBundle(examplesFolder, templatesFolder), ct);

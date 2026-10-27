@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Hosting;
 using System.Diagnostics;
 using System.IO.Compression;
 
@@ -25,13 +24,13 @@ public class SushiOutputFile
 
 public class SushiService
 {
-    private readonly IWebHostEnvironment _env;
+    private readonly SessionWorkspace  _workspace;
     private readonly ILogger<SushiService> _logger;
 
-    public SushiService(IWebHostEnvironment env, ILogger<SushiService> logger)
+    public SushiService(SessionWorkspace workspace, ILogger<SushiService> logger)
     {
-        _env = env;
-        _logger = logger;
+        _workspace = workspace;
+        _logger    = logger;
     }
 
     /// <summary>
@@ -101,14 +100,13 @@ public class SushiService
         "ValueSet-udp-study-title-type-vs.json",
     };
 
-    // Path to the bundled SushiProject folder (contains sushi-config.yaml, input/fsh/**, etc.)
-    public string ProjectRoot => Path.Combine(_env.ContentRootPath, "SushiProject");
+    // Delegates path resolution to the per-session workspace
+    public string ProjectRoot             => _workspace.ProjectRoot;
+    public string ExamplesFolder          => _workspace.ExamplesFolder;
+    public string GeneratedResourcesFolder => _workspace.GeneratedResourcesFolder;
 
-    // The Examples subfolder where the generated .fsh file is written before running sushi
-    public string ExamplesFolder => Path.Combine(ProjectRoot, "input", "fsh", "Examples");
-
-    // The fsh-generated/resources output folder
-    public string GeneratedResourcesFolder => Path.Combine(ProjectRoot, "fsh-generated", "resources");
+    // The static (shared, read-only) SushiProject — used for static FSH file listings
+    private string SourceProjectRoot => _workspace.SourceProjectRoot;
 
     private static readonly SemaphoreSlim _nodeInstallLock = new(1, 1);
 
@@ -409,10 +407,11 @@ public class SushiService
         File.WriteAllText(path, content);
     }
 
-    /// <summary>Lists the static .fsh files in input/fsh (not Examples) for display.</summary>
+    /// <summary>Lists the static .fsh files in input/fsh (not Examples) for display.
+    /// Reads from the shared source project (read-only; same for all sessions).</summary>
     public List<string> ListStaticFshFiles()
     {
-        var fshRoot = Path.Combine(ProjectRoot, "input", "fsh");
+        var fshRoot = Path.Combine(SourceProjectRoot, "input", "fsh");
         if (!Directory.Exists(fshRoot)) return new();
         return Directory.GetFiles(fshRoot, "*.fsh", SearchOption.AllDirectories)
             .Where(p => !p.Contains(Path.DirectorySeparatorChar + "Examples" + Path.DirectorySeparatorChar))
@@ -421,21 +420,22 @@ public class SushiService
             .ToList();
     }
 
-    /// <summary>Reads a single static FSH file (relative path from fsh root) as bytes.</summary>
+    /// <summary>Reads a single static FSH file (relative path from fsh root) as bytes.
+    /// Reads from the shared source project (read-only; same for all sessions).</summary>
     public byte[]? ReadStaticFshFile(string relativePath)
     {
-        // Prevent path traversal
         if (string.IsNullOrWhiteSpace(relativePath) || relativePath.Contains("..")) return null;
-        var fshRoot = Path.Combine(ProjectRoot, "input", "fsh");
+        var fshRoot = Path.Combine(SourceProjectRoot, "input", "fsh");
         var full    = Path.GetFullPath(Path.Combine(fshRoot, relativePath));
         if (!full.StartsWith(fshRoot, StringComparison.OrdinalIgnoreCase)) return null;
         return File.Exists(full) ? File.ReadAllBytes(full) : null;
     }
 
-    /// <summary>Zips all static FSH files (preserving sub-directory structure) and returns the zip bytes.</summary>
+    /// <summary>Zips all static FSH files (preserving sub-directory structure) and returns the zip bytes.
+    /// Reads from the shared source project (read-only; same for all sessions).</summary>
     public byte[]? ReadAllStaticFshAsZip()
     {
-        var fshRoot = Path.Combine(ProjectRoot, "input", "fsh");
+        var fshRoot = Path.Combine(SourceProjectRoot, "input", "fsh");
         if (!Directory.Exists(fshRoot)) return null;
         var files = Directory.GetFiles(fshRoot, "*.fsh", SearchOption.AllDirectories)
             .Where(p => !p.Contains(Path.DirectorySeparatorChar + "Examples" + Path.DirectorySeparatorChar))
@@ -520,7 +520,8 @@ public class SushiService
     /// </summary>
     public int CopyGeneratedToMainExamples(IEnumerable<SushiOutputFile> studyFiles)
     {
-        var dest = Path.Combine(_env.ContentRootPath, "Examples");
+        var dest = _workspace.BuildOutputFolder;
+        if (string.IsNullOrWhiteSpace(dest)) return 0;
         Directory.CreateDirectory(dest);
         int count = 0;
         foreach (var file in studyFiles)

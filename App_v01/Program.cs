@@ -7,6 +7,7 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddHttpClient();
 
+builder.Services.AddScoped<UDP_App.Services.SessionWorkspace>();
 builder.Services.AddScoped<UDP_App.Services.DataServiceTP>();
 builder.Services.AddScoped<UDP_App.Services.SushiService>();
 builder.Services.AddScoped<UDP_App.Services.DataService01>();
