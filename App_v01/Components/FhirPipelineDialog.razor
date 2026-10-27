@@ -35,7 +35,12 @@
             @if (_running) { <span class="pipe-spinner"></span> }
             @_statusMsg
         </div>
-        <div class="pipe-footer">
+        <div class="pipe-footer" style="gap:8px;">
+            @if (_running)
+            {
+                <button class="btn btn-danger" style="padding:6px 20px;font-size:10pt;"
+                        @onclick="Stop">⏹ Stop</button>
+            }
             <button class="btn btn-secondary" style="padding:6px 20px;font-size:10pt;"
                     disabled="@_running" @onclick="Close">Close</button>
         </div>
@@ -65,26 +70,48 @@
 
         _cts = new CancellationTokenSource();
 
-        var result = await PipelineSvc.RunAsync(
-            fshFileName, fshContent,
-            line =>
-            {
-                _logHtml += FormatLine(line) + "\n";
-                InvokeAsync(StateHasChanged);
-            },
-            _cts.Token);
+        try
+        {
+            var result = await PipelineSvc.RunAsync(
+                fshFileName, fshContent,
+                line =>
+                {
+                    _logHtml += FormatLine(line) + "\n";
+                    InvokeAsync(StateHasChanged);
+                },
+                _cts.Token);
 
-        _running = false;
-        if (result.Success)
-        {
-            _statusMsg = "Pipeline completed successfully.";
-            _statusCss = "success";
+            _running = false;
+            if (_cts.IsCancellationRequested)
+            {
+                _statusMsg = "Pipeline stopped by user.";
+                _statusCss = "failed";
+            }
+            else if (result.Success)
+            {
+                _statusMsg = "Pipeline completed successfully.";
+                _statusCss = "success";
+            }
+            else
+            {
+                _statusMsg = $"Pipeline failed at step \"{result.Step}\": {result.ErrorMessage}";
+                _statusCss = "failed";
+            }
         }
-        else
+        catch (OperationCanceledException)
         {
-            _statusMsg = $"Pipeline failed at step \"{result.Step}\": {result.ErrorMessage}";
+            _running   = false;
+            _statusMsg = "Pipeline stopped by user.";
             _statusCss = "failed";
         }
+        StateHasChanged();
+    }
+
+    private void Stop()
+    {
+        _cts?.Cancel();
+        _statusMsg = "Stopping…";
+        _statusCss = "running";
         StateHasChanged();
     }
 

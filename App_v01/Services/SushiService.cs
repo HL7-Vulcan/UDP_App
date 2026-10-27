@@ -421,6 +421,41 @@ public class SushiService
             .ToList();
     }
 
+    /// <summary>Reads a single static FSH file (relative path from fsh root) as bytes.</summary>
+    public byte[]? ReadStaticFshFile(string relativePath)
+    {
+        // Prevent path traversal
+        if (string.IsNullOrWhiteSpace(relativePath) || relativePath.Contains("..")) return null;
+        var fshRoot = Path.Combine(ProjectRoot, "input", "fsh");
+        var full    = Path.GetFullPath(Path.Combine(fshRoot, relativePath));
+        if (!full.StartsWith(fshRoot, StringComparison.OrdinalIgnoreCase)) return null;
+        return File.Exists(full) ? File.ReadAllBytes(full) : null;
+    }
+
+    /// <summary>Zips all static FSH files (preserving sub-directory structure) and returns the zip bytes.</summary>
+    public byte[]? ReadAllStaticFshAsZip()
+    {
+        var fshRoot = Path.Combine(ProjectRoot, "input", "fsh");
+        if (!Directory.Exists(fshRoot)) return null;
+        var files = Directory.GetFiles(fshRoot, "*.fsh", SearchOption.AllDirectories)
+            .Where(p => !p.Contains(Path.DirectorySeparatorChar + "Examples" + Path.DirectorySeparatorChar))
+            .OrderBy(p => p).ToList();
+        if (files.Count == 0) return null;
+
+        using var ms  = new System.IO.MemoryStream();
+        using var zip = new System.IO.Compression.ZipArchive(ms, System.IO.Compression.ZipArchiveMode.Create, leaveOpen: true);
+        foreach (var file in files)
+        {
+            var entryName = Path.GetRelativePath(fshRoot, file).Replace('\\', '/');
+            var entry = zip.CreateEntry(entryName, System.IO.Compression.CompressionLevel.Optimal);
+            using var es = entry.Open();
+            using var fs = File.OpenRead(file);
+            fs.CopyTo(es);
+        }
+        zip.Dispose();
+        return ms.ToArray();
+    }
+
     // ── Examples folder management ─────────────────────────────────────────────
 
     /// <summary>

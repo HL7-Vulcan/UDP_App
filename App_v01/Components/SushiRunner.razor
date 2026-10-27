@@ -309,17 +309,36 @@
     @* ── Static files tab ─────────────────────────────────────────────── *@
     @if (ActiveTab == "files")
     {
-        <p class="text-muted small">
-            These are the static FSH files bundled with the app in
-            <code>SushiProject/input/fsh/</code>. To update them, replace the files on disk and
-            redeploy.
-        </p>
-        <ul class="list-group font-monospace" style="font-size:0.82rem;">
-            @foreach (var f in StaticFiles)
+        <div class="d-flex align-items-center mb-2 gap-2">
+            <p class="text-muted small mb-0">
+                Static FSH files bundled with the app in
+                <code>SushiProject/input/fsh/</code>.
+            </p>
+            @if (StaticFiles.Count > 0)
             {
-                <li class="list-group-item py-1">@f</li>
+                <button class="btn btn-outline-success btn-sm ms-auto text-nowrap"
+                        @onclick="DownloadAllStaticFsh">
+                    ⬇ Download All (@StaticFiles.Count)
+                </button>
             }
-        </ul>
+        </div>
+        <table class="table table-sm table-hover font-monospace" style="font-size:0.82rem;">
+            <tbody>
+                @foreach (var f in StaticFiles)
+                {
+                    <tr>
+                        <td class="align-middle">@f</td>
+                        <td style="width:48px;" class="text-end pe-1">
+                            <button class="btn btn-link btn-sm text-success p-0"
+                                    title="Download @f"
+                                    @onclick="() => DownloadStaticFshFile(f)">
+                                ⬇
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     }
 
 </div>
@@ -425,6 +444,23 @@
         if (bytes == null) return;
         var b64 = Convert.ToBase64String(bytes);
         await JS.InvokeVoidAsync("udpDownloadZip", "sushi-generated.zip", b64);
+    }
+
+    private async Task DownloadStaticFshFile(string relativePath)
+    {
+        var bytes = SushiSvc.ReadStaticFshFile(relativePath);
+        if (bytes == null) return;
+        var b64 = Convert.ToBase64String(bytes);
+        var fileName = Path.GetFileName(relativePath.Replace('/', Path.DirectorySeparatorChar));
+        await JS.InvokeVoidAsync("udpDownloadBase64", fileName, b64);
+    }
+
+    private async Task DownloadAllStaticFsh()
+    {
+        var bytes = SushiSvc.ReadAllStaticFshAsZip();
+        if (bytes == null) return;
+        var b64 = Convert.ToBase64String(bytes);
+        await JS.InvokeVoidAsync("udpDownloadZip", "static-fsh.zip", b64);
     }
 
     // ── Examples file selection / editing ───────────────────────────────────
