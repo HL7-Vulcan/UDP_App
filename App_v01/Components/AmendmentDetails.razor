@@ -1,0 +1,583 @@
+@page "/amendments"
+@layout MainLayout
+@using UDP_App.Models
+@using UDP_App.Services
+@inject AmendmentStore Store
+@implements IDisposable
+
+<PageTitle>Amendment Details</PageTitle>
+
+<style>
+    /* ── Layout ─────────────────────────────────────────────────── */
+    .amend-layout { display:flex; gap:18px; max-width:1100px; margin:24px auto 80px; padding:0 16px; font-family:'Calibri',Arial,sans-serif; }
+    .amend-sidebar { width:240px; flex-shrink:0; }
+    .amend-main    { flex:1; min-width:0; }
+
+    /* ── Sidebar ────────────────────────────────────────────────── */
+    .sidebar-hdr { font-weight:700; font-size:10.5pt; color:#1f3864; padding:8px 10px; background:#e8edf7; border-radius:4px 4px 0 0; border:1px solid #c0cbdf; display:flex; justify-content:space-between; align-items:center; }
+    .sidebar-list { list-style:none; margin:0; padding:0; border:1px solid #c0cbdf; border-top:none; border-radius:0 0 4px 4px; background:#fff; }
+    .sidebar-list li { border-bottom:1px solid #e8edf7; }
+    .sidebar-list li:last-child { border-bottom:none; }
+    .sidebar-item { display:flex; align-items:center; gap:6px; padding:7px 10px; cursor:pointer; font-size:10pt; color:#333; transition:background 0.1s; }
+    .sidebar-item:hover { background:#f0f4ff; }
+    .sidebar-item.active { background:#1f3864; color:#fff; font-weight:700; border-radius:0; }
+    .sidebar-item .amend-name { flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .sidebar-item .del-x { background:none; border:none; color:inherit; opacity:0.55; cursor:pointer; font-size:12px; padding:0 2px; flex-shrink:0; }
+    .sidebar-item .del-x:hover { opacity:1; color:#c00; }
+    .sidebar-item.active .del-x:hover { color:#ffaaaa; }
+    .add-amend-btn { display:block; width:100%; margin-top:10px; background:#1f3864; color:#fff; border:none; border-radius:4px; padding:7px 0; font-size:10pt; cursor:pointer; font-family:inherit; }
+    .add-amend-btn:hover { background:#162a4e; }
+    .amend-count  { font-size:8.5pt; color:#888; margin-top:6px; text-align:right; }
+
+    /* ── Document page ──────────────────────────────────────────── */
+    .doc-page { background:#fff; width:794px; min-height:600px; margin:0 auto; padding:40px 60px 56px; box-shadow:0 4px 24px rgba(0,0,0,0.18); font-family:'Calibri',Arial,sans-serif; font-size:11pt; color:#000; }
+    .h1  { font-family:'Times New Roman',Times,serif; font-size:14pt; font-weight:700; margin:0 0 12px; }
+    .h2  { font-family:'Times New Roman',Times,serif; font-size:12pt; font-weight:700; margin:22px 0 8px; border-bottom:1px solid #ccc; padding-bottom:3px; }
+    .tp-tbl { width:100%; border-collapse:collapse; margin-bottom:12px; font-size:10.5pt; }
+    .tp-tbl td { border:1px solid #bbb; padding:5px 8px; vertical-align:top; }
+    .tp-tbl td.lbl { font-weight:700; white-space:nowrap; width:36%; background:#f0f4ff; color:#1f3864; font-size:10pt; }
+    .tp-tbl td.cond { background:#f5f0ff; }
+    textarea.fb { display:block; width:100%; background:#d0cece; color:#1a7a1a; border:none; border-bottom:1.5px solid #999; font-family:'Calibri',Arial,sans-serif; font-size:10.5pt; line-height:1.4; padding:3px 5px; outline:none; resize:vertical; min-height:36px; }
+    textarea.fb:focus { background:#bfbcbc; }
+    textarea.fb::placeholder { color:#9a7ab5; font-style:italic; }
+    input.fb { display:block; width:100%; background:#d0cece; color:#1a7a1a; border:none; border-bottom:1.5px solid #999; font-family:'Calibri',Arial,sans-serif; font-size:10.5pt; padding:3px 5px; outline:none; }
+    input.fb:focus { background:#bfbcbc; }
+    select.fb-sel { display:block; width:100%; background:#d0cece; color:#1a7a1a; border:none; border-bottom:1.5px solid #999; font-family:'Calibri',Arial,sans-serif; font-size:10.5pt; padding:3px 5px; outline:none; cursor:pointer; }
+    select.fb-sel:focus { background:#bfbcbc; }
+    .type-badge { font-size:8pt; color:#888; font-style:italic; margin-bottom:3px; }
+    /* Change overview table */
+    .chg-tbl { width:100%; border-collapse:collapse; font-size:10pt; margin-top:8px; }
+    .chg-tbl th { background:#1f3864; color:#fff; padding:5px 8px; text-align:left; font-size:9.5pt; }
+    .chg-tbl td { border:1px solid #bbb; padding:3px 5px; vertical-align:top; }
+    .chg-tbl textarea.fb { min-height:32px; }
+    .add-btn { background:#00B050; color:#fff; border:none; border-radius:3px; padding:4px 12px; font-size:10pt; cursor:pointer; margin-top:6px; }
+    .add-btn:hover { background:#008a3e; }
+    .del-btn { background:none; border:none; color:#c00; font-size:14px; cursor:pointer; padding:0 3px; }
+    .del-btn:hover { color:#900; }
+    .toolbar { display:flex; justify-content:flex-end; gap:10px; margin-top:28px; flex-wrap:wrap; }
+    .btn { padding:7px 20px; border:none; border-radius:3px; font-size:10pt; font-family:inherit; cursor:pointer; }
+    .btn-primary   { background:#1f3864; color:#fff; } .btn-primary:hover { background:#162a4e; }
+    .btn-secondary { background:#eee; color:#333; border:1px solid #ccc; } .btn-secondary:hover { background:#ddd; }
+    .empty-state { color:#888; font-style:italic; font-size:10.5pt; padding:32px 0 0; text-align:center; }
+    .name-edit { display:inline-block; background:transparent; border:none; border-bottom:1.5px solid #9ab; font-size:13pt; font-weight:700; font-family:'Times New Roman',Times,serif; color:#1f3864; padding:0 4px; outline:none; width:340px; }
+    .name-edit:focus { border-bottom-color:#1f3864; background:#f0f4ff; }
+    .sbar { position:fixed; bottom:0; left:0; right:0; background:#1f3864; color:#fff; font-size:9pt; padding:5px 18px; display:flex; justify-content:space-between; align-items:center; z-index:100; }
+</style>
+
+<div class="amend-layout">
+
+    <!-- ── Sidebar ────────────────────────────────────────────────── -->
+    <div class="amend-sidebar">
+        <div class="sidebar-hdr">
+            <span>Amendments</span>
+            <span style="font-size:8.5pt;font-weight:400;color:#7a8eb8;">@Store.All.Count set(s)</span>
+        </div>
+        <ul class="sidebar-list">
+            @foreach (var rec in Store.All)
+            {
+                var recId = rec.Id;
+                <li>
+                    <div class="sidebar-item @(Current?.Id == recId ? "active" : "")"
+                         @onclick="() => SelectRecord(recId)">
+                        <span class="amend-name" title="@rec.Name">@rec.Name</span>
+                        <button class="del-x" title="Delete" @onclick:stopPropagation
+                                @onclick="() => DeleteRecord(recId)">✕</button>
+                    </div>
+                </li>
+            }
+        </ul>
+        <button class="add-amend-btn" @onclick="AddNew">+ New Amendment</button>
+        <button class="add-amend-btn" style="background:#5a6a8a;margin-top:6px;" @onclick="LoadSample">⬇ Sample Data</button>
+        @if (Store.All.Count == 0)
+        {
+            <div class="amend-count">No amendments yet</div>
+        }
+    </div>
+
+    <!-- ── Main form ──────────────────────────────────────────────── -->
+    <div class="amend-main">
+        @if (Current == null)
+        {
+            <div class="empty-state">
+                <p>No amendment selected.</p>
+                <p>Click <strong>+ New Amendment</strong> to get started.</p>
+            </div>
+        }
+        else
+        {
+            <div class="doc-page">
+                <div class="h1" style="display:flex;align-items:baseline;gap:10px;">
+                    <input class="name-edit" value="@Current.Name"
+                           @onchange="@(e => RenameAndSave(e.Value?.ToString()))"
+                           title="Click to rename this amendment set" />
+                </div>
+
+                <div class="h2">Amendment Details</div>
+                <table class="tp-tbl">
+                    <tr>
+                        <td class="lbl cond">Amendment Status:</td>
+                        <td><div class="type-badge">conditional picklist</div>
+                            <select data-ctx="C218694" class="fb-sel"
+                                value="@Current.C218694" @onchange="@(e => SetAndSave(v => Current.C218694 = v, e.Value?.ToString()))">
+                                <option value="">-- select --</option>
+                                <option value='$NCIT#C218485 "This protocol has not been amended."'>This protocol has not been amended.</option>
+                                <option value='$NCIT#C218486 "This is the first protocol amendment."'>This is the first protocol amendment.</option>
+                                <option value='$NCIT#C218487 "This protocol has been amended previously. Details of prior amendments are presented in Section 12.3 Prior Protocol Amendment(s)."'>This protocol has been amended previously. Details of prior amendments are presented in Section 12.3 Prior Protocol Amendment(s).</option>
+                            </select></td>
+                    </tr>
+                </table>
+
+                <p style="font-style:italic;font-size:10pt;color:#555;margin:6px 0 12px;">The table below describes the current amendment. Complete only if an amendment applies.</p>
+
+                <table class="tp-tbl">
+                    <tr>
+                        <td class="lbl">Version Number:</td>
+                        <td><div class="type-badge">optional string</div>
+                            <input data-ctx="C181232" class="fb" type="text" placeholder="Enter Version Number"
+                                value="@Current.C181232"
+                                @oninput="@(e => SetAndSave(v => Current.C181232 = v, e.Value?.ToString()))" /></td>
+                    </tr>
+                    <tr>
+                        <td class="lbl">Version Date:</td>
+                        <td><div class="type-badge">optional date</div>
+                            <input data-ctx="C93813" class="fb" type="text" placeholder="yyyy-mm-dd"
+                                value="@Current.C93813"
+                                @oninput="@(e => SetAndSave(v => Current.C93813 = v, e.Value?.ToString()))" /></td>
+                    </tr>
+                    <tr>
+                        <td class="lbl cond">Amendment Identifier:</td>
+                        <td><div class="type-badge">conditional string</div>
+                            <input data-ctx="C218477" class="fb" type="text" placeholder="Enter Amendment Identifier"
+                                value="@Current.C218477"
+                                @oninput="@(e => SetAndSave(v => Current.C218477 = v, e.Value?.ToString()))" /></td>
+                    </tr>
+                    <tr>
+                        <td class="lbl cond">Amendment Scope:</td>
+                        <td><div class="type-badge">conditional picklist</div>
+                            <select data-ctx="C218673" class="fb-sel"
+                                value="@Current.C218673" @onchange="@(e => SetAndSave(v => Current.C218673 = v, e.Value?.ToString()))">
+                                <option value="">-- select --</option>
+                                <option value='$NCIT#C68846 "Global"'>Global</option>
+                                <option value='$NCIT#C217026 "Not Global"'>Not Global</option>
+                            </select>
+                            <div style="margin-top:6px;">
+                                <div class="type-badge">Country (conditional picklist)</div>
+                                <select data-ctx="C20108" class="fb-sel"
+                                    value="@Current.C20108" @onchange="@(e => SetAndSave(v => Current.C20108 = v, e.Value?.ToString()))">
+                                    <option value="">-- select --</option>
+                                    <option value="$iso3166#GB &quot;UK&quot;">UK</option>
+                                    <option value="$iso3166#FR &quot;France&quot;">France</option>
+                                    <option value="$iso3166#DE &quot;Germany&quot;">Germany</option>
+                                    <option value="$iso3166#IN &quot;India&quot;">India</option>
+                                    <option value="$iso3166#AU &quot;Australia&quot;">Australia</option>
+                                </select>
+                            </div>
+                            <div style="margin-top:6px;">
+                                <div class="type-badge">Region (conditional picklist)</div>
+                                <select data-ctx="C218674" class="fb-sel"
+                                    value="@Current.C218674" @onchange="@(e => SetAndSave(v => Current.C218674 = v, e.Value?.ToString()))">
+                                    <option value="">-- select --</option>
+                                    <option value="$iso3166-2#GB-WLS &quot;Wales&quot;">Wales</option>
+                                    <option value="$iso3166-2#FR-NOR &quot;Normandy&quot;">Normandy</option>
+                                    <option value="$iso3166-2#DE-BY &quot;Bavaria&quot;">Bavaria</option>
+                                    <option value="$iso3166-2#IN-UP &quot;Uttar Pradesh&quot;">Uttar Pradesh</option>
+                                    <option value="$iso3166-2#AU-NSW &quot;New South Wales&quot;">New South Wales</option>
+                                </select>
+                            </div>
+                            <div style="margin-top:6px;">
+                                <div class="type-badge">Site Identifier (conditional string)</div>
+                                <input data-ctx="C83081" class="fb" type="text" placeholder="Enter Site Identifier"
+                                    value="@Current.C83081"
+                                    @oninput="@(e => SetAndSave(v => Current.C83081 = v, e.Value?.ToString()))" />
+                            </div></td>
+                    </tr>
+                </table>
+
+                <table class="tp-tbl">
+                    <tr>
+                        <td class="lbl cond">Approx. Enrolled at Time of Sponsor Approval:</td>
+                        <td>
+                            <div class="type-badge">conditional quantity</div>
+                            <input data-ctx="C218478" class="fb" type="text" placeholder="Approximately #/% enrolled"
+                                value="@Current.C218478"
+                                @oninput="@(e => SetAndSave(v => Current.C218478 = v, e.Value?.ToString()))" />
+                            <div class="type-badge" style="margin-top:6px;">Amendment Scope Enrollment Definition (conditional picklist)</div>
+                            <select data-ctx="C218695" class="fb-sel"
+                                value="@Current.C218695" @onchange="@(e => SetAndSave(v => Current.C218695 = v, e.Value?.ToString()))">
+                                <option value="">-- select --</option>
+                                <option value='$NCIT#C68846 "Globally"'>Globally</option>
+                                <option value='$NCIT#C41065 "Locally"'>Locally</option>
+                                <option value='$NCIT#C218489 "By Cohort"'>By Cohort</option>
+                            </select></td>
+                    </tr>
+                    <tr>
+                        <td class="lbl cond">Primary Reason for Amendment:</td>
+                        <td><div class="type-badge">conditional picklist</div>
+                            @ReasonSelect("C218696", Current.C218696, v => SetAndSave(x => Current.C218696 = x, v))
+                            <div class="type-badge" style="margin-top:6px;">Other reason text (conditional string)</div>
+                            <input data-ctx="C17649" class="fb" type="text" placeholder="Enter other reason"
+                                disabled="@(!PrimaryOtherActive)"
+                                style="@(PrimaryOtherActive ? "" : "opacity:0.4;cursor:not-allowed;")"
+                                value="@Current.C17649"
+                                @oninput="@(e => SetAndSave(v => Current.C17649 = v, e.Value?.ToString()))" /></td>
+                    </tr>
+                    <tr>
+                        <td class="lbl cond">Secondary Reason for Amendment:</td>
+                        <td><div class="type-badge">conditional multi-select</div>
+                            @ReasonMultiSelect("C218697", Current.C218697, v => { SetAndSave(x => Current.C218697 = x, v); StateHasChanged(); })
+                            <div class="type-badge" style="margin-top:6px;">Other reason text (conditional string)</div>
+                            <input data-ctx="C17649_2" class="fb" type="text" placeholder="Enter other reason"
+                                disabled="@(!SecondaryOtherActive)"
+                                style="@(SecondaryOtherActive ? "" : "opacity:0.4;cursor:not-allowed;")"
+                                value="@Current.C17649_2"
+                                @oninput="@(e => SetAndSave(v => Current.C17649_2 = v, e.Value?.ToString()))" /></td>
+                    </tr>
+                    <tr>
+                        <td class="lbl cond">Amendment Summary:</td>
+                        <td><div class="type-badge">conditional string</div>
+                            <textarea data-ctx="C42581" class="fb" rows="3" placeholder="Briefly describe key changes"
+                                value="@Current.C42581"
+                                @oninput="@(e => SetAndSave(v => Current.C42581 = v, e.Value?.ToString()))"></textarea></td>
+                    </tr>
+                    <tr>
+                        <td class="lbl cond">Substantial Impact on Safety or Rights?</td>
+                        <td>
+                            <div class="type-badge">conditional picklist</div>
+                            <select data-ctx="C218698" class="fb-sel"
+                                value="@Current.C218698" @onchange="@(e => SetAndSave(v => Current.C218698 = v, e.Value?.ToString()))">
+                                <option value="">-- select --</option>
+                                <option value='$NCIT#C49488 "Yes"'>Yes</option>
+                                <option value='$NCIT#C49487 "No"'>No</option>
+                            </select>
+                            <div class="type-badge" style="margin-top:6px;">If yes, briefly explain (conditional string)</div>
+                            <textarea data-ctx="C218699" class="fb" rows="2" placeholder="If yes, briefly explain"
+                                value="@Current.C218699"
+                                @oninput="@(e => SetAndSave(v => Current.C218699 = v, e.Value?.ToString()))"></textarea></td>
+                    </tr>
+                    <tr>
+                        <td class="lbl cond">Substantial Impact on Reliability and Robustness?</td>
+                        <td>
+                            <div class="type-badge">conditional picklist</div>
+                            <select data-ctx="C218700" class="fb-sel"
+                                value="@Current.C218700" @onchange="@(e => SetAndSave(v => Current.C218700 = v, e.Value?.ToString()))">
+                                <option value="">-- select --</option>
+                                <option value='$NCIT#C49488 "Yes"'>Yes</option>
+                                <option value='$NCIT#C49487 "No"'>No</option>
+                            </select>
+                            <div class="type-badge" style="margin-top:6px;">If yes, briefly explain (conditional string)</div>
+                            <textarea data-ctx="C218701" class="fb" rows="2" placeholder="If yes, briefly explain"
+                                value="@Current.C218701"
+                                @oninput="@(e => SetAndSave(v => Current.C218701 = v, e.Value?.ToString()))"></textarea></td>
+                    </tr>
+                </table>
+
+                <div class="h2">Overview of Changes in the Current Amendment</div>
+                <table class="chg-tbl">
+                    <thead><tr>
+                        <th style="width:5%"></th>
+                        <th style="width:38%">Description of Change</th>
+                        <th style="width:32%">Brief Rationale for Change</th>
+                        <th style="width:25%">Section # and Name</th>
+                    </tr></thead>
+                    <tbody>
+                        @foreach (var row in _chgRows)
+                        {
+                            var r = row;
+                            <tr>
+                                <td style="text-align:center;vertical-align:middle;">
+                                    <button class="del-btn" @onclick="@(() => DeleteChgRow(r))">✕</button>
+                                </td>
+                                <td><textarea data-ctx="C218483" class="fb" rows="2" placeholder="Description of Change"
+                                    value="@GetChg($"C218483_r{r}")"
+                                    @oninput="@(e => SetChgAndSave($"C218483_r{r}", e.Value?.ToString()))"></textarea></td>
+                                <td><textarea data-ctx="C181233" class="fb" rows="2" placeholder="Brief Rationale for Change"
+                                    value="@GetChg($"C181233_r{r}")"
+                                    @oninput="@(e => SetChgAndSave($"C181233_r{r}", e.Value?.ToString()))"></textarea></td>
+                                <td>
+                                    <select data-ctx="C218479" class="fb-sel"
+                                        value="@GetChg($"C218479_r{r}")"
+                                        @onchange="@(e => SetChgAndSave($"C218479_r{r}", e.Value?.ToString()))">
+                                        <option value="">-- select --</option>
+                                        <option value='$NCIT#C217342 "Section 1"'>Section 1</option>
+                                        <option value='$NCIT#C217343 "Section 2"'>Section 2</option>
+                                        <option value='$NCIT#C217344 "Section 3"'>Section 3</option>
+                                        <option value='$NCIT#C217345 "Section 4"'>Section 4</option>
+                                        <option value='$NCIT#C217346 "Section 5"'>Section 5</option>
+                                        <option value='$NCIT#C217347 "Section 6"'>Section 6</option>
+                                        <option value='$NCIT#C217348 "Section 7"'>Section 7</option>
+                                        <option value='$NCIT#C217349 "Section 8"'>Section 8</option>
+                                        <option value='$NCIT#C217350 "Section 9"'>Section 9</option>
+                                        <option value='$NCIT#C217351 "Section 10"'>Section 10</option>
+                                        <option value='$NCIT#C217352 "Section 11"'>Section 11</option>
+                                        <option value='$NCIT#C217353 "Section 12"'>Section 12</option>
+                                        <option value='$NCIT#C217354 "Section 13"'>Section 13</option>
+                                        <option value='$NCIT#C217355 "Section 14"'>Section 14</option>
+                                        <option value='$NCIT#C217356 "Section Title Page"'>Section Title Page</option>
+                                        <option value='$NCIT#C217357 "Section Amendment Details"'>Section Amendment Details</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <button class="add-btn" @onclick="AddChgRow">+ Add Row</button>
+
+                <div class="toolbar">
+                    <button class="btn btn-secondary" @onclick="ClearCurrent">Clear</button>
+                    <button class="btn btn-secondary" @onclick="DuplicateCurrent">Duplicate</button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@if (!string.IsNullOrEmpty(_status))
+{
+    <div class="sbar">
+        <span>@_status</span>
+        <span style="font-size:8pt;opacity:0.7;">@Store.All.Count amendment(s) in session</span>
+    </div>
+}
+
+@code {
+    private AmendmentRecord? Current { get; set; }
+    private List<int> _chgRows = new() { 1 };
+    private int _nextChgRow = 2;
+    private string _status = string.Empty;
+    private System.Threading.Timer? _statusTimer;
+
+    // ── Computed helpers ──────────────────────────────────────────────
+
+    private bool PrimaryOtherActive =>
+        Current != null &&
+        !string.IsNullOrWhiteSpace(Current.C218696) &&
+        Current.C218696.Contains("C17649", StringComparison.OrdinalIgnoreCase);
+
+    private bool SecondaryOtherActive =>
+        Current != null &&
+        !string.IsNullOrWhiteSpace(Current.C218697) &&
+        Current.C218697.Split(';', StringSplitOptions.RemoveEmptyEntries)
+               .Any(v => v.Trim().Contains("C17649"));
+
+    private string GetChg(string key) =>
+        Current?.ChgData.TryGetValue(key, out var v) == true ? v : string.Empty;
+
+    // ── Record management ─────────────────────────────────────────────
+
+    private void SelectRecord(string id)
+    {
+        var rec = Store.GetById(id);
+        if (rec == null) return;
+        Current = rec;
+        _chgRows = Enumerable.Range(1, Math.Max(1, rec.ChgRows)).ToList();
+        _nextChgRow = _chgRows.Max() + 1;
+    }
+
+    private void AddNew()
+    {
+        var count = Store.All.Count + 1;
+        var rec = Store.Add($"Amendment {count}");
+        SelectRecord(rec.Id);
+        SetStatus($"✓ New amendment set created");
+    }
+
+    private void DeleteRecord(string id)
+    {
+        var wasActive = Current?.Id == id;
+        Store.Delete(id);
+        if (wasActive)
+        {
+            var first = Store.All.FirstOrDefault();
+            if (first != null) SelectRecord(first.Id);
+            else { Current = null; _chgRows = new() { 1 }; _nextChgRow = 2; }
+        }
+        SetStatus("Deleted");
+    }
+
+    private void DuplicateCurrent()
+    {
+        if (Current == null) return;
+        var copy = Store.Add($"{Current.Name} (copy)");
+        copy.C218694  = Current.C218694;
+        copy.C181232  = Current.C181232;
+        copy.C93813   = Current.C93813;
+        copy.C218477  = Current.C218477;
+        copy.C218673  = Current.C218673;
+        copy.C20108   = Current.C20108;
+        copy.C218674  = Current.C218674;
+        copy.C83081   = Current.C83081;
+        copy.C218478  = Current.C218478;
+        copy.C218695  = Current.C218695;
+        copy.C218874  = Current.C218874;
+        copy.C218696  = Current.C218696;
+        copy.C218697  = Current.C218697;
+        copy.C17649   = Current.C17649;
+        copy.C17649_2 = Current.C17649_2;
+        copy.C42581   = Current.C42581;
+        copy.C218698  = Current.C218698;
+        copy.C218699  = Current.C218699;
+        copy.C218700  = Current.C218700;
+        copy.C218701  = Current.C218701;
+        copy.ChgRows  = Current.ChgRows;
+        copy.ChgData  = new Dictionary<string, string>(Current.ChgData);
+        Store.Update(copy);
+        SelectRecord(copy.Id);
+        SetStatus("✓ Duplicated");
+    }
+
+    private void ClearCurrent()
+    {
+        if (Current == null) return;
+        Current.C218694 = null;
+        Current.C181232 = null; Current.C93813 = null;
+        Current.C218477 = null; Current.C218673 = null;
+        Current.C20108  = null; Current.C218674 = null; Current.C83081 = null;
+        Current.C218478 = null; Current.C218695 = null; Current.C218874 = null;
+        Current.C218696 = null; Current.C218697 = null; Current.C17649 = null; Current.C17649_2 = null;
+        Current.C42581  = null; Current.C218698 = null; Current.C218699 = null;
+        Current.C218700 = null; Current.C218701 = null;
+        Current.ChgData.Clear(); Current.ChgRows = 1;
+        _chgRows = new() { 1 }; _nextChgRow = 2;
+        Store.Update(Current);
+        SetStatus("Cleared");
+    }
+
+    private void LoadSample()
+    {
+        var first = Store.LoadSample();
+        SelectRecord(first.Id);
+        SetStatus("✓ Sample data loaded — 2 amendments created");
+    }
+
+    private void RenameAndSave(string? name)
+    {
+        if (Current == null) return;
+        Current.Name = string.IsNullOrWhiteSpace(name) ? "Amendment" : name.Trim();
+        Store.Update(Current);
+    }
+
+    // ── Field helpers ─────────────────────────────────────────────────
+
+    private void SetAndSave(Action<string?> setter, string? value)
+    {
+        if (Current == null) return;
+        setter(value);
+        Store.Update(Current);
+    }
+
+    private void SetChgAndSave(string key, string? value)
+    {
+        if (Current == null) return;
+        Current.ChgData[key] = value ?? string.Empty;
+        Store.Update(Current);
+    }
+
+    // ── Change rows ───────────────────────────────────────────────────
+
+    private void AddChgRow()
+    {
+        if (Current == null) return;
+        var r = _nextChgRow++;
+        _chgRows.Add(r);
+        Current.ChgRows = _chgRows.Count;
+        Store.Update(Current);
+    }
+
+    private void DeleteChgRow(int r)
+    {
+        if (Current == null) return;
+        _chgRows.Remove(r);
+        var keys = Current.ChgData.Keys.Where(k => k.EndsWith($"_r{r}")).ToList();
+        foreach (var k in keys) Current.ChgData.Remove(k);
+        Current.ChgRows = _chgRows.Count;
+        Store.Update(Current);
+    }
+
+    // ── Status bar ────────────────────────────────────────────────────
+
+    private void SetStatus(string msg)
+    {
+        _status = msg;
+        _statusTimer?.Dispose();
+        _statusTimer = new System.Threading.Timer(_ =>
+        {
+            _status = string.Empty;
+            InvokeAsync(StateHasChanged);
+        }, null, 3000, System.Threading.Timeout.Infinite);
+    }
+
+    public void Dispose() => _statusTimer?.Dispose();
+
+    // ── Render fragments ──────────────────────────────────────────────
+
+    private RenderFragment ReasonSelect(string ctxId, string? current, Action<string?> setter) => __builder =>
+    {
+        var opts = new[]
+        {
+            ("$NCIT#C218490 \"Regulatory Agency Request To Amend\"", "Regulatory Agency Request To Amend"),
+            ("$NCIT#C218491 \"New Regulatory Guidance\"",           "New Regulatory Guidance"),
+            ("$NCIT#C218492 \"IRB/IEC Feedback\"",                  "IRB/IEC Feedback"),
+            ("$NCIT#C218493 \"New Safety Information Available\"",   "New Safety Information Available"),
+            ("$NCIT#C218494 \"Manufacturing Change\"",              "Manufacturing Change"),
+            ("$NCIT#C218495 \"IMP Addition\"",                      "IMP Addition"),
+            ("$NCIT#C218496 \"Change In Strategy\"",                "Change In Strategy"),
+            ("$NCIT#C218497 \"Change In Standard Of Care\"",        "Change In Standard Of Care"),
+            ("$NCIT#C218498 \"New Data Available (Other Than Safety Data)\"", "New Data Available (Other Than Safety Data)"),
+            ("$NCIT#C218499 \"Investigator/Site Feedback\"",        "Investigator/Site Feedback"),
+            ("$NCIT#C218500 \"Recruitment Difficulty\"",            "Recruitment Difficulty"),
+            ("$NCIT#C218501 \"Inconsistency And/Or Error In The Protocol\"", "Inconsistency And/Or Error In The Protocol"),
+            ("$NCIT#C218502 \"Protocol Design Error\"",             "Protocol Design Error"),
+            ("$NCIT#C17649 \"Other\"",                              "Other"),
+            ("$NCIT#C48660 \"Not Applicable\"",                     "Not Applicable"),
+        };
+        <select data-ctx="@ctxId" class="fb-sel" value="@current"
+            @onchange="@(e => setter(e.Value?.ToString()))">
+            <option value="">-- select --</option>
+            @foreach (var (val, lbl) in opts)
+            {
+                <option value="@val">@lbl</option>
+            }
+        </select>;
+    };
+
+    private RenderFragment ReasonMultiSelect(string ctxId, string? current, Action<string?> setter) => __builder =>
+    {
+        var opts = new[]
+        {
+            ("$NCIT#C218490 \"Regulatory Agency Request To Amend\"", "Regulatory Agency Request To Amend"),
+            ("$NCIT#C218491 \"New Regulatory Guidance\"",           "New Regulatory Guidance"),
+            ("$NCIT#C218492 \"IRB/IEC Feedback\"",                  "IRB/IEC Feedback"),
+            ("$NCIT#C218493 \"New Safety Information Available\"",   "New Safety Information Available"),
+            ("$NCIT#C218494 \"Manufacturing Change\"",              "Manufacturing Change"),
+            ("$NCIT#C218495 \"IMP Addition\"",                      "IMP Addition"),
+            ("$NCIT#C218496 \"Change In Strategy\"",                "Change In Strategy"),
+            ("$NCIT#C218497 \"Change In Standard Of Care\"",        "Change In Standard Of Care"),
+            ("$NCIT#C218498 \"New Data Available (Other Than Safety Data)\"", "New Data Available (Other Than Safety Data)"),
+            ("$NCIT#C218499 \"Investigator/Site Feedback\"",        "Investigator/Site Feedback"),
+            ("$NCIT#C218500 \"Recruitment Difficulty\"",            "Recruitment Difficulty"),
+            ("$NCIT#C218501 \"Inconsistency And/Or Error In The Protocol\"", "Inconsistency And/Or Error In The Protocol"),
+            ("$NCIT#C218502 \"Protocol Design Error\"",             "Protocol Design Error"),
+            ("$NCIT#C17649 \"Other\"",                              "Other"),
+            ("$NCIT#C48660 \"Not Applicable\"",                     "Not Applicable"),
+        };
+        var selected = (current ?? "").Split(';', StringSplitOptions.RemoveEmptyEntries)
+                                      .Select(v => v.Trim()).ToHashSet();
+        <div data-ctx="@ctxId" style="display:flex;flex-direction:column;gap:3px;padding:4px 0;">
+        @foreach (var (val, lbl) in opts)
+        {
+            var isChecked = selected.Contains(val);
+            var capturedVal = val;
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:10.5pt;padding:1px 0;">
+                <input type="checkbox" checked="@isChecked"
+                    @onchange="@(e => {
+                        var nowChecked = (bool)(e.Value ?? false);
+                        if (nowChecked) selected.Add(capturedVal);
+                        else            selected.Remove(capturedVal);
+                        setter(string.Join(";", selected));
+                    })" />
+                @lbl
+            </label>
+        }
+        </div>;
+    };
+}

@@ -1,0 +1,448 @@
+@page "/section-04"
+@layout MainLayout
+@using UDP_App.Models
+@using UDP_App.Services
+@inject DataService04 DataSvc
+@inject SushiService SushiSvc
+@inject FhirPipelineService PipelineSvc
+@inject IJSRuntime JS
+@implements IDisposable
+
+<PageTitle>Section 4 – Trial Design</PageTitle>
+
+<style>
+    .doc-page {
+        background:#fff; width:794px; min-height:1123px;
+        margin:30px auto 80px; padding:72px;
+        box-shadow:0 4px 24px rgba(0,0,0,0.18);
+        font-family:'Calibri',Arial,sans-serif; font-size:11pt; color:#000;
+    }
+    .h1  { font-family:'Times New Roman',Times,serif; font-size:14pt; font-weight:700; margin:0 0 18px; }
+    .h2  { font-family:'Times New Roman',Times,serif; font-size:14pt; font-weight:700; margin:24px 0 10px; }
+    .h3  { font-family:'Times New Roman',Times,serif; font-size:12pt; font-weight:700; margin:18px 0 8px; }
+    .h4p { font-family:'Times New Roman',Times,serif; font-size:12pt; font-weight:700; margin:14px 0 6px; }
+    .field-wrap { position:relative; margin-bottom:10px; }
+    textarea.fb {
+        display:block; width:100%; background:#d0cece; color:#1a7a1a;
+        border:none; border-bottom:1.5px solid #999;
+        font-family:'Calibri',Arial,sans-serif; font-size:11pt;
+        line-height:1.4; padding:4px 6px; outline:none; resize:vertical; min-height:52px;
+    }
+    textarea.fb:focus { background:#bfbcbc; }
+    textarea.fb::placeholder { color:#9a7ab5; font-style:italic; }
+    textarea.fb.req-empty { border-bottom:2px solid #c00; background:#f5d0d0; }
+    textarea.fb.opt { border-bottom-style:dotted; }
+    textarea.fb.alt { border-bottom-style:dashed; border-bottom-color:#5a7abf; }
+    /* alternate banner */
+    .alt-banner {
+        background:#eef3ff; border:1px solid #9db4e8; border-radius:4px;
+        padding:6px 12px; margin:10px 0 6px; font-size:9.5pt; color:#1f3864;
+    }
+    /* Toolbar */
+    .toolbar { display:flex; justify-content:flex-end; gap:10px; margin-top:32px; flex-wrap:wrap; }
+    .btn { padding:7px 20px; border:none; border-radius:3px; font-size:10pt; font-family:inherit; cursor:pointer; }
+    .btn-primary   { background:#1f3864; color:#fff; } .btn-primary:hover { background:#162a4e; }
+    .btn-secondary { background:#eee; color:#333; border:1px solid #ccc; } .btn-secondary:hover { background:#ddd; }
+    /* Dialogs */
+    .overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:200; align-items:center; justify-content:center; }
+    .overlay.show { display:flex; }
+    .dbox { background:#fff; border-radius:6px; padding:28px 32px; width:400px; box-shadow:0 8px 40px rgba(0,0,0,0.25); }
+    .dbox h3 { font-size:13pt; font-weight:700; color:#1f3864; margin-bottom:12px; }
+    .dbox p  { font-size:10.5pt; margin-bottom:16px; line-height:1.5; }
+    .dbox input[type=text] { width:100%; border:1px solid #aaa; border-radius:3px; padding:6px 8px; font-size:10pt; margin-bottom:14px; outline:none; }
+    .fmt-row { display:flex; gap:14px; margin-bottom:20px; flex-wrap:wrap; }
+    .fmt-row label { display:flex; align-items:center; gap:5px; font-size:10pt; cursor:pointer; }
+    .dbr { display:flex; justify-content:flex-end; gap:10px; }
+    .sbar { position:fixed; bottom:0; left:0; right:0; background:#1f3864; color:#fff; font-size:9pt; padding:5px 18px; display:flex; justify-content:space-between; align-items:center; z-index:100; }
+    .err  { background:#fff3cd; color:#856404; border:1px solid #ffc107; padding:10px; margin-bottom:10px; border-radius:4px; font-size:10pt; }
+    /* Context menu */
+    .ctx-menu { display:none; position:fixed; background:#fff; border:1px solid #ccc; border-radius:4px; box-shadow:0 4px 16px rgba(0,0,0,0.18); z-index:1000; min-width:300px; max-width:400px; font-family:'Calibri',Arial,sans-serif; font-size:10pt; }
+    .ctx-hdr  { background:#1f3864; color:#fff; padding:8px 12px; font-weight:700; font-size:10pt; border-radius:4px 4px 0 0; display:flex; justify-content:space-between; align-items:center; }
+    .ctx-close { background:none; border:none; color:#fff; font-size:14px; cursor:pointer; padding:0 2px; }
+    .ctx-body  { padding:10px 12px; }
+    .ctx-row   { display:flex; gap:8px; margin-bottom:6px; font-size:9.5pt; }
+    .ctx-row label { font-weight:700; white-space:nowrap; min-width:100px; color:#333; }
+    .ctx-row span  { color:#555; word-break:break-all; }
+    .ctx-div   { border:none; border-top:1px solid #e0e0e0; margin:8px 0; }
+    .ctx-guide { font-size:9.5pt; color:#444; line-height:1.5; }
+    .ctx-guide strong { color:#1f3864; }
+</style>
+
+@if (!string.IsNullOrEmpty(ErrorMessage))
+{
+    <div class="err">⚠ @ErrorMessage</div>
+}
+
+<div class="doc-page">
+
+    <div class="h1">4.&nbsp;&nbsp;TRIAL DESIGN</div>
+
+    <!-- ── 4.1 Description of Trial Design ──────────────────────── -->
+    <div class="h2">4.1&nbsp;&nbsp;Description of Trial Design</div>
+
+    <div class="h3">Overall Description of Trial Design and Description of Intervention Model</div>
+    <div class="field-wrap">
+        <textarea data-ctx="C147139" class="fb opt" rows="4"
+            placeholder="Describe Trial Design and Intervention Model (optional)"
+            @bind="Model.C147139" @bind:event="oninput" @bind:after="AutoSave"></textarea>
+    </div>
+
+    <div class="h3">Description of Trial Duration</div>
+    <div class="field-wrap">
+        <textarea data-ctx="C218726" class="fb opt" rows="3"
+            placeholder="Describe trial duration (optional)"
+            @bind="Model.C218726" @bind:event="oninput" @bind:after="AutoSave"></textarea>
+    </div>
+
+    <div class="h3">Description of Method of Assignment to Trial Intervention</div>
+    <div class="field-wrap">
+        <textarea data-ctx="C219658" class="fb opt" rows="3"
+            placeholder="Describe Method of Assignment to Trial Intervention (optional)"
+            @bind="Model.C219658" @bind:event="oninput" @bind:after="AutoSave"></textarea>
+    </div>
+
+    <div class="h3">Description of Level and Method of Blinding</div>
+    <div class="field-wrap">
+        <textarea data-ctx="C218727" class="fb opt" rows="3"
+            placeholder="Describe Level and Method of Blinding (optional)"
+            @bind="Model.C218727" @bind:event="oninput" @bind:after="AutoSave"></textarea>
+    </div>
+
+    <div class="h3">Additional Description of Trial Design</div>
+    <div class="field-wrap">
+        <textarea data-ctx="C218728" class="fb opt" rows="3"
+            placeholder="Provide any Additional Description of Trial Design (optional)"
+            @bind="Model.C218728" @bind:event="oninput" @bind:after="AutoSave"></textarea>
+    </div>
+
+    <div class="h3">Stakeholder Input into Design</div>
+    <div class="field-wrap">
+        <textarea data-ctx="C218729" class="fb opt" rows="3"
+            placeholder="Describe Stakeholder Input into Design (optional)"
+            @bind="Model.C218729" @bind:event="oninput" @bind:after="AutoSave"></textarea>
+    </div>
+
+    <!-- ── 4.2 Rationale for Trial Design ───────────────────────── -->
+    <div class="h2">4.2&nbsp;&nbsp;Rationale for Trial Design</div>
+
+    <div class="alt-banner">
+        ℹ <strong>Alternate entry:</strong> Enter the overall rationale below, OR complete sections 4.2.1–4.2.6 individually. Both are optional; use whichever is appropriate.
+    </div>
+
+    <div class="h4p">Overall Rationale for Trial Design</div>
+    <div class="field-wrap">
+        <textarea data-ctx="C142705" class="fb alt" rows="4"
+            placeholder="Enter Overall Rationale for Trial Design here — OR use sections 4.2.1 to 4.2.6 below (alternate)"
+            @bind="Model.C142705" @bind:event="oninput" @bind:after="AutoSave"></textarea>
+    </div>
+
+    <div class="h3">4.2.1&nbsp;&nbsp;Rationale for Estimand(s)</div>
+    <div class="field-wrap">
+        <textarea data-ctx="C218730" class="fb alt" rows="3"
+            placeholder="Enter Rationale for Estimand(s) (alternate)"
+            @bind="Model.C218730" @bind:event="oninput" @bind:after="AutoSave"></textarea>
+    </div>
+
+    <div class="h3">4.2.2&nbsp;&nbsp;Rationale for Intervention Model</div>
+    <div class="field-wrap">
+        <textarea data-ctx="C215629" class="fb alt" rows="3"
+            placeholder="Enter Rationale for Intervention Model (alternate)"
+            @bind="Model.C215629" @bind:event="oninput" @bind:after="AutoSave"></textarea>
+    </div>
+
+    <div class="h3">4.2.3&nbsp;&nbsp;Rationale for Control Type</div>
+    <div class="field-wrap">
+        <textarea data-ctx="C218731" class="fb alt" rows="3"
+            placeholder="Enter Rationale for Control Type (alternate)"
+            @bind="Model.C218731" @bind:event="oninput" @bind:after="AutoSave"></textarea>
+    </div>
+
+    <div class="h3">4.2.4&nbsp;&nbsp;Rationale for Trial Duration</div>
+    <div class="field-wrap">
+        <textarea data-ctx="C218732" class="fb alt" rows="3"
+            placeholder="Enter Rationale for Trial Duration (alternate)"
+            @bind="Model.C218732" @bind:event="oninput" @bind:after="AutoSave"></textarea>
+    </div>
+
+    <div class="h3">4.2.5&nbsp;&nbsp;Rationale for Adaptive or Novel Trial Design</div>
+    <div class="field-wrap">
+        <textarea data-ctx="C218733" class="fb alt" rows="3"
+            placeholder="Enter Rationale for Adaptive or Novel Trial Design (alternate)"
+            @bind="Model.C218733" @bind:event="oninput" @bind:after="AutoSave"></textarea>
+    </div>
+
+    <div class="h4p">Rationale for Interim Analysis</div>
+    <div class="field-wrap">
+        <textarea data-ctx="C218734" class="fb alt" rows="3"
+            placeholder="Enter Rationale for Interim Analysis (alternate)"
+            @bind="Model.C218734" @bind:event="oninput" @bind:after="AutoSave"></textarea>
+    </div>
+
+    <div class="h3">4.2.6&nbsp;&nbsp;Rationale for Other Trial Design Aspects</div>
+    <div class="field-wrap">
+        <textarea data-ctx="C218735" class="fb alt" rows="3"
+            placeholder="Enter Rationale for Other Trial Design Aspects (alternate)"
+            @bind="Model.C218735" @bind:event="oninput" @bind:after="AutoSave"></textarea>
+    </div>
+
+    <!-- ── 4.3 Trial Stopping Rules ─────────────────────────────── -->
+    <div class="h2">4.3&nbsp;&nbsp;Trial Stopping Rules</div>
+    <div class="field-wrap">
+        <textarea data-ctx="C142698" class="@ReqClass(Model.C142698)" rows="4"
+            placeholder="Describe Trial Stopping Rules (required)"
+            @bind="Model.C142698" @bind:event="oninput" @bind:after="AutoSave"></textarea>
+    </div>
+
+    <!-- ── 4.4 Start and End of Trial ───────────────────────────── -->
+    <div class="h2">4.4&nbsp;&nbsp;Start of Trial and End of Trial</div>
+
+    <div class="h3">Start of Trial</div>
+    <div class="field-wrap">
+        <textarea data-ctx="C218736" class="@ReqClass(Model.C218736)" rows="2"
+            placeholder="Enter Start of Trial (required)"
+            @bind="Model.C218736" @bind:event="oninput" @bind:after="AutoSave"></textarea>
+    </div>
+
+    <div class="h3">End of Trial</div>
+    <div class="field-wrap">
+        <textarea data-ctx="C218737" class="@ReqClass(Model.C218737)" rows="2"
+            placeholder="Enter End of Trial (required)"
+            @bind="Model.C218737" @bind:event="oninput" @bind:after="AutoSave"></textarea>
+    </div>
+
+    <div class="h3">Access to Trial Intervention After End of Trial</div>
+    <div class="field-wrap">
+        <textarea data-ctx="C218738" class="@ReqClass(Model.C218738)" rows="3"
+            placeholder="Describe Access to Trial Intervention After End of Trial (required)"
+            @bind="Model.C218738" @bind:event="oninput" @bind:after="AutoSave"></textarea>
+    </div>
+
+    <div class="toolbar">
+        <button class="btn btn-secondary" @onclick="ClearAll">Clear All</button>
+        <button class="btn btn-secondary" @onclick="LoadSample">Load Sample</button>
+        <button class="btn btn-secondary" @onclick="OpenSaveDialog">⬇ Save to File…</button>
+        <button class="btn btn-secondary" @onclick="OpenLoadDialog">⬆ Load from File</button>
+    </div>
+</div>
+
+<FhirPipelineDialog @ref="_pipeline" />
+
+<div class="overlay @SaveDialogCss">
+    <div class="dbox">
+        <h3>Save Data to File</h3>
+        <label style="display:block;font-weight:700;margin-bottom:6px;">File name</label>
+        <input type="text" @bind="SaveFileName" @bind:event="oninput" />
+        <label style="display:block;font-weight:700;margin:10px 0 6px;">Format</label>
+        <div class="fmt-row">
+            <label><input type="radio" name="s4fmt" checked="@IsPipeline" @onchange="SetFmtPipeline" /> FHIR</label>
+            <label><input type="radio" name="s4fmt" checked="@IsFhir"     @onchange="SetFmtFhir"     /> FSH</label>
+            <label><input type="radio" name="s4fmt" checked="@IsJson"     @onchange="SetFmtJson"     /> JSON</label>
+            <label><input type="radio" name="s4fmt" checked="@IsCsv"      @onchange="SetFmtCsv"      /> CSV</label>
+            <label><input type="radio" name="s4fmt" checked="@IsTxt"      @onchange="SetFmtTxt"      /> Plain Text</label>
+        </div>
+        <div class="dbr">
+            <button class="btn btn-secondary" @onclick="CloseSaveDialog">Cancel</button>
+            <button class="btn btn-primary"   @onclick="DoSaveToFile">@(IsPipeline ? "Publish" : "Download")</button>
+        </div>
+    </div>
+</div>
+
+<div class="overlay @ReqDialogCss">
+    <div class="dbox">
+        <h3 style="color:#c00;">Incomplete Required Fields</h3>
+        <p>@ReqDialogMsg</p>
+        <div class="dbr">
+            <button class="btn btn-secondary" @onclick="CloseReqDialog">Cancel</button>
+            <button class="btn btn-primary" style="background:#c00;" @onclick="ForceConfirm">Save Anyway</button>
+        </div>
+    </div>
+</div>
+
+<div id="s4-ctx-menu" class="ctx-menu">
+    <div class="ctx-hdr">
+        <span>Field Information</span>
+        <button class="ctx-close" @onclick="CloseCtxMenu">✕</button>
+    </div>
+    <div class="ctx-body">
+        <div class="ctx-row"><label>Field name:</label><span>@CtxFieldName</span></div>
+        <div class="ctx-row"><label>Original name:</label><span>@CtxOriginalName</span></div>
+        <hr class="ctx-div" />
+        <div class="ctx-guide"><strong>Guidance:</strong><br />@CtxGuidance</div>
+    </div>
+</div>
+
+<div class="sbar">
+    <span>Section 4 – Trial Design &nbsp;|&nbsp; Grey = data entry &nbsp;|&nbsp; Red border = required &nbsp;|&nbsp; Dashed blue = alternate</span>
+    <span>@StatusMessage</span>
+</div>
+
+@code {
+    private Section04Model Model = new();
+    private bool   ShowValidation = false;
+    private bool   ShowSaveDialog = false;
+    private bool   ShowReqDialog  = false;
+    private string SaveFileName   = "section4_data";
+    private string SaveFormat     = "fhir-pipeline";
+    private string StatusMessage  = string.Empty;
+    private string ReqDialogMsg   = string.Empty;
+    private string ErrorMessage   = string.Empty;
+    private string? PendingAction = null;
+    private FhirPipelineDialog _pipeline = default!;
+    private System.Threading.Timer? _statusTimer;
+    private string CtxFieldName = string.Empty, CtxOriginalName = string.Empty, CtxGuidance = string.Empty;
+    private DotNetObjectReference<Section04>? _objRef;
+
+    private string SaveDialogCss => ShowSaveDialog ? "overlay show" : "overlay";
+    private string ReqDialogCss  => ShowReqDialog  ? "overlay show" : "overlay";
+    private bool IsPipeline => SaveFormat == "fhir-pipeline";
+    private bool IsFhir => SaveFormat == "fsh";
+    private bool IsJson => SaveFormat == "json";
+    private bool IsCsv  => SaveFormat == "csv";
+    private bool IsTxt  => SaveFormat == "txt";
+    private void SetFmtPipeline(ChangeEventArgs e) => SaveFormat = "fhir-pipeline";
+    private void SetFmtFhir(ChangeEventArgs e)     => SaveFormat = "fsh";
+    private void SetFmtJson(ChangeEventArgs e)     => SaveFormat = "json";
+    private void SetFmtCsv(ChangeEventArgs e)      => SaveFormat = "csv";
+    private void SetFmtTxt(ChangeEventArgs e)      => SaveFormat = "txt";
+
+    private string ReqClass(string? val) =>
+        ShowValidation && string.IsNullOrWhiteSpace(val) ? "fb req-empty" : "fb";
+
+    private void AutoSave() =>
+        _ = JS.InvokeVoidAsync("localStorage.setItem", "s4data", DataSvc.ToJson(Model));
+
+    private bool HasRequiredEmpty() =>
+        string.IsNullOrWhiteSpace(Model.C142698) ||
+        string.IsNullOrWhiteSpace(Model.C218736) ||
+        string.IsNullOrWhiteSpace(Model.C218737) ||
+        string.IsNullOrWhiteSpace(Model.C218738);
+
+    private int RequiredEmptyCount() =>
+        new[] { Model.C142698, Model.C218736, Model.C218737, Model.C218738 }
+            .Count(string.IsNullOrWhiteSpace);
+
+    private void ClearAll()
+    {
+        Model = new Section04Model(); ShowValidation = false; ErrorMessage = string.Empty;
+        _ = JS.InvokeVoidAsync("localStorage.removeItem", "s4data");
+        SetStatus("Cleared");
+    }
+
+    private void LoadSample()
+    {
+        var s = DataSvc.LoadSample();
+        if (s != null) { Model = s; ShowValidation = false; AutoSave(); SetStatus("Sample data loaded"); }
+        else ErrorMessage = "Could not load sample data.";
+    }
+
+    private void OpenSaveDialog()
+    {
+        ShowValidation = true;
+        if (HasRequiredEmpty())
+        {
+            ReqDialogMsg  = $"{RequiredEmptyCount()} required field(s) are empty. Do you still want to save?";
+            PendingAction = "file"; ShowReqDialog = true; return;
+        }
+        SaveFileName = "section4_data_" + DateTime.Now.ToString("yyyy-MM-dd");
+        ShowSaveDialog = true;
+    }
+    private void CloseSaveDialog() => ShowSaveDialog = false;
+    private void CloseReqDialog()  { ShowReqDialog = false; PendingAction = null; }
+    private void ForceConfirm()
+    {
+        ShowReqDialog = false;
+        SaveFileName  = "section4_data_" + DateTime.Now.ToString("yyyy-MM-dd");
+        ShowSaveDialog = true; PendingAction = null;
+    }
+
+    private async Task DoSaveToFile()
+    {
+        ShowSaveDialog = false;
+        if (SaveFormat == "fhir-pipeline")
+        {
+            var fsh = DataSvc.ToFsh(Model);
+            var bn  = SaveFileName.Trim().Length > 0 ? SaveFileName.Trim() : "section4_data";
+            await _pipeline.RunAsync(bn + ".fsh", fsh);
+            SetStatus("✓ FHIR pipeline complete"); return;
+        }
+        var (content, mime, ext) = SaveFormat switch
+        {
+            "csv"  => (DataSvc.ToCsv(Model),      "text/csv",         ".csv"),
+            "txt"  => (DataSvc.ToPlainText(Model), "text/plain",       ".txt"),
+            "fsh"  => (DataSvc.ToFsh(Model),       "text/plain",       ".fsh"),
+            _      => (DataSvc.ToJson(Model),      "application/json", ".json"),
+        };
+        var fn = (SaveFileName.Trim().Length > 0 ? SaveFileName.Trim() : "section4_data") + ext;
+        if (SaveFormat == "fsh") SushiSvc.SaveToExamples(fn, content);
+        await JS.InvokeVoidAsync("udpDownload", fn, content, mime);
+        SetStatus("⬇ Downloaded " + fn);
+    }
+
+    private async Task OpenLoadDialog() => await JS.InvokeVoidAsync("udpOpenFilePicker");
+
+    [JSInvokable]
+    public void ReceiveFileContent(string json)
+    {
+        var loaded = DataSvc.FromJson(json);
+        if (loaded != null) { Model = loaded; ShowValidation = false; SetStatus("⬆ Loaded from file"); InvokeAsync(StateHasChanged); }
+    }
+
+    [JSInvokable]
+    public async Task OnContextMenuJS(string code, double x, double y)
+    {
+        var info = GetFieldInfo(code);
+        CtxFieldName = code; CtxOriginalName = info.original; CtxGuidance = info.guidance;
+        StateHasChanged();
+        await JS.InvokeVoidAsync("udpShowCtxMenu", "s4-ctx-menu", x, y);
+    }
+    [JSInvokable] public void OnCtxMenuClosed() { }
+    private void CloseCtxMenu() => _ = JS.InvokeVoidAsync("udpHideCtxMenu", "s4-ctx-menu");
+
+    private (string original, string guidance) GetFieldInfo(string code) => code switch
+    {
+        "C147139" => ("TrialDesignDescription",       "Describe the overall trial design and intervention model (e.g. parallel group, cross-over)."),
+        "C218726" => ("TrialDurationDescription",      "Describe the total duration of the trial and each of its phases."),
+        "C219658" => ("AssignmentMethodDescription",   "Describe how participants are assigned to trial interventions, including any randomisation method."),
+        "C218727" => ("BlindingDescription",           "Describe the level of blinding (e.g. open-label, single-blind, double-blind) and method used."),
+        "C218728" => ("AdditionalDesignDescription",   "Provide any additional description of the trial design not covered above."),
+        "C218729" => ("StakeholderInputDescription",   "Describe any input from patients, caregivers, or other stakeholders into the trial design."),
+        "C142705" => ("OverallRationale",              "Enter the overall rationale for the trial design, OR use sections 4.2.1–4.2.6 individually."),
+        "C218730" => ("EstimandRationale",             "Explain the rationale for the choice of estimand(s)."),
+        "C215629" => ("InterventionModelRationale",    "Explain the rationale for the choice of intervention model."),
+        "C218731" => ("ControlTypeRationale",          "Explain the rationale for the choice of control type (e.g. placebo, active comparator)."),
+        "C218732" => ("TrialDurationRationale",        "Explain the rationale for the trial duration."),
+        "C218733" => ("AdaptiveDesignRationale",       "Explain the rationale for any adaptive or novel design elements."),
+        "C218734" => ("InterimAnalysisRationale",      "Explain the rationale for any planned interim analyses."),
+        "C218735" => ("OtherDesignRationale",          "Explain the rationale for any other trial design aspects not covered above."),
+        "C142698" => ("TrialStoppingRules",            "Describe the criteria and rules under which the trial will be stopped prematurely (required)."),
+        "C218736" => ("StartOfTrial",                  "Define what constitutes the start of the trial, e.g. FPFV date (required)."),
+        "C218737" => ("EndOfTrial",                    "Define what constitutes the end of the trial, e.g. LPLV date (required)."),
+        "C218738" => ("PostTrialAccess",               "Describe what access, if any, participants will have to trial interventions after the trial ends (required)."),
+        _         => (code, "Enter field value."),
+    };
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender) return;
+        try
+        {
+            _objRef = DotNetObjectReference.Create(this);
+            await JS.InvokeVoidAsync("udpSetDotNetRef", _objRef);
+            await JS.InvokeVoidAsync("udpInitContextMenus", "s4-ctx-menu");
+            var json = await JS.InvokeAsync<string?>("localStorage.getItem", "s4data");
+            if (!string.IsNullOrEmpty(json)) { var l = DataSvc.FromJson(json); if (l != null) { Model = l; StateHasChanged(); } }
+        }
+        catch (JSDisconnectedException) { }
+        catch (TaskCanceledException)   { }
+        catch (Exception ex) { ErrorMessage = "Init error: " + ex.Message; StateHasChanged(); }
+    }
+
+    private void SetStatus(string msg)
+    {
+        StatusMessage = msg;
+        _statusTimer?.Dispose();
+        _statusTimer = new System.Threading.Timer(_ => { StatusMessage = string.Empty; InvokeAsync(StateHasChanged); }, null, 4000, System.Threading.Timeout.Infinite);
+    }
+
+    public void Dispose() { _objRef?.Dispose(); _statusTimer?.Dispose(); }
+}

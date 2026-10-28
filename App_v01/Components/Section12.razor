@@ -1,0 +1,877 @@
+@page "/section-12"
+@layout MainLayout
+@using UDP_App.Models
+@using UDP_App.Services
+@inject DataService12 DataSvc
+@inject AmendmentStore AmendStore
+@inject SushiService SushiSvc
+@inject FhirPipelineService PipelineSvc
+@inject NavigationManager Nav
+@inject IJSRuntime JS
+@implements IDisposable
+
+<PageTitle>Section 12 – Appendix: Supporting Detail</PageTitle>
+
+<style>
+    .doc-page {
+        background:#fff; width:794px; min-height:1123px;
+        margin:30px auto 80px; padding:72px;
+        box-shadow:0 4px 24px rgba(0,0,0,0.18);
+        font-family:'Calibri',Arial,sans-serif; font-size:11pt; color:#000;
+    }
+    .h1  { font-family:'Times New Roman',Times,serif; font-size:14pt; font-weight:700; margin:0 0 18px; }
+    .h2  { font-family:'Times New Roman',Times,serif; font-size:14pt; font-weight:700; margin:24px 0 10px; }
+    .h3  { font-family:'Times New Roman',Times,serif; font-size:12pt; font-weight:700; margin:18px 0 8px; }
+    .h4p { font-family:'Times New Roman',Times,serif; font-size:12pt; font-weight:700; margin:14px 0 6px; }
+    .field-wrap { position:relative; margin-bottom:10px; }
+    textarea.fb {
+        display:block; width:100%; background:#d0cece; color:#1a7a1a;
+        border:none; border-bottom:1.5px solid #999;
+        font-family:'Calibri',Arial,sans-serif; font-size:11pt;
+        line-height:1.4; padding:4px 6px; outline:none; resize:vertical; min-height:52px;
+    }
+    textarea.fb:focus { background:#bfbcbc; }
+    textarea.fb::placeholder { color:#9a7ab5; font-style:italic; }
+    textarea.fb.req-empty { border-bottom:2px solid #c00; background:#f5d0d0; }
+    textarea.fb.cond { border-bottom-style:dashed; }
+    input.fb-text {
+        display:block; width:100%; background:#d0cece; color:#1a7a1a;
+        border:none; border-bottom:1.5px solid #999;
+        font-family:'Calibri',Arial,sans-serif; font-size:10pt;
+        padding:4px 6px; outline:none; box-sizing:border-box;
+    }
+    input.fb-text:focus { background:#bfbcbc; }
+    input.fb-date {
+        display:block; width:100%; background:#d0cece; color:#1a7a1a;
+        border:none; border-bottom:1.5px solid #999;
+        font-family:'Calibri',Arial,sans-serif; font-size:10pt;
+        padding:4px 6px; outline:none; cursor:pointer; box-sizing:border-box;
+    }
+    input.fb-date:focus { background:#bfbcbc; }
+    select.fb-sel {
+        display:block; width:100%; background:#d0cece; color:#1a7a1a;
+        border:none; border-bottom:1.5px solid #999;
+        font-family:'Calibri',Arial,sans-serif; font-size:10pt;
+        padding:4px 6px; outline:none; cursor:pointer;
+    }
+    select.fb-sel:focus { background:#bfbcbc; }
+    /* Tables */
+    .s12-tbl { width:100%; border-collapse:collapse; margin:8px 0; font-size:9.5pt; }
+    .s12-tbl th { background:#404040; color:#fff; font-family:Arial,sans-serif; font-weight:700; font-size:8.5pt; padding:5px 6px; text-align:left; border:1px solid #555; }
+    .s12-tbl td { border:1px solid #ccc; padding:3px 4px; vertical-align:top; }
+    .s12-tbl td.fixed-cell { background:#e8e8e8; color:#555; font-style:italic; padding:5px 6px; }
+    /* Buttons */
+    .add-btn    { background:#00B050; color:#fff; border:none; border-radius:3px; padding:4px 12px; font-size:10pt; cursor:pointer; font-family:'Calibri',Arial,sans-serif; white-space:nowrap; }
+    .add-btn:hover { background:#008a3e; }
+    .del-btn    { background:#c00; color:#fff; border:none; border-radius:3px; padding:2px 8px; font-size:9pt; cursor:pointer; }
+    .del-btn:hover { background:#900; }
+    .imp-btn    { background:#5a7abf; color:#fff; border:none; border-radius:3px; padding:4px 12px; font-size:10pt; cursor:pointer; font-family:'Calibri',Arial,sans-serif; white-space:nowrap; }
+    .imp-btn:hover { background:#3d5a9e; }
+    /* Row header */
+    .row-hdr { display:flex; align-items:center; justify-content:space-between; margin:12px 0 6px; }
+    .row-hdr-title { font-family:'Times New Roman',Times,serif; font-size:11pt; font-weight:700; color:#1f3864; }
+    /* Toolbar */
+    .toolbar { display:flex; justify-content:flex-end; gap:10px; margin-top:32px; flex-wrap:wrap; }
+    .btn { padding:7px 20px; border:none; border-radius:3px; font-size:10pt; font-family:inherit; cursor:pointer; }
+    .btn-primary   { background:#1f3864; color:#fff; } .btn-primary:hover { background:#162a4e; }
+    .btn-secondary { background:#eee; color:#333; border:1px solid #ccc; } .btn-secondary:hover { background:#ddd; }
+    /* Dialogs */
+    .overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:200; align-items:center; justify-content:center; }
+    .overlay.show { display:flex; }
+    .dbox { background:#fff; border-radius:6px; padding:28px 32px; width:440px; box-shadow:0 8px 40px rgba(0,0,0,0.25); }
+    .dbox h3 { font-size:13pt; font-weight:700; color:#1f3864; margin-bottom:12px; }
+    .dbox p  { font-size:10.5pt; margin-bottom:16px; line-height:1.5; }
+    .dbox input[type=text] { width:100%; border:1px solid #aaa; border-radius:3px; padding:6px 8px; font-size:10pt; margin-bottom:14px; outline:none; }
+    .fmt-row { display:flex; gap:14px; margin-bottom:20px; flex-wrap:wrap; }
+    .fmt-row label { display:flex; align-items:center; gap:5px; font-size:10pt; cursor:pointer; }
+    .dbr { display:flex; justify-content:flex-end; gap:10px; }
+    /* Amendment import picker */
+    .ap-list { max-height:240px; overflow-y:auto; margin:10px 0; border:1px solid #ddd; border-radius:4px; }
+    .ap-item { display:flex; align-items:center; justify-content:space-between; padding:8px 12px; border-bottom:1px solid #eee; }
+    .ap-item:last-child { border-bottom:none; }
+    .ap-item:hover { background:#f5f7fc; }
+    .ap-item-name { font-weight:700; font-size:10.5pt; color:#1f3864; }
+    .ap-item-meta { font-size:9pt; color:#777; }
+    .ap-select-btn { background:#1f3864; color:#fff; border:none; border-radius:3px; padding:4px 12px; font-size:9pt; cursor:pointer; }
+    .ap-select-btn:hover { background:#162a4e; }
+    .ap-empty { padding:20px; text-align:center; color:#777; font-style:italic; }
+    .ap-create-link { display:inline-block; margin-top:8px; color:#1f3864; text-decoration:underline; cursor:pointer; font-style:normal; font-weight:700; }
+    /* Status */
+    .sbar { position:fixed; bottom:0; left:0; right:0; background:#1f3864; color:#fff; font-size:9pt; padding:5px 18px; display:flex; justify-content:space-between; align-items:center; z-index:100; }
+    .err  { background:#fff3cd; color:#856404; border:1px solid #ffc107; padding:10px; margin-bottom:10px; border-radius:4px; font-size:10pt; }
+    /* Context menu */
+    .ctx-menu { display:none; position:fixed; background:#fff; border:1px solid #ccc; border-radius:4px; box-shadow:0 4px 16px rgba(0,0,0,0.18); z-index:1000; min-width:300px; max-width:400px; font-family:'Calibri',Arial,sans-serif; font-size:10pt; }
+    .ctx-hdr  { background:#1f3864; color:#fff; padding:8px 12px; font-weight:700; font-size:10pt; border-radius:4px 4px 0 0; display:flex; justify-content:space-between; align-items:center; }
+    .ctx-close { background:none; border:none; color:#fff; font-size:14px; cursor:pointer; padding:0 2px; }
+    .ctx-body  { padding:10px 12px; }
+    .ctx-row   { display:flex; gap:8px; margin-bottom:6px; font-size:9.5pt; }
+    .ctx-row label { font-weight:700; white-space:nowrap; min-width:100px; color:#333; }
+    .ctx-row span  { color:#555; word-break:break-all; }
+    .ctx-div   { border:none; border-top:1px solid #e0e0e0; margin:8px 0; }
+    .ctx-guide { font-size:9.5pt; color:#444; line-height:1.5; }
+    .ctx-guide strong { color:#1f3864; }
+</style>
+
+@if (!string.IsNullOrEmpty(ErrorMessage))
+{
+    <div class="err">⚠ @ErrorMessage</div>
+}
+
+<div class="doc-page">
+
+    <div class="h1">12.&nbsp;&nbsp;APPENDIX: SUPPORTING DETAIL</div>
+
+    <!-- ── 12.1 Clinical Laboratory Tests ──────────────────────── -->
+    <div class="h2">12.1&nbsp;&nbsp;Clinical Laboratory Tests</div>
+    <div class="field-wrap">
+        <textarea data-ctx="C25294" class="@ReqClass(Model.C25294)" rows="4"
+            placeholder="Enter Clinical Laboratory Tests"
+            @bind="Model.C25294" @bind:event="oninput" @bind:after="AutoSave"></textarea>
+    </div>
+
+    <!-- ── 12.2 Country/Region-Specific Differences ─────────────── -->
+    <div class="h2">12.2&nbsp;&nbsp;Country/Region-Specific Differences</div>
+
+    @if (Model.CrRows == 0)
+    {
+        <p style="color:#888;font-style:italic;margin:0 0 8px;">Not applicable</p>
+    }
+    else
+    {
+        <table class="s12-tbl" style="margin-bottom:10px;">
+            <thead>
+                <tr>
+                    <th style="width:20%">Country/Region Identifier</th>
+                    <th style="width:40%">Country/Region-Specific Requirements</th>
+                    <th style="width:35%">Country/Region-Specific Protocol Clarifications</th>
+                    <th style="width:5%"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int r = 1; r <= Model.CrRows; r++)
+                {
+                    var row = r; // capture
+                    <tr>
+                        <td>
+                            <div class="field-wrap">
+                                <input type="text" data-ctx="@($"C218832_r{row}")" class="fb-text"
+                                    placeholder="Enter Country/Region Identifier"
+                                    value="@GetCr($"C218832_r{row}")"
+                                    @oninput="@(e => SetCr($"C218832_r{row}", e.Value?.ToString()))" />
+                            </div>
+                        </td>
+                        <td>
+                            <div class="field-wrap">
+                                <textarea data-ctx="@($"C218833_r{row}")" class="fb cond" rows="3"
+                                    placeholder="Enter Country/Region-Specific Requirements"
+                                    value="@GetCr($"C218833_r{row}")"
+                                    @oninput="@(e => SetCr($"C218833_r{row}", e.Value?.ToString()))"></textarea>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="field-wrap">
+                                <textarea data-ctx="@($"C218834_r{row}")" class="fb cond" rows="3"
+                                    placeholder="Enter Country/Region-Specific Protocol Clarifications"
+                                    value="@GetCr($"C218834_r{row}")"
+                                    @oninput="@(e => SetCr($"C218834_r{row}", e.Value?.ToString()))"></textarea>
+                            </div>
+                        </td>
+                        <td style="text-align:center;vertical-align:middle;">
+                            <button class="del-btn" @onclick="@(() => DeleteCrRow(row))">✕</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    <button class="add-btn" @onclick="AddCrRow">+ Add Country/Region</button>
+
+    <!-- ── 12.3 Prior Protocol Amendments ───────────────────────── -->
+    <div class="h2">12.3&nbsp;&nbsp;Prior Protocol Amendment(s)</div>
+
+    <div style="margin-bottom:12px;">
+        <button class="add-btn" @onclick="GoToAmendments">Edit Amendments</button>
+    </div>
+
+    @if (AmendStore.All.Count == 0)
+    {
+        <p><strong>This protocol has not been amended.</strong></p>
+    }
+    else
+    {
+        @if (AmendStore.All.Count == 1)
+        {
+            <p>This is the first protocol amendment.</p>
+        }
+        else
+        {
+            <p>This protocol has been amended previously. The Protocol Amendment Summary of Changes for the current amendment is located directly before the Table of Contents. Prior amendment(s) to this protocol are listed in the table below, beginning with the most recent.</p>
+        }
+
+        <!-- Amendment summary table — rows populated from AmendStore, most recent first -->
+        <table class="s12-tbl" style="margin-bottom:18px;">
+            <thead>
+                <tr>
+                    <th style="width:30%">Document</th>
+                    <th style="width:25%">Sponsor Approval Date</th>
+                    <th style="width:25%">Approx. Enrollment when Approved</th>
+                    <th style="width:15%">Enrollment Scope</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var rec in Enumerable.Reverse(AmendStore.All))
+                {
+                    var scopeDisplay = rec.C218695 switch {
+                        string s when s.Contains("Globally") => "Globally",
+                        string s when s.Contains("Locally")  => "Locally",
+                        _ => rec.C218695 ?? string.Empty
+                    };
+                    var dateDisplay = FormatDate(rec.C93813);
+                    <tr>
+                        <td>@(rec.C218477 ?? rec.Name)</td>
+                        <td>@dateDisplay</td>
+                        <td>@(rec.C218478 ?? string.Empty)</td>
+                        <td>@scopeDisplay</td>
+                    </tr>
+                }
+                <!-- Original Protocol is oldest — always last -->
+                <tr>
+                    <td class="fixed-cell">Original Protocol</td>
+                    <td class="fixed-cell">@FormatDate(GetAmd("C132352_r0"))</td>
+                    <td class="fixed-cell"></td>
+                    <td class="fixed-cell"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Overview of Changes — one table per amendment, most recent first -->
+        @foreach (var rec in Enumerable.Reverse(AmendStore.All))
+        {
+            var aLabel = rec.C218477 ?? rec.Name;
+            var aDate2 = FormatDate(rec.C93813);
+
+            <div class="h3">Overview of Changes — @aLabel
+                @if (!string.IsNullOrWhiteSpace(aDate2)) { <span style="font-weight:400;font-size:10pt;"> &nbsp;(Sponsor approval date: @aDate2)</span> }
+            </div>
+
+            @if (!string.IsNullOrWhiteSpace(Model.C218836))
+            {
+                <p style="font-style:italic;color:#555;margin:0 0 8px;">Provided at alternate location: @Model.C218836</p>
+            }
+            else
+            {
+                <table class="s12-tbl" style="margin-bottom:14px;">
+                    <thead>
+                        <tr>
+                            <th style="width:40%">Description of Change</th>
+                            <th style="width:35%">Brief Rationale for Change</th>
+                            <th style="width:25%">Section # and Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int r = 1; r <= rec.ChgRows; r++)
+                        {
+                            var ri = r;
+                            var desc = rec.ChgData.TryGetValue($"C218483_r{ri}", out var d) ? d : string.Empty;
+                            var rat  = rec.ChgData.TryGetValue($"C181233_r{ri}", out var rv) ? rv : string.Empty;
+                            var sec  = rec.ChgData.TryGetValue($"C218479_r{ri}", out var sv) ? sv : string.Empty;
+                            var secDisplay = System.Text.RegularExpressions.Regex.Match(sec, "\"([^\"]+)\"") is var m && m.Success ? m.Groups[1].Value : sec;
+                            <tr>
+                                <td style="white-space:pre-wrap;">@desc</td>
+                                <td style="white-space:pre-wrap;">@rat</td>
+                                <td>@secDisplay</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        }
+
+        <!-- Alternate location field -->
+        <div class="h4p" style="margin-top:18px;">Alternate Location for Overview of Changes</div>
+        <p style="font-size:9.5pt;color:#666;margin:0 0 6px;">If the Overview of Changes is not provided above, specify where it can be found.</p>
+        <div class="field-wrap">
+            <input type="text" data-ctx="C218836" class="fb-text"
+                placeholder="Specify Alternate Location (optional)"
+                value="@(Model.C218836 ?? string.Empty)"
+                @oninput="@(e => { Model.C218836 = e.Value?.ToString(); AutoSave(); })" />
+        </div>
+    }
+
+    <div class="toolbar">
+        <button class="btn btn-secondary" @onclick="ClearAll">Clear All</button>
+        <button class="btn btn-secondary" @onclick="LoadSample">Load Sample</button>
+        <button class="btn btn-secondary" @onclick="OpenSaveDialog">⬇ Save to File…</button>
+        <button class="btn btn-secondary" @onclick="OpenLoadDialog">⬆ Load from File</button>
+    </div>
+</div>
+
+<!-- FHIR Pipeline dialog -->
+<FhirPipelineDialog @ref="_pipeline" />
+
+<!-- Save dialog -->
+<div class="overlay @SaveDialogCss">
+    <div class="dbox">
+        <h3>Save Data to File</h3>
+        <label style="display:block;font-weight:700;margin-bottom:6px;">File name</label>
+        <input type="text" @bind="SaveFileName" @bind:event="oninput" />
+        <label style="display:block;font-weight:700;margin:10px 0 6px;">Format</label>
+        <div class="fmt-row">
+            <label><input type="radio" name="s12fmt" checked="@IsPipeline" @onchange="SetFmtPipeline" /> FHIR</label>
+            <label><input type="radio" name="s12fmt" checked="@IsFhir"     @onchange="SetFmtFhir"     /> FSH</label>
+            <label><input type="radio" name="s12fmt" checked="@IsJson"     @onchange="SetFmtJson"     /> JSON</label>
+            <label><input type="radio" name="s12fmt" checked="@IsCsv"      @onchange="SetFmtCsv"      /> CSV</label>
+            <label><input type="radio" name="s12fmt" checked="@IsTxt"      @onchange="SetFmtTxt"      /> Plain Text</label>
+        </div>
+        <div class="dbr">
+            <button class="btn btn-secondary" @onclick="CloseSaveDialog">Cancel</button>
+            <button class="btn btn-primary"   @onclick="DoSaveToFile">@(IsPipeline ? "Publish" : "Download")</button>
+        </div>
+    </div>
+</div>
+
+<!-- Required fields dialog -->
+<div class="overlay @ReqDialogCss">
+    <div class="dbox">
+        <h3 style="color:#c00;">Incomplete Required Fields</h3>
+        <p>@ReqDialogMsg</p>
+        <div class="dbr">
+            <button class="btn btn-secondary" @onclick="CloseReqDialog">Cancel</button>
+            <button class="btn btn-primary" style="background:#c00;" @onclick="ForceConfirm">Save Anyway</button>
+        </div>
+    </div>
+</div>
+
+<!-- Amendment import picker dialog -->
+<div class="overlay @AmendPickerCss">
+    <div class="dbox" style="width:520px;">
+        <h3>Import from Amendment Details</h3>
+        <p style="margin-bottom:8px;">Select an amendment set to import its identifier, approval date, enrollment count and overview of changes into the selected amendment row.</p>
+        <label style="font-weight:700;font-size:10pt;margin-bottom:4px;display:block;">Import into amendment row:</label>
+        <select class="fb-sel" style="margin-bottom:12px;" @bind="ImportTargetRow">
+            @for (int r = 1; r <= Model.AmendRows; r++)
+            {
+                var row = r;
+                var label = GetAmd($"C218477_r{row}");
+                <option value="@row">@(string.IsNullOrWhiteSpace(label) ? $"Amendment {row}" : label)</option>
+            }
+        </select>
+        <div class="ap-list">
+            @if (AmendStore.All.Count == 0)
+            {
+                <div class="ap-empty">
+                    No amendment sets found.
+                    <br />
+                    <span class="ap-create-link" @onclick="GoToAmendments">Go create amendments →</span>
+                </div>
+            }
+            else
+            {
+                @foreach (var rec in AmendStore.All)
+                {
+                    var r = rec;
+                    <div class="ap-item">
+                        <div>
+                            <div class="ap-item-name">@r.Name</div>
+                            <div class="ap-item-meta">
+                                @(r.C218477 ?? "No identifier") &nbsp;|&nbsp; @(r.C93813 ?? "No date")
+                            </div>
+                        </div>
+                        <button class="ap-select-btn" @onclick="@(() => ApplyImport(r))">Select</button>
+                    </div>
+                }
+            }
+        </div>
+        <div class="dbr" style="margin-top:14px;">
+            <button class="btn btn-secondary" @onclick="CloseImportPicker">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<!-- Context menu -->
+<div id="s12-ctx-menu" class="ctx-menu">
+    <div class="ctx-hdr">
+        <span>Field Information</span>
+        <button class="ctx-close" @onclick="CloseCtxMenu">✕</button>
+    </div>
+    <div class="ctx-body">
+        <div class="ctx-row">
+            <label>Field name:</label>
+            <span>@CtxFieldName</span>
+        </div>
+        <div class="ctx-row">
+            <label>Original name:</label>
+            <span>@CtxOriginalName</span>
+        </div>
+        <hr class="ctx-div" />
+        <div class="ctx-guide">
+            <strong>Guidance:</strong><br />
+            @CtxGuidance
+        </div>
+    </div>
+</div>
+
+<div class="sbar">
+    <span>Section 12 – Appendix: Supporting Detail &nbsp;|&nbsp; Grey = data entry &nbsp;|&nbsp; Red border = required &nbsp;|&nbsp; Dashed = conditional</span>
+    <span>@StatusMessage</span>
+</div>
+
+@code {
+    private Section12Model Model = new();
+
+    private bool   ShowValidation  = false;
+    private bool   ShowSaveDialog  = false;
+    private bool   ShowReqDialog   = false;
+    private bool   ShowAmendPicker = false;
+    private int    ImportTargetRow = 1;
+    private string SaveFileName    = "section12_data";
+    private string SaveFormat      = "fhir-pipeline";
+    private string StatusMessage   = string.Empty;
+    private string ReqDialogMsg    = string.Empty;
+    private string ErrorMessage    = string.Empty;
+    private string? PendingAction  = null;
+
+    private FhirPipelineDialog _pipeline = default!;
+    private System.Threading.Timer? _statusTimer;
+    private bool _reinitCtxMenus = false;
+
+    private string CtxFieldName    = string.Empty;
+    private string CtxOriginalName = string.Empty;
+    private string CtxGuidance     = string.Empty;
+    private DotNetObjectReference<Section12>? _objRef;
+
+    // ── CSS helpers ───────────────────────────────────────────────
+    private string SaveDialogCss   => ShowSaveDialog   ? "overlay show" : "overlay";
+    private string ReqDialogCss    => ShowReqDialog    ? "overlay show" : "overlay";
+    private string AmendPickerCss  => ShowAmendPicker  ? "overlay show" : "overlay";
+    private bool IsPipeline => SaveFormat == "fhir-pipeline";
+    private bool IsFhir     => SaveFormat == "fsh";
+    private bool IsJson     => SaveFormat == "json";
+    private bool IsCsv      => SaveFormat == "csv";
+    private bool IsTxt      => SaveFormat == "txt";
+    private void SetFmtPipeline(ChangeEventArgs e) => SaveFormat = "fhir-pipeline";
+    private void SetFmtFhir(ChangeEventArgs e)     => SaveFormat = "fsh";
+    private void SetFmtJson(ChangeEventArgs e)     => SaveFormat = "json";
+    private void SetFmtCsv(ChangeEventArgs e)      => SaveFormat = "csv";
+    private void SetFmtTxt(ChangeEventArgs e)      => SaveFormat = "txt";
+
+    private string ReqClass(string? val) =>
+        ShowValidation && string.IsNullOrWhiteSpace(val) ? "fb req-empty" : "fb";
+
+    private static string FormatDate(string? raw)
+    {
+        if (string.IsNullOrWhiteSpace(raw)) return string.Empty;
+        if (DateTime.TryParseExact(raw, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture,
+                System.Globalization.DateTimeStyles.None, out var d1))
+            return d1.ToString("yyyy/MM/dd");
+        if (DateTime.TryParseExact(raw, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture,
+                System.Globalization.DateTimeStyles.None, out var d2))
+            return d2.ToString("yyyy/MM/dd");
+        if (DateTime.TryParse(raw, out var d3))
+            return d3.ToString("yyyy/MM/dd");
+        return raw;
+    }
+
+    // ── Data helpers ──────────────────────────────────────────────
+    private string GetCr(string key) =>
+        Model.CrData.TryGetValue(key, out var v) ? v : string.Empty;
+
+    private void SetCr(string key, string? value)
+    {
+        Model.CrData[key] = value ?? string.Empty;
+        AutoSave();
+    }
+
+    private string GetAmd(string key) =>
+        Model.AmendData.TryGetValue(key, out var v) ? v : string.Empty;
+
+    private void SetAmd(string key, string? value)
+    {
+        Model.AmendData[key] = value ?? string.Empty;
+        AutoSave();
+    }
+
+    private void SetAmdAndSave(string key, string? value)
+    {
+        Model.AmendData[key] = value ?? string.Empty;
+        AutoSave();
+    }
+
+    private int GetChgRows(int amendIdx)
+    {
+        var key = amendIdx.ToString();
+        if (!Model.ChgRows.ContainsKey(key))
+            Model.ChgRows[key] = 1;
+        return Model.ChgRows[key];
+    }
+
+    private void SetChgRows(int amendIdx, int count)
+    {
+        Model.ChgRows[amendIdx.ToString()] = count;
+    }
+
+    private void EnsureChgKey(string key)
+    {
+        if (!Model.ChgData.ContainsKey(key))
+            Model.ChgData[key] = string.Empty;
+    }
+
+    private void EnsureAmdKey(string key)
+    {
+        if (!Model.AmendData.ContainsKey(key))
+            Model.AmendData[key] = string.Empty;
+    }
+
+    private void SetChg(string key, string? value)
+    {
+        Model.ChgData[key] = value ?? string.Empty;
+        AutoSave();
+    }
+
+    private void SetChgAndSave(string key, string? value)
+    {
+        Model.ChgData[key] = value ?? string.Empty;
+        AutoSave();
+    }
+
+    // ── Country/Region rows ───────────────────────────────────────
+    private void AddCrRow()
+    {
+        Model.CrRows++;
+        _reinitCtxMenus = true;
+        AutoSave();
+    }
+
+    private void DeleteCrRow(int row)
+    {
+        // Shift rows down
+        for (int r = row; r < Model.CrRows; r++)
+        {
+            foreach (var col in new[] { "C218832", "C218833", "C218834" })
+            {
+                var src = $"{col}_r{r + 1}";
+                var dst = $"{col}_r{r}";
+                Model.CrData[dst] = Model.CrData.TryGetValue(src, out var v) ? v : string.Empty;
+            }
+        }
+        // Remove last
+        foreach (var col in new[] { "C218832", "C218833", "C218834" })
+            Model.CrData.Remove($"{col}_r{Model.CrRows}");
+        Model.CrRows = Math.Max(0, Model.CrRows - 1);
+        AutoSave();
+    }
+
+    // ── Amendment rows ────────────────────────────────────────────
+    private void AddAmendRow()
+    {
+        Model.AmendRows++;
+        var r = Model.AmendRows;
+        Model.AmendData[$"C218695e_r{r}"] = string.Empty;
+        _reinitCtxMenus = true;
+        AutoSave();
+    }
+
+    private void DeleteAmendRow(int row)
+    {
+        // Shift amendment rows down
+        for (int r = row; r < Model.AmendRows; r++)
+        {
+            var next = r + 1;
+            foreach (var col in new[] { "C218477", "C132352", "C218695", "C218695e" })
+            {
+                var src = $"{col}_r{next}";
+                var dst = $"{col}_r{r}";
+                Model.AmendData[dst] = Model.AmendData.TryGetValue(src, out var v) ? v : string.Empty;
+            }
+            // Shift change data
+            var chgCount = Model.ChgRows.TryGetValue(next.ToString(), out var c) ? c : 0;
+            Model.ChgRows[r.ToString()] = chgCount;
+            for (int cr = 1; cr <= chgCount; cr++)
+            {
+                foreach (var col in new[] { "C218483", "C181233", "C218479" })
+                {
+                    var src = $"{col}_a{next}_r{cr}";
+                    var dst = $"{col}_a{r}_r{cr}";
+                    Model.ChgData[dst] = Model.ChgData.TryGetValue(src, out var v) ? v : string.Empty;
+                }
+            }
+        }
+        // Remove last
+        var last = Model.AmendRows;
+        foreach (var col in new[] { "C218477", "C132352", "C218695", "C218695e" })
+            Model.AmendData.Remove($"{col}_r{last}");
+        var lastChg = Model.ChgRows.TryGetValue(last.ToString(), out var lc) ? lc : 0;
+        for (int cr = 1; cr <= lastChg; cr++)
+            foreach (var col in new[] { "C218483", "C181233", "C218479" })
+                Model.ChgData.Remove($"{col}_a{last}_r{cr}");
+        Model.ChgRows.Remove(last.ToString());
+
+        Model.AmendRows = Math.Max(0, Model.AmendRows - 1);
+        AutoSave();
+    }
+
+    // ── Change description rows ───────────────────────────────────
+    private void AddChgRow(int amendIdx)
+    {
+        var key = amendIdx.ToString();
+        var count = Model.ChgRows.TryGetValue(key, out var c) ? c : 0;
+        count++;
+        Model.ChgRows[key] = count;
+        _reinitCtxMenus = true;
+        AutoSave();
+    }
+
+    private void DeleteChgRow(int amendIdx, int row)
+    {
+        var key = amendIdx.ToString();
+        var count = Model.ChgRows.TryGetValue(key, out var c) ? c : 0;
+        for (int r = row; r < count; r++)
+        {
+            foreach (var col in new[] { "C218483", "C181233", "C218479" })
+            {
+                var src = $"{col}_a{amendIdx}_r{r + 1}";
+                var dst = $"{col}_a{amendIdx}_r{r}";
+                Model.ChgData[dst] = Model.ChgData.TryGetValue(src, out var v) ? v : string.Empty;
+            }
+        }
+        foreach (var col in new[] { "C218483", "C181233", "C218479" })
+            Model.ChgData.Remove($"{col}_a{amendIdx}_r{count}");
+        Model.ChgRows[key] = Math.Max(0, count - 1);
+        AutoSave();
+    }
+
+    // ── Amendment import ──────────────────────────────────────────
+    private void OpenImportPicker()
+    {
+        ImportTargetRow = 1;
+        ShowAmendPicker = true;
+    }
+
+    private void CloseImportPicker() => ShowAmendPicker = false;
+
+    private void GoToAmendments()
+    {
+        ShowAmendPicker = false;
+        Nav.NavigateTo("/amendments");
+    }
+
+    private void ApplyImport(AmendmentRecord rec)
+    {
+        var r = ImportTargetRow;
+        if (r < 1 || r > Model.AmendRows) { ShowAmendPicker = false; return; }
+
+        // Copy identifier, approval date (C93813 = Version Date in amendment), enrollment count
+        Model.AmendData[$"C218477_r{r}"]  = rec.C218477  ?? string.Empty;
+        Model.AmendData[$"C132352_r{r}"]  = rec.C93813   ?? string.Empty;
+        Model.AmendData[$"C218695_r{r}"]  = rec.C218478  ?? string.Empty;  // approx enrolled
+        Model.AmendData[$"C218695e_r{r}"] = rec.C218695  ?? string.Empty;  // enrollment scope
+
+        // Copy change rows
+        var chgCount = rec.ChgRows;
+        Model.ChgRows[r.ToString()] = chgCount;
+        for (int cr = 1; cr <= chgCount; cr++)
+        {
+            Model.ChgData[$"C218483_a{r}_r{cr}"] = rec.ChgData.TryGetValue($"C218483_r{cr}", out var desc)  ? desc  : string.Empty;
+            Model.ChgData[$"C181233_a{r}_r{cr}"] = rec.ChgData.TryGetValue($"C181233_r{cr}", out var rat)   ? rat   : string.Empty;
+            Model.ChgData[$"C218479_a{r}_r{cr}"] = rec.ChgData.TryGetValue($"C218479_r{cr}", out var sec)   ? sec   : string.Empty;
+        }
+
+        ShowAmendPicker = false;
+        _reinitCtxMenus = true;
+        AutoSave();
+        SetStatus($"✓ Imported '{rec.Name}'");
+    }
+
+    // ── Persistence ───────────────────────────────────────────────
+    private void AutoSave()
+    {
+        _ = JS.InvokeVoidAsync("localStorage.setItem", "s12data", DataSvc.ToJson(Model));
+    }
+
+    // ── Clear ─────────────────────────────────────────────────────
+    private void ClearAll()
+    {
+        Model          = new Section12Model();
+        ShowValidation = false;
+        ErrorMessage   = string.Empty;
+        _ = JS.InvokeVoidAsync("localStorage.removeItem", "s12data");
+        SetStatus("Cleared");
+    }
+
+    // ── Load Sample ───────────────────────────────────────────────
+    private void LoadSample()
+    {
+        var sample = DataSvc.LoadSample();
+        if (sample != null)
+        {
+            Model          = sample;
+            ShowValidation = false;
+            _reinitCtxMenus = true;
+            AutoSave();
+            SetStatus("Sample data loaded");
+        }
+        else
+        {
+            ErrorMessage = "Could not load sample data.";
+        }
+    }
+
+    // ── Validation ────────────────────────────────────────────────
+    private bool HasRequiredEmpty() =>
+        string.IsNullOrWhiteSpace(Model.C25294);
+
+    private int RequiredEmptyCount() =>
+        string.IsNullOrWhiteSpace(Model.C25294) ? 1 : 0;
+
+    // ── Save dialog ───────────────────────────────────────────────
+    private void OpenSaveDialog()
+    {
+        ShowValidation = true;
+        if (HasRequiredEmpty())
+        {
+            ReqDialogMsg  = $"{RequiredEmptyCount()} required field(s) are empty. Do you still want to save?";
+            PendingAction = "file";
+            ShowReqDialog = true;
+            return;
+        }
+        SaveFileName   = "section12_data_" + DateTime.Now.ToString("yyyy-MM-dd");
+        ShowSaveDialog = true;
+    }
+
+    private void CloseSaveDialog() => ShowSaveDialog = false;
+    private void CloseReqDialog()  { ShowReqDialog = false; PendingAction = null; }
+
+    private void ForceConfirm()
+    {
+        ShowReqDialog = false;
+        SaveFileName  = "section12_data_" + DateTime.Now.ToString("yyyy-MM-dd");
+        ShowSaveDialog = true;
+        PendingAction = null;
+    }
+
+    private async Task DoSaveToFile()
+    {
+        ShowSaveDialog = false;
+        if (SaveFormat == "fhir-pipeline")
+        {
+            var fshContent = DataSvc.ToFsh(Model);
+            var baseName   = SaveFileName.Trim().Length > 0 ? SaveFileName.Trim() : "section12_data";
+            await _pipeline.RunAsync(baseName + ".fsh", fshContent);
+            SetStatus("✓ FHIR pipeline complete");
+            return;
+        }
+        var (content, mime, ext) = SaveFormat switch
+        {
+            "csv"  => (DataSvc.ToCsv(Model),       "text/csv",         ".csv"),
+            "txt"  => (DataSvc.ToPlainText(Model),  "text/plain",       ".txt"),
+            "fsh"  => (DataSvc.ToFsh(Model),        "text/plain",       ".fsh"),
+            _      => (DataSvc.ToJson(Model),       "application/json", ".json"),
+        };
+        var fn = (SaveFileName.Trim().Length > 0 ? SaveFileName.Trim() : "section12_data") + ext;
+        if (SaveFormat == "fsh") SushiSvc.SaveToExamples(fn, content);
+        await JS.InvokeVoidAsync("udpDownload", fn, content, mime);
+        SetStatus("⬇ Downloaded " + fn);
+    }
+
+    // ── Load from file ────────────────────────────────────────────
+    private async Task OpenLoadDialog() =>
+        await JS.InvokeVoidAsync("udpOpenFilePicker");
+
+    [JSInvokable]
+    public void ReceiveFileContent(string json)
+    {
+        var loaded = DataSvc.FromJson(json);
+        if (loaded != null)
+        {
+            Model          = loaded;
+            ShowValidation = false;
+            _reinitCtxMenus = true;
+            SetStatus("⬆ Loaded from file");
+            InvokeAsync(StateHasChanged);
+        }
+    }
+
+    // ── Context menu ──────────────────────────────────────────────
+    [JSInvokable]
+    public async Task OnContextMenuJS(string code, double x, double y)
+    {
+        var info = GetFieldInfo(code);
+        CtxFieldName    = code;
+        CtxOriginalName = info.original;
+        CtxGuidance     = info.guidance;
+        StateHasChanged();
+        await JS.InvokeVoidAsync("udpShowCtxMenu", "s12-ctx-menu", x, y);
+    }
+
+    [JSInvokable]
+    public void OnCtxMenuClosed() { }
+
+    private void CloseCtxMenu() =>
+        _ = JS.InvokeVoidAsync("udpHideCtxMenu", "s12-ctx-menu");
+
+    private (string original, string guidance) GetFieldInfo(string code)
+    {
+        // Strip row suffix for lookup
+        var bare = System.Text.RegularExpressions.Regex.Replace(code, @"_[ar]\d+.*$", "");
+        return bare switch
+        {
+            "C25294"  => ("ClinicalLaboratoryTests",          "Specify which clinical laboratory tests will be performed. Reference the Laboratory Manual for normal ranges."),
+            "C218832" => ("CountryRegionIdentifier",          "Enter the country or region identifier, e.g. 'Japan', 'EU'."),
+            "C218833" => ("CountryRegionRequirements",        "Describe any country or region-specific regulatory or procedural requirements."),
+            "C218834" => ("CountryRegionClarifications",      "Describe any protocol clarifications specific to this country or region."),
+            "C218477" => ("AmendmentIdentifier",              "Enter the amendment identifier, e.g. 'EX2010/12(a)'."),
+            "C132352" => ("SponsorApprovalDate",              "Enter the date the sponsor approved this amendment."),
+            "C218695" => ("ApproxEnrollment",                 "Enter the approximate number of participants enrolled when the sponsor approved the amendment."),
+            "C218695e"=> ("EnrollmentScopeDescription",      "Select whether enrollment count applies globally or locally."),
+            "C218836" => ("AlternateLocation",                "If the Overview of Changes is not provided in this section, specify where it can be found."),
+            "C218483" => ("DescriptionOfChange",              "Describe the change made in this amendment."),
+            "C181233" => ("RationaleForChange",               "Provide a brief rationale for why this change was made."),
+            "C218479" => ("SectionAndName",                   "Select the section number and name where the change was made."),
+            _         => (code,                               "Enter field value."),
+        };
+    }
+
+    // ── Init ──────────────────────────────────────────────────────
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+        {
+            if (_reinitCtxMenus)
+            {
+                _reinitCtxMenus = false;
+                await JS.InvokeVoidAsync("udpInitContextMenus", "s12-ctx-menu");
+            }
+            return;
+        }
+        try
+        {
+            _objRef = DotNetObjectReference.Create(this);
+            await JS.InvokeVoidAsync("udpSetDotNetRef", _objRef);
+            await JS.InvokeVoidAsync("udpInitContextMenus", "s12-ctx-menu");
+
+            var json = await JS.InvokeAsync<string?>("localStorage.getItem", "s12data");
+            if (!string.IsNullOrEmpty(json))
+            {
+                var loaded = DataSvc.FromJson(json);
+                if (loaded != null) { Model = loaded; StateHasChanged(); }
+            }
+        }
+        catch (JSDisconnectedException) { }
+        catch (TaskCanceledException)   { }
+        catch (Exception ex) { ErrorMessage = "Init error: " + ex.Message; StateHasChanged(); }
+    }
+
+    // ── Status ────────────────────────────────────────────────────
+    private void SetStatus(string msg)
+    {
+        StatusMessage = msg;
+        _statusTimer?.Dispose();
+        _statusTimer = new System.Threading.Timer(_ =>
+        {
+            StatusMessage = string.Empty;
+            InvokeAsync(StateHasChanged);
+        }, null, 4000, System.Threading.Timeout.Infinite);
+    }
+
+    public void Dispose() { _objRef?.Dispose(); _statusTimer?.Dispose(); }
+}

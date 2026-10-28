@@ -17,11 +17,18 @@ builder.Services.AddScoped<UDP_App.Services.DataService06>();
 builder.Services.AddScoped<UDP_App.Services.DataService07>();
 builder.Services.AddScoped<UDP_App.Services.DataService08>();
 builder.Services.AddScoped<UDP_App.Services.DataService09>();
+builder.Services.AddScoped<UDP_App.Services.DataService04>();
+builder.Services.AddScoped<UDP_App.Services.DataService10>();
+builder.Services.AddScoped<UDP_App.Services.DataService11>();
+builder.Services.AddScoped<UDP_App.Services.DataService12>();
+builder.Services.AddScoped<UDP_App.Services.DataService13>();
+builder.Services.AddScoped<UDP_App.Services.DataService14>();
 builder.Services.AddSingleton<UDP_App.Services.SettingsService>();
 builder.Services.AddSingleton<UDP_App.Services.TerminologyService>();
 builder.Services.AddScoped<UDP_App.Services.FhirBrowseService>();
 builder.Services.AddScoped<UDP_App.Services.BuildService>();
 builder.Services.AddScoped<UDP_App.Services.FhirPipelineService>();
+builder.Services.AddScoped<UDP_App.Services.AmendmentStore>();
 builder.Services.AddSingleton<UDP_App.Services.FhirQuantityService>();
 
 var app = builder.Build();
