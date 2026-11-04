@@ -264,8 +264,8 @@
         <button class="ctx-close" @onclick="CloseCtxMenu">✕</button>
     </div>
     <div class="ctx-body">
-        <div class="ctx-row"><label>Field name:</label><span>@CtxFieldName</span></div>
-        <div class="ctx-row"><label>Original name:</label><span>@CtxOriginalName</span></div>
+        <div class="ctx-row"><label>M11 Field Name:</label><span>@CtxFieldName</span></div>
+        <div class="ctx-row"><label>M11 Name:</label><span>@CtxOriginalName</span></div>
         <hr class="ctx-div" />
         <div class="ctx-guide"><strong>Guidance:</strong><br />@CtxGuidance</div>
     </div>
@@ -391,7 +391,7 @@
     public async Task OnContextMenuJS(string code, double x, double y)
     {
         var info = GetFieldInfo(code);
-        CtxFieldName = code; CtxOriginalName = info.original; CtxGuidance = info.guidance;
+        CtxFieldName = code; CtxOriginalName = FieldTerms.For(code) is { Length: > 0 } t ? t : info.original; CtxGuidance = info.guidance;
         StateHasChanged();
         await JS.InvokeVoidAsync("udpShowCtxMenu", "s4-ctx-menu", x, y);
     }
@@ -400,25 +400,25 @@
 
     private (string original, string guidance) GetFieldInfo(string code) => code switch
     {
-        "C147139" => ("TrialDesignDescription",       "Describe the overall trial design and intervention model (e.g. parallel group, cross-over)."),
-        "C218726" => ("TrialDurationDescription",      "Describe the total duration of the trial and each of its phases."),
-        "C219658" => ("AssignmentMethodDescription",   "Describe how participants are assigned to trial interventions, including any randomisation method."),
-        "C218727" => ("BlindingDescription",           "Describe the level of blinding (e.g. open-label, single-blind, double-blind) and method used."),
-        "C218728" => ("AdditionalDesignDescription",   "Provide any additional description of the trial design not covered above."),
-        "C218729" => ("StakeholderInputDescription",   "Describe any input from patients, caregivers, or other stakeholders into the trial design."),
-        "C142705" => ("OverallRationale",              "Enter the overall rationale for the trial design, OR use sections 4.2.1–4.2.6 individually."),
-        "C218730" => ("EstimandRationale",             "Explain the rationale for the choice of estimand(s)."),
-        "C215629" => ("InterventionModelRationale",    "Explain the rationale for the choice of intervention model."),
-        "C218731" => ("ControlTypeRationale",          "Explain the rationale for the choice of control type (e.g. placebo, active comparator)."),
-        "C218732" => ("TrialDurationRationale",        "Explain the rationale for the trial duration."),
-        "C218733" => ("AdaptiveDesignRationale",       "Explain the rationale for any adaptive or novel design elements."),
-        "C218734" => ("InterimAnalysisRationale",      "Explain the rationale for any planned interim analyses."),
-        "C218735" => ("OtherDesignRationale",          "Explain the rationale for any other trial design aspects not covered above."),
-        "C142698" => ("TrialStoppingRules",            "Describe the criteria and rules under which the trial will be stopped prematurely (required)."),
-        "C218736" => ("StartOfTrial",                  "Define what constitutes the start of the trial, e.g. FPFV date (required)."),
-        "C218737" => ("EndOfTrial",                    "Define what constitutes the end of the trial, e.g. LPLV date (required)."),
-        "C218738" => ("PostTrialAccess",               "Describe what access, if any, participants will have to trial interventions after the trial ends (required)."),
-        _         => (code, "Enter field value."),
+        "C147139" => ("TrialDesignDescription",        FieldGuidance.For("C147139")),
+        "C218726" => ("TrialDurationDescription",      FieldGuidance.For("C218726")),
+        "C219658" => ("AssignmentMethodDescription",   FieldGuidance.For("C219658")),
+        "C218727" => ("BlindingDescription",           FieldGuidance.For("C218727")),
+        "C218728" => ("AdditionalDesignDescription",   FieldGuidance.For("C218728")),
+        "C218729" => ("StakeholderInputDescription",   FieldGuidance.For("C218729")),
+        "C142705" => ("OverallRationale",              FieldGuidance.For("C142705")),
+        "C218730" => ("EstimandRationale",             FieldGuidance.For("C218730")),
+        "C215629" => ("InterventionModelRationale",    FieldGuidance.For("C215629")),
+        "C218731" => ("ControlTypeRationale",          FieldGuidance.For("C218731")),
+        "C218732" => ("TrialDurationRationale",        FieldGuidance.For("C218732")),
+        "C218733" => ("AdaptiveDesignRationale",       FieldGuidance.For("C218733")),
+        "C218734" => ("InterimAnalysisRationale",      FieldGuidance.For("C218734")),
+        "C218735" => ("OtherDesignRationale",          FieldGuidance.For("C218735")),
+        "C142698" => ("TrialStoppingRules",            FieldGuidance.For("C142698")),
+        "C218736" => ("StartOfTrial",                  FieldGuidance.For("C218736")),
+        "C218737" => ("EndOfTrial",                    FieldGuidance.For("C218737")),
+        "C218738" => ("PostTrialAccess",               FieldGuidance.For("C218738")),
+        _         => (code, FieldGuidance.For(code)),
     };
 
     protected override async Task OnAfterRenderAsync(bool firstRender)

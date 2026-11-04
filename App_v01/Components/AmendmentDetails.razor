@@ -3,6 +3,8 @@
 @using UDP_App.Models
 @using UDP_App.Services
 @inject AmendmentStore Store
+@inject IJSRuntime JS
+@inject TerminologyService TermSvc
 @implements IDisposable
 
 <PageTitle>Amendment Details</PageTitle>
@@ -62,6 +64,16 @@
     .name-edit { display:inline-block; background:transparent; border:none; border-bottom:1.5px solid #9ab; font-size:13pt; font-weight:700; font-family:'Times New Roman',Times,serif; color:#1f3864; padding:0 4px; outline:none; width:340px; }
     .name-edit:focus { border-bottom-color:#1f3864; background:#f0f4ff; }
     .sbar { position:fixed; bottom:0; left:0; right:0; background:#1f3864; color:#fff; font-size:9pt; padding:5px 18px; display:flex; justify-content:space-between; align-items:center; z-index:100; }
+    /* ── Context menu ──────────────────────────────────────────────── */
+    .ctx-menu { display:none; position:fixed; background:#fff; border:1px solid #ccc; border-radius:4px; box-shadow:0 4px 16px rgba(0,0,0,0.18); z-index:1000; min-width:320px; max-width:420px; font-family:'Calibri',Arial,sans-serif; font-size:10pt; }
+    .ctx-hdr  { background:#1f3864; color:#fff; padding:8px 12px; font-weight:700; font-size:10pt; border-radius:4px 4px 0 0; display:flex; justify-content:space-between; align-items:center; }
+    .ctx-close { background:none; border:none; color:#fff; font-size:14px; cursor:pointer; }
+    .ctx-body { padding:10px 12px; }
+    .ctx-row  { display:flex; gap:8px; margin-bottom:6px; font-size:9.5pt; }
+    .ctx-row label { font-weight:700; white-space:nowrap; min-width:100px; color:#333; }
+    .ctx-row span  { color:#555; word-break:break-all; }
+    .ctx-div  { border:none; border-top:1px solid #e0e0e0; margin:8px 0; }
+    .ctx-guide { font-size:9.5pt; color:#444; line-height:1.5; }
 </style>
 
 <div class="amend-layout">
@@ -117,13 +129,10 @@
                     <tr>
                         <td class="lbl cond">Amendment Status:</td>
                         <td><div class="type-badge">conditional picklist</div>
-                            <select data-ctx="C218694" class="fb-sel"
-                                value="@Current.C218694" @onchange="@(e => SetAndSave(v => Current.C218694 = v, e.Value?.ToString()))">
-                                <option value="">-- select --</option>
-                                <option value='$NCIT#C218485 "This protocol has not been amended."'>This protocol has not been amended.</option>
-                                <option value='$NCIT#C218486 "This is the first protocol amendment."'>This is the first protocol amendment.</option>
-                                <option value='$NCIT#C218487 "This protocol has been amended previously. Details of prior amendments are presented in Section 12.3 Prior Protocol Amendment(s)."'>This protocol has been amended previously. Details of prior amendments are presented in Section 12.3 Prior Protocol Amendment(s).</option>
-                            </select></td>
+                            <PicklistSelect ValueSetId="m11-amendment-status-vs" CssClass="fb-sel"
+                                DataCtx="C218694"
+                                Value="@Current.C218694"
+                                ValueChanged="@(v => SetAndSave(x => Current.C218694 = x, v))" /></td>
                     </tr>
                 </table>
 
@@ -154,35 +163,23 @@
                     <tr>
                         <td class="lbl cond">Amendment Scope:</td>
                         <td><div class="type-badge">conditional picklist</div>
-                            <select data-ctx="C218673" class="fb-sel"
-                                value="@Current.C218673" @onchange="@(e => SetAndSave(v => Current.C218673 = v, e.Value?.ToString()))">
-                                <option value="">-- select --</option>
-                                <option value='$NCIT#C68846 "Global"'>Global</option>
-                                <option value='$NCIT#C217026 "Not Global"'>Not Global</option>
-                            </select>
+                            <PicklistSelect ValueSetId="m11-study-amendment-scope-vs" CssClass="fb-sel"
+                                DataCtx="C218673"
+                                Value="@Current.C218673"
+                                ValueChanged="@(v => SetAndSave(x => Current.C218673 = x, v))" />
                             <div style="margin-top:6px;">
                                 <div class="type-badge">Country (conditional picklist)</div>
-                                <select data-ctx="C20108" class="fb-sel"
-                                    value="@Current.C20108" @onchange="@(e => SetAndSave(v => Current.C20108 = v, e.Value?.ToString()))">
-                                    <option value="">-- select --</option>
-                                    <option value="$iso3166#GB &quot;UK&quot;">UK</option>
-                                    <option value="$iso3166#FR &quot;France&quot;">France</option>
-                                    <option value="$iso3166#DE &quot;Germany&quot;">Germany</option>
-                                    <option value="$iso3166#IN &quot;India&quot;">India</option>
-                                    <option value="$iso3166#AU &quot;Australia&quot;">Australia</option>
-                                </select>
+                                <PicklistSelect ValueSetId="udp-country-vs" CssClass="fb-sel"
+                                    DataCtx="C20108"
+                                    Value="@Current.C20108"
+                                    ValueChanged="@(v => SetAndSave(x => Current.C20108 = x, v))" />
                             </div>
                             <div style="margin-top:6px;">
                                 <div class="type-badge">Region (conditional picklist)</div>
-                                <select data-ctx="C218674" class="fb-sel"
-                                    value="@Current.C218674" @onchange="@(e => SetAndSave(v => Current.C218674 = v, e.Value?.ToString()))">
-                                    <option value="">-- select --</option>
-                                    <option value="$iso3166-2#GB-WLS &quot;Wales&quot;">Wales</option>
-                                    <option value="$iso3166-2#FR-NOR &quot;Normandy&quot;">Normandy</option>
-                                    <option value="$iso3166-2#DE-BY &quot;Bavaria&quot;">Bavaria</option>
-                                    <option value="$iso3166-2#IN-UP &quot;Uttar Pradesh&quot;">Uttar Pradesh</option>
-                                    <option value="$iso3166-2#AU-NSW &quot;New South Wales&quot;">New South Wales</option>
-                                </select>
+                                <PicklistSelect ValueSetId="udp-region-vs" CssClass="fb-sel"
+                                    DataCtx="C218674"
+                                    Value="@Current.C218674"
+                                    ValueChanged="@(v => SetAndSave(x => Current.C218674 = x, v))" />
                             </div>
                             <div style="margin-top:6px;">
                                 <div class="type-badge">Site Identifier (conditional string)</div>
@@ -202,13 +199,10 @@
                                 value="@Current.C218478"
                                 @oninput="@(e => SetAndSave(v => Current.C218478 = v, e.Value?.ToString()))" />
                             <div class="type-badge" style="margin-top:6px;">Amendment Scope Enrollment Definition (conditional picklist)</div>
-                            <select data-ctx="C218695" class="fb-sel"
-                                value="@Current.C218695" @onchange="@(e => SetAndSave(v => Current.C218695 = v, e.Value?.ToString()))">
-                                <option value="">-- select --</option>
-                                <option value='$NCIT#C68846 "Globally"'>Globally</option>
-                                <option value='$NCIT#C41065 "Locally"'>Locally</option>
-                                <option value='$NCIT#C218489 "By Cohort"'>By Cohort</option>
-                            </select></td>
+                            <PicklistSelect ValueSetId="m11-amendment-scope-enrollment-vs" CssClass="fb-sel"
+                                DataCtx="C218695"
+                                Value="@Current.C218695"
+                                ValueChanged="@(v => SetAndSave(x => Current.C218695 = x, v))" /></td>
                     </tr>
                     <tr>
                         <td class="lbl cond">Primary Reason for Amendment:</td>
@@ -243,12 +237,10 @@
                         <td class="lbl cond">Substantial Impact on Safety or Rights?</td>
                         <td>
                             <div class="type-badge">conditional picklist</div>
-                            <select data-ctx="C218698" class="fb-sel"
-                                value="@Current.C218698" @onchange="@(e => SetAndSave(v => Current.C218698 = v, e.Value?.ToString()))">
-                                <option value="">-- select --</option>
-                                <option value='$NCIT#C49488 "Yes"'>Yes</option>
-                                <option value='$NCIT#C49487 "No"'>No</option>
-                            </select>
+                            <PicklistSelect ValueSetId="m11-yes-no-vs" CssClass="fb-sel"
+                                DataCtx="C218698"
+                                Value="@Current.C218698"
+                                ValueChanged="@(v => SetAndSave(x => Current.C218698 = x, v))" />
                             <div class="type-badge" style="margin-top:6px;">If yes, briefly explain (conditional string)</div>
                             <textarea data-ctx="C218699" class="fb" rows="2" placeholder="If yes, briefly explain"
                                 value="@Current.C218699"
@@ -258,12 +250,10 @@
                         <td class="lbl cond">Substantial Impact on Reliability and Robustness?</td>
                         <td>
                             <div class="type-badge">conditional picklist</div>
-                            <select data-ctx="C218700" class="fb-sel"
-                                value="@Current.C218700" @onchange="@(e => SetAndSave(v => Current.C218700 = v, e.Value?.ToString()))">
-                                <option value="">-- select --</option>
-                                <option value='$NCIT#C49488 "Yes"'>Yes</option>
-                                <option value='$NCIT#C49487 "No"'>No</option>
-                            </select>
+                            <PicklistSelect ValueSetId="m11-yes-no-vs" CssClass="fb-sel"
+                                DataCtx="C218700"
+                                Value="@Current.C218700"
+                                ValueChanged="@(v => SetAndSave(x => Current.C218700 = x, v))" />
                             <div class="type-badge" style="margin-top:6px;">If yes, briefly explain (conditional string)</div>
                             <textarea data-ctx="C218701" class="fb" rows="2" placeholder="If yes, briefly explain"
                                 value="@Current.C218701"
@@ -294,27 +284,10 @@
                                     value="@GetChg($"C181233_r{r}")"
                                     @oninput="@(e => SetChgAndSave($"C181233_r{r}", e.Value?.ToString()))"></textarea></td>
                                 <td>
-                                    <select data-ctx="C218479" class="fb-sel"
-                                        value="@GetChg($"C218479_r{r}")"
-                                        @onchange="@(e => SetChgAndSave($"C218479_r{r}", e.Value?.ToString()))">
-                                        <option value="">-- select --</option>
-                                        <option value='$NCIT#C217342 "Section 1"'>Section 1</option>
-                                        <option value='$NCIT#C217343 "Section 2"'>Section 2</option>
-                                        <option value='$NCIT#C217344 "Section 3"'>Section 3</option>
-                                        <option value='$NCIT#C217345 "Section 4"'>Section 4</option>
-                                        <option value='$NCIT#C217346 "Section 5"'>Section 5</option>
-                                        <option value='$NCIT#C217347 "Section 6"'>Section 6</option>
-                                        <option value='$NCIT#C217348 "Section 7"'>Section 7</option>
-                                        <option value='$NCIT#C217349 "Section 8"'>Section 8</option>
-                                        <option value='$NCIT#C217350 "Section 9"'>Section 9</option>
-                                        <option value='$NCIT#C217351 "Section 10"'>Section 10</option>
-                                        <option value='$NCIT#C217352 "Section 11"'>Section 11</option>
-                                        <option value='$NCIT#C217353 "Section 12"'>Section 12</option>
-                                        <option value='$NCIT#C217354 "Section 13"'>Section 13</option>
-                                        <option value='$NCIT#C217355 "Section 14"'>Section 14</option>
-                                        <option value='$NCIT#C217356 "Section Title Page"'>Section Title Page</option>
-                                        <option value='$NCIT#C217357 "Section Amendment Details"'>Section Amendment Details</option>
-                                    </select>
+                                    <PicklistSelect ValueSetId="m11-protocol-section-vs" CssClass="fb-sel"
+                                        DataCtx="C218479"
+                                        Value="@GetChg($"C218479_r{r}")"
+                                        ValueChanged="@(v => SetChgAndSave($"C218479_r{r}", v))" />
                                 </td>
                             </tr>
                         }
@@ -328,6 +301,21 @@
                 </div>
             </div>
         }
+    </div>
+</div>
+
+<div id="ad-ctx-menu" class="ctx-menu">
+    <div class="ctx-hdr"><span>Field Information</span><button class="ctx-close" @onclick="CloseCtxMenu">✕</button></div>
+    <div class="ctx-body">
+        <div class="ctx-row"><label>M11 Field Name:</label><span>@_ctxFieldName</span></div>
+        <div class="ctx-row"><label>M11 Name:</label><span>@_ctxM11Name</span></div>
+        @if (!string.IsNullOrEmpty(_ctxValueSetName))
+        {
+            <div class="ctx-row"><label>M11 code set:</label><span>@_ctxValueSetCCode</span></div>
+            <div class="ctx-row"><label>Value Set:</label><span>@_ctxValueSetName</span></div>
+        }
+        <hr class="ctx-div" />
+        <div class="ctx-guide"><strong>Guidance:</strong><br />@_ctxGuidance</div>
     </div>
 </div>
 
@@ -345,6 +333,27 @@
     private int _nextChgRow = 2;
     private string _status = string.Empty;
     private System.Threading.Timer? _statusTimer;
+    private DotNetObjectReference<AmendmentDetails>? _objRef;
+    private string _ctxFieldName     = string.Empty;
+    private string _ctxM11Name       = string.Empty;
+    private string _ctxGuidance      = string.Empty;
+    private string _ctxValueSetId    = string.Empty;
+    private string _ctxValueSetName  = string.Empty;
+    private string _ctxValueSetCCode = string.Empty;
+
+    private static readonly Dictionary<string, string> FieldValueSets = new()
+    {
+        ["C218694"] = "m11-amendment-status-vs",  // Amendment Status
+        ["C218673"] = "m11-study-amendment-scope-vs",       // Amendment Scope
+        ["C20108"]  = "udp-country-vs",             // Country
+        ["C218674"] = "udp-region-vs",              // Region
+        ["C218695"] = "m11-amendment-scope-enrollment-vs",   // Enrollment Scope
+        ["C218696"] = "m11-study-amendment-reason-vs",   // Primary Reason for Amendment
+        ["C218697"] = "m11-study-amendment-reason-vs",   // Secondary Reason for Amendment
+        ["C218698"] = "m11-yes-no-vs",                   // Substantial Impact on Safety or Rights
+        ["C218700"] = "m11-yes-no-vs",                   // Substantial Impact on Reliability
+        ["C218479"] = "m11-protocol-section-vs",   // Protocol Section (change log)
+    };
 
     // ── Computed helpers ──────────────────────────────────────────────
 
@@ -506,7 +515,44 @@
         }, null, 3000, System.Threading.Timeout.Infinite);
     }
 
-    public void Dispose() => _statusTimer?.Dispose();
+    // ── Context menu ──────────────────────────────────────────────────
+
+    [JSInvokable]
+    public async Task OnContextMenuJS(string fieldId, double x, double y)
+    {
+        _ctxFieldName = fieldId;
+        _ctxM11Name   = FieldTerms.For(fieldId);
+        _ctxGuidance  = FieldGuidance.For(fieldId);
+        var baseId       = System.Text.RegularExpressions.Regex.Replace(fieldId, @"_r\d+$", "");
+        _ctxValueSetId    = FieldValueSets.TryGetValue(baseId, out var vsId) ? vsId : string.Empty;
+        var vs            = string.IsNullOrEmpty(_ctxValueSetId) ? null : TermSvc.Get(_ctxValueSetId);
+        _ctxValueSetCCode = vs?.CCode ?? string.Empty;
+        _ctxValueSetName  = vs == null ? string.Empty : $"{vs.Name}  {vs.Id}";
+        StateHasChanged();
+        await JS.InvokeVoidAsync("udpShowCtxMenu", "ad-ctx-menu", x, y);
+    }
+
+    [JSInvokable] public void OnCtxMenuClosed() { }
+
+    private void CloseCtxMenu() => _ = JS.InvokeVoidAsync("udpHideCtxMenu", "ad-ctx-menu");
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        try
+        {
+            if (firstRender)
+            {
+                _objRef = DotNetObjectReference.Create(this);
+                await JS.InvokeVoidAsync("udpSetDotNetRef", _objRef, "ad-ctx-menu");
+            }
+            // Re-attach on every render: the form fields only appear after an amendment
+            // is selected, so the first-render pass finds nothing to hook.
+            await JS.InvokeVoidAsync("udpInitContextMenus", "ad-ctx-menu");
+        }
+        catch (JSDisconnectedException) { } catch (TaskCanceledException) { }
+    }
+
+    public void Dispose() { _objRef?.Dispose(); _statusTimer?.Dispose(); }
 
     // ── Render fragments ──────────────────────────────────────────────
 

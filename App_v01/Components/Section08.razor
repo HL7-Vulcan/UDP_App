@@ -105,8 +105,8 @@
 <div id="s8-ctx-menu" class="ctx-menu">
     <div class="ctx-hdr"><span>Field Information</span><button class="ctx-close" @onclick="CloseCtxMenu">✕</button></div>
     <div class="ctx-body">
-        <div class="ctx-row"><label>Field name:</label><span>@CtxFieldName</span></div>
-        <div class="ctx-row"><label>Original name:</label><span>@CtxOriginalName</span></div>
+        <div class="ctx-row"><label>M11 Field Name:</label><span>@CtxFieldName</span></div>
+        <div class="ctx-row"><label>M11 Name:</label><span>@CtxOriginalName</span></div>
         <hr class="ctx-div" />
         <div class="ctx-guide"><strong>Guidance:</strong><br />@CtxGuidance</div>
     </div>
@@ -257,7 +257,7 @@
     }
     [JSInvokable] public async Task OnContextMenuJS(string code, double x, double y)
     {
-        CtxFieldName = code; CtxOriginalName = "guidance text goes here"; CtxGuidance = "guidance text goes here";
+        CtxFieldName = code; CtxOriginalName = FieldTerms.For(code); CtxGuidance = FieldGuidance.For(code);
         StateHasChanged(); await JS.InvokeVoidAsync("udpShowCtxMenu", "s8-ctx-menu", x, y);
     }
     [JSInvokable] public void OnCtxMenuClosed() { }

@@ -8,6 +8,7 @@
 @inject AmendmentStore AmendStore
 @inject NavigationManager Nav
 @inject IJSRuntime JS
+@inject TerminologyService TermSvc
 @implements IDisposable
 
 <PageTitle>Title Page – Data Entry</PageTitle>
@@ -124,71 +125,64 @@
         <tr>
             <td class="lbl req">Original Protocol:</td>
             <td><div class="type-badge">required picklist — C217046</div>
-                <select data-ctx="C218672" class="@SelReqClass(Model.C218672)"
-                    value="@Model.C218672" @onchange="OnOriginalProtocolChanged">
-                    <option value="">-- select --</option>
-                    <option value='$NCIT#C49488 "Yes"'>Yes</option>
-                    <option value='$NCIT#C49487 "No"'>No</option>
-                </select></td>
+                <PicklistSelect ValueSetId="m11-yes-no-vs" CssClass="@SelReqClass(Model.C218672)"
+                    DataCtx="C218672" Value="@Model.C218672"
+                    ValueChanged="@(v => OnOriginalProtocolChanged(new ChangeEventArgs { Value = v }))" /></td>
         </tr>
         <tr>
             <td class="lbl">Version Number:</td>
             <td><div class="type-badge">@(AmendFromStore ? "read-only" : "optional string")</div>
+                <div data-ctx-wrap="C181232" style="position:relative">
                 <input data-ctx="C181232" class="fb @(AmendFromStore ? "ro-inp" : "")" type="text" placeholder="Enter Version Number"
                     @bind="Model.C181232" @bind:event="oninput" disabled="@AmendFromStore" />
+                </div>
             </td>
         </tr>
         <tr>
             <td class="lbl">Version Date:</td>
             <td><div class="type-badge">@(AmendFromStore ? "read-only" : "optional date")</div>
+                <div data-ctx-wrap="C93813" style="position:relative">
                 <input data-ctx="C93813" class="fb @(AmendFromStore ? "ro-inp" : "")" type="text" placeholder="yyyy-mm-dd"
                     @bind="Model.C93813" @bind:event="oninput" disabled="@AmendFromStore" />
+                </div>
             </td>
         </tr>
         <tr class="@((IsAmendment || AmendFromStore) ? "" : "amend-inactive")">
             <td class="lbl cond">Amendment Identifier:</td>
             <td><div class="type-badge">@(AmendFromStore ? "read-only" : "conditional string")</div>
+                <div data-ctx-wrap="C218477" style="position:relative">
                 <input data-ctx="C218477" class="fb @(AmendFromStore ? "ro-inp" : "")" type="text" placeholder="Enter Amendment Identifier"
                     @bind="Model.C218477" @bind:event="oninput" disabled="@(AmendFromStore || !IsAmendment)" />
+                </div>
             </td>
         </tr>
         <tr class="@((IsAmendment || AmendFromStore) ? "" : "amend-inactive")">
             <td class="lbl cond">Amendment Scope:</td>
             <td><div class="type-badge">@(AmendFromStore ? "read-only" : "conditional picklist")</div>
-                <select data-ctx="C218673" class="fb-sel @(AmendFromStore ? "ro-sel" : "")"
-                    value="@Model.C218673" @onchange="@(e => { Model.C218673 = e.Value?.ToString(); })" disabled="@AmendFromStore">
-                    <option value="">-- select --</option>
-                    <option value='$NCIT#C68846 "Global"'>Global</option>
-                    <option value='$NCIT#C217026 "Not Global"'>Not Global</option>
-                </select>
+                <div data-ctx-wrap="C218673" style="position:relative">
+                <PicklistSelect ValueSetId="m11-study-amendment-scope-vs" CssClass="@("fb-sel" + (AmendFromStore ? " ro-sel" : ""))"
+                    DataCtx="C218673" @bind-Value="Model.C218673" />
+                </div>
                 <div style="margin-top:6px;">
                     <div class="type-badge">Country (@(AmendFromStore ? "read-only" : "conditional picklist"))</div>
-                    <select data-ctx="C20108" class="fb-sel @(AmendFromStore ? "ro-sel" : "")"
-                        value="@Model.C20108" @onchange="@(e => { Model.C20108 = e.Value?.ToString(); })" disabled="@AmendFromStore">
-                        <option value="">-- select --</option>
-                        <option value="$iso3166#GB \"UK\"">UK</option>
-                        <option value="$iso3166#FR \"France\"">France</option>
-                        <option value="$iso3166#DE \"Germany\"">Germany</option>
-                        <option value="$iso3166#IN \"India\"">India</option>
-                        <option value="$iso3166#AU \"Australia\"">Australia</option>
-                    </select>
+                    <div data-ctx-wrap="C20108" style="position:relative">
+                    <PicklistSelect ValueSetId="udp-country-vs" CssClass="@("fb-sel" + (AmendFromStore ? " ro-sel" : ""))"
+                        DataCtx="C20108" @bind-Value="Model.C20108" />
+                    </div>
                 </div>
                 <div style="margin-top:6px;">
                     <div class="type-badge">Region (@(AmendFromStore ? "read-only" : "conditional picklist"))</div>
-                    <select data-ctx="C218674" class="fb-sel @(AmendFromStore ? "ro-sel" : "")"
-                        value="@Model.C218674" @onchange="@(e => { Model.C218674 = e.Value?.ToString(); })" disabled="@AmendFromStore">
-                        <option value="">-- select --</option>
-                        <option value="$iso3166-2#GB-WLS \"Wales\"">Wales</option>
-                        <option value="$iso3166-2#FR-NOR \"Normandy\"">Normandy</option>
-                        <option value="$iso3166-2#DE-BY \"Bavaria\"">Bavaria</option>
-                        <option value="$iso3166-2#IN-UP \"Uttar Pradesh\"">Uttar Pradesh</option>
-                        <option value="$iso3166-2#AU-NSW \"New South Wales\"">New South Wales</option>
-                    </select>
+                    <div data-ctx-wrap="C218674" style="position:relative">
+                    <PicklistSelect ValueSetId="udp-region-vs" CssClass="@("fb-sel" + (AmendFromStore ? " ro-sel" : ""))"
+                        DataCtx="C218674" @bind-Value="Model.C218674" />
+                    </div>
                 </div>
                 <div style="margin-top:6px;">
                     <div class="type-badge">Site Identifier (@(AmendFromStore ? "read-only" : "conditional string"))</div>
+                    <div data-ctx-wrap="C83081" style="position:relative">
                     <input data-ctx="C83081" class="fb @(AmendFromStore ? "ro-inp" : "")" type="text" placeholder="Enter Site Identifier"
                         @bind="Model.C83081" @bind:event="oninput" disabled="@AmendFromStore" />
+                    </div>
                 </div>
             </td>
         </tr>
@@ -211,21 +205,8 @@
         <tr>
             <td class="lbl req">Trial Phase</td>
             <td><div class="type-badge">required picklist</div>
-                <select data-ctx="C48281" class="@SelReqClass(Model.C48281)"
-                    value="@Model.C48281" @onchange="@(e => { Model.C48281 = e.Value?.ToString(); })">
-                    <option value="">-- select --</option>
-                    <option value='$NCIT#C54721 "Early Phase 1"'>Early Phase 1</option>
-                    <option value='$NCIT#C15600 "Phase 1"'>Phase 1</option>
-                    <option value='$NCIT#C15693 "Phase 1/Phase 2"'>Phase 1/Phase 2</option>
-                    <option value='$NCIT#C198366 "Phase 1/Phase 2/Phase 3"'>Phase 1/Phase 2/Phase 3</option>
-                    <option value='$NCIT#C198367 "Phase 1/Phase 3"'>Phase 1/Phase 3</option>
-                    <option value='$NCIT#C15601 "Phase 2"'>Phase 2</option>
-                    <option value='$NCIT#C15694 "Phase 2/Phase 3"'>Phase 2/Phase 3</option>
-                    <option value='$NCIT#C217024 "Phase 2/Phase 3/Phase 4"'>Phase 2/Phase 3/Phase 4</option>
-                    <option value='$NCIT#C15602 "Phase 3"'>Phase 3</option>
-                    <option value='$NCIT#C217025 "Phase 3/Phase 4"'>Phase 3/Phase 4</option>
-                    <option value='$NCIT#C15603 "Phase 4"'>Phase 4</option>
-                </select></td>
+                <PicklistSelect ValueSetId="m11-phase-vs" CssClass="@SelReqClass(Model.C48281)"
+                    DataCtx="C48281" @bind-Value="Model.C48281" /></td>
         </tr>
         <tr>
             <td class="lbl">Short Title</td>
@@ -338,13 +319,10 @@
         <tr>
             <td class="lbl cond">Amendment Status:</td>
             <td><div class="type-badge">@(AmendFromStore ? "read-only" : "conditional picklist")</div>
-                <select data-ctx="C218694" class="fb-sel @(AmendFromStore ? "ro-sel" : "")"
-                    value="@Model.C218694" @onchange="@(e => { Model.C218694 = e.Value?.ToString(); })" disabled="@AmendFromStore">
-                    <option value="">-- select --</option>
-                    <option value='$NCIT#C218485 "This protocol has not been amended."'>This protocol has not been amended.</option>
-                    <option value='$NCIT#C218486 "This is the first protocol amendment."'>This is the first protocol amendment.</option>
-                    <option value='$NCIT#C218487 "This protocol has been amended previously. Details of prior amendments are presented in Section 12.3 Prior Protocol Amendment(s)."'>This protocol has been amended previously. Details of prior amendments are presented in Section 12.3 Prior Protocol Amendment(s).</option>
-                </select>
+                <div data-ctx-wrap="C218694" style="position:relative">
+                <PicklistSelect ValueSetId="m11-amendment-status-vs" CssClass="@("fb-sel" + (AmendFromStore ? " ro-sel" : ""))"
+                    DataCtx="C218694" @bind-Value="Model.C218694" />
+                </div>
             </td>
         </tr>
     </table>
@@ -369,75 +347,84 @@
             <td class="lbl cond">Approx. Enrolled at Time of Sponsor Approval:</td>
             <td>
                 <div class="type-badge">@(AmendFromStore ? "read-only" : "conditional quantity")</div>
+                <div data-ctx-wrap="C218478" style="position:relative">
                 <input data-ctx="C218478" class="fb @(AmendFromStore ? "ro-inp" : "")" type="text" placeholder="Approximately #/% enrolled"
                     @bind="Model.C218478" @bind:event="oninput" disabled="@AmendFromStore" />
+                </div>
                 <div class="type-badge" style="margin-top:6px;">Amendment Scope Enrollment Definition (@(AmendFromStore ? "read-only" : "conditional picklist"))</div>
-                <select data-ctx="C218695" class="fb-sel @(AmendFromStore ? "ro-sel" : "")"
-                    value="@Model.C218695" @onchange="@(e => { Model.C218695 = e.Value?.ToString(); })" disabled="@AmendFromStore">
-                    <option value="">-- select --</option>
-                    <option value='$NCIT#C68846 "Globally"'>Globally</option>
-                    <option value='$NCIT#C41065 "Locally"'>Locally</option>
-                    <option value='$NCIT#C218489 "By Cohort"'>By Cohort</option>
-                </select>
+                <div data-ctx-wrap="C218695" style="position:relative">
+                <PicklistSelect ValueSetId="m11-amendment-scope-enrollment-vs" CssClass="@("fb-sel" + (AmendFromStore ? " ro-sel" : ""))"
+                    DataCtx="C218695" @bind-Value="Model.C218695" />
+                </div>
             </td>
         </tr>
         <tr>
             <td class="lbl cond">Primary Reason for Amendment:</td>
             <td><div class="type-badge">@(AmendFromStore ? "read-only" : "conditional picklist")</div>
+                <div data-ctx-wrap="C218696" style="position:relative">
                 @ReasonSelect("C218696", Model.C218696, v => Model.C218696 = v, AmendFromStore)
+                </div>
                 <div class="type-badge" style="margin-top:6px;">Other reason text (@(AmendFromStore ? "read-only" : "conditional string"))</div>
+                <div data-ctx-wrap="C17649" style="position:relative">
                 <input data-ctx="C17649" class="fb @(AmendFromStore ? "ro-inp" : "")" type="text" placeholder="Enter other reason"
                     disabled="@(AmendFromStore || !PrimaryOtherActive)"
                     style="@((!AmendFromStore && !PrimaryOtherActive) ? "opacity:0.4;cursor:not-allowed;" : "")"
                     @bind="Model.C17649" @bind:event="oninput" />
+                </div>
             </td>
         </tr>
         <tr>
             <td class="lbl cond">Secondary Reason for Amendment:</td>
             <td><div class="type-badge">@(AmendFromStore ? "read-only" : "conditional multi-select")</div>
+                <div data-ctx-wrap="C218697" style="position:relative">
                 @ReasonMultiSelect("C218697", Model.C218697, v => { Model.C218697 = v; StateHasChanged(); }, AmendFromStore)
+                </div>
                 <div class="type-badge" style="margin-top:6px;">Other reason text (@(AmendFromStore ? "read-only" : "conditional string"))</div>
+                <div data-ctx-wrap="C17649_2" style="position:relative">
                 <input data-ctx="C17649_2" class="fb @(AmendFromStore ? "ro-inp" : "")" type="text" placeholder="Enter other reason"
                     disabled="@(AmendFromStore || !SecondaryOtherActive)"
                     style="@((!AmendFromStore && !SecondaryOtherActive) ? "opacity:0.4;cursor:not-allowed;" : "")"
                     @bind="Model.C17649_2" @bind:event="oninput" />
+                </div>
             </td>
         </tr>
         <tr>
             <td class="lbl cond">Amendment Summary:</td>
             <td><div class="type-badge">@(AmendFromStore ? "read-only" : "conditional string")</div>
+                <div data-ctx-wrap="C42581" style="position:relative">
                 <textarea data-ctx="C42581" class="fb @(AmendFromStore ? "ro-ta" : "")" rows="3" placeholder="Briefly describe key changes"
                     @bind="Model.C42581" @bind:event="oninput" disabled="@AmendFromStore"></textarea>
+                </div>
             </td>
         </tr>
         <tr>
             <td class="lbl cond">Substantial Impact on Safety or Rights?</td>
             <td>
                 <div class="type-badge">@(AmendFromStore ? "read-only" : "conditional picklist")</div>
-                <select data-ctx="C218698" class="fb-sel @(AmendFromStore ? "ro-sel" : "")"
-                    value="@Model.C218698" @onchange="@(e => { Model.C218698 = e.Value?.ToString(); })" disabled="@AmendFromStore">
-                    <option value="">-- select --</option>
-                    <option value='$NCIT#C49488 "Yes"'>Yes</option>
-                    <option value='$NCIT#C49487 "No"'>No</option>
-                </select>
+                <div data-ctx-wrap="C218698" style="position:relative">
+                <PicklistSelect ValueSetId="m11-yes-no-vs" CssClass="@("fb-sel" + (AmendFromStore ? " ro-sel" : ""))"
+                    DataCtx="C218698" @bind-Value="Model.C218698" />
+                </div>
                 <div class="type-badge" style="margin-top:6px;">If yes, briefly explain (@(AmendFromStore ? "read-only" : "conditional string"))</div>
+                <div data-ctx-wrap="C218699" style="position:relative">
                 <textarea data-ctx="C218699" class="fb @(AmendFromStore ? "ro-ta" : "")" rows="2" placeholder="If yes, briefly explain"
                     @bind="Model.C218699" @bind:event="oninput" disabled="@AmendFromStore"></textarea>
+                </div>
             </td>
         </tr>
         <tr>
             <td class="lbl cond">Substantial Impact on Reliability and Robustness?</td>
             <td>
                 <div class="type-badge">@(AmendFromStore ? "read-only" : "conditional picklist")</div>
-                <select data-ctx="C218700" class="fb-sel @(AmendFromStore ? "ro-sel" : "")"
-                    value="@Model.C218700" @onchange="@(e => { Model.C218700 = e.Value?.ToString(); })" disabled="@AmendFromStore">
-                    <option value="">-- select --</option>
-                    <option value='$NCIT#C49488 "Yes"'>Yes</option>
-                    <option value='$NCIT#C49487 "No"'>No</option>
-                </select>
+                <div data-ctx-wrap="C218700" style="position:relative">
+                <PicklistSelect ValueSetId="m11-yes-no-vs" CssClass="@("fb-sel" + (AmendFromStore ? " ro-sel" : ""))"
+                    DataCtx="C218700" @bind-Value="Model.C218700" />
+                </div>
                 <div class="type-badge" style="margin-top:6px;">If yes, briefly explain (@(AmendFromStore ? "read-only" : "conditional string"))</div>
+                <div data-ctx-wrap="C218701" style="position:relative">
                 <textarea data-ctx="C218701" class="fb @(AmendFromStore ? "ro-ta" : "")" rows="2" placeholder="If yes, briefly explain"
                     @bind="Model.C218701" @bind:event="oninput" disabled="@AmendFromStore"></textarea>
+                </div>
             </td>
         </tr>
     </table>
@@ -461,34 +448,19 @@
                             <button class="del-btn" @onclick="@(() => DeleteChgRow(r))">✕</button>
                         </td>
                     }
-                    <td><textarea data-ctx="C218483" class="fb @(AmendFromStore ? "ro-ta" : "")" rows="2" placeholder="Description of Change"
+                    <td><div data-ctx-wrap="C218483" style="position:relative"><textarea data-ctx="C218483" class="fb @(AmendFromStore ? "ro-ta" : "")" rows="2" placeholder="Description of Change"
                         value="@GetChg($"C218483_r{r}")"
-                        @oninput="@(e => SetChg($"C218483_r{r}", e.Value?.ToString()))" disabled="@AmendFromStore"></textarea></td>
-                    <td><textarea data-ctx="C181233" class="fb @(AmendFromStore ? "ro-ta" : "")" rows="2" placeholder="Brief Rationale for Change"
+                        @oninput="@(e => SetChg($"C218483_r{r}", e.Value?.ToString()))" disabled="@AmendFromStore"></textarea></div></td>
+                    <td><div data-ctx-wrap="C181233" style="position:relative"><textarea data-ctx="C181233" class="fb @(AmendFromStore ? "ro-ta" : "")" rows="2" placeholder="Brief Rationale for Change"
                         value="@GetChg($"C181233_r{r}")"
-                        @oninput="@(e => SetChg($"C181233_r{r}", e.Value?.ToString()))" disabled="@AmendFromStore"></textarea></td>
+                        @oninput="@(e => SetChg($"C181233_r{r}", e.Value?.ToString()))" disabled="@AmendFromStore"></textarea></div></td>
                     <td>
-                        <select data-ctx="C218479" class="fb-sel @(AmendFromStore ? "ro-sel" : "")"
-                            value="@GetChg($"C218479_r{r}")"
-                            @onchange="@(e => SetChg($"C218479_r{r}", e.Value?.ToString()))" disabled="@AmendFromStore">
-                            <option value="">-- select --</option>
-                            <option value='$NCIT#C217342 "Section 1"'>Section 1</option>
-                            <option value='$NCIT#C217343 "Section 2"'>Section 2</option>
-                            <option value='$NCIT#C217344 "Section 3"'>Section 3</option>
-                            <option value='$NCIT#C217345 "Section 4"'>Section 4</option>
-                            <option value='$NCIT#C217346 "Section 5"'>Section 5</option>
-                            <option value='$NCIT#C217347 "Section 6"'>Section 6</option>
-                            <option value='$NCIT#C217348 "Section 7"'>Section 7</option>
-                            <option value='$NCIT#C217349 "Section 8"'>Section 8</option>
-                            <option value='$NCIT#C217350 "Section 9"'>Section 9</option>
-                            <option value='$NCIT#C217351 "Section 10"'>Section 10</option>
-                            <option value='$NCIT#C217352 "Section 11"'>Section 11</option>
-                            <option value='$NCIT#C217353 "Section 12"'>Section 12</option>
-                            <option value='$NCIT#C217354 "Section 13"'>Section 13</option>
-                            <option value='$NCIT#C217355 "Section 14"'>Section 14</option>
-                            <option value='$NCIT#C217356 "Section Title Page"'>Section Title Page</option>
-                            <option value='$NCIT#C217357 "Section Amendment Details"'>Section Amendment Details</option>
-                        </select>
+                        <div data-ctx-wrap="C218479" style="position:relative">
+                        <PicklistSelect ValueSetId="m11-protocol-section-vs" CssClass="@("fb-sel" + (AmendFromStore ? " ro-sel" : ""))"
+                            DataCtx="C218479"
+                            Value="@GetChg($"C218479_r{r}")"
+                            ValueChanged="@(v => SetChg($"C218479_r{r}", v))" />
+                        </div>
                     </td>
                 </tr>
             }
@@ -511,7 +483,13 @@
 <div id="tp-ctx-menu" class="ctx-menu">
     <div class="ctx-hdr"><span>Field Information</span><button class="ctx-close" @onclick="CloseCtxMenu">✕</button></div>
     <div class="ctx-body">
-        <div class="ctx-row"><label>Field name:</label><span>@CtxFieldName</span></div>
+        <div class="ctx-row"><label>M11 Field Name:</label><span>@CtxFieldName</span></div>
+        <div class="ctx-row"><label>M11 Name:</label><span>@CtxM11Name</span></div>
+        @if (!string.IsNullOrEmpty(CtxValueSetId))
+        {
+            <div class="ctx-row"><label>M11 code set:</label><span>@CtxValueSetCCode</span></div>
+            <div class="ctx-row"><label>Value Set:</label><span>@CtxValueSetName</span></div>
+        }
         <hr class="ctx-div" />
         <div class="ctx-guide"><strong>Guidance:</strong><br />@CtxGuidance</div>
     </div>
@@ -610,7 +588,23 @@
     private string ReqDialogMsg   = string.Empty;
     private string ErrorMessage   = string.Empty;
     private string? PendingAction = null;
-    private string CtxFieldName = string.Empty, CtxGuidance = string.Empty;
+    private string CtxFieldName = string.Empty, CtxM11Name = string.Empty, CtxGuidance = string.Empty, CtxValueSetId = string.Empty, CtxValueSetName = string.Empty, CtxValueSetCCode = string.Empty;
+
+    private static readonly Dictionary<string, string> FieldValueSets = new()
+    {
+        ["C218672"] = "m11-yes-no-vs",           // Original Protocol (Yes/No)
+        ["C48281"]  = "m11-phase-vs",     // Trial Phase
+        ["C218673"] = "m11-study-amendment-scope-vs",    // Amendment Scope
+        ["C20108"]  = "udp-country-vs",          // Country
+        ["C218674"] = "udp-region-vs",           // Region
+        ["C218694"] = "m11-amendment-status-vs",// Amendment Status
+        ["C218695"] = "m11-amendment-scope-enrollment-vs",// Enrollment Scope
+        ["C218696"] = "m11-study-amendment-reason-vs", // Primary Reason for Amendment
+        ["C218697"] = "m11-study-amendment-reason-vs", // Secondary Reason for Amendment
+        ["C218698"] = "m11-yes-no-vs",           // Substantial Impact on Safety or Rights
+        ["C218700"] = "m11-yes-no-vs",           // Substantial Impact on Reliability
+        ["C218479"] = "m11-protocol-section-vs",// Protocol Section (change log)
+    };
     private System.Threading.Timer? _statusTimer;
     private DotNetObjectReference<TitlePage>? _objRef;
 
@@ -917,7 +911,12 @@
 
     [JSInvokable] public async Task OnContextMenuJS(string fieldId, double x, double y)
     {
-        CtxFieldName = fieldId; CtxGuidance = string.Empty;
+        CtxFieldName = fieldId; CtxM11Name = FieldTerms.For(fieldId); CtxGuidance = FieldGuidance.For(fieldId);
+        var baseId      = System.Text.RegularExpressions.Regex.Replace(fieldId, @"_r\d+$", "");
+        CtxValueSetId    = FieldValueSets.TryGetValue(baseId, out var vsId) ? vsId : string.Empty;
+        var vs           = string.IsNullOrEmpty(CtxValueSetId) ? null : TermSvc.Get(CtxValueSetId);
+        CtxValueSetCCode = vs?.CCode ?? string.Empty;
+        CtxValueSetName  = vs == null ? string.Empty : $"{vs.Name}  {vs.Id}";
         StateHasChanged(); await JS.InvokeVoidAsync("udpShowCtxMenu", "tp-ctx-menu", x, y);
     }
     [JSInvokable] public void OnCtxMenuClosed() { }

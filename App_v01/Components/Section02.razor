@@ -190,11 +190,11 @@
     </div>
     <div class="ctx-body">
         <div class="ctx-row">
-            <label>Current name:</label>
+            <label>M11 Field Name:</label>
             <span>@CtxFieldName</span>
         </div>
         <div class="ctx-row">
-            <label>Original name:</label>
+            <label>M11 Name:</label>
             <span>@CtxOriginalName</span>
         </div>
         <hr class="ctx-divider" />
@@ -226,7 +226,7 @@
     {
         var info = GetFieldInfo(code);
         CtxFieldName    = code;
-        CtxOriginalName = info.originalName;
+        CtxOriginalName = FieldTerms.For(code) is { Length: > 0 } t ? t : info.originalName;
         CtxGuidance     = info.guidance;
         StateHasChanged();
         await JS.InvokeVoidAsync("udpShowCtxMenu", "ctx-menu", x, y);
@@ -242,13 +242,13 @@
 
     private (string originalName, string guidance) GetFieldInfo(string code) => code switch
     {
-        "C146997" => ("PurposeOfTrial",       "guidance text goes here"),
-        "C218721" => ("RiskTrialIntervention","guidance text goes here"),
-        "C218722" => ("RiskTrialProcedures",  "guidance text goes here"),
-        "C218723" => ("RiskOther",            "guidance text goes here"),
-        "C218724" => ("BenefitSummary",       "guidance text goes here"),
-        "C218725" => ("OverallRiskBenefit",   "guidance text goes here"),
-        _         => (code,                   "guidance text goes here")
+        "C146997" => ("PurposeOfTrial",       FieldGuidance.For("C146997")),
+        "C218721" => ("RiskTrialIntervention",FieldGuidance.For("C218721")),
+        "C218722" => ("RiskTrialProcedures",  FieldGuidance.For("C218722")),
+        "C218723" => ("RiskOther",            FieldGuidance.For("C218723")),
+        "C218724" => ("BenefitSummary",       FieldGuidance.For("C218724")),
+        "C218725" => ("OverallRiskBenefit",   FieldGuidance.For("C218725")),
+        _         => (code,                   FieldGuidance.For(code))
     };
 
     private bool   ShowValidation  = false;

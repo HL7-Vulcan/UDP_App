@@ -5,6 +5,7 @@
 @inject DataService09 DataSvc
 @inject SushiService SushiSvc
 @inject FhirPipelineService PipelineSvc
+@inject TerminologyService TermSvc
 @inject IJSRuntime JS
 @implements IDisposable
 
@@ -307,13 +308,18 @@
     </div>
     <div class="ctx-body">
         <div class="ctx-row">
-            <label>Field name:</label>
+            <label>M11 Field Name:</label>
             <span>@CtxFieldName</span>
         </div>
         <div class="ctx-row">
-            <label>Original name:</label>
+            <label>M11 Name:</label>
             <span>@CtxOriginalName</span>
         </div>
+        @if (!string.IsNullOrEmpty(CtxValueSetId))
+        {
+            <div class="ctx-row"><label>M11 code set:</label><span>@CtxValueSetCCode</span></div>
+            <div class="ctx-row"><label>Value Set:</label><span>@CtxValueSetName</span></div>
+        }
         <hr class="ctx-div" />
         <div class="ctx-guide">
             <strong>Guidance:</strong><br />
@@ -351,6 +357,14 @@
     private string CtxFieldName    = string.Empty;
     private string CtxOriginalName = string.Empty;
     private string CtxGuidance     = string.Empty;
+    private string CtxValueSetId    = string.Empty;
+    private string CtxValueSetName  = string.Empty;
+    private string CtxValueSetCCode = string.Empty;
+
+    private static readonly Dictionary<string, string> FieldValueSets = new()
+    {
+        ["C218784"] = "m11-event-type-vs", // Safety Event Type (row-keyed: C218784_r{n})
+    };
     private DotNetObjectReference<Section09>? _objRef;
 
     // ── CSS helpers ───────────────────────────────────────────────
@@ -642,10 +656,15 @@
     [JSInvokable]
     public async Task OnContextMenuJS(string code, double x, double y)
     {
-        var info = GetFieldInfo(code);
+        var info        = GetFieldInfo(code);
         CtxFieldName    = code;
-        CtxOriginalName = info.original;
+        CtxOriginalName = FieldTerms.For(code) is { Length: > 0 } t ? t : info.original;
         CtxGuidance     = info.guidance;
+        var baseCode    = System.Text.RegularExpressions.Regex.Replace(code, @"_r\d+$", "");
+        CtxValueSetId    = FieldValueSets.TryGetValue(baseCode, out var vsId) ? vsId : string.Empty;
+        var vs           = string.IsNullOrEmpty(CtxValueSetId) ? null : TermSvc.Get(CtxValueSetId);
+        CtxValueSetCCode = vs?.CCode ?? string.Empty;
+        CtxValueSetName  = vs == null ? string.Empty : $"{vs.Name}  {vs.Id}";
         StateHasChanged();
         await JS.InvokeVoidAsync("udpShowCtxMenu", "s9-ctx-menu", x, y);
     }
@@ -660,24 +679,24 @@
 
     private (string original, string guidance) GetFieldInfo(string code) => code switch
     {
-        "C218476" => ("AEDefinitions",       "guidance text goes here"),
-        "C218781" => ("SAEDefinitions",      "guidance text goes here"),
-        "C218782" => ("PCDefinitions",       "guidance text goes here"),
-        "C218783" => ("MDPCDefinitions",     "guidance text goes here"),
-        "C218791" => ("Timing",              "guidance text goes here"),
-        "C218792" => ("Identification",      "guidance text goes here"),
-        "C25676"  => ("Severity",            "guidance text goes here"),
-        "C82552"  => ("Causality",           "guidance text goes here"),
-        "C218793" => ("Recording",           "guidance text goes here"),
-        "C218794" => ("FollowUp",            "guidance text goes here"),
-        "C218795" => ("Reporting",           "guidance text goes here"),
-        "C218796" => ("RegulatoryReporting", "guidance text goes here"),
-        "C217358" => ("AESIDefinitions",     "guidance text goes here"),
-        "C218797" => ("DiseaseEvents",       "guidance text goes here"),
-        "C218798" => ("PregnancyParticipant","guidance text goes here"),
-        "C218799" => ("PregnancyPartner",    "guidance text goes here"),
-        "C218800" => ("SpecialSafety",       "guidance text goes here"),
-        _                    => (code,                  "guidance text goes here"),
+        "C218476" => ("AEDefinitions",       FieldGuidance.For("C218476")),
+        "C218781" => ("SAEDefinitions",      FieldGuidance.For("C218781")),
+        "C218782" => ("PCDefinitions",       FieldGuidance.For("C218782")),
+        "C218783" => ("MDPCDefinitions",     FieldGuidance.For("C218783")),
+        "C218791" => ("Timing",              FieldGuidance.For("C218791")),
+        "C218792" => ("Identification",      FieldGuidance.For("C218792")),
+        "C25676"  => ("Severity",            FieldGuidance.For("C25676")),
+        "C82552"  => ("Causality",           FieldGuidance.For("C82552")),
+        "C218793" => ("Recording",           FieldGuidance.For("C218793")),
+        "C218794" => ("FollowUp",            FieldGuidance.For("C218794")),
+        "C218795" => ("Reporting",           FieldGuidance.For("C218795")),
+        "C218796" => ("RegulatoryReporting", FieldGuidance.For("C218796")),
+        "C217358" => ("AESIDefinitions",     FieldGuidance.For("C217358")),
+        "C218797" => ("DiseaseEvents",       FieldGuidance.For("C218797")),
+        "C218798" => ("PregnancyParticipant",FieldGuidance.For("C218798")),
+        "C218799" => ("PregnancyPartner",    FieldGuidance.For("C218799")),
+        "C218800" => ("SpecialSafety",       FieldGuidance.For("C218800")),
+        _         => (code,                  FieldGuidance.For(code)),
     };
 
     [JSInvokable]

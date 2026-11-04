@@ -68,6 +68,10 @@
         var vsId = vs.Id; // capture for lambdas
         <div class="vs-card">
             <div class="vs-hdr">
+                @if (!string.IsNullOrEmpty(vs.CCode))
+                {
+                    <span class="vs-id">@vs.CCode</span>
+                }
                 <span>@vs.Name</span>
                 <span class="vs-id">@vs.Id</span>
             </div>

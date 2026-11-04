@@ -1,0 +1,347 @@
+{
+  "resourceType": "ResearchStudy",
+  "id": "title-page-001",
+  "meta": {
+    "profile": [
+      "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-research-study-profile"
+    ]
+  },
+  "extension": [
+    {
+      "url": "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-confidentiality-statement",
+      "valueString": "This document is confidential and is the property of Exemplar Pharmaceuticals Ltd. No part of it may be transmitted, reproduced, published or used without prior written authorisation from the sponsor."
+    },
+    {
+      "extension": [
+        {
+          "url": "originalProtocol",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "code": "C49487",
+                "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+                "display": "No"
+              }
+            ]
+          }
+        },
+        {
+          "url": "versionDate",
+          "valueDate": "2024-03-15"
+        }
+      ],
+      "url": "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-research-study"
+    },
+    {
+      "extension": [
+        {
+          "url": "approvalDate",
+          "valueDate": "2024-03-15"
+        },
+        {
+          "url": "signatureUrl",
+          "valueUrl": "https://esign.exemplarpharma.com/EX2010-12-a"
+        },
+        {
+          "valueSignature": {
+            "data": "RHIgSmFuZSBTbWl0aCwgQ2hpZWYgTWVkaWNhbCBPZmZpY2Vy"
+          },
+          "url": "signature"
+        },
+        {
+          "url": "signatureMethod",
+          "valueString": "Electronic signature held in the Exemplar document management system"
+        }
+      ],
+      "url": "http://HL7Vulcan/UDP/IG/StructureDefinition/m11-approval"
+    }
+  ],
+  "identifier": [
+    {
+      "type": {
+        "coding": [
+          {
+            "code": "C132351",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "Sponsor Protocol Identifier"
+          }
+        ]
+      },
+      "system": "https://exemplarSponsor.com/sponsor-identifier",
+      "value": "EX2010/12"
+    },
+    {
+      "type": {
+        "coding": [
+          {
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "code": "C218684"
+          }
+        ],
+        "text": "EU CT Number"
+      },
+      "system": "https://exemplarEMARegulator.org/registry-identifier",
+      "value": "2024-000123-42"
+    },
+    {
+      "type": {
+        "coding": [
+          {
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "code": "C218685"
+          }
+        ],
+        "text": "FDA IND Number"
+      },
+      "system": "https://exemplarFDARegulator.org/registry-identifier",
+      "value": "IND-123456"
+    },
+    {
+      "type": {
+        "coding": [
+          {
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "code": "C218686"
+          }
+        ],
+        "text": "IDE Number"
+      },
+      "system": "https://exemplarIDERegulator.org/registry-identifier",
+      "value": "IDE-1234"
+    },
+    {
+      "type": {
+        "coding": [
+          {
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "code": "C218687"
+          }
+        ],
+        "text": "jRCT Number"
+      },
+      "system": "https://exemplarJRCTRegulator.org/registry-identifier",
+      "value": "jRCT2031240001"
+    },
+    {
+      "type": {
+        "coding": [
+          {
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "code": "C172240"
+          }
+        ],
+        "text": "NCT Number"
+      },
+      "system": "https://exemplarNCTRegulator.org/registry-identifier",
+      "value": "NCT05123456"
+    },
+    {
+      "type": {
+        "coding": [
+          {
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "code": "C218688"
+          }
+        ],
+        "text": "NMPA IND Number"
+      },
+      "system": "https://exemplarNPMARegulator.org/registry-identifier",
+      "value": "NMPA-1234"
+    },
+    {
+      "type": {
+        "coding": [
+          {
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "code": "C218689"
+          }
+        ],
+        "text": "WHO/UTN Number"
+      },
+      "system": "https://exemplarWHORegulator.org/registry-identifier",
+      "value": "U1111-1234-5678"
+    },
+    {
+      "type": {
+        "coding": [
+          {
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "code": "C218690"
+          }
+        ],
+        "text": "Other Regulatory or Clinical Trial Identifier"
+      },
+      "system": "https://exemplarRegulator.org/registry-identifier",
+      "value": "ERA1234",
+      "assigner": {
+        "reference": "Organization/Exemplar-Regulator-Organization"
+      }
+    },
+    {
+      "type": {
+        "coding": [
+          {
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "code": "C218477"
+          }
+        ],
+        "text": "Amendment Identifier"
+      },
+      "system": "https://example.org/amendment-identifier",
+      "value": "EX2010/12(a)"
+    }
+  ],
+  "label": [
+    {
+      "type": {
+        "coding": [
+          {
+            "code": "C207646",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "Study Acronym"
+          }
+        ]
+      },
+      "value": "IIME Study"
+    },
+    {
+      "type": {
+        "coding": [
+          {
+            "code": "C94105",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "Brief Study Title"
+          }
+        ]
+      },
+      "value": "A Phase 3 Study of Inhaled versus Intramuscular Exoticillin for Bronchitis in Diabetic Japanese Patients"
+    }
+  ],
+  "focus": [
+    {
+      "reference": {
+        "reference": "MedicinalProductDefinition/InvestigationalMedicinalProduct"
+      }
+    }
+  ],
+  "associatedParty": [
+    {
+      "party": {
+        "reference": "Organization/SponsorOrganization"
+      },
+      "role": {
+        "coding": [
+          {
+            "code": "C70793",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "Clinical Study Sponsor"
+          }
+        ]
+      }
+    },
+    {
+      "party": {
+        "reference": "Practitioner/SponsorPractitioner"
+      },
+      "role": {
+        "coding": [
+          {
+            "code": "C70793",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "Clinical Study Sponsor"
+          }
+        ]
+      }
+    },
+    {
+      "party": {
+        "reference": "Organization/LocalSponsorOrganization"
+      },
+      "role": {
+        "coding": [
+          {
+            "code": "C215670",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "Local Legal Sponsor"
+          }
+        ]
+      }
+    },
+    {
+      "party": {
+        "reference": "Practitioner/LocalSponsorPractitioner"
+      },
+      "role": {
+        "coding": [
+          {
+            "code": "C215670",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "Local Legal Sponsor"
+          }
+        ]
+      }
+    },
+    {
+      "party": {
+        "reference": "Practitioner/LocalSponsorPractitioner"
+      },
+      "role": {
+        "coding": [
+          {
+            "code": "C215670",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "Local Legal Sponsor"
+          }
+        ]
+      }
+    },
+    {
+      "party": {
+        "reference": "Practitioner/LocalSponsorPractitioner"
+      },
+      "role": {
+        "coding": [
+          {
+            "code": "C215670",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "Local Legal Sponsor"
+          }
+        ]
+      }
+    },
+    {
+      "party": {
+        "reference": "Practitioner/SponsorExpertPractitioner"
+      },
+      "role": {
+        "coding": [
+          {
+            "code": "C51876",
+            "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+            "display": "Sponsor Medical Expert"
+          }
+        ]
+      }
+    }
+  ],
+  "relatesTo": [
+    {
+      "type": "justification",
+      "targetReference": {
+        "reference": "ResearchStudy/Amendment-001"
+      }
+    }
+  ],
+  "status": "active",
+  "version": "(a)",
+  "title": "A Phase 3, Randomised, Double-Blind, Placebo-Controlled Study of Inhaled Exoticillin Compared to Intramuscular Exoticillin for Treatment of Bronchitis in Japanese Patients with Iatrogenic Diabetes Mellitus",
+  "phase": {
+    "coding": [
+      {
+        "code": "C15602",
+        "system": "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl",
+        "display": "Phase 3"
+      }
+    ]
+  }
+}

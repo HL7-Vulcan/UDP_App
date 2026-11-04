@@ -3,7 +3,6 @@
 
 @{
     var def = Defs[TypeName];
-    var objFieldId = $"field_3_{def.Prefix}_{ObjIndex:D2}_01_{def.ObjCode}";
 }
 
 <!-- Objective heading -->
@@ -13,16 +12,13 @@
 
 <!-- Objective description textarea -->
 <div class="field-wrap">
-    <span class="fid-tip">@objFieldId</span>
     <textarea class="fb @(IsObjRequired() && string.IsNullOrWhiteSpace(Block.ObjectiveText) ? "req-empty" : "")"
-              id="@objFieldId" title="@objFieldId"
+              data-ctx="@def.ObjCode"
               placeholder="@def.ObjPlaceholder"
               rows="2"
               @bind="Block.ObjectiveText"
               @bind:event="oninput"
-              @bind:after="OnObjectiveChanged"
-              @oncontextmenu:preventDefault="true"
-              @oncontextmenu="@(e => OnContextMenu(e, objFieldId, GetGuidance(TypeName, "obj")))">
+              @bind:after="OnObjectiveChanged">
     </textarea>
 </div>
 
@@ -38,21 +34,13 @@
         </tr>
     </thead>
     <tbody>
-        @{
-            var estF2Id = $"field_3_{def.Prefix}_{ObjIndex:D2}_02_C70833";
-            var estF3Id = $"field_3_{def.Prefix}_{ObjIndex:D2}_03_C49236";
-            var estF4Id = $"field_3_{def.Prefix}_{ObjIndex:D2}_04_C25212";
-            var estF5Id = $"field_3_{def.Prefix}_{ObjIndex:D2}_05_C188853";
-        }
         <tr>
             <td class="lbl">Population</td>
             <td>
                 <div class="field-wrap">
-                    <span class="fid-tip">@estF2Id</span>
-                    <textarea class="fb" id="@estF2Id" title="@estF2Id" placeholder="List conditions / diseases" rows="2"
-                              @bind="Block.C70833" @bind:event="oninput" @bind:after="Changed"
-                              @oncontextmenu:preventDefault="true"
-                              @oncontextmenu="@(e => OnContextMenu(e, estF2Id, GetGuidance(TypeName, "population")))">
+                    <textarea class="fb" data-ctx="C70833"
+                              placeholder="List conditions / diseases" rows="2"
+                              @bind="Block.C70833" @bind:event="oninput" @bind:after="Changed">
                     </textarea>
                 </div>
             </td>
@@ -61,11 +49,9 @@
             <td class="lbl">Treatment</td>
             <td>
                 <div class="field-wrap">
-                    <span class="fid-tip">@estF3Id</span>
-                    <textarea class="fb" id="@estF3Id" title="@estF3Id" placeholder="List the treatments / interventions for this objective" rows="2"
-                              @bind="Block.C49236" @bind:event="oninput" @bind:after="Changed"
-                              @oncontextmenu:preventDefault="true"
-                              @oncontextmenu="@(e => OnContextMenu(e, estF3Id, GetGuidance(TypeName, "treatment")))">
+                    <textarea class="fb" data-ctx="C49236"
+                              placeholder="List the treatments / interventions for this objective" rows="2"
+                              @bind="Block.C49236" @bind:event="oninput" @bind:after="Changed">
                     </textarea>
                 </div>
             </td>
@@ -74,13 +60,10 @@
             <td class="lbl">Endpoint</td>
             <td>
                 <div class="field-wrap">
-                    <span class="fid-tip">@estF4Id</span>
                     <textarea class="fb @(IsEndpointRequired() && string.IsNullOrWhiteSpace(Block.C25212) ? "req-empty" : "")"
-                              id="@estF4Id" title="@estF4Id"
+                              data-ctx="C25212"
                               placeholder="Describe the change from baseline to [timepoint] in [health measurement/outcome]" rows="2"
-                              @bind="Block.C25212" @bind:event="oninput" @bind:after="Changed"
-                              @oncontextmenu:preventDefault="true"
-                              @oncontextmenu="@(e => OnContextMenu(e, estF4Id, GetGuidance(TypeName, "endpoint")))">
+                              @bind="Block.C25212" @bind:event="oninput" @bind:after="Changed">
                     </textarea>
                 </div>
             </td>
@@ -89,11 +72,9 @@
             <td class="lbl">Population-level summary</td>
             <td>
                 <div class="field-wrap">
-                    <span class="fid-tip">@estF5Id</span>
-                    <textarea class="fb" id="@estF5Id" title="@estF5Id" placeholder="Describe the difference in mean changes between treatment conditions" rows="2"
-                              @bind="Block.C188853" @bind:event="oninput" @bind:after="Changed"
-                              @oncontextmenu:preventDefault="true"
-                              @oncontextmenu="@(e => OnContextMenu(e, estF5Id, GetGuidance(TypeName, "summary")))">
+                    <textarea class="fb" data-ctx="C188853"
+                              placeholder="Describe the difference in mean changes between treatment conditions" rows="2"
+                              @bind="Block.C188853" @bind:event="oninput" @bind:after="Changed">
                     </textarea>
                 </div>
             </td>
@@ -114,33 +95,24 @@
         @for (int r = 0; r < Block.IceRows.Count; r++)
         {
             var rowIdx = r;
-            var rowNum = r + 1;
-            var iceEventId    = $"field_3_{def.Prefix}_ice_{ObjIndex}_{rowNum}_C188856";
-            var iceStrategyId = $"field_3_{def.Prefix}_ice_{ObjIndex}_{rowNum}_C188857";
             var row = Block.IceRows[rowIdx];
 
             <tr>
                 <td>
                     <div class="field-wrap">
-                        <span class="fid-tip">@iceEventId</span>
                         <textarea class="fb @(IsIceRequired(row, isEvent: true) ? "req-empty" : "")"
-                                  id="@iceEventId" title="@iceEventId"
+                                  data-ctx="C188856"
                                   placeholder="Describe intercurrent event" rows="2"
-                                  @bind="row.C188856" @bind:event="oninput" @bind:after="Changed"
-                                  @oncontextmenu:preventDefault="true"
-                                  @oncontextmenu="@(e => OnContextMenu(e, iceEventId, GetGuidance(TypeName, "ice_event")))">
+                                  @bind="row.C188856" @bind:event="oninput" @bind:after="Changed">
                         </textarea>
                     </div>
                 </td>
                 <td>
                     <div class="field-wrap">
-                        <span class="fid-tip">@iceStrategyId</span>
                         <textarea class="fb @(IsIceRequired(row, isEvent: false) ? "req-empty" : "")"
-                                  id="@iceStrategyId" title="@iceStrategyId"
+                                  data-ctx="C188857"
                                   placeholder="Describe strategy for dealing with intercurrent event" rows="2"
-                                  @bind="row.C188857" @bind:event="oninput" @bind:after="Changed"
-                                  @oncontextmenu:preventDefault="true"
-                                  @oncontextmenu="@(e => OnContextMenu(e, iceStrategyId, GetGuidance(TypeName, "ice_strategy")))">
+                                  @bind="row.C188857" @bind:event="oninput" @bind:after="Changed">
                         </textarea>
                     </div>
                 </td>
@@ -155,7 +127,6 @@
     [Parameter, EditorRequired] public int ObjIndex { get; set; }
     [Parameter, EditorRequired] public ObjectiveBlock Block { get; set; } = new();
     [Parameter] public EventCallback OnChanged { get; set; }
-    [Parameter] public EventCallback<CtxMenuArgs> OnRightClick { get; set; }
 
     private Task Changed() => OnChanged.InvokeAsync();
 
@@ -187,17 +158,6 @@
         OnChanged.InvokeAsync();
     }
 
-    private Task OnContextMenu(Microsoft.AspNetCore.Components.Web.MouseEventArgs e, string fieldId, string guidance)
-    {
-        return OnRightClick.InvokeAsync(new CtxMenuArgs
-        {
-            FieldId  = fieldId,
-            Guidance = guidance,
-            X = $"{e.ClientX}px",
-            Y = $"{e.ClientY}px",
-        });
-    }
-
     // ─── Field definitions ────────────────────────────────────────────────────
     private record ObjDef(string Label, string Prefix, string ObjCode, string ObjPlaceholder);
 
@@ -208,19 +168,4 @@
         ["exploratory"] = new("Exploratory Objective", "03", "C163559", "Describe the exploratory objective of this study"),
     };
 
-    private static string GetGuidance(string typeName, string slot) => slot switch
-    {
-        "obj"          => typeName == "primary"
-                            ? "<strong>Required.</strong> Describe the primary objective of this study."
-                            : "<strong>Optional.</strong> If provided, the Endpoint field becomes required.",
-        "population"   => "<strong>Optional.</strong> List the conditions / diseases defining the target population for this estimand.",
-        "treatment"    => "<strong>Optional.</strong> List the treatments or interventions for this objective.",
-        "endpoint"     => typeName == "primary"
-                            ? "<strong>Required.</strong> Describe the change from baseline to a specified timepoint in the primary health measurement."
-                            : "<strong>Conditional.</strong> Required if the objective description field has content.",
-        "summary"      => "<strong>Optional.</strong> Describe the population-level summary statistic for this estimand.",
-        "ice_event"    => "<strong>Conditional.</strong> Required if the Strategy field in this row has content.",
-        "ice_strategy" => "<strong>Conditional.</strong> Required if the Intercurrent Event field in this row has content.",
-        _              => string.Empty,
-    };
 }

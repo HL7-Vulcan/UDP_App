@@ -59,26 +59,6 @@ Description: """Profile of Basic resource to be used as Reporting details  accor
 
 
 //--------------------------------------------------------------------------------------
-//
-ValueSet: M11EventTypeVS
-Id: m11-event-type-vs
-Title: "M11 Event Type Elements Value Set using NCIT codes to create a FHIR value set."
-Description: """Event Type elements for describing trial reportings. This is an M11 specific value set.
-Code List C217287: ICH OID 2.16.840.1.113883.3.989.2.3.1.22 """
-* insert rs-copyright-terminology
-* ^extension[$ext-fmm].valueInteger = 2
-* ^experimental = false
-* ^status = #active
-* ^publisher = "ICH M11"
-
-* $NCIT#C41331 "Adverse Event"
-* $NCIT#C41335 "Serious Adverse Event"
-* $NCIT#C218508 "Trial Intervention Complaint"
-* $NCIT#C222331 "Drug/Device Combination Product Complaint"
-* $NCIT#C25742 "Pregnancy Event"
-* $NCIT#C218510 "Lactation Event"
-* $NCIT#C218511 "Post-Partum Event"
-* $NCIT#C218512 "Reportable Adverse Event of Special Interest"
-* $NCIT#C218513 "Not Reportable Adverse Event of Special Interest"
-* $NCIT#C17649 "Other" 
+// Value sets moved to M11Additional.fsh:
+//   m11-event-type-vs (C217287)
 

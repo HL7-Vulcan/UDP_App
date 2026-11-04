@@ -228,10 +228,10 @@
                     };
                     var dateDisplay = FormatDate(rec.C93813);
                     <tr>
-                        <td>@(rec.C218477 ?? rec.Name)</td>
-                        <td>@dateDisplay</td>
-                        <td>@(rec.C218478 ?? string.Empty)</td>
-                        <td>@scopeDisplay</td>
+                        <td><div data-ctx-wrap="C218477" style="position:relative;min-height:1em;">@(rec.C218477 ?? rec.Name)</div></td>
+                        <td><div data-ctx-wrap="C93813"  style="position:relative;min-height:1em;">@dateDisplay</div></td>
+                        <td><div data-ctx-wrap="C218478" style="position:relative;min-height:1em;">@(rec.C218478 ?? string.Empty)</div></td>
+                        <td><div data-ctx-wrap="C218695" style="position:relative;min-height:1em;">@scopeDisplay</div></td>
                     </tr>
                 }
                 <!-- Original Protocol is oldest — always last -->
@@ -277,9 +277,9 @@
                             var sec  = rec.ChgData.TryGetValue($"C218479_r{ri}", out var sv) ? sv : string.Empty;
                             var secDisplay = System.Text.RegularExpressions.Regex.Match(sec, "\"([^\"]+)\"") is var m && m.Success ? m.Groups[1].Value : sec;
                             <tr>
-                                <td style="white-space:pre-wrap;">@desc</td>
-                                <td style="white-space:pre-wrap;">@rat</td>
-                                <td>@secDisplay</td>
+                                <td style="white-space:pre-wrap;"><div data-ctx-wrap="C218483" style="position:relative;min-height:1em;">@desc</div></td>
+                                <td style="white-space:pre-wrap;"><div data-ctx-wrap="C181233" style="position:relative;min-height:1em;">@rat</div></td>
+                                <td><div data-ctx-wrap="C218479" style="position:relative;min-height:1em;">@secDisplay</div></td>
                             </tr>
                         }
                     </tbody>
@@ -396,11 +396,11 @@
     </div>
     <div class="ctx-body">
         <div class="ctx-row">
-            <label>Field name:</label>
+            <label>M11 Field Name:</label>
             <span>@CtxFieldName</span>
         </div>
         <div class="ctx-row">
-            <label>Original name:</label>
+            <label>M11 Name:</label>
             <span>@CtxOriginalName</span>
         </div>
         <hr class="ctx-div" />
@@ -797,7 +797,7 @@
     {
         var info = GetFieldInfo(code);
         CtxFieldName    = code;
-        CtxOriginalName = info.original;
+        CtxOriginalName = FieldTerms.For(code) is { Length: > 0 } t ? t : info.original;
         CtxGuidance     = info.guidance;
         StateHasChanged();
         await JS.InvokeVoidAsync("udpShowCtxMenu", "s12-ctx-menu", x, y);
@@ -815,19 +815,21 @@
         var bare = System.Text.RegularExpressions.Regex.Replace(code, @"_[ar]\d+.*$", "");
         return bare switch
         {
-            "C25294"  => ("ClinicalLaboratoryTests",          "Specify which clinical laboratory tests will be performed. Reference the Laboratory Manual for normal ranges."),
-            "C218832" => ("CountryRegionIdentifier",          "Enter the country or region identifier, e.g. 'Japan', 'EU'."),
-            "C218833" => ("CountryRegionRequirements",        "Describe any country or region-specific regulatory or procedural requirements."),
-            "C218834" => ("CountryRegionClarifications",      "Describe any protocol clarifications specific to this country or region."),
-            "C218477" => ("AmendmentIdentifier",              "Enter the amendment identifier, e.g. 'EX2010/12(a)'."),
-            "C132352" => ("SponsorApprovalDate",              "Enter the date the sponsor approved this amendment."),
-            "C218695" => ("ApproxEnrollment",                 "Enter the approximate number of participants enrolled when the sponsor approved the amendment."),
-            "C218695e"=> ("EnrollmentScopeDescription",      "Select whether enrollment count applies globally or locally."),
-            "C218836" => ("AlternateLocation",                "If the Overview of Changes is not provided in this section, specify where it can be found."),
-            "C218483" => ("DescriptionOfChange",              "Describe the change made in this amendment."),
-            "C181233" => ("RationaleForChange",               "Provide a brief rationale for why this change was made."),
-            "C218479" => ("SectionAndName",                   "Select the section number and name where the change was made."),
-            _         => (code,                               "Enter field value."),
+            "C25294"  => ("ClinicalLaboratoryTests",   FieldGuidance.For("C25294")),
+            "C218832" => ("CountryRegionIdentifier",  FieldGuidance.For("C218832")),
+            "C218833" => ("CountryRegionRequirements",FieldGuidance.For("C218833")),
+            "C218834" => ("CountryRegionClarifications", FieldGuidance.For("C218834")),
+            "C218477" => ("AmendmentIdentifier",      FieldGuidance.For("C218477")),
+            "C93813"  => ("SponsorApprovalDate",      FieldGuidance.For("C93813")),
+            "C132352" => ("SponsorApprovalDate",      FieldGuidance.For("C132352")),
+            "C218478" => ("ApproxEnrollment",         FieldGuidance.For("C218478")),
+            "C218695" => ("EnrollmentScope",          FieldGuidance.For("C218695")),
+            "C218695e"=> ("EnrollmentScopeDescription",FieldGuidance.For("C218695")),
+            "C218836" => ("AlternateLocation",        FieldGuidance.For("C218836")),
+            "C218483" => ("DescriptionOfChange",      FieldGuidance.For("C218483")),
+            "C181233" => ("RationaleForChange",       FieldGuidance.For("C181233")),
+            "C218479" => ("SectionAndName",           FieldGuidance.For("C218479")),
+            _         => (code,                       FieldGuidance.For(bare)),
         };
     }
 
@@ -846,7 +848,7 @@
         try
         {
             _objRef = DotNetObjectReference.Create(this);
-            await JS.InvokeVoidAsync("udpSetDotNetRef", _objRef);
+            await JS.InvokeVoidAsync("udpSetDotNetRef", _objRef, "s12-ctx-menu");
             await JS.InvokeVoidAsync("udpInitContextMenus", "s12-ctx-menu");
 
             var json = await JS.InvokeAsync<string?>("localStorage.getItem", "s12data");
@@ -855,6 +857,8 @@
                 var loaded = DataSvc.FromJson(json);
                 if (loaded != null) { Model = loaded; StateHasChanged(); }
             }
+            // Re-init after data load so amendment table wrappers get hooked
+            await JS.InvokeVoidAsync("udpInitContextMenus", "s12-ctx-menu");
         }
         catch (JSDisconnectedException) { }
         catch (TaskCanceledException)   { }

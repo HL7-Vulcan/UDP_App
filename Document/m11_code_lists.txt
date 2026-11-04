@@ -1,0 +1,324 @@
+ICH M11 Technical Specification – Code Lists
+============================================================
+Extracted from M11 Technical Specification PDF
+Total entries: 33
+
+Field C-code(s): C218672
+Code List:       C217046
+OID:             ICH OID 2.16.840.1.113883.3.989.2.3.1.11
+Items:
+  Yes (C49488)
+  No (C49487)
+
+Field C-code(s): C218673
+Code List:       C217047
+OID:             ICH OID 2.16.840.1.113883.3.989.2.3.1.3
+Items:
+  Global (C68846)
+  Not Global (C217026)
+
+Field C-code(s): C48281
+Code List:       C217045
+OID:             ICH OID 2.16.840.1.113883.3.989.2.3.1.18
+Items:
+  Early Phase 1 (C54721)
+  Phase 1 (C15600)
+  Phase 1/Phase 2 (C15693)
+  Phase 1/Phase 2/Phase 3 (C198366)
+  Phase 1/Phase 3 (C198367)
+  Phase 2 (C15601)
+  Phase 2/Phase 3 (C15694)
+  Phase 2/Phase 3/Phase 4 (C217024)
+  Phase 3 (C15602)
+  Phase 3/Phase 4 (C217025)
+  Phase 4 (C15603)
+
+Field C-code(s): C218694
+Code List:       C217274
+OID:             ICH OID 2.16.840.1.113883.3.989.2.3.1.1
+Items:
+  This protocol has not been amended. (C218485)
+  OR This is the first protocol amendment. (C218486)
+
+Field C-code(s): C218695
+Code List:       C217275
+OID:             ICH OID 2.16.840.1.113883.3.989.2.3.1.2
+Items:
+  Globally (C68846)
+  Locally (C41065)
+  By Cohort (C218489)
+
+Field C-code(s): C218696
+Code List:       C217276
+OID:             ICH OID 2.16.840.1.113883.3.989.2.3.1.14
+Items:
+  Regulatory Agency Request To Amend (C218490)
+  New Regulatory Guidance (C218491)
+  IRB/IEC Feedback (C218492)
+  New Safety Information Available (C218493)
+  Manufacturing Change (C218494)
+  IMP Addition (C218495)
+  Change In Strategy (C218496)
+  Change In Standard Of Care (C218497)
+  Investigator/Site Feedback (C218499)
+  Recruitment Difficulty (C218500)
+  Inconsistency And/Or Error In The Protocol (C218501)
+  Protocol Design Error (C218502)
+  Other (C17649)
+  Not Applicable (C48660)
+
+Field C-code(s): C218697
+Code List:       C217276
+OID:             ICH OID 2.16.840.1.113883.3.989.2.3.1.14
+Items:
+  Regulatory Agency Request To Amend (C218490)
+  New Regulatory Guidance (C218491)
+  IRB/IEC Feedback (C218492)
+  New Safety Information Available (C218493)
+  Manufacturing Change (C218494)
+  IMP Addition (C218495)
+  Change In Strategy (C218496)
+  Change In Standard Of Care (C218497)
+  Investigator/Site Feedback (C218499)
+  Recruitment Difficulty (C218500)
+  Inconsistency And/Or Error In The Protocol (C218501)
+  Protocol Design Error (C218502)
+  Other (C17649)
+  Not applicable (C48660)
+
+Field C-code(s): C218698
+Code List:       C217046
+OID:             ICH OID 2.16.840.1.113883.3.989.2.3.1.11
+Items:
+  Yes (C49488)
+  No (C49487)
+
+Field C-code(s): C218700
+Code List:       C217046
+OID:             ICH OID 2.16.840.1.113883.3.989.2.3.1.11
+Items:
+  Yes (C49488)
+  No (C49487)
+
+Field C-code(s): C218479
+Code List:       C217272
+OID:             ICH OID 2.16.840.1.113883.3.989.2.3.13
+Items: (section references - see PDF)
+
+Field C-code(s): C98746
+Code List:       C217277
+OID:             ICH OID 2.16.840.1.113883.3.989.2.3.1.6
+Items:
+  Single Group (C82640)
+  Parallel Group (C82639)
+  Cross-over (C82637)
+  Factorial (C82638)
+  Sequential (C142568)
+  Other (C17649)
+
+Field C-code(s): C218703
+Code List:       C217278
+OID:             ICH OID 2.16.840.1.113883.3.989.2.3.1.12
+Items:
+  With Disease (C218503)
+  Without Disease (C218504)
+
+Field C-code(s): C49647
+Code List:       C217279
+OID:             ICH OID 2.16.840.1.113883.3.989.2.3.1.4
+Items:
+  Placebo (C49648)
+  Active Comparator (C49649)
+  Dose Response (C120841)
+  Different Dose or Regimen (C218505)
+  External (C218506)
+  Sham Procedure (C184727)
+  No Control (C28280)
+
+Field C-code(s): C50400
+Code List:       C217048
+OID:             ICH OID 2.16.840.1.113883.3.989.2.3.1.23
+Items:
+  Hours (C25529)
+  Days (C25301)
+  Weeks (C29844)
+  Months (C29846)
+  Years (C29848)
+
+Field C-code(s): C218475
+Code List:       C217280
+OID:             ICH OID 2.16.840.1.113883.3.989.2.3.1.18
+Items:
+  Randomisation (C25196)
+  No Intervention Assignment Method (C222801)
+  Other (C17649)
+
+Field C-code(s): C223136
+Code List:       C217046
+OID:             ICH OID 2.16.840.1.113883.3.989.2.3.1.11
+Items:
+  Yes (C49488)
+  No (C49487)
+
+Field C-code(s): C218704
+Code List:       C217049
+OID:             ICH OID 2.16.840.1.113883.3.989.2.3.1.20
+Items:
+  Single-Centre (C217004)
+  Multicentre (C217005)
+
+Field C-code(s): C218705
+Code List:       C217050
+OID:             ICH OID 2.16.840.1.113883.3.989.2.3.1.21
+Items:
+  Single Country (C217006)
+  Multiple Countries (C217007)
+
+Field C-code(s): C218707
+Code List:       C217046
+OID:             ICH OID 2.16.840.1.113883.3.989.2.3.1.11
+Items:
+  Yes (C49488)
+  No (C49487)
+
+Field C-code(s): C218708
+Code List:       C217046
+OID:             ICH OID 2.16.840.1.113883.3.989.2.3.1.11
+Items:
+  Yes (C49488)
+  No (C49487)
+
+Field C-code(s): C218706
+Code List:       C217046
+OID:             ICH OID 2.16.840.1.113883.3.989.2.3.1.11
+Items:
+  Yes (C49488)
+  No (C49487)
+
+Field C-code(s): C49658
+Code List:       C217051
+OID:             ICH OID 2.16.840.1.113883.3.989.2.3.1.17
+Items:
+  Double Blind (C15228)
+  Observer Blind (C187674)
+  Open Label (C49659)
+  Single Blind (C28233)
+
+Field C-code(s): C218709
+Code List:       C217281
+OID:             ICH OID 2.16.840.1.113883.3.989.2.3.1.16
+Items:
+  Participant (C142710)
+  Care Provider (C17445)
+  Investigator (C25936)
+  Outcomes Assessor (C207599)
+  Sponsor (C70793)
+  Not Applicable (C48660)
+
+Field C-code(s): C218712, C218713
+Code List:       C217048
+OID:             ICH OID 2.16.840.1.113883.3.989.2.3.1.23
+Items:
+  Days (C25301)
+  Hours (C25529)
+  Months (C29846)
+  Weeks (C29844)
+  Years (C29848)
+
+Field C-code(s): C218715, C218716
+Code List:       C217048
+OID:             ICH OID 2.16.840.1.113883.3.989.2.3.1.23
+Items:
+  Days (C25301)
+  Hours (C25529)
+  Months (C29846)
+  Weeks (C29844)
+  Years (C29848)
+
+Field C-code(s): C218718
+Code List:       C217282
+OID:             ICH OID 2.16.840.1.113883.3.989.2.3.1.5
+Items:
+  Independent Data Monitoring Committee (C142578)
+  Dose Escalation Committee (C215671)
+  Endpoint Adjudication Committee (C78726)
+  Other (C17649)
+  None (C41132)
+
+Field C-code(s): C172457
+Code List:       C217283
+OID:             ICH OID 2.16.840.1.113883.3.989.2.3.1.15
+Items:
+  Active Comparator Arm (C174267)
+  Control Arm (C174226)
+  Experimental Arm (C174266)
+  No Intervention Arm (C174270)
+  Placebo Comparator Arm (C174268)
+  Sham Comparator Arm (C174269)
+
+Field C-code(s): C98747
+Code List:       C217284
+OID:             ICH OID 2.16.840.1.113883.3.989.2.3.1.7
+Items:
+  Drug (C1909)
+  Medical Device (C16830)
+  Biologic (C307)
+  Vaccine (C923)
+  Non- Surgical Procedure (C218507)
+  Surgery (C15329)
+  Radiation (C15313)
+  Behavioral (C15184)
+  Genetic (C15238)
+  Dietary Supplement (C1505)
+  Combination Product (C54696)
+  Diagnostic (C18020)
+
+Field C-code(s): C218748
+Code List:       C217285
+OID:             ICH OID 2.16.840.1.113883.3.989.2.3.1.8
+Items:
+  Experimental Intervention (C41161)
+  Placebo (C753)
+  Rescue Medicine (C165835)
+  Background Treatment (C165822)
+  Challenge Agent (C158128)
+  Diagnostic (C18020)
+  Additional Required Treatment (C207614)
+
+Field C-code(s): C218749
+Code List:       C217286
+OID:             ICH OID 2.16.840.1.113883.3.989.2.3.1.10
+Items:
+  IMP (C202579)
+  NIMP (C156473)
+
+Field C-code(s): C218750
+Code List:       C217052
+OID:             ICH OID 2.16.840.1.113883.3.989.2.3.1.9
+Items:
+  Centrally Sourced (C215659)
+  Locally Sourced (C215660)
+
+Field C-code(s): C218784
+Code List:       C217287
+OID:             ICH OID 2.16.840.1.113883.3.989.2.3.1.22
+Items:
+  Adverse Event (C41331)
+  Serious Adverse Event (C41335)
+  Trial Intervention Complaint (C218508)
+  Drug/Device Combination Product Complaint (C222331)
+  Pregnancy Event (C25742)
+  Lactation Event (C218510)
+  Post-Partum Event (C218511)
+  Reportable Adverse Event of Special Interest (C218512)
+  Not Reportable Adverse Event of Special Interest (C218513)
+  Other (C17649)
+
+Field C-code(s): C218835
+Code List:       C217274
+OID:             ICH OID 2.16.840.1.113883.3.989.2.3.1.1
+Items:
+  This protocol has not been amended. (C218485)
+  Or This is the first protocol amendment. (C218486)
+  to this protocol are listed in the table below, beginning with the most recent. (C218488)
+

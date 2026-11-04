@@ -1,0 +1,916 @@
+[
+  {
+    "field_codes": [
+      "C218672"
+    ],
+    "code_list": "C217046",
+    "oid": "ICH OID 2.16.840.1.113883.3.989.2.3.1.11",
+    "items": [
+      {
+        "display": "Yes",
+        "code": "C49488"
+      },
+      {
+        "display": "No",
+        "code": "C49487"
+      }
+    ]
+  },
+  {
+    "field_codes": [
+      "C218673"
+    ],
+    "code_list": "C217047",
+    "oid": "ICH OID 2.16.840.1.113883.3.989.2.3.1.3",
+    "items": [
+      {
+        "display": "Global",
+        "code": "C68846"
+      },
+      {
+        "display": "Not Global",
+        "code": "C217026"
+      }
+    ]
+  },
+  {
+    "field_codes": [
+      "C48281"
+    ],
+    "code_list": "C217045",
+    "oid": "ICH OID 2.16.840.1.113883.3.989.2.3.1.18",
+    "items": [
+      {
+        "display": "Early Phase 1",
+        "code": "C54721"
+      },
+      {
+        "display": "Phase 1",
+        "code": "C15600"
+      },
+      {
+        "display": "Phase 1/Phase 2",
+        "code": "C15693"
+      },
+      {
+        "display": "Phase 1/Phase 2/Phase 3",
+        "code": "C198366"
+      },
+      {
+        "display": "Phase 1/Phase 3",
+        "code": "C198367"
+      },
+      {
+        "display": "Phase 2",
+        "code": "C15601"
+      },
+      {
+        "display": "Phase 2/Phase 3",
+        "code": "C15694"
+      },
+      {
+        "display": "Phase 2/Phase 3/Phase 4",
+        "code": "C217024"
+      },
+      {
+        "display": "Phase 3",
+        "code": "C15602"
+      },
+      {
+        "display": "Phase 3/Phase 4",
+        "code": "C217025"
+      },
+      {
+        "display": "Phase 4",
+        "code": "C15603"
+      }
+    ]
+  },
+  {
+    "field_codes": [
+      "C218694"
+    ],
+    "code_list": "C217274",
+    "oid": "ICH OID 2.16.840.1.113883.3.989.2.3.1.1",
+    "items": [
+      {
+        "display": "This protocol has not been amended.",
+        "code": "C218485"
+      },
+      {
+        "display": "OR This is the first protocol amendment.",
+        "code": "C218486"
+      }
+    ]
+  },
+  {
+    "field_codes": [
+      "C218695"
+    ],
+    "code_list": "C217275",
+    "oid": "ICH OID 2.16.840.1.113883.3.989.2.3.1.2",
+    "items": [
+      {
+        "display": "Globally",
+        "code": "C68846"
+      },
+      {
+        "display": "Locally",
+        "code": "C41065"
+      },
+      {
+        "display": "By Cohort",
+        "code": "C218489"
+      }
+    ]
+  },
+  {
+    "field_codes": [
+      "C218696"
+    ],
+    "code_list": "C217276",
+    "oid": "ICH OID 2.16.840.1.113883.3.989.2.3.1.14",
+    "items": [
+      {
+        "display": "Regulatory Agency Request To Amend",
+        "code": "C218490"
+      },
+      {
+        "display": "New Regulatory Guidance",
+        "code": "C218491"
+      },
+      {
+        "display": "IRB/IEC Feedback",
+        "code": "C218492"
+      },
+      {
+        "display": "New Safety Information Available",
+        "code": "C218493"
+      },
+      {
+        "display": "Manufacturing Change",
+        "code": "C218494"
+      },
+      {
+        "display": "IMP Addition",
+        "code": "C218495"
+      },
+      {
+        "display": "Change In Strategy",
+        "code": "C218496"
+      },
+      {
+        "display": "Change In Standard Of Care",
+        "code": "C218497"
+      },
+      {
+        "display": "Investigator/Site Feedback",
+        "code": "C218499"
+      },
+      {
+        "display": "Recruitment Difficulty",
+        "code": "C218500"
+      },
+      {
+        "display": "Inconsistency And/Or Error In The Protocol",
+        "code": "C218501"
+      },
+      {
+        "display": "Protocol Design Error",
+        "code": "C218502"
+      },
+      {
+        "display": "Other",
+        "code": "C17649"
+      },
+      {
+        "display": "Not Applicable",
+        "code": "C48660"
+      }
+    ]
+  },
+  {
+    "field_codes": [
+      "C218697"
+    ],
+    "code_list": "C217276",
+    "oid": "ICH OID 2.16.840.1.113883.3.989.2.3.1.14",
+    "items": [
+      {
+        "display": "Regulatory Agency Request To Amend",
+        "code": "C218490"
+      },
+      {
+        "display": "New Regulatory Guidance",
+        "code": "C218491"
+      },
+      {
+        "display": "IRB/IEC Feedback",
+        "code": "C218492"
+      },
+      {
+        "display": "New Safety Information Available",
+        "code": "C218493"
+      },
+      {
+        "display": "Manufacturing Change",
+        "code": "C218494"
+      },
+      {
+        "display": "IMP Addition",
+        "code": "C218495"
+      },
+      {
+        "display": "Change In Strategy",
+        "code": "C218496"
+      },
+      {
+        "display": "Change In Standard Of Care",
+        "code": "C218497"
+      },
+      {
+        "display": "Investigator/Site Feedback",
+        "code": "C218499"
+      },
+      {
+        "display": "Recruitment Difficulty",
+        "code": "C218500"
+      },
+      {
+        "display": "Inconsistency And/Or Error In The Protocol",
+        "code": "C218501"
+      },
+      {
+        "display": "Protocol Design Error",
+        "code": "C218502"
+      },
+      {
+        "display": "Other",
+        "code": "C17649"
+      },
+      {
+        "display": "Not applicable",
+        "code": "C48660"
+      }
+    ]
+  },
+  {
+    "field_codes": [
+      "C218698"
+    ],
+    "code_list": "C217046",
+    "oid": "ICH OID 2.16.840.1.113883.3.989.2.3.1.11",
+    "items": [
+      {
+        "display": "Yes",
+        "code": "C49488"
+      },
+      {
+        "display": "No",
+        "code": "C49487"
+      }
+    ]
+  },
+  {
+    "field_codes": [
+      "C218700"
+    ],
+    "code_list": "C217046",
+    "oid": "ICH OID 2.16.840.1.113883.3.989.2.3.1.11",
+    "items": [
+      {
+        "display": "Yes",
+        "code": "C49488"
+      },
+      {
+        "display": "No",
+        "code": "C49487"
+      }
+    ]
+  },
+  {
+    "field_codes": [
+      "C218479"
+    ],
+    "code_list": "C217272",
+    "oid": "ICH OID 2.16.840.1.113883.3.989.2.3.13",
+    "items": []
+  },
+  {
+    "field_codes": [
+      "C98746"
+    ],
+    "code_list": "C217277",
+    "oid": "ICH OID 2.16.840.1.113883.3.989.2.3.1.6",
+    "items": [
+      {
+        "display": "Single Group",
+        "code": "C82640"
+      },
+      {
+        "display": "Parallel Group",
+        "code": "C82639"
+      },
+      {
+        "display": "Cross-over",
+        "code": "C82637"
+      },
+      {
+        "display": "Factorial",
+        "code": "C82638"
+      },
+      {
+        "display": "Sequential",
+        "code": "C142568"
+      },
+      {
+        "display": "Other",
+        "code": "C17649"
+      }
+    ]
+  },
+  {
+    "field_codes": [
+      "C218703"
+    ],
+    "code_list": "C217278",
+    "oid": "ICH OID 2.16.840.1.113883.3.989.2.3.1.12",
+    "items": [
+      {
+        "display": "With Disease",
+        "code": "C218503"
+      },
+      {
+        "display": "Without Disease",
+        "code": "C218504"
+      }
+    ]
+  },
+  {
+    "field_codes": [
+      "C49647"
+    ],
+    "code_list": "C217279",
+    "oid": "ICH OID 2.16.840.1.113883.3.989.2.3.1.4",
+    "items": [
+      {
+        "display": "Placebo",
+        "code": "C49648"
+      },
+      {
+        "display": "Active Comparator",
+        "code": "C49649"
+      },
+      {
+        "display": "Dose Response",
+        "code": "C120841"
+      },
+      {
+        "display": "Different Dose or Regimen",
+        "code": "C218505"
+      },
+      {
+        "display": "External",
+        "code": "C218506"
+      },
+      {
+        "display": "Sham Procedure",
+        "code": "C184727"
+      },
+      {
+        "display": "No Control",
+        "code": "C28280"
+      }
+    ]
+  },
+  {
+    "field_codes": [
+      "C50400"
+    ],
+    "code_list": "C217048",
+    "oid": "ICH OID 2.16.840.1.113883.3.989.2.3.1.23",
+    "items": [
+      {
+        "display": "Hours",
+        "code": "C25529"
+      },
+      {
+        "display": "Days",
+        "code": "C25301"
+      },
+      {
+        "display": "Weeks",
+        "code": "C29844"
+      },
+      {
+        "display": "Months",
+        "code": "C29846"
+      },
+      {
+        "display": "Years",
+        "code": "C29848"
+      }
+    ]
+  },
+  {
+    "field_codes": [
+      "C218475"
+    ],
+    "code_list": "C217280",
+    "oid": "ICH OID 2.16.840.1.113883.3.989.2.3.1.18",
+    "items": [
+      {
+        "display": "Randomisation",
+        "code": "C25196"
+      },
+      {
+        "display": "No Intervention Assignment Method",
+        "code": "C222801"
+      },
+      {
+        "display": "Other",
+        "code": "C17649"
+      }
+    ]
+  },
+  {
+    "field_codes": [
+      "C223136"
+    ],
+    "code_list": "C217046",
+    "oid": "ICH OID 2.16.840.1.113883.3.989.2.3.1.11",
+    "items": [
+      {
+        "display": "Yes",
+        "code": "C49488"
+      },
+      {
+        "display": "No",
+        "code": "C49487"
+      }
+    ]
+  },
+  {
+    "field_codes": [
+      "C218704"
+    ],
+    "code_list": "C217049",
+    "oid": "ICH OID 2.16.840.1.113883.3.989.2.3.1.20",
+    "items": [
+      {
+        "display": "Single-Centre",
+        "code": "C217004"
+      },
+      {
+        "display": "Multicentre",
+        "code": "C217005"
+      }
+    ]
+  },
+  {
+    "field_codes": [
+      "C218705"
+    ],
+    "code_list": "C217050",
+    "oid": "ICH OID 2.16.840.1.113883.3.989.2.3.1.21",
+    "items": [
+      {
+        "display": "Single Country",
+        "code": "C217006"
+      },
+      {
+        "display": "Multiple Countries",
+        "code": "C217007"
+      }
+    ]
+  },
+  {
+    "field_codes": [
+      "C218707"
+    ],
+    "code_list": "C217046",
+    "oid": "ICH OID 2.16.840.1.113883.3.989.2.3.1.11",
+    "items": [
+      {
+        "display": "Yes",
+        "code": "C49488"
+      },
+      {
+        "display": "No",
+        "code": "C49487"
+      }
+    ]
+  },
+  {
+    "field_codes": [
+      "C218708"
+    ],
+    "code_list": "C217046",
+    "oid": "ICH OID 2.16.840.1.113883.3.989.2.3.1.11",
+    "items": [
+      {
+        "display": "Yes",
+        "code": "C49488"
+      },
+      {
+        "display": "No",
+        "code": "C49487"
+      }
+    ]
+  },
+  {
+    "field_codes": [
+      "C218706"
+    ],
+    "code_list": "C217046",
+    "oid": "ICH OID 2.16.840.1.113883.3.989.2.3.1.11",
+    "items": [
+      {
+        "display": "Yes",
+        "code": "C49488"
+      },
+      {
+        "display": "No",
+        "code": "C49487"
+      }
+    ]
+  },
+  {
+    "field_codes": [
+      "C49658"
+    ],
+    "code_list": "C217051",
+    "oid": "ICH OID 2.16.840.1.113883.3.989.2.3.1.17",
+    "items": [
+      {
+        "display": "Double Blind",
+        "code": "C15228"
+      },
+      {
+        "display": "Observer Blind",
+        "code": "C187674"
+      },
+      {
+        "display": "Open Label",
+        "code": "C49659"
+      },
+      {
+        "display": "Single Blind",
+        "code": "C28233"
+      }
+    ]
+  },
+  {
+    "field_codes": [
+      "C218709"
+    ],
+    "code_list": "C217281",
+    "oid": "ICH OID 2.16.840.1.113883.3.989.2.3.1.16",
+    "items": [
+      {
+        "display": "Participant",
+        "code": "C142710"
+      },
+      {
+        "display": "Care Provider",
+        "code": "C17445"
+      },
+      {
+        "display": "Investigator",
+        "code": "C25936"
+      },
+      {
+        "display": "Outcomes Assessor",
+        "code": "C207599"
+      },
+      {
+        "display": "Sponsor",
+        "code": "C70793"
+      },
+      {
+        "display": "Not Applicable",
+        "code": "C48660"
+      }
+    ]
+  },
+  {
+    "field_codes": [
+      "C218712",
+      "C218713"
+    ],
+    "code_list": "C217048",
+    "oid": "ICH OID 2.16.840.1.113883.3.989.2.3.1.23",
+    "items": [
+      {
+        "display": "Days",
+        "code": "C25301"
+      },
+      {
+        "display": "Hours",
+        "code": "C25529"
+      },
+      {
+        "display": "Months",
+        "code": "C29846"
+      },
+      {
+        "display": "Weeks",
+        "code": "C29844"
+      },
+      {
+        "display": "Years",
+        "code": "C29848"
+      }
+    ]
+  },
+  {
+    "field_codes": [
+      "C218715",
+      "C218716"
+    ],
+    "code_list": "C217048",
+    "oid": "ICH OID 2.16.840.1.113883.3.989.2.3.1.23",
+    "items": [
+      {
+        "display": "Days",
+        "code": "C25301"
+      },
+      {
+        "display": "Hours",
+        "code": "C25529"
+      },
+      {
+        "display": "Months",
+        "code": "C29846"
+      },
+      {
+        "display": "Weeks",
+        "code": "C29844"
+      },
+      {
+        "display": "Years",
+        "code": "C29848"
+      }
+    ]
+  },
+  {
+    "field_codes": [
+      "C218718"
+    ],
+    "code_list": "C217282",
+    "oid": "ICH OID 2.16.840.1.113883.3.989.2.3.1.5",
+    "items": [
+      {
+        "display": "Independent Data Monitoring Committee",
+        "code": "C142578"
+      },
+      {
+        "display": "Dose Escalation Committee",
+        "code": "C215671"
+      },
+      {
+        "display": "Endpoint Adjudication Committee",
+        "code": "C78726"
+      },
+      {
+        "display": "Other",
+        "code": "C17649"
+      },
+      {
+        "display": "None",
+        "code": "C41132"
+      }
+    ]
+  },
+  {
+    "field_codes": [
+      "C172457"
+    ],
+    "code_list": "C217283",
+    "oid": "ICH OID 2.16.840.1.113883.3.989.2.3.1.15",
+    "items": [
+      {
+        "display": "Active Comparator Arm",
+        "code": "C174267"
+      },
+      {
+        "display": "Control Arm",
+        "code": "C174226"
+      },
+      {
+        "display": "Experimental Arm",
+        "code": "C174266"
+      },
+      {
+        "display": "No Intervention Arm",
+        "code": "C174270"
+      },
+      {
+        "display": "Placebo Comparator Arm",
+        "code": "C174268"
+      },
+      {
+        "display": "Sham Comparator Arm",
+        "code": "C174269"
+      }
+    ]
+  },
+  {
+    "field_codes": [
+      "C98747"
+    ],
+    "code_list": "C217284",
+    "oid": "ICH OID 2.16.840.1.113883.3.989.2.3.1.7",
+    "items": [
+      {
+        "display": "Drug",
+        "code": "C1909"
+      },
+      {
+        "display": "Medical Device",
+        "code": "C16830"
+      },
+      {
+        "display": "Biologic",
+        "code": "C307"
+      },
+      {
+        "display": "Vaccine",
+        "code": "C923"
+      },
+      {
+        "display": "Non- Surgical Procedure",
+        "code": "C218507"
+      },
+      {
+        "display": "Surgery",
+        "code": "C15329"
+      },
+      {
+        "display": "Radiation",
+        "code": "C15313"
+      },
+      {
+        "display": "Behavioral",
+        "code": "C15184"
+      },
+      {
+        "display": "Genetic",
+        "code": "C15238"
+      },
+      {
+        "display": "Dietary Supplement",
+        "code": "C1505"
+      },
+      {
+        "display": "Combination Product",
+        "code": "C54696"
+      },
+      {
+        "display": "Diagnostic",
+        "code": "C18020"
+      }
+    ]
+  },
+  {
+    "field_codes": [
+      "C218748"
+    ],
+    "code_list": "C217285",
+    "oid": "ICH OID 2.16.840.1.113883.3.989.2.3.1.8",
+    "items": [
+      {
+        "display": "Experimental Intervention",
+        "code": "C41161"
+      },
+      {
+        "display": "Placebo",
+        "code": "C753"
+      },
+      {
+        "display": "Rescue Medicine",
+        "code": "C165835"
+      },
+      {
+        "display": "Background Treatment",
+        "code": "C165822"
+      },
+      {
+        "display": "Challenge Agent",
+        "code": "C158128"
+      },
+      {
+        "display": "Diagnostic",
+        "code": "C18020"
+      },
+      {
+        "display": "Additional Required Treatment",
+        "code": "C207614"
+      }
+    ]
+  },
+  {
+    "field_codes": [
+      "C218749"
+    ],
+    "code_list": "C217286",
+    "oid": "ICH OID 2.16.840.1.113883.3.989.2.3.1.10",
+    "items": [
+      {
+        "display": "IMP",
+        "code": "C202579"
+      },
+      {
+        "display": "NIMP",
+        "code": "C156473"
+      }
+    ]
+  },
+  {
+    "field_codes": [
+      "C218750"
+    ],
+    "code_list": "C217052",
+    "oid": "ICH OID 2.16.840.1.113883.3.989.2.3.1.9",
+    "items": [
+      {
+        "display": "Centrally Sourced",
+        "code": "C215659"
+      },
+      {
+        "display": "Locally Sourced",
+        "code": "C215660"
+      }
+    ]
+  },
+  {
+    "field_codes": [
+      "C218784"
+    ],
+    "code_list": "C217287",
+    "oid": "ICH OID 2.16.840.1.113883.3.989.2.3.1.22",
+    "items": [
+      {
+        "display": "Adverse Event",
+        "code": "C41331"
+      },
+      {
+        "display": "Serious Adverse Event",
+        "code": "C41335"
+      },
+      {
+        "display": "Trial Intervention Complaint",
+        "code": "C218508"
+      },
+      {
+        "display": "Drug/Device Combination Product Complaint",
+        "code": "C222331"
+      },
+      {
+        "display": "Pregnancy Event",
+        "code": "C25742"
+      },
+      {
+        "display": "Lactation Event",
+        "code": "C218510"
+      },
+      {
+        "display": "Post-Partum Event",
+        "code": "C218511"
+      },
+      {
+        "display": "Reportable Adverse Event of Special Interest",
+        "code": "C218512"
+      },
+      {
+        "display": "Not Reportable Adverse Event of Special Interest",
+        "code": "C218513"
+      },
+      {
+        "display": "Other",
+        "code": "C17649"
+      }
+    ]
+  },
+  {
+    "field_codes": [
+      "C218835"
+    ],
+    "code_list": "C217274",
+    "oid": "ICH OID 2.16.840.1.113883.3.989.2.3.1.1",
+    "items": [
+      {
+        "display": "This protocol has not been amended.",
+        "code": "C218485"
+      },
+      {
+        "display": "Or This is the first protocol amendment.",
+        "code": "C218486"
+      },
+      {
+        "display": "to this protocol are listed in the table below, beginning with the most recent.",
+        "code": "C218488"
+      }
+    ]
+  }
+]

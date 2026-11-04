@@ -5,6 +5,7 @@
 @inject DataService06 DataSvc
 @inject SushiService SushiSvc
 @inject FhirPipelineService PipelineSvc
+@inject TerminologyService TermSvc
 @inject IJSRuntime JS
 @implements IDisposable
 
@@ -57,6 +58,7 @@
     .ctx-div  { border:none; border-top:1px solid #e0e0e0; margin:8px 0; }
     .ctx-guide { font-size:9.5pt; color:#444; line-height:1.5; }
     .ctx-guide strong { color:#1f3864; }
+    .tbl-sel { width:100%; box-sizing:border-box; min-width:0; }
 </style>
 
 @if (!string.IsNullOrEmpty(ErrorMessage))
@@ -188,8 +190,13 @@
         <button class="ctx-close" @onclick="CloseCtxMenu">✕</button>
     </div>
     <div class="ctx-body">
-        <div class="ctx-row"><label>Field name:</label><span>@CtxFieldName</span></div>
-        <div class="ctx-row"><label>Original name:</label><span>@CtxOriginalName</span></div>
+        <div class="ctx-row"><label>M11 Field Name:</label><span>@CtxFieldName</span></div>
+        <div class="ctx-row"><label>M11 Name:</label><span>@CtxOriginalName</span></div>
+        @if (!string.IsNullOrEmpty(CtxValueSetId))
+        {
+            <div class="ctx-row"><label>M11 code set:</label><span>@CtxValueSetCCode</span></div>
+            <div class="ctx-row"><label>Value Set:</label><span>@CtxValueSetName</span></div>
+        }
         <hr class="ctx-div" />
         <div class="ctx-guide"><strong>Guidance:</strong><br />@CtxGuidance</div>
     </div>
@@ -255,6 +262,21 @@
     private string CtxFieldName    = string.Empty;
     private string CtxOriginalName = string.Empty;
     private string CtxGuidance     = string.Empty;
+    private string CtxValueSetId    = string.Empty;
+    private string CtxValueSetName  = string.Empty;
+    private string CtxValueSetCCode = string.Empty;
+
+    // Row-keyed fields: strip the _r{n} suffix to look up the base C-code
+    private static readonly Dictionary<string, string> FieldValueSets = new()
+    {
+        ["C172457"] = "m11-arm-type-vs",          // Arm Type
+        ["C98747"]  = "m11-intervention-type-vs", // Intervention Type
+        ["C42636"]  = "m11-dose-form-vs",         // Pharmaceutical Dose Form
+        ["C38114"]  = "m11-route-vs",             // Route of Administration
+        ["C218748"] = "m11-use-code-vs",         // Intervention Role (Use Code)
+        ["C218749"] = "m11-imp-nimp-type-vs",    // IMP/NIMP Classification
+        ["C218750"] = "m11-source-code-vs",      // Sourcing (Source Code)
+    };
 
     private System.Threading.Timer?           _statusTimer;
     private DotNetObjectReference<Section06>? _objRef;
@@ -386,7 +408,7 @@
         AutoSave();
     }
 
-    private void OpenPopout()  { _showPopout = true; }
+    private void OpenPopout()  { _showPopout = true; _reinitCtxMenus = true; }
     private void ClosePopout() { _showPopout = false; }
 
     private bool HasRequiredEmpty() =>
@@ -501,8 +523,13 @@
     public async Task OnContextMenuJS(string code, double x, double y)
     {
         CtxFieldName    = code;
-        CtxOriginalName = "guidance text goes here";
-        CtxGuidance     = "guidance text goes here";
+        CtxOriginalName = FieldTerms.For(code);
+        CtxGuidance     = FieldGuidance.For(code);
+        var baseCode    = System.Text.RegularExpressions.Regex.Replace(code, @"_r\d+$", "");
+        CtxValueSetId    = FieldValueSets.TryGetValue(baseCode, out var vsId) ? vsId : string.Empty;
+        var vs           = string.IsNullOrEmpty(CtxValueSetId) ? null : TermSvc.Get(CtxValueSetId);
+        CtxValueSetCCode = vs?.CCode ?? string.Empty;
+        CtxValueSetName  = vs == null ? string.Empty : $"{vs.Name}  {vs.Id}";
         StateHasChanged();
         await JS.InvokeVoidAsync("udpShowCtxMenu", "s6-ctx-menu", x, y);
     }

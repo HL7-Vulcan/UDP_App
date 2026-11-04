@@ -1,0 +1,13 @@
+{
+  "resourceType": "Practitioner",
+  "id": "SponsorExpertPractitioner",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"en\" xml:lang=\"en\">Medical Expert contact details held in the sponsor TMF</div>"
+  },
+  "name": [
+    {
+      "text": "Dr James Brown, MD PhD, Exemplar Pharmaceuticals Ltd, james.brown@exemplarpharma.com"
+    }
+  ]
+}

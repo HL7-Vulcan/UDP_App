@@ -18,7 +18,7 @@ Context: M11_ResearchStudyProfile
   versionDate 1..1
 
 * extension[originalProtocol].value[x] only CodeableConcept
-* extension[originalProtocol].value[x] from m11-amendment-details-statement-vs
+* extension[originalProtocol].value[x] from m11-yes-no-vs //m11-amendment-details-statement-vs
   * ^short = "Original Protocol Indicator"
   * ^definition = "An indication as to whether the protocol document reflects the original version of the protocol.."
 

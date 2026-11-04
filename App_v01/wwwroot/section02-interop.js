@@ -113,6 +113,7 @@ window.udpOpenFilePicker = function () {
 
 // ── Context menus ─────────────────────────────────────────────────
 window.udpInitContextMenus = function (menuId) {
+    // Standard editable fields
     document.querySelectorAll('textarea[data-ctx], input[data-ctx], select[data-ctx]').forEach(function (ta) {
         ta.removeEventListener('contextmenu', ta._ctxHandler);
         ta._ctxHandler = function (e) {
@@ -124,6 +125,17 @@ window.udpInitContextMenus = function (menuId) {
             if (ref) ref.invokeMethodAsync('OnContextMenuJS', code, e.clientX, e.clientY);
         };
         ta.addEventListener('contextmenu', ta._ctxHandler);
+    });
+    // Wrapper divs for disabled/read-only fields (data-ctx-wrap) and plain divs with data-ctx
+    document.querySelectorAll('[data-ctx-wrap], div[data-ctx]').forEach(function (el) {
+        el.removeEventListener('contextmenu', el._ctxHandler);
+        el._ctxHandler = function (e) {
+            e.preventDefault();
+            const code = el.getAttribute('data-ctx-wrap') || el.getAttribute('data-ctx');
+            const ref = _refForMenu(menuId);
+            if (ref) ref.invokeMethodAsync('OnContextMenuJS', code, e.clientX, e.clientY);
+        };
+        el.addEventListener('contextmenu', el._ctxHandler);
     });
 };
 
@@ -188,10 +200,8 @@ window.s5HideExclPopout = function () {
 // ── Section 6 popout ──────────────────────────────────────────────
 window.s6ShowPopout = function () {
     const el = document.getElementById('s6-popout');
-    if (el) {
-        el.style.display = 'flex';
-        window.udpInitContextMenus('s6-ctx-menu');
-    }
+    if (el) el.style.display = 'flex';
+    // Context menus initialised by Blazor OnAfterRenderAsync after render
 };
 window.s6HidePopout = function () {
     const el = document.getElementById('s6-popout');

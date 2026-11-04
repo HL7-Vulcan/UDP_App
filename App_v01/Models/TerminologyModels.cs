@@ -16,7 +16,8 @@ public class PicklistOption
 /// <summary>A named value set containing an ordered list of options.</summary>
 public class ValueSet
 {
-    [JsonPropertyName("id")]          public string Id          { get; set; } = string.Empty;  // e.g. C217046
+    [JsonPropertyName("id")]          public string Id          { get; set; } = string.Empty;  // FSH canonical name, e.g. m11-yes-no-vs
+    [JsonPropertyName("ccode")]       public string CCode       { get; set; } = string.Empty;  // NCI/ICH C-code, e.g. C217046
     [JsonPropertyName("name")]        public string Name        { get; set; } = string.Empty;  // e.g. Yes/No Indicator
     [JsonPropertyName("description")] public string Description { get; set; } = string.Empty;
     [JsonPropertyName("options")]     public List<PicklistOption> Options { get; set; } = new();
