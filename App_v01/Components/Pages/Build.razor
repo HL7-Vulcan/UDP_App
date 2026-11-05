@@ -35,7 +35,14 @@
 
     @if (_bundleMessage is not null)
     {
-        <div class="alert @(_bundleError ? "alert-danger" : "alert-success") py-2">@_bundleMessage</div>
+        <div class="alert @(_bundleError ? "alert-danger" : "alert-success") py-2 mb-1">@_bundleMessage</div>
+        @if (_serverDiagnostics is not null && _serverDiagnostics.Count > 0)
+        {
+            <div class="alert alert-danger py-2 mb-1" style="font-size:0.88em;">
+                <strong>Request / response detail:</strong>
+                <pre class="mt-1 mb-0" style="white-space:pre-wrap;word-break:break-all;font-size:0.82em;background:transparent;border:none;padding:0;">@string.Join("\n\n", _serverDiagnostics)</pre>
+            </div>
+        }
     }
 
     @if (_error is not null)
@@ -94,6 +101,7 @@
     private string? _error;
     private string? _bundleMessage;
     private bool _bundleError;
+    private IReadOnlyList<string>? _serverDiagnostics;
     private bool _generating;
     private bool _sending;
 
@@ -137,15 +145,18 @@
 
     private async Task SendToServer()
     {
-        _bundleMessage = null;
-        _bundleError   = false;
-        _sending       = true;
+        _bundleMessage     = null;
+        _bundleError       = false;
+        _serverDiagnostics = null;
+        _sending           = true;
         try
         {
-            var (status, reason) = await BuildSvc.SendBundleToServerAsync(Workspace.BuildOutputFolder);
+            var (status, reason, body) = await BuildSvc.SendBundleToServerAsync(Workspace.BuildOutputFolder);
             var ok = status is >= 200 and < 300;
             _bundleMessage = $"Server responded: {status} {reason}";
             _bundleError   = !ok;
+            if (!ok)
+                _serverDiagnostics = BuildService.ExtractOperationOutcomeDiagnostics(body);
         }
         catch (Exception ex)
         {

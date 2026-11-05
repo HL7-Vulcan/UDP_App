@@ -136,3 +136,68 @@ This value set uses EDQM/IDMP coding rather than NCI codes. The entries below ar
 * $IDMP_DUMMY#R1 "oral"
 * $IDMP_DUMMY#R2 "subcutaneous injection"
 * $IDMP_DUMMY#R3 "topical"
+
+//--------------------------------------------------------------------------------------
+//
+ValueSet: M11InterventionTypeVS
+Id: m11-intervention-type-vs
+Title: "M11 Intervention Type Elements Value Set using NCIT codes to create a FHIR value set."
+Description: """Intervention Type elements for describing trial interventions. This is an M11 specific value set.
+- Code List C217284: ICH OID 2.16.840.1.113883.3.989.2.3.1.7"""
+* insert rs-copyright-terminology
+* ^extension[$ext-fmm].valueInteger = 2
+* ^experimental = false
+* ^status = #active
+* ^publisher = "ICH M11" 
+
+* $NCIT#C1909 "Drug" 
+* $NCIT#C16830 "Medical Device" 
+* $NCIT#C307 "Biologic" 
+* $NCIT#C923 "Vaccine" 
+* $NCIT#C218507 "Non Surgical Procedure" 
+* $NCIT#C15329 "Surgery" 
+* $NCIT#C15313 "Radiation" 
+* $NCIT#C15184 "Behavioral" 
+* $NCIT#C15238 "Genetic" 
+* $NCIT#C1505 "Dietary Supplement" 
+* $NCIT#C54696 "Combination Product" 
+* $NCIT#C18020 "Diagnostic" 
+
+//--------------------------------------------------------------------------------------
+//
+ValueSet: M11ArmTypeVS
+Id: m11-arm-type-vs
+Title: "M11 Arm Type Elements Value Set using NCIT codes to create a FHIR value set."
+Description: """Arm Type elements for describing trial interventions. This is an M11 specific value set.
+Code List C217283: ICH OID 2.16.840.1.113883.3.989.2.3.1.15"""
+* insert rs-copyright-terminology
+* ^extension[$ext-fmm].valueInteger = 2
+* ^experimental = false
+* ^status = #active
+* ^publisher = "ICH M11"
+
+* $NCIT#C174267 "Active Comparator Arm"
+* $NCIT#C174226 "Control Arm"
+* $NCIT#C174266 "Experimental Arm"
+* $NCIT#C174270 "No Intervention Arm"
+* $NCIT#C174268 "Placebo Comparator Arm"
+* $NCIT#C174269 "Sham Comparator Arm"
+
+//--------------------------------------------------------------------------------------
+//ValueSet: C217274
+ValueSet: M11AmendmentDetailsStatementVS
+Id: m11-amendment-details-statement-vs
+Title: "ICH M11 Amendment Details Statement Value Set Terminology"
+Description: """Terminology associated with whether or not a protocol has been amended.
+This is ICH M11 Value Set C217274 drawn from the NCI Thesaurus and represented here in FHIR format."""
+* insert rs-copyright-terminology
+* ^extension[$ext-fmm].valueInteger = 0
+* ^experimental = false
+* ^status = #active
+//* ^caseSensitive = false
+* ^publisher = "ICH M11"
+
+* $NCIT#C218486	"First Protocol Amendment"
+* $NCIT#C218485	"Protocol Not Amended"
+* $NCIT#C218488	"Protocol Previously Amended See Summary of Changes Before the Table of Contents"
+* $NCIT#C218487	"Protocol Previously Amended, Details Presented"

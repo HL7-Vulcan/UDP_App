@@ -26,10 +26,11 @@ public class BuildService
     }
 
     /// <summary>
-    /// PUTs the generated bundle.json from the Examples folder to the FHIR server as a transaction Bundle.
-    /// Returns the HTTP status code and reason phrase.
+    /// POSTs the generated bundle.json from the Examples folder to the FHIR server as a transaction Bundle.
+    /// Returns the HTTP status code, reason phrase, and (on failure) the full response body so that
+    /// FHIR OperationOutcome diagnostics can be displayed to the user.
     /// </summary>
-    public async Task<(int StatusCode, string Reason)> SendBundleToServerAsync(string examplesFolder)
+    public async Task<(int StatusCode, string Reason, string? ResponseBody)> SendBundleToServerAsync(string examplesFolder)
     {
         if (!Path.IsPathRooted(examplesFolder))
             examplesFolder = Path.Combine(_env.ContentRootPath, examplesFolder);
@@ -46,11 +47,74 @@ public class BuildService
         client.DefaultRequestHeaders.Authorization =
             new AuthenticationHeaderValue("Basic", token);
 
-        // FHIR transaction bundles are sent via POST to the server base URL
-        var content  = new StringContent(bundleJson, Encoding.UTF8, "application/fhir+json");
-        var response = await client.PostAsync(s.BaseUrl.TrimEnd('/'), content);
+        var url     = s.BaseUrl.TrimEnd('/') + "/Bundle";
+        var content = new StringContent(bundleJson, Encoding.UTF8, "application/fhir+json");
 
-        return ((int)response.StatusCode, response.ReasonPhrase ?? string.Empty);
+        // Build a diagnostic summary of exactly what we are about to send
+        var requestDump = new System.Text.StringBuilder();
+        requestDump.AppendLine($"PUT {url}");
+        requestDump.AppendLine($"Authorization: Basic {token[..Math.Min(8, token.Length)]}…  (truncated)");
+        requestDump.AppendLine($"Content-Type: {content.Headers.ContentType}");
+        requestDump.AppendLine($"Body length: {Encoding.UTF8.GetByteCount(bundleJson)} bytes");
+        requestDump.AppendLine($"Body preview: {bundleJson[..Math.Min(200, bundleJson.Length)]}");
+
+        var response   = await client.PostAsync(url, content);
+        var statusCode = (int)response.StatusCode;
+        var reason     = response.ReasonPhrase ?? string.Empty;
+
+        string? body = null;
+        try { body = await response.Content.ReadAsStringAsync(); }
+        catch { }
+
+        // Prepend the request dump to the body so it appears in the diagnostics panel
+        var fullDiag = requestDump.ToString() + "\n--- RESPONSE BODY ---\n" + (body ?? "(empty)");
+
+        return (statusCode, reason, fullDiag);
+    }
+
+    /// <summary>
+    /// Extracts human-readable diagnostic lines from a FHIR OperationOutcome JSON body.
+    /// Returns null if the body is not an OperationOutcome or contains no issues.
+    /// </summary>
+    public static IReadOnlyList<string>? ExtractOperationOutcomeDiagnostics(string? body)
+    {
+        if (string.IsNullOrWhiteSpace(body)) return null;
+
+        // The body may be prefixed with a request-dump; extract just the JSON part for parsing
+        const string marker = "\n--- RESPONSE BODY ---\n";
+        var markerIdx = body.IndexOf(marker, StringComparison.Ordinal);
+        var jsonPart  = markerIdx >= 0 ? body[(markerIdx + marker.Length)..] : body;
+
+        // Always return the full dump as the first line so the UI shows request details too
+        var lines = new List<string> { body };
+
+        try
+        {
+            using var doc = JsonDocument.Parse(jsonPart);
+            var root = doc.RootElement;
+            if (!root.TryGetProperty("resourceType", out var rt) || rt.GetString() != "OperationOutcome")
+                return lines;
+            if (!root.TryGetProperty("issue", out var issues)) return lines;
+
+            foreach (var issue in issues.EnumerateArray())
+            {
+                var severity    = issue.TryGetProperty("severity",    out var s)   ? s.GetString()   : null;
+                var code        = issue.TryGetProperty("code",        out var c)   ? c.GetString()   : null;
+                var diagnostics = issue.TryGetProperty("diagnostics", out var d)   ? d.GetString()   : null;
+                var text        = issue.TryGetProperty("details",     out var det) &&
+                                  det.TryGetProperty("text",          out var t)   ? t.GetString()   : null;
+
+                var msg = diagnostics ?? text;
+                if (string.IsNullOrWhiteSpace(msg)) continue;
+
+                var prefix = (severity != null && code != null) ? $"[{severity}/{code}] " :
+                             severity != null ? $"[{severity}] " : "";
+                lines.Add(prefix + msg);
+            }
+        }
+        catch { /* return what we have */ }
+
+        return lines;
     }
 
     /// <summary>
