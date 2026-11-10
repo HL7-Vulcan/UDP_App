@@ -41,6 +41,16 @@
         <div class="form-text">Absolute path to the folder containing JSON example files.</div>
     </div>
 
+    <div class="mb-3">
+        <label class="form-label">SUSHI Executable Path</label>
+        <InputText class="form-control" @bind-Value="_form.SushiExePath" placeholder="D:\home\sushi.cmd  or  /home/bin/sushi" />
+        <div class="form-text">
+            Full path to the sushi executable. Leave blank to search PATH automatically.
+            On Azure: install once via Kudu console with <code>npm install -g fsh-sushi --prefix D:\home</code>,
+            then set this to <code>D:\home\sushi.cmd</code>.
+        </div>
+    </div>
+
     <hr class="my-3" />
     <h5>Vhewer</h5>
     <p class="text-muted" style="font-size:0.9em;">
@@ -77,12 +87,13 @@
         // Pre-populate form from current settings
         _form = new FhirServerSettings
         {
-            BaseUrl   = SettingsSvc.Settings.BaseUrl,
-            Username  = SettingsSvc.Settings.Username,
-            Password  = SettingsSvc.Settings.Password,
+            BaseUrl        = SettingsSvc.Settings.BaseUrl,
+            Username       = SettingsSvc.Settings.Username,
+            Password       = SettingsSvc.Settings.Password,
             ExamplesFolder = SettingsSvc.Settings.ExamplesFolder,
             VhewerUrl      = SettingsSvc.Settings.VhewerUrl,
             StudyOption    = SettingsSvc.Settings.StudyOption,
+            SushiExePath   = SettingsSvc.Settings.SushiExePath,
         };
     }
 

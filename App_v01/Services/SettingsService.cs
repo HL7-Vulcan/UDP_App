@@ -20,12 +20,13 @@ public class SettingsService
     {
         Settings = new FhirServerSettings
         {
-            BaseUrl   = updated.BaseUrl.TrimEnd('/'),
-            Username  = updated.Username,
-            Password  = updated.Password,
-            VhewerUrl   = updated.VhewerUrl.TrimEnd('/'),
+            BaseUrl        = updated.BaseUrl.TrimEnd('/'),
+            Username       = updated.Username,
+            Password       = updated.Password,
+            VhewerUrl      = updated.VhewerUrl.TrimEnd('/'),
             StudyOption    = updated.StudyOption.Trim(),
             ExamplesFolder = updated.ExamplesFolder.Trim(),
+            SushiExePath   = updated.SushiExePath.Trim(),
         };
     }
 }

@@ -77,6 +77,22 @@ window.udpOpenFshPicker = function (dotNetRef) {
 const _dotNetRefs = {};
 let _dotNetRef = null;   // legacy single ref (Section02 / Section09 etc.)
 
+// ── Global file-input handler (called from App.razor onchange) ────────
+// Reads the selected file from the persistent global file input and
+// calls ReceiveFileContent on whichever section is currently active.
+window.udpHandleGlobalFileInput = function () {
+    const input = document.getElementById('udp-global-file-input');
+    if (!input || !input.files || !input.files[0]) return;
+    const file = input.files[0];
+    const reader = new FileReader();
+    reader.onload = function (e) {
+        input.value = '';   // reset so the same file can be re-loaded
+        const ref = Object.values(_dotNetRefs).slice(-1)[0] || _dotNetRef;
+        if (ref) ref.invokeMethodAsync('ReceiveFileContent', e.target.result);
+    };
+    reader.readAsText(file);
+};
+
 window.udpSetDotNetRef = function (ref, menuId) {
     if (menuId) {
         _dotNetRefs[menuId] = ref;
@@ -90,25 +106,62 @@ function _refForMenu(menuId) {
 }
 
 // ── File picker (load JSON) ────────────────────────────────────────
+// Clicks the persistent hidden <input id="udp-global-file-input"> that is
+// rendered in App.razor. Because the element is already in the DOM when the
+// button is pressed, browsers on Azure (Blazor Server over SignalR) still
+// treat the programmatic .click() as a trusted user-gesture action.
+// The onchange handler (udpHandleGlobalFileInput, defined in App.razor) reads
+// the file and calls ReceiveFileContent on the active DotNet ref.
 window.udpOpenFilePicker = function () {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = '.json';
-    input.style.display = 'none';
-    document.body.appendChild(input);
-    input.addEventListener('change', function () {
-        const file = input.files[0];
-        if (!file) { document.body.removeChild(input); return; }
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            document.body.removeChild(input);
-            // Try the active menu's ref first, fall back to global
-            const ref = Object.values(_dotNetRefs).slice(-1)[0] || _dotNetRef;
-            if (ref) ref.invokeMethodAsync('ReceiveFileContent', e.target.result);
-        };
-        reader.readAsText(file);
-    });
-    input.click();
+    const input = document.getElementById('udp-global-file-input');
+    if (input) {
+        input.click();
+    } else {
+        // Fallback: dynamically-created input (works locally, may fail on Azure).
+        const dyn = document.createElement('input');
+        dyn.type = 'file';
+        dyn.accept = '.json';
+        dyn.style.display = 'none';
+        document.body.appendChild(dyn);
+        dyn.addEventListener('change', function () {
+            const file = dyn.files[0];
+            if (!file) { document.body.removeChild(dyn); return; }
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                document.body.removeChild(dyn);
+                const ref = Object.values(_dotNetRefs).slice(-1)[0] || _dotNetRef;
+                if (ref) ref.invokeMethodAsync('ReceiveFileContent', e.target.result);
+            };
+            reader.readAsText(file);
+        });
+        dyn.click();
+    }
+};
+
+// ── File picker by pre-existing input element ID (Azure-safe) ────────
+// Clicks a hidden <input type="file"> that is already in the DOM.
+// Because the element exists before the click, browsers allow the gesture
+// even when the click arrives via SignalR (Blazor Server on Azure).
+// The input's onchange handler reads the file and calls ReceiveFileContent.
+window.udpOpenFilePickerById = function (inputId) {
+    const input = document.getElementById(inputId);
+    if (input) input.click();
+};
+
+// Called by the hidden file input's onchange (wired in Razor markup).
+window.udpReadFileInput = function (inputId, menuId) {
+    const input = document.getElementById(inputId);
+    if (!input || !input.files || !input.files[0]) return;
+    const file = input.files[0];
+    const reader = new FileReader();
+    reader.onload = function (e) {
+        // Reset so the same file can be reloaded
+        input.value = '';
+        const ref = menuId ? (_dotNetRefs[menuId] || _dotNetRef) :
+                             (Object.values(_dotNetRefs).slice(-1)[0] || _dotNetRef);
+        if (ref) ref.invokeMethodAsync('ReceiveFileContent', e.target.result);
+    };
+    reader.readAsText(file);
 };
 
 // ── Context menus ─────────────────────────────────────────────────

@@ -8,4 +8,5 @@ public class FhirServerSettings
     public string VhewerUrl      { get; set; } = "https://vhewer.com";
     public string StudyOption    { get; set; } = "study";
     public string ExamplesFolder { get; set; } = "Examples";
+    public string SushiExePath   { get; set; } = string.Empty;
 }

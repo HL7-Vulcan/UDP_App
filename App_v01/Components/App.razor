@@ -12,6 +12,13 @@
 </head>
 <body>
     <Routes @rendermode="InteractiveServer" />
+
+    <!-- Global hidden file input for JSON load — present in the DOM before any click,
+         so browsers allow the programmatic .click() even on Azure (Blazor Server over SignalR). -->
+    <input type="file" id="udp-global-file-input" accept=".json"
+           style="display:none; position:absolute; left:-9999px"
+           onchange="udpHandleGlobalFileInput()" />
+
     <script src="_framework/blazor.web.js"></script>
     <script src="section02-interop.js"></script>
     <script>
