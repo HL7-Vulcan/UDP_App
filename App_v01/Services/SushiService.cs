@@ -110,221 +110,6 @@ public class SushiService
     // The static (shared, read-only) SushiProject — used for static FSH file listings
     private string SourceProjectRoot => _workspace.SourceProjectRoot;
 
-    private static readonly SemaphoreSlim _nodeInstallLock = new(1, 1);
-
-    const string NodeBin   = "/home/node/bin/node";
-    const string NpmBin    = "/home/node/bin/npm";
-    const string SushiPath = "/home/bin/sushi";
-
-
-    /// <summary>
-    /// On Azure App Service the app container does not have Node.js or fsh-sushi —
-    /// only the Kudu/SCM sidecar does. This installs both into /home (the only
-    /// persistent, writable volume) on first call, and returns immediately on
-    /// subsequent calls once the binaries are confirmed present.
-    /// </summary>
-    private static async Task EnsureNodeAndSushiInstalledAsync(Action<string>? onLine, CancellationToken ct)
-    {
-        if (OperatingSystem.IsWindows())
-        {
-            // On Windows (Azure or local): Node is assumed present, but the .NET process
-            // PATH may point to an ancient system Node rather than the one configured via
-            // WEBSITE_NODE_DEFAULT_VERSION. Find the modern npm explicitly.
-            var npmExe = FindModernNpmWindows(onLine);
-            if (npmExe == null)
-            {
-                onLine?.Invoke("[WARN] Could not find a modern npm (Node 14+). fsh-sushi requires Node 14+.");
-                return;
-            }
-
-            // Check if sushi is already installed (look in npm global prefix)
-            var sushiCmd = FindOnPath("sushi.cmd") ?? FindOnPath("sushi");
-            if (sushiCmd == null)
-            {
-                // Also check the npm global prefix for the node we found
-                try
-                {
-                    var prefixPsi = new ProcessStartInfo
-                    {
-                        FileName = npmExe, Arguments = "config get prefix",
-                        RedirectStandardOutput = true, RedirectStandardError = true,
-                        UseShellExecute = false, CreateNoWindow = true
-                    };
-                    using var pp = Process.Start(prefixPsi);
-                    if (pp != null)
-                    {
-                        var prefix = pp.StandardOutput.ReadToEnd().Trim();
-                        pp.WaitForExit();
-                        var candidate = Path.Combine(prefix, "sushi.cmd");
-                        if (File.Exists(candidate)) sushiCmd = candidate;
-                    }
-                }
-                catch { }
-            }
-            if (sushiCmd != null) return;  // already installed
-
-            await _nodeInstallLock.WaitAsync(ct);
-            try
-            {
-                sushiCmd = FindOnPath("sushi.cmd") ?? FindOnPath("sushi");
-                if (sushiCmd != null) return;
-
-                onLine?.Invoke("[INFO] fsh-sushi not found — installing via npm (Windows)...");
-
-                var psi = new ProcessStartInfo
-                {
-                    FileName               = npmExe,
-                    Arguments              = "install -g fsh-sushi",
-                    RedirectStandardOutput = true,
-                    RedirectStandardError  = true,
-                    UseShellExecute        = false,
-                    CreateNoWindow         = true,
-                };
-
-                using var proc = Process.Start(psi);
-                if (proc != null)
-                {
-                    proc.OutputDataReceived += (_, e) => { if (e.Data != null) onLine?.Invoke($"[install] {e.Data}"); };
-                    proc.ErrorDataReceived  += (_, e) => { if (e.Data != null) onLine?.Invoke($"[install] {e.Data}"); };
-                    proc.BeginOutputReadLine();
-                    proc.BeginErrorReadLine();
-                    await proc.WaitForExitAsync(ct);
-
-                    if (proc.ExitCode == 0)
-                        onLine?.Invoke("[INFO] fsh-sushi installed successfully.");
-                    else
-                        onLine?.Invoke($"[WARN] npm install exited with code {proc.ExitCode}.");
-                }
-            }
-            finally { _nodeInstallLock.Release(); }
-
-            return;
-        }
-
-        // ── Linux path ────────────────────────────────────────────────────────────
-
-        // Probe writable directories before attempting install
-        var writableDirs = new[] { "/home", "/tmp", "/var/tmp", "/app", "/data" };
-        onLine?.Invoke("[INFO] Probing writable directories...");
-        foreach (var d in writableDirs)
-        {
-            try
-            {
-                var testFile = Path.Combine(d, ".write_test");
-                Directory.CreateDirectory(d);
-                File.WriteAllText(testFile, "x");
-                File.Delete(testFile);
-                onLine?.Invoke($"[INFO]   {d}: WRITABLE");
-            }
-            catch (Exception ex) { onLine?.Invoke($"[INFO]   {d}: NOT WRITABLE ({ex.Message})"); }
-        }
-
-        // Check what's already available on PATH
-        try
-        {
-            var psi2 = new ProcessStartInfo { FileName = "/bin/sh",
-                Arguments = "-c \"echo PATH=$PATH; which node 2>/dev/null && node --version 2>/dev/null; which npm 2>/dev/null && npm --version 2>/dev/null; which sushi 2>/dev/null && sushi --version 2>/dev/null; which curl 2>/dev/null; ls /usr/local/bin/ 2>/dev/null | head -20\"",
-                RedirectStandardOutput = true, RedirectStandardError = true, UseShellExecute = false };
-            using var p2 = Process.Start(psi2);
-            if (p2 != null)
-            {
-                var o = p2.StandardOutput.ReadToEnd();
-                p2.WaitForExit();
-                foreach (var ln in o.Split('\n').Where(l => !string.IsNullOrWhiteSpace(l)))
-                    onLine?.Invoke($"[INFO] {ln}");
-            }
-        }
-        catch (Exception ex) { onLine?.Invoke($"[INFO] PATH probe failed: {ex.Message}"); }
-
-        bool needNode  = !CanExecute(NodeBin);
-        bool needSushi = !File.Exists(SushiPath);
-
-        if (!needNode && !needSushi) return;
-
-        await _nodeInstallLock.WaitAsync(ct);
-        try
-        {
-            needNode  = !CanExecute(NodeBin);
-            needSushi = !File.Exists(SushiPath);
-            if (!needNode && !needSushi) return;
-
-            var script = new System.Text.StringBuilder();
-            script.AppendLine("#!/bin/sh");
-            script.AppendLine("set -ex");   // -x traces each command to stderr
-
-            if (needNode)
-            {
-                // The container image has no Node at all (confirmed: pure .NET container).
-                // Use the Node binary bundled with the app in node-linux-x64/bin/node.
-                // If that's also missing, we cannot proceed.
-                var bundledNodePath = Path.Combine(AppContext.BaseDirectory, "node-linux-x64", "bin", "node");
-                onLine?.Invoke($"[INFO] Looking for bundled Node at: {bundledNodePath}");
-
-                script.AppendLine($"BUNDLED_NODE=\"{bundledNodePath}\"");
-                script.AppendLine("if [ -f \"$BUNDLED_NODE\" ]; then");
-                script.AppendLine("  echo \"[node] Using bundled node at: $BUNDLED_NODE\"");
-                script.AppendLine("  chmod +x \"$BUNDLED_NODE\"");
-                script.AppendLine("  mkdir -p /home/node/bin");
-                script.AppendLine("  ln -sf \"$BUNDLED_NODE\" /home/node/bin/node");
-                script.AppendLine("  BUNDLED_DIR=$(dirname \"$BUNDLED_NODE\")");
-                script.AppendLine("  if [ -f \"$BUNDLED_DIR/npm\" ]; then chmod +x \"$BUNDLED_DIR/npm\"; ln -sf \"$BUNDLED_DIR/npm\" /home/node/bin/npm; fi");
-                script.AppendLine("  if [ -f \"$BUNDLED_DIR/npx\" ]; then chmod +x \"$BUNDLED_DIR/npx\"; ln -sf \"$BUNDLED_DIR/npx\" /home/node/bin/npx; fi");
-                script.AppendLine("  echo \"[node] version: $(/home/node/bin/node --version)\"");
-                script.AppendLine("else");
-                script.AppendLine("  echo \"ERROR: Node binary not found at $BUNDLED_NODE\"");
-                script.AppendLine("  echo \"ERROR: Bundle node-linux-x64 into the app. Download from https://nodejs.org/dist/latest-v20.x/ and place in App_v01/node-linux-x64/\"");
-                script.AppendLine("  exit 1");
-                script.AppendLine("fi");
-            }
-
-            if (needSushi)
-            {
-                onLine?.Invoke("[INFO] fsh-sushi not found — installing via npm...");
-                script.AppendLine("export PATH=\"/home/node/bin:$PATH\"");
-                script.AppendLine("echo \"[sushi] node version: $(/home/node/bin/node --version)\"");
-                script.AppendLine("echo \"[sushi] npm  version: $(/home/node/bin/npm --version)\"");
-                script.AppendLine("echo '[sushi] Running: npm install -g fsh-sushi --prefix /home'");
-                script.AppendLine("/home/node/bin/npm install -g fsh-sushi --prefix /home --loglevel verbose");
-                script.AppendLine("echo \"[sushi] sushi version: $(/home/bin/sushi --version)\"");
-            }
-
-            // /tmp may not be accessible in the Azure App Service sandbox — use /home instead
-            var scriptDir  = Directory.Exists("/home") ? "/home" : Path.GetTempPath();
-            var scriptPath = Path.Combine(scriptDir, "install_node_sushi.sh");
-            await File.WriteAllTextAsync(scriptPath, script.ToString(), ct);
-
-            var psi = new ProcessStartInfo
-            {
-                FileName               = "/bin/sh",
-                Arguments              = scriptPath,
-                RedirectStandardOutput = true,
-                RedirectStandardError  = true,
-                UseShellExecute        = false,
-            };
-
-            using var proc = Process.Start(psi);
-            if (proc != null)
-            {
-                proc.OutputDataReceived += (_, e) => { if (e.Data != null) onLine?.Invoke($"[install] {e.Data}"); };
-                proc.ErrorDataReceived  += (_, e) => { if (e.Data != null) onLine?.Invoke($"[install] {e.Data}"); };
-                proc.BeginOutputReadLine();
-                proc.BeginErrorReadLine();
-                await proc.WaitForExitAsync(ct);
-
-                if (proc.ExitCode == 0)
-                    onLine?.Invoke("[INFO] Installation complete.");
-                else
-                    onLine?.Invoke($"[WARN] Install script exited with code {proc.ExitCode}.");
-            }
-
-            try { File.Delete(scriptPath); } catch { }
-        }
-        finally
-        {
-            _nodeInstallLock.Release();
-        }
-    }
-
     /// <summary>
     /// Runs SUSHI on the project. If <paramref name="fshFileName"/> and
     /// <paramref name="fshContent"/> are supplied the file is written to the Examples
@@ -350,55 +135,36 @@ public class SushiService
                 await File.WriteAllTextAsync(fshPath, fshContent, ct);
             }
 
-            // 1b. On Linux, ensure Node+sushi are installed on demand.
-            //     On Windows, sushi must be pre-installed; we just locate it.
-            if (!OperatingSystem.IsWindows())
-                await EnsureNodeAndSushiInstalledAsync(onLine, ct);
-
-            // 2. Locate sushi executable (and node if needed)
-            // Emit diagnostics first so we can see what's on disk regardless of outcome
-            if (!OperatingSystem.IsWindows())
-            {
-                onLine?.Invoke($"[INFO] /home/bin exists: {Directory.Exists("/home/bin")}");
-                onLine?.Invoke($"[INFO] /home/bin/sushi exists: {File.Exists("/home/bin/sushi")}");
-                onLine?.Invoke($"[INFO] /home/node/bin/node exists: {File.Exists("/home/node/bin/node")}");
-                onLine?.Invoke($"[INFO] /home/lib/node_modules/fsh-sushi/built/app.js exists: {File.Exists("/home/lib/node_modules/fsh-sushi/built/app.js")}");
-                onLine?.Invoke($"[INFO] /home/lib/node_modules/fsh-sushi/dist/app.js exists: {File.Exists("/home/lib/node_modules/fsh-sushi/dist/app.js")}");
-                try
-                {
-                    var binEntries = Directory.Exists("/home/bin")
-                        ? string.Join(", ", Directory.GetFiles("/home/bin").Select(Path.GetFileName))
-                        : "(dir missing)";
-                    onLine?.Invoke($"[INFO] /home/bin contents: {binEntries}");
-                    var sushiModDir = "/home/lib/node_modules/fsh-sushi";
-                    if (Directory.Exists(sushiModDir))
-                    {
-                        var subDirs = string.Join(", ", Directory.GetDirectories(sushiModDir).Select(Path.GetFileName));
-                        onLine?.Invoke($"[INFO] fsh-sushi module subdirs: {subDirs}");
-                    }
-                    else onLine?.Invoke("[INFO] fsh-sushi module dir not found");
-                }
-                catch (Exception diagEx) { onLine?.Invoke($"[INFO] diag error: {diagEx.Message}"); }
-            }
-
-            var configuredPath = _settings.Settings.SushiExePath;
-            var sushiInfo = FindSushiExecutable(configuredPath, onLine);
+            // 2. Locate SUSHI — configured path takes priority, then PATH search
+            var sushiInfo = FindSushiExecutable(_settings.Settings.SushiExePath, onLine);
             if (sushiInfo == null)
             {
-                var msg = "SUSHI not found. Please install it with: npm install -g fsh-sushi\n" +
-                          "See https://fshschool.org/docs/sushi/installation/";
-                onLine?.Invoke(msg);
-                result.Error = msg;
+                string[] lines = OperatingSystem.IsWindows()
+                    ? new[]
+                    {
+                        "SUSHI not found.",
+                        "Install it via the Kudu console:  npm install -g fsh-sushi --prefix D:\\home",
+                        "Then set the SUSHI Executable Path in Setup to D:\\home\\sushi.cmd",
+                    }
+                    : new[]
+                    {
+                        "SUSHI not found.",
+                        "Install it with:  npm install -g fsh-sushi",
+                        "Then set the SUSHI Executable Path in Setup if needed.",
+                        "See https://fshschool.org/docs/sushi/installation/",
+                    };
+                foreach (var l in lines) onLine?.Invoke("[ERROR] " + l);
+                result.Error = string.Join(" ", lines);
                 return result;
             }
 
-            var (sushiExe, argPrefix) = sushiInfo.Value;
+            var (sushiExe, sushiArgs) = sushiInfo.Value;
 
-            // 3. Run sushi in the project root
+            // 3. Run SUSHI in the project root
             var psi = new ProcessStartInfo
             {
                 FileName               = sushiExe,
-                Arguments              = string.IsNullOrEmpty(argPrefix) ? "" : argPrefix,
+                Arguments              = sushiArgs,
                 WorkingDirectory       = ProjectRoot,
                 RedirectStandardOutput = true,
                 RedirectStandardError  = true,
@@ -406,55 +172,11 @@ public class SushiService
                 CreateNoWindow         = true,
             };
 
-            onLine?.Invoke($"[INFO] Running: {sushiExe} {argPrefix}");
-
-            if (!OperatingSystem.IsWindows())
-            {
-                // On Linux/Azure: node may not be on the .NET process PATH.
-                // Find it explicitly and ensure it's reachable by the child process.
-                var nodeExeFound = FindNodeExecutable();
-                onLine?.Invoke($"[INFO] node found at: {nodeExeFound ?? "NOT FOUND"}");
-
-                if (nodeExeFound != null && (sushiExe.EndsWith("/sushi") || sushiExe.EndsWith("\\sushi")))
-                {
-                    var firstLine = "";
-                    try { firstLine = File.ReadLines(sushiExe).FirstOrDefault() ?? ""; } catch { }
-
-                    if (firstLine.Contains("node"))
-                    {
-                        psi.FileName  = nodeExeFound;
-                        psi.Arguments = $"\"{sushiExe}\"";
-                        onLine?.Invoke($"[INFO] Invoking as: {nodeExeFound} \"{sushiExe}\"");
-                    }
-                    else
-                    {
-                        var jsEntry = FindSushiJsEntry(sushiExe);
-                        onLine?.Invoke($"[INFO] sushi JS entry: {jsEntry ?? "NOT FOUND"}");
-                        if (jsEntry != null)
-                        {
-                            psi.FileName  = nodeExeFound;
-                            psi.Arguments = $"\"{jsEntry}\"";
-                        }
-                    }
-
-                    var nodeDir = Path.GetDirectoryName(nodeExeFound) ?? "";
-                    var currentPath = Environment.GetEnvironmentVariable("PATH") ?? "";
-                    psi.Environment["PATH"] = nodeDir + ":/usr/local/bin:/usr/bin:/bin:" + currentPath;
-                }
-                else if (nodeExeFound == null)
-                {
-                    onLine?.Invoke("[WARN] node not found — forcing PATH and attempting direct run");
-                    psi.Environment["PATH"] =
-                        "/home/node/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/home/bin:/opt/nodejs/bin:/usr/local/nodejs/bin";
-                }
-            }
-            // Windows: cmd.exe inherits the user's PATH which already includes node/npm dirs —
-            // no PATH manipulation needed.
+            onLine?.Invoke($"[INFO] Running: {sushiExe} {sushiArgs}".TrimEnd());
 
             using var proc = new Process { StartInfo = psi };
             proc.Start();
 
-            // Stream stdout and stderr concurrently, calling onLine for each line
             async Task DrainAsync(StreamReader reader, string prefix)
             {
                 string? line;
@@ -531,17 +253,13 @@ public class SushiService
     /// <summary>Reads one generated resource file as bytes for download.</summary>
     public byte[]? ReadGeneratedFile(string fileName)
     {
-        // Sanitise: only allow simple filenames, no path traversal
         if (fileName.Contains('/') || fileName.Contains('\\') || fileName.Contains(".."))
             return null;
-
         var path = Path.Combine(GeneratedResourcesFolder, fileName);
         return File.Exists(path) ? File.ReadAllBytes(path) : null;
     }
 
-    /// <summary>
-    /// Returns the content of sushi-config.yaml for display/editing.
-    /// </summary>
+    /// <summary>Returns the content of sushi-config.yaml for display/editing.</summary>
     public string ReadConfig()
     {
         var path = Path.Combine(ProjectRoot, "sushi-config.yaml");
@@ -555,8 +273,7 @@ public class SushiService
         File.WriteAllText(path, content);
     }
 
-    /// <summary>Lists the static .fsh files in input/fsh (not Examples) for display.
-    /// Reads from the shared source project (read-only; same for all sessions).</summary>
+    /// <summary>Lists the static .fsh files in input/fsh (not Examples) for display.</summary>
     public List<string> ListStaticFshFiles()
     {
         var fshRoot = Path.Combine(SourceProjectRoot, "input", "fsh");
@@ -568,8 +285,7 @@ public class SushiService
             .ToList();
     }
 
-    /// <summary>Reads a single static FSH file (relative path from fsh root) as bytes.
-    /// Reads from the shared source project (read-only; same for all sessions).</summary>
+    /// <summary>Reads a single static FSH file (relative path from fsh root) as bytes.</summary>
     public byte[]? ReadStaticFshFile(string relativePath)
     {
         if (string.IsNullOrWhiteSpace(relativePath) || relativePath.Contains("..")) return null;
@@ -579,8 +295,7 @@ public class SushiService
         return File.Exists(full) ? File.ReadAllBytes(full) : null;
     }
 
-    /// <summary>Zips all static FSH files (preserving sub-directory structure) and returns the zip bytes.
-    /// Reads from the shared source project (read-only; same for all sessions).</summary>
+    /// <summary>Zips all static FSH files and returns the zip bytes.</summary>
     public byte[]? ReadAllStaticFshAsZip()
     {
         var fshRoot = Path.Combine(SourceProjectRoot, "input", "fsh");
@@ -606,11 +321,6 @@ public class SushiService
 
     // ── Examples folder management ─────────────────────────────────────────────
 
-    /// <summary>
-    /// Saves FSH content into the Examples folder (used when a section saves in FHIR format).
-    /// Reads a single .fsh file from the Examples folder and returns its bytes.
-    /// Returns null if not found or path is unsafe.
-    /// </summary>
     public byte[]? ReadExampleFile(string fileName)
     {
         var safe = Path.GetFileName(fileName);
@@ -619,9 +329,6 @@ public class SushiService
         return File.Exists(path) ? File.ReadAllBytes(path) : null;
     }
 
-    /// <summary>
-    /// Zips all .fsh files in the Examples folder and returns the zip as bytes.
-    /// </summary>
     public byte[]? ReadAllExamplesAsZip()
     {
         if (!Directory.Exists(ExamplesFolder)) return null;
@@ -642,13 +349,10 @@ public class SushiService
         return ms.ToArray();
     }
 
-    /// <summary>
-    /// Returns the full path written.
-    /// </summary>
     public string SaveToExamples(string fileName, string content)
     {
         Directory.CreateDirectory(ExamplesFolder);
-        var safe = Path.GetFileName(fileName); // strip any directory component
+        var safe = Path.GetFileName(fileName);
         if (!safe.EndsWith(".fsh", StringComparison.OrdinalIgnoreCase))
             safe += ".fsh";
         var path = Path.Combine(ExamplesFolder, safe);
@@ -656,16 +360,6 @@ public class SushiService
         return safe;
     }
 
-    /// <summary>
-    /// After a successful Sushi build, copies all files from
-    /// SushiProject/fsh-generated/resources/ into the top-level Examples/ folder,
-    /// overwriting any file with the same name.
-    /// Returns the number of files copied.
-    /// </summary>
-    /// <summary>
-    /// Copies only the study-specific generated files (those shown to the user,
-    /// i.e. not in the support-files baseline) to the main Examples folder.
-    /// </summary>
     public int CopyGeneratedToMainExamples(IEnumerable<SushiOutputFile> studyFiles)
     {
         var dest = _workspace.BuildOutputFolder;
@@ -675,14 +369,12 @@ public class SushiService
         foreach (var file in studyFiles)
         {
             if (!File.Exists(file.FullPath)) continue;
-            var target = Path.Combine(dest, file.FileName);
-            File.Copy(file.FullPath, target, overwrite: true);
+            File.Copy(file.FullPath, Path.Combine(dest, file.FileName), overwrite: true);
             count++;
         }
         return count;
     }
 
-    /// <summary>Lists all .fsh files currently in the Examples folder.</summary>
     public List<string> ListExampleFiles()
     {
         if (!Directory.Exists(ExamplesFolder)) return new();
@@ -693,7 +385,6 @@ public class SushiService
             .ToList();
     }
 
-    /// <summary>Deletes a .fsh file from the Examples folder. Returns false if not found / path unsafe.</summary>
     public bool DeleteExampleFile(string fileName)
     {
         var safe = Path.GetFileName(fileName);
@@ -704,7 +395,6 @@ public class SushiService
         return true;
     }
 
-    /// <summary>Imports a .fsh file into the Examples folder from supplied content bytes.</summary>
     public string ImportExampleFile(string fileName, byte[] content)
     {
         Directory.CreateDirectory(ExamplesFolder);
@@ -715,10 +405,6 @@ public class SushiService
         return safe;
     }
 
-    /// <summary>
-    /// Deletes all .fsh files from the Examples folder.
-    /// Returns the number of files deleted.
-    /// </summary>
     public int ClearExamplesFolder()
     {
         if (!Directory.Exists(ExamplesFolder)) return 0;
@@ -734,332 +420,57 @@ public class SushiService
     // ── Helpers ────────────────────────────────────────────────────────────────
 
     /// <summary>
-    /// On Windows, finds a modern npm.cmd (Node 14+) by checking well-known Azure
-    /// App Service paths and the WEBSITE_NODE_DEFAULT_VERSION environment variable,
-    /// avoiding the ancient system Node at C:\Program Files (x86)\nodejs\.
+    /// Locates the SUSHI executable. Checks the configured path first, then searches PATH.
+    /// Returns (executable, arguments) ready to pass to ProcessStartInfo, or null if not found.
     /// </summary>
-    private static string? FindModernNpmWindows(Action<string>? onLine)
-    {
-        // Candidate locations for npm.cmd, in preference order.
-        // Azure App Service Windows puts the configured Node version under
-        // D:\Program Files (x86)\nodejs\  (symlinked/switched by WEBSITE_NODE_DEFAULT_VERSION)
-        // but the .NET process PATH still has the old one first.
-        // We try every candidate and version-check each one.
-        var candidates = new List<string>();
-
-        // 1. All nodejs dirs on current PATH — collect them all, check versions
-        var pathEnv = Environment.GetEnvironmentVariable("PATH") ?? "";
-        foreach (var dir in pathEnv.Split(';').Select(d => d.Trim()).Where(d => d.Length > 0))
-        {
-            var c = Path.Combine(dir, "npm.cmd");
-            if (File.Exists(c)) candidates.Add(c);
-        }
-
-        // 2. Azure well-known locations
-        foreach (var drive in new[] { "D:", "C:" })
-        {
-            candidates.Add($@"{drive}\Program Files\nodejs\npm.cmd");
-            candidates.Add($@"{drive}\Program Files (x86)\nodejs\npm.cmd");
-            candidates.Add($@"{drive}\local\node\npm.cmd");
-        }
-
-        // 3. AppData\Roaming\npm (global npm sometimes self-updates here)
-        var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-        candidates.Add(Path.Combine(appData, "npm", "npm.cmd"));
-
-        onLine?.Invoke("[INFO] Searching for modern Node/npm...");
-        foreach (var npm in candidates.Where(File.Exists).Distinct())
-        {
-            try
-            {
-                var nodeExe = Path.Combine(Path.GetDirectoryName(npm)!, "node.exe");
-                if (!File.Exists(nodeExe)) continue;
-
-                var vPsi = new ProcessStartInfo
-                {
-                    FileName = nodeExe, Arguments = "--version",
-                    RedirectStandardOutput = true, RedirectStandardError = true,
-                    UseShellExecute = false, CreateNoWindow = true
-                };
-                using var vp = Process.Start(vPsi);
-                if (vp == null) continue;
-                var ver = vp.StandardOutput.ReadToEnd().Trim();
-                vp.WaitForExit();
-                onLine?.Invoke($"[INFO]   {nodeExe} → {ver}");
-
-                // Parse major version — need at least 14 for fsh-sushi
-                var maj = 0;
-                if (ver.StartsWith("v") && int.TryParse(ver[1..].Split('.')[0], out var m)) maj = m;
-                if (maj >= 14)
-                {
-                    onLine?.Invoke($"[INFO] Using npm at: {npm}");
-                    return npm;
-                }
-            }
-            catch { }
-        }
-
-        onLine?.Invoke("[WARN] No modern Node found in any candidate location.");
-        return null;
-    }
-
-    /// <summary>
-    /// Returns (executable, arguments-prefix) to invoke SUSHI.
-    /// On Linux/Azure we may need to call "node /path/to/sushi-cli.js" directly
-    /// because the .NET process PATH often lacks the npm-global bin directory.
-    /// </summary>
-    private static (string exe, string argPrefix)? FindSushiExecutable(string? configuredPath, Action<string>? onLine)
+    private static (string exe, string args)? FindSushiExecutable(string? configuredPath, Action<string>? onLine)
     {
         if (OperatingSystem.IsWindows())
         {
-            // 1. Configured path takes absolute priority
-            if (!string.IsNullOrWhiteSpace(configuredPath) && File.Exists(configuredPath))
-            {
-                onLine?.Invoke($"[INFO] Using configured SUSHI path: {configuredPath}");
-                return ("cmd.exe", $"/c \"{configuredPath}\"");
-            }
+            // 1. Configured path
             if (!string.IsNullOrWhiteSpace(configuredPath))
-                onLine?.Invoke($"[WARN] Configured SUSHI path not found: {configuredPath}");
-
-            // 2. Search PATH for sushi.cmd
-            var fromPath = FindOnPath("sushi.cmd");
-            if (fromPath != null) return ("cmd.exe", $"/c \"{fromPath}\"");
-
-            // 3. Common npm global prefix locations
-            var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            var candidates = new[]
             {
-                Path.Combine(appData, "npm", "sushi.cmd"),
-                @"D:\home\sushi.cmd",
-                @"C:\Users\Default\AppData\Roaming\npm\sushi.cmd",
-            };
-            var found = candidates.FirstOrDefault(File.Exists);
-            return found != null ? ("cmd.exe", $"/c \"{found}\"") : null;
-        }
-        else
-        {
-            // 1. Configured path takes absolute priority
-            if (!string.IsNullOrWhiteSpace(configuredPath) && File.Exists(configuredPath))
-            {
-                onLine?.Invoke($"[INFO] Using configured SUSHI path: {configuredPath}");
-                return (configuredPath, "");
-            }
-            if (!string.IsNullOrWhiteSpace(configuredPath))
-                onLine?.Invoke($"[WARN] Configured SUSHI path not found: {configuredPath}");
-
-            // Linux/macOS: try sushi script on PATH or well-known locations.
-            // If node isn't on the .NET process PATH the script will fail with
-            // "env: 'node': No such file or directory", so we find node and the
-            // sushi JS entry-point and invoke them directly as a fallback.
-
-            // 1. Try sushi directly (works when node is on PATH)
-            var sushiCandidates = new[]
-            {
-                FindOnPath("sushi"),
-                "/home/bin/sushi",            // Azure App Service npm --prefix /home
-                "/usr/local/bin/sushi",
-                "/usr/bin/sushi",
-                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
-                             ".npm-global", "bin", "sushi"),
-            };
-
-            var sushiScript = sushiCandidates.FirstOrDefault(p => p != null && File.Exists(p));
-
-            // 2. Find node executable
-            var nodeCandidates = new[]
-            {
-                FindOnPath("node"),
-                "/usr/local/bin/node",
-                "/usr/bin/node",
-                "/home/bin/node",
-                "/opt/nodejs/bin/node",
-                "/usr/local/nodejs/bin/node",
-            };
-            var nodeExe = nodeCandidates.FirstOrDefault(p => p != null && File.Exists(p));
-
-            if (nodeExe != null && sushiScript != null)
-            {
-                // Check if the sushi "script" is itself a JS file (starts with #!/usr/bin/env node).
-                // When installed with --prefix /home, npm puts the compiled JS directly in /home/bin/sushi
-                // with no separate wrapper — so we run: node /home/bin/sushi
-                var firstLine = "";
-                try { firstLine = File.ReadLines(sushiScript).FirstOrDefault() ?? ""; } catch { }
-
-                if (firstLine.Contains("node"))
+                if (File.Exists(configuredPath))
                 {
-                    // It's a JS file — invoke it directly with node
-                    return (nodeExe, $"\"{sushiScript}\"");
+                    onLine?.Invoke($"[INFO] Using configured SUSHI path: {configuredPath}");
+                    return ("cmd.exe", $"/c \"{configuredPath}\"");
                 }
-
-                // It's a shell wrapper — try to extract the JS entry point from it
-                var jsEntry = FindSushiJsEntry(sushiScript);
-                if (jsEntry != null)
-                    return (nodeExe, $"\"{jsEntry}\"");
-
-                // Fallback: run the shell script as-is (works locally where env finds node)
-                return (sushiScript, "");
+                onLine?.Invoke($"[WARN] Configured SUSHI path not found: {configuredPath}");
             }
 
-            // Last resort: try running the script anyway (works locally)
-            if (sushiScript != null) return (sushiScript, "");
+            // 2. Search PATH
+            var fromPath = FindOnPath("sushi.cmd") ?? FindOnPath("sushi");
+            if (fromPath != null)
+            {
+                onLine?.Invoke($"[INFO] Found SUSHI on PATH: {fromPath}");
+                return ("cmd.exe", $"/c \"{fromPath}\"");
+            }
 
             return null;
         }
-    }
-
-    /// <summary>
-    /// Reads the sushi shell wrapper and extracts the path to the JS entry point,
-    /// e.g. /home/lib/node_modules/fsh-sushi/built/app.js
-    /// </summary>
-    private static string? FindSushiJsEntry(string sushiScriptPath)
-    {
-        try
+        else
         {
-            var dir = Path.GetDirectoryName(sushiScriptPath) ?? "";
-
-            // 1. Relative paths from the bin/ directory containing the sushi wrapper
-            var relatives = new[]
+            // 1. Configured path
+            if (!string.IsNullOrWhiteSpace(configuredPath))
             {
-                "../lib/node_modules/fsh-sushi/built/app.js",
-                "../lib/node_modules/fsh-sushi/dist/app.js",
-            };
-            foreach (var rel in relatives)
-            {
-                var candidate = Path.GetFullPath(Path.Combine(dir, rel));
-                if (File.Exists(candidate)) return candidate;
-            }
-
-            // 2. Absolute well-known locations (covers Azure --prefix /home install)
-            var absolutes = new[]
-            {
-                "/home/lib/node_modules/fsh-sushi/built/app.js",
-                "/home/lib/node_modules/fsh-sushi/dist/app.js",
-                "/usr/local/lib/node_modules/fsh-sushi/built/app.js",
-                "/usr/local/lib/node_modules/fsh-sushi/dist/app.js",
-                "/usr/lib/node_modules/fsh-sushi/built/app.js",
-            };
-            var abs = absolutes.FirstOrDefault(File.Exists);
-            if (abs != null) return abs;
-
-            // 3. Parse the shell script for the node invocation line
-            var lines = File.ReadAllLines(sushiScriptPath);
-            foreach (var line in lines)
-            {
-                var m = System.Text.RegularExpressions.Regex.Match(
-                    line, @"node\s+[""']?([^\s""']+\.js)[""']?");
-                if (m.Success)
+                if (File.Exists(configuredPath))
                 {
-                    var raw = m.Groups[1].Value
-                        .Replace("$basedir", dir)
-                        .Replace("$dir", dir);
-                    if (File.Exists(raw)) return raw;
+                    onLine?.Invoke($"[INFO] Using configured SUSHI path: {configuredPath}");
+                    return (configuredPath, "");
                 }
+                onLine?.Invoke($"[WARN] Configured SUSHI path not found: {configuredPath}");
             }
-        }
-        catch { /* ignore */ }
-        return null;
-    }
 
-    /// <summary>
-    /// Finds the node executable by checking PATH and then a broad set of known
-    /// install locations, including Azure App Service's non-standard paths.
-    /// </summary>
-    private static string? FindNodeExecutable()
-    {
-        // Strategy 1: try 'which node' via shell — works if Process.Start is allowed
-        try
-        {
-            var psi = new ProcessStartInfo
+            // 2. Search PATH
+            var fromPath = FindOnPath("sushi");
+            if (fromPath != null)
             {
-                FileName               = "/bin/sh",
-                Arguments              = "-c \"which node 2>/dev/null || command -v node 2>/dev/null\"",
-                RedirectStandardOutput = true,
-                RedirectStandardError  = true,
-                UseShellExecute        = false,
-            };
-            psi.Environment["PATH"] =
-                "/home/node/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:/home/bin";
-
-            using var proc = Process.Start(psi);
-            if (proc != null)
-            {
-                var output = proc.StandardOutput.ReadToEnd().Trim();
-                proc.WaitForExit();
-                if (!string.IsNullOrEmpty(output) && output.Contains("node"))
-                    return output.Split('\n')[0].Trim();
+                onLine?.Invoke($"[INFO] Found SUSHI on PATH: {fromPath}");
+                return (fromPath, "");
             }
+
+            return null;
         }
-        catch { /* fall through */ }
-
-        // Strategy 2: resolve symlinks manually via /proc/self/fd or realpath
-        // On Azure, /usr/local/bin/node is a symlink. FileInfo.Exists() doesn't care about
-        // whether it's a symlink — if the target exists the symlink reports Exists=true.
-        // The real problem is File.Exists() does not handle dangling symlinks well.
-        // Try each candidate using both FileInfo and a direct open attempt.
-        var candidates = new[]
-        {
-            "/home/node/bin/node",          // installed by startup.sh into /home (persistent)
-            "/usr/local/bin/node",
-            "/usr/bin/node",
-            "/home/bin/node",
-            "/opt/nodejs/bin/node",
-            "/usr/local/nodejs/bin/node",
-            "/usr/local/nvm/versions/node/*/bin/node",  // nvm-style
-        };
-
-        foreach (var pattern in candidates)
-        {
-            if (pattern.Contains('*'))
-            {
-                // Pattern is e.g. /usr/local/nvm/versions/node/*/bin/node
-                // Split at the wildcard segment to find the parent to enumerate
-                var parts   = pattern.Split('/');
-                var starIdx = Array.IndexOf(parts, "*");
-                if (starIdx > 0)
-                {
-                    var parentDir = string.Join("/", parts.Take(starIdx));
-                    var suffix    = string.Join("/", parts.Skip(starIdx + 1)); // "bin/node"
-                    if (Directory.Exists(parentDir))
-                    {
-                        foreach (var d in Directory.GetDirectories(parentDir))
-                        {
-                            var p = Path.Combine(d, suffix);
-                            if (CanExecute(p)) return p;
-                        }
-                    }
-                }
-                continue;
-            }
-            if (CanExecute(pattern)) return pattern;
-        }
-
-        return null;
-    }
-
-    private static bool CanExecute(string path)
-    {
-        try
-        {
-            var fi = new FileInfo(path);
-            if (!fi.Exists) return false;
-            // On Linux, verify the execute bit is set via a quick /bin/sh -c test
-            if (!OperatingSystem.IsWindows())
-            {
-                var psi = new ProcessStartInfo
-                {
-                    FileName               = "/bin/sh",
-                    Arguments              = $"-c \"test -x '{path}'\"",
-                    RedirectStandardOutput = true,
-                    RedirectStandardError  = true,
-                    UseShellExecute        = false,
-                };
-                using var p = Process.Start(psi);
-                if (p != null) { p.WaitForExit(); return p.ExitCode == 0; }
-            }
-            using var fs = File.OpenRead(path);
-            return fs.CanRead;
-        }
-        catch { return false; }
     }
 
     private static string? FindOnPath(string exe)
