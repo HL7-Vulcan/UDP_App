@@ -70,16 +70,35 @@ window.udpOpenFshPicker = function (dotNetRef) {
     input.click();
 };
 
-// ── DotNet references — one per section key ────────────────────────
-// _dotNetRefs maps menuId -> DotNetObjectReference for that section.
-// udpSetDotNetRef(ref, menuId) registers the ref for a specific menu.
-// Falls back to legacy single-ref behaviour if menuId is omitted.
+// ── DotNet references — keyed by menuId with timestamp ────────────
+// Stores { ref, ts } so we can always find the most recently registered
+// live reference, avoiding stale disposed refs after navigation.
 const _dotNetRefs = {};
-let _dotNetRef = null;   // legacy single ref (Section02 / Section09 etc.)
+let _dotNetRef = null;       // legacy fallback
+let _activeMenuId = null;    // menuId of the most recently registered ref
+
+window.udpSetDotNetRef = function (ref, menuId) {
+    if (menuId) {
+        _dotNetRefs[menuId] = { ref: ref, ts: Date.now() };
+        _activeMenuId = menuId;
+    } else {
+        _dotNetRef = ref;
+    }
+};
+
+function _refForMenu(menuId) {
+    if (menuId && _dotNetRefs[menuId]) return _dotNetRefs[menuId].ref;
+    // Fall back to most-recently-registered ref by timestamp
+    let best = null, bestTs = 0;
+    for (const key in _dotNetRefs) {
+        if (_dotNetRefs[key].ts > bestTs) { bestTs = _dotNetRefs[key].ts; best = _dotNetRefs[key].ref; }
+    }
+    return best || _dotNetRef;
+}
 
 // ── Global file-input handler (called from App.razor onchange) ────────
 // Reads the selected file from the persistent global file input and
-// calls ReceiveFileContent on whichever section is currently active.
+// calls ReceiveFileContent on whichever section registered most recently.
 window.udpHandleGlobalFileInput = function () {
     const input = document.getElementById('udp-global-file-input');
     if (!input || !input.files || !input.files[0]) return;
@@ -87,23 +106,11 @@ window.udpHandleGlobalFileInput = function () {
     const reader = new FileReader();
     reader.onload = function (e) {
         input.value = '';   // reset so the same file can be re-loaded
-        const ref = Object.values(_dotNetRefs).slice(-1)[0] || _dotNetRef;
+        const ref = _refForMenu(_activeMenuId);
         if (ref) ref.invokeMethodAsync('ReceiveFileContent', e.target.result);
     };
     reader.readAsText(file);
 };
-
-window.udpSetDotNetRef = function (ref, menuId) {
-    if (menuId) {
-        _dotNetRefs[menuId] = ref;
-    } else {
-        _dotNetRef = ref;
-    }
-};
-
-function _refForMenu(menuId) {
-    return _dotNetRefs[menuId] || _dotNetRef;
-}
 
 // ── File picker (load JSON) ────────────────────────────────────────
 // Clicks the persistent hidden <input id="udp-global-file-input"> that is
