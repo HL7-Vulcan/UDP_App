@@ -74,6 +74,16 @@
     .ctx-row span  { color:#555; word-break:break-all; }
     .ctx-div  { border:none; border-top:1px solid #e0e0e0; margin:8px 0; }
     .ctx-guide { font-size:9.5pt; color:#444; line-height:1.5; }
+    /* ── Save dialog ─────────────────────────────────────────────────── */
+    .overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:9000; align-items:center; justify-content:center; }
+    .overlay.show { display:flex; }
+    .dbox { background:#fff; border-radius:6px; padding:24px 28px; width:400px; box-shadow:0 8px 40px rgba(0,0,0,0.25); font-family:'Calibri',Arial,sans-serif; }
+    .dbox h3 { font-size:12pt; font-weight:700; color:#1f3864; margin:0 0 14px; }
+    .dbox label { font-size:10pt; }
+    .dbox input[type=text] { width:100%; box-sizing:border-box; padding:5px 8px; border:1px solid #bbb; border-radius:3px; font-size:10pt; font-family:inherit; margin-top:4px; }
+    .fmt-row { display:flex; gap:14px; flex-wrap:wrap; margin-top:4px; }
+    .fmt-row label { display:flex; align-items:center; gap:5px; font-size:10pt; cursor:pointer; }
+    .dbr { display:flex; justify-content:flex-end; gap:10px; margin-top:18px; }
 </style>
 
 <div class="amend-layout">
@@ -298,6 +308,8 @@
                 <div class="toolbar">
                     <button class="btn btn-secondary" @onclick="ClearCurrent">Clear</button>
                     <button class="btn btn-secondary" @onclick="DuplicateCurrent">Duplicate</button>
+                    <button class="btn btn-secondary" @onclick="OpenSaveDialog">⬇ Save to File…</button>
+                    <button class="btn btn-secondary" @onclick="OpenLoadDialog">⬆ Load from File</button>
                 </div>
             </div>
         }
@@ -319,13 +331,28 @@
     </div>
 </div>
 
-@if (!string.IsNullOrEmpty(_status))
-{
-    <div class="sbar">
-        <span>@_status</span>
-        <span style="font-size:8pt;opacity:0.7;">@Store.All.Count amendment(s) in session</span>
+<div class="overlay @(_showSaveDialog ? "show" : "")">
+    <div class="dbox">
+        <h3>Save Amendment to File</h3>
+        <label style="display:block;font-weight:700;margin-bottom:4px;">File name</label>
+        <input type="text" @bind="_saveFileName" @bind:event="oninput" />
+        <label style="display:block;font-weight:700;margin:12px 0 4px;">Format</label>
+        <div class="fmt-row">
+            <label><input type="radio" name="adfmt" checked="@(_saveFormat=="fsh")"  @onchange='() => _saveFormat="fsh"'  /> FSH</label>
+            <label><input type="radio" name="adfmt" checked="@(_saveFormat=="json")" @onchange='() => _saveFormat="json"' /> JSON</label>
+            <label><input type="radio" name="adfmt" checked="@(_saveFormat=="txt")"  @onchange='() => _saveFormat="txt"'  /> Plain Text</label>
+        </div>
+        <div class="dbr">
+            <button class="btn btn-secondary" @onclick="() => _showSaveDialog = false">Cancel</button>
+            <button class="btn btn-primary"   @onclick="DoSaveToFile">Download</button>
+        </div>
     </div>
-}
+</div>
+
+<div class="sbar">
+    <span>Amendment Details &nbsp;|&nbsp; <span style='color:#c8a0e8'>Purple</span> = placeholder &nbsp;|&nbsp; <span style='color:#6dbf6d'>Green</span> = user entry &nbsp;|&nbsp; <span style='background:#f5d0d0;padding:0 3px'>Pink</span> = required &nbsp;|&nbsp; Right-click field for info</span>
+    <span>@_status</span>
+</div>
 
 @code {
     private AmendmentRecord? Current { get; set; }
@@ -334,6 +361,9 @@
     private string _status = string.Empty;
     private System.Threading.Timer? _statusTimer;
     private DotNetObjectReference<AmendmentDetails>? _objRef;
+    private bool   _showSaveDialog = false;
+    private string _saveFileName   = "amendment_data";
+    private string _saveFormat     = "json";
     private string _ctxFieldName     = string.Empty;
     private string _ctxM11Name       = string.Empty;
     private string _ctxGuidance      = string.Empty;
@@ -550,6 +580,151 @@
             await JS.InvokeVoidAsync("udpInitContextMenus", "ad-ctx-menu");
         }
         catch (JSDisconnectedException) { } catch (TaskCanceledException) { }
+    }
+
+    // ── Save / Load ───────────────────────────────────────────────────
+
+    private void OpenSaveDialog()
+    {
+        if (Current == null) return;
+        _saveFileName = $"amendment_{Current.Name.Replace(' ', '_').Replace('/', '-')}_{DateTime.Now:yyyy-MM-dd}";
+        _showSaveDialog = true;
+    }
+
+    private async Task DoSaveToFile()
+    {
+        _showSaveDialog = false;
+        if (Current == null) return;
+        var (content, mime, ext) = _saveFormat switch
+        {
+            "fsh" => (ToFsh(Current),       "text/plain",       ".fsh"),
+            "txt" => (ToPlainText(Current),  "text/plain",       ".txt"),
+            _     => (ToJson(Current),       "application/json", ".json"),
+        };
+        var fn = (_saveFileName.Trim().Length > 0 ? _saveFileName.Trim() : "amendment_data") + ext;
+        await JS.InvokeVoidAsync("udpDownload", fn, content, mime);
+        SetStatus($"⬇ Downloaded {fn}");
+    }
+
+    private async Task OpenLoadDialog() => await JS.InvokeVoidAsync("udpOpenFilePicker");
+
+    [JSInvokable]
+    public void ReceiveFileContent(string json)
+    {
+        try
+        {
+            var opts = new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            var rec  = System.Text.Json.JsonSerializer.Deserialize<AmendmentRecord>(json, opts);
+            if (rec == null) { SetStatus("⚠ Could not read file"); return; }
+            // Add as a new amendment or replace current if names match
+            var existing = Store.GetById(rec.Id);
+            if (existing != null)
+            {
+                Store.Update(rec);
+                SelectRecord(rec.Id);
+            }
+            else
+            {
+                _records_add(rec);
+                SelectRecord(rec.Id);
+            }
+            SetStatus("⬆ Loaded from file");
+            InvokeAsync(StateHasChanged);
+        }
+        catch { SetStatus("⚠ Invalid file format"); }
+    }
+
+    // Add a loaded record: Store.Add() generates a fresh Id, so we override the
+    // loaded record's Id with the new one so Store.Update() can find it.
+    private void _records_add(AmendmentRecord rec)
+    {
+        var placeholder = Store.Add(rec.Name);
+        rec.Id        = placeholder.Id;
+        rec.CreatedAt = placeholder.CreatedAt;
+        Store.Update(rec);
+    }
+
+    // ── Serialisation helpers ─────────────────────────────────────────
+
+    private static string ToJson(AmendmentRecord rec)
+    {
+        var opts = new System.Text.Json.JsonSerializerOptions { WriteIndented = true };
+        return System.Text.Json.JsonSerializer.Serialize(rec, opts);
+    }
+
+    private static string ToFsh(AmendmentRecord rec)
+    {
+        var sb = new System.Text.StringBuilder();
+        sb.AppendLine($"// Amendment: {rec.Name}");
+        sb.AppendLine($"// Generated: {DateTime.UtcNow:yyyy-MM-dd}");
+        sb.AppendLine();
+        void Add(string code, string? val) { if (!string.IsNullOrWhiteSpace(val)) sb.AppendLine($"* {code} = {val}"); }
+        Add("C218694",  rec.C218694);
+        Add("C181232",  string.IsNullOrWhiteSpace(rec.C181232) ? null : $"\"{rec.C181232}\"");
+        Add("C93813",   string.IsNullOrWhiteSpace(rec.C93813)  ? null : $"\"{rec.C93813}\"");
+        Add("C218477",  string.IsNullOrWhiteSpace(rec.C218477) ? null : $"\"{rec.C218477}\"");
+        Add("C218673",  rec.C218673);
+        Add("C20108",   rec.C20108);
+        Add("C218674",  rec.C218674);
+        Add("C83081",   string.IsNullOrWhiteSpace(rec.C83081)  ? null : $"\"{rec.C83081}\"");
+        Add("C218478",  string.IsNullOrWhiteSpace(rec.C218478) ? null : $"\"{rec.C218478}\"");
+        Add("C218695",  rec.C218695);
+        Add("C218696",  rec.C218696);
+        Add("C17649",   string.IsNullOrWhiteSpace(rec.C17649)  ? null : $"\"{rec.C17649}\"");
+        if (!string.IsNullOrWhiteSpace(rec.C218697))
+            foreach (var v in rec.C218697.Split(';', StringSplitOptions.RemoveEmptyEntries))
+                sb.AppendLine($"* C218697 = {v.Trim()}");
+        Add("C17649_2", string.IsNullOrWhiteSpace(rec.C17649_2) ? null : $"\"{rec.C17649_2}\"");
+        Add("C42581",   string.IsNullOrWhiteSpace(rec.C42581)  ? null : $"\"{rec.C42581}\"");
+        Add("C218698",  rec.C218698);
+        Add("C218699",  string.IsNullOrWhiteSpace(rec.C218699) ? null : $"\"{rec.C218699}\"");
+        Add("C218700",  rec.C218700);
+        Add("C218701",  string.IsNullOrWhiteSpace(rec.C218701) ? null : $"\"{rec.C218701}\"");
+        if (rec.ChgData.Count > 0)
+        {
+            sb.AppendLine();
+            sb.AppendLine("// Overview of Changes");
+            foreach (var kv in rec.ChgData.OrderBy(x => x.Key))
+                sb.AppendLine($"* {kv.Key} = \"{kv.Value}\"");
+        }
+        return sb.ToString();
+    }
+
+    private static string ToPlainText(AmendmentRecord rec)
+    {
+        var sb = new System.Text.StringBuilder();
+        sb.AppendLine($"Amendment: {rec.Name}");
+        sb.AppendLine($"Generated: {DateTime.UtcNow:yyyy-MM-dd HH:mm} UTC");
+        sb.AppendLine(new string('-', 60));
+        void Row(string label, string? val) { if (!string.IsNullOrWhiteSpace(val)) sb.AppendLine($"{label}: {val}"); }
+        Row("Amendment Status",           rec.C218694);
+        Row("Version Number",             rec.C181232);
+        Row("Version Date",               rec.C93813);
+        Row("Amendment Identifier",       rec.C218477);
+        Row("Amendment Scope",            rec.C218673);
+        Row("Country",                    rec.C20108);
+        Row("Region",                     rec.C218674);
+        Row("Site Identifier",            rec.C83081);
+        Row("Approx Enrolled at Sponsor Approval", rec.C218478);
+        Row("Enrollment Scope Definition",rec.C218695);
+        Row("Primary Reason",             rec.C218696);
+        Row("Other Primary Reason",       rec.C17649);
+        Row("Secondary Reason(s)",        rec.C218697?.Replace(";", "; "));
+        Row("Other Secondary Reason",     rec.C17649_2);
+        Row("Amendment Summary",          rec.C42581);
+        Row("Substantial Impact Safety",  rec.C218698);
+        Row("Safety Impact Explanation",  rec.C218699);
+        Row("Substantial Impact Reliability", rec.C218700);
+        Row("Reliability Impact Explanation", rec.C218701);
+        if (rec.ChgData.Count > 0)
+        {
+            sb.AppendLine();
+            sb.AppendLine("Overview of Changes:");
+            sb.AppendLine(new string('-', 40));
+            foreach (var kv in rec.ChgData.OrderBy(x => x.Key))
+                sb.AppendLine($"  {kv.Key}: {kv.Value}");
+        }
+        return sb.ToString();
     }
 
     public void Dispose() { _objRef?.Dispose(); _statusTimer?.Dispose(); }

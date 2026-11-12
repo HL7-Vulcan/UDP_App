@@ -1,4 +1,26 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿<style>
+    .nav-group-toggle {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        background: none;
+        border: none;
+        color: rgba(255,255,255,0.75);
+        font-size: 0.9rem;
+        padding: 0.35rem 0.5rem;
+        cursor: pointer;
+        text-align: left;
+    }
+    .nav-group-toggle:hover { color: #fff; background: rgba(255,255,255,0.08); border-radius: 4px; }
+    .nav-group-toggle.open  { color: #fff; }
+    .toggle-arrow { font-size: 0.7rem; transition: transform 0.15s; }
+    .nav-group-toggle.open .toggle-arrow { transform: rotate(90deg); }
+    .nav-group-items { padding-left: 0.5rem; }
+    .nav-link.nav-sub { font-size: 0.85rem; padding-top: 0.2rem; padding-bottom: 0.2rem; }
+</style>
+
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">UDP_App</a>
     </div>
@@ -119,34 +141,38 @@
         </div>
 
         <div class="nav-item px-2">
-            <NavLink class="nav-link" href="terminology">
-                Terminology
-            </NavLink>
+            <NavLink class="nav-link" href="build">Build</NavLink>
         </div>
 
         <div class="nav-item px-2">
-            <NavLink class="nav-link" href="sushi">
-                SUSHI Runner
-            </NavLink>
+            <NavLink class="nav-link" href="browse">Browse Resources</NavLink>
         </div>
 
-        <div class="nav-item px-2">
-            <NavLink class="nav-link" href="browse">
-                Browse Resources
-            </NavLink>
-        </div>
 
         <div class="nav-item px-2">
-            <NavLink class="nav-link" href="build">
-                Build
-            </NavLink>
+            <NavLink class="nav-link" href="setup">Setup</NavLink>
         </div>
 
+        <!-- ── Utilities (collapsible) ───────────────────────── -->
         <div class="nav-item px-2">
-            <NavLink class="nav-link" href="setup">
-                Setup
-            </NavLink>
+            <button class="nav-group-toggle @(_utilitiesOpen ? "open" : "")"
+                    @onclick="() => _utilitiesOpen = !_utilitiesOpen">
+                <span>⚙ Utilities</span>
+                <span class="toggle-arrow">▸</span>
+            </button>
+            @if (_utilitiesOpen)
+            {
+                <div class="nav-group-items">
+                    <NavLink class="nav-link nav-sub" href="terminology">Terminology</NavLink>
+                    <NavLink class="nav-link nav-sub" href="sushi">SUSHI Runner</NavLink>
+                </div>
+            }
         </div>
+
 
     </nav>
 </div>
+
+@code {
+    private bool _utilitiesOpen = false;
+}

@@ -70,8 +70,8 @@
     <div class="h1">6.&nbsp;&nbsp;Trial Intervention and Concomitant Therapy</div>
 
     <div class="field-wrap">
-        <textarea data-ctx="C218747" class="fb" rows="3" placeholder="Enter Trial Intervention overview"
-            @bind="Model.C218747" @bind:event="oninput"></textarea>
+        <textarea data-ctx="C218747" class="fb" rows="3" placeholder="Enter EITHER description of the overview of trial interventions OR a heading for the optional table"
+            @bind="Model.C218747" @bind:event="oninput" @bind:after="AutoSave"></textarea>
     </div>
 
     <!-- Intervention Table -->
@@ -95,56 +95,56 @@
     </table>
 
     <div class="h2">6.1&nbsp;&nbsp;Description of Investigational Trial Intervention</div>
-    <div class="field-wrap"><textarea data-ctx="C218751" class="@ReqClass(Model.C218751)" rows="3" placeholder="Enter Description" @bind="Model.C218751" @bind:event="oninput"></textarea></div>
+    <div class="field-wrap"><textarea data-ctx="C218751" class="@ReqClass(Model.C218751)" rows="3" placeholder="Enter Description" @bind="Model.C218751" @bind:event="oninput" @bind:after="AutoSave"></textarea></div>
 
     <div class="h2">6.2&nbsp;&nbsp;Rationale for Investigational Trial Intervention Dose and Regimen</div>
-    <div class="field-wrap"><textarea data-ctx="C218752" class="@ReqClass(Model.C218752)" rows="3" placeholder="Enter Rationale" @bind="Model.C218752" @bind:event="oninput"></textarea></div>
+    <div class="field-wrap"><textarea data-ctx="C218752" class="@ReqClass(Model.C218752)" rows="3" placeholder="Enter Rationale" @bind="Model.C218752" @bind:event="oninput" @bind:after="AutoSave"></textarea></div>
 
     <div class="h2">6.3&nbsp;&nbsp;Investigational Trial Intervention Administration</div>
-    <div class="field-wrap"><textarea data-ctx="C218753" class="@ReqClass(Model.C218753)" rows="3" placeholder="Enter Administration" @bind="Model.C218753" @bind:event="oninput"></textarea></div>
+    <div class="field-wrap"><textarea data-ctx="C218753" class="@ReqClass(Model.C218753)" rows="3" placeholder="Enter Administration" @bind="Model.C218753" @bind:event="oninput" @bind:after="AutoSave"></textarea></div>
 
     <div class="h2">6.4&nbsp;&nbsp;Investigational Trial Intervention Dose Modification</div>
-    <div class="field-wrap"><textarea data-ctx="C218754" class="@ReqClass(Model.C218754)" rows="3" placeholder="Enter Dose Modification" @bind="Model.C218754" @bind:event="oninput"></textarea></div>
+    <div class="field-wrap"><textarea data-ctx="C218754" class="@ReqClass(Model.C218754)" rows="3" placeholder="Enter Dose Modification" @bind="Model.C218754" @bind:event="oninput" @bind:after="AutoSave"></textarea></div>
 
     <div class="h2">6.5&nbsp;&nbsp;Management of Investigational Trial Intervention Overdose</div>
-    <div class="field-wrap"><textarea data-ctx="C218755" class="@ReqClass(Model.C218755)" rows="3" placeholder="Enter Overdose Management" @bind="Model.C218755" @bind:event="oninput"></textarea></div>
+    <div class="field-wrap"><textarea data-ctx="C218755" class="@ReqClass(Model.C218755)" rows="3" placeholder="Enter Overdose Management" @bind="Model.C218755" @bind:event="oninput" @bind:after="AutoSave"></textarea></div>
 
     <div class="h2">6.6&nbsp;&nbsp;Preparation, Storage, Handling and Accountability</div>
     <div class="h3">6.6.1&nbsp;&nbsp;Preparation of Investigational Trial Intervention</div>
-    <div class="field-wrap"><textarea data-ctx="C176274" class="@ReqClass(Model.C176274)" rows="3" placeholder="Enter Preparation" @bind="Model.C176274" @bind:event="oninput"></textarea></div>
+    <div class="field-wrap"><textarea data-ctx="C176274" class="@ReqClass(Model.C176274)" rows="3" placeholder="Enter Preparation" @bind="Model.C176274" @bind:event="oninput" @bind:after="AutoSave"></textarea></div>
     <div class="h3">6.6.2&nbsp;&nbsp;Storage and Handling of Investigational Trial Intervention</div>
-    <div class="field-wrap"><textarea data-ctx="C115525" class="@ReqClass(Model.C115525)" rows="3" placeholder="Enter Storage and Handling" @bind="Model.C115525" @bind:event="oninput"></textarea></div>
+    <div class="field-wrap"><textarea data-ctx="C115525" class="@ReqClass(Model.C115525)" rows="3" placeholder="Enter Storage and Handling" @bind="Model.C115525" @bind:event="oninput" @bind:after="AutoSave"></textarea></div>
     <div class="h3">6.6.3&nbsp;&nbsp;Accountability of Investigational Trial Intervention</div>
-    <div class="field-wrap"><textarea data-ctx="C176267" class="@ReqClass(Model.C176267)" rows="3" placeholder="Enter Accountability" @bind="Model.C176267" @bind:event="oninput"></textarea></div>
+    <div class="field-wrap"><textarea data-ctx="C176267" class="@ReqClass(Model.C176267)" rows="3" placeholder="Enter Accountability" @bind="Model.C176267" @bind:event="oninput" @bind:after="AutoSave"></textarea></div>
 
     <div class="h2">6.7&nbsp;&nbsp;Investigational Trial Intervention Assignment, Randomisation and Blinding</div>
     <div class="h3">6.7.1&nbsp;&nbsp;Participant Assignment to Investigational Trial Intervention</div>
-    <div class="field-wrap"><textarea data-ctx="C218756" class="@ReqClass(Model.C218756)" rows="3" placeholder="Enter Participant Assignment" @bind="Model.C218756" @bind:event="oninput"></textarea></div>
+    <div class="field-wrap"><textarea data-ctx="C218756" class="@ReqClass(Model.C218756)" rows="3" placeholder="Enter Participant Assignment" @bind="Model.C218756" @bind:event="oninput" @bind:after="AutoSave"></textarea></div>
     <div class="h3">6.7.2&nbsp;&nbsp;Randomisation</div>
-    <div class="field-wrap"><textarea data-ctx="C25196" class="fb cond" rows="3" placeholder="Enter Randomisation" @bind="Model.C25196" @bind:event="oninput"></textarea></div>
+    <div class="field-wrap"><textarea data-ctx="C25196" class="fb cond" rows="3" placeholder="Enter Randomisation" @bind="Model.C25196" @bind:event="oninput" @bind:after="AutoSave"></textarea></div>
     <div class="h3">6.7.3&nbsp;&nbsp;Measures to Maintain Blinding</div>
-    <div class="field-wrap"><textarea data-ctx="C189349" class="fb cond" rows="3" placeholder="Enter Blinding Measures" @bind="Model.C189349" @bind:event="oninput"></textarea></div>
+    <div class="field-wrap"><textarea data-ctx="C189349" class="fb cond" rows="3" placeholder="Enter Blinding Measures" @bind="Model.C189349" @bind:event="oninput" @bind:after="AutoSave"></textarea></div>
     <div class="h3">6.7.4&nbsp;&nbsp;Emergency Unblinding at the Site</div>
-    <div class="field-wrap"><textarea data-ctx="C218757" class="fb cond" rows="3" placeholder="Enter Emergency Unblinding" @bind="Model.C218757" @bind:event="oninput"></textarea></div>
+    <div class="field-wrap"><textarea data-ctx="C218757" class="fb cond" rows="3" placeholder="Enter Emergency Unblinding" @bind="Model.C218757" @bind:event="oninput" @bind:after="AutoSave"></textarea></div>
 
     <div class="h2">6.8&nbsp;&nbsp;Investigational Trial Intervention Adherence</div>
-    <div class="field-wrap"><textarea data-ctx="C218758" class="@ReqClass(Model.C218758)" rows="3" placeholder="Enter Adherence" @bind="Model.C218758" @bind:event="oninput"></textarea></div>
+    <div class="field-wrap"><textarea data-ctx="C218758" class="@ReqClass(Model.C218758)" rows="3" placeholder="Enter Adherence" @bind="Model.C218758" @bind:event="oninput" @bind:after="AutoSave"></textarea></div>
 
     <div class="h2">6.9&nbsp;&nbsp;Description of Noninvestigational Trial Intervention</div>
-    <div class="field-wrap"><textarea data-ctx="C218759" class="@ReqClass(Model.C218759)" rows="3" placeholder="Enter Noninvestigational Intervention" @bind="Model.C218759" @bind:event="oninput"></textarea></div>
+    <div class="field-wrap"><textarea data-ctx="C218759" class="@ReqClass(Model.C218759)" rows="3" placeholder="Enter Noninvestigational Intervention" @bind="Model.C218759" @bind:event="oninput" @bind:after="AutoSave"></textarea></div>
     <div class="h3">6.9.1&nbsp;&nbsp;Background Trial Intervention</div>
-    <div class="field-wrap"><textarea data-ctx="C222329" class="fb cond" rows="3" placeholder="Enter Background Trial Intervention" @bind="Model.C222329" @bind:event="oninput"></textarea></div>
+    <div class="field-wrap"><textarea data-ctx="C222329" class="fb cond" rows="3" placeholder="Enter Background Trial Intervention" @bind="Model.C222329" @bind:event="oninput" @bind:after="AutoSave"></textarea></div>
     <div class="h3">6.9.2&nbsp;&nbsp;Rescue Therapy</div>
-    <div class="field-wrap"><textarea data-ctx="C222330" class="fb cond" rows="3" placeholder="Enter Rescue Therapy" @bind="Model.C222330" @bind:event="oninput"></textarea></div>
+    <div class="field-wrap"><textarea data-ctx="C222330" class="fb cond" rows="3" placeholder="Enter Rescue Therapy" @bind="Model.C222330" @bind:event="oninput" @bind:after="AutoSave"></textarea></div>
     <div class="h3">6.9.3&nbsp;&nbsp;Other Noninvestigational Trial Intervention</div>
-    <div class="field-wrap"><textarea data-ctx="C218761" class="fb cond" rows="3" placeholder="Enter Other Noninvestigational Intervention" @bind="Model.C218761" @bind:event="oninput"></textarea></div>
+    <div class="field-wrap"><textarea data-ctx="C218761" class="fb cond" rows="3" placeholder="Enter Other Noninvestigational Intervention" @bind="Model.C218761" @bind:event="oninput" @bind:after="AutoSave"></textarea></div>
 
     <div class="h2">6.10&nbsp;&nbsp;Concomitant Therapy</div>
-    <div class="field-wrap"><textarea data-ctx="C53630" class="@ReqClass(Model.C53630)" rows="3" placeholder="Enter Concomitant Therapy" @bind="Model.C53630" @bind:event="oninput"></textarea></div>
+    <div class="field-wrap"><textarea data-ctx="C53630" class="@ReqClass(Model.C53630)" rows="3" placeholder="Enter Concomitant Therapy" @bind="Model.C53630" @bind:event="oninput" @bind:after="AutoSave"></textarea></div>
     <div class="h3">6.10.1&nbsp;&nbsp;Prohibited Concomitant Therapy</div>
-    <div class="field-wrap"><textarea data-ctx="C218762" class="fb cond" rows="3" placeholder="Enter Prohibited Concomitant Therapy" @bind="Model.C218762" @bind:event="oninput"></textarea></div>
+    <div class="field-wrap"><textarea data-ctx="C218762" class="fb cond" rows="3" placeholder="Enter Prohibited Concomitant Therapy" @bind="Model.C218762" @bind:event="oninput" @bind:after="AutoSave"></textarea></div>
     <div class="h3">6.10.2&nbsp;&nbsp;Permitted Concomitant Therapy</div>
-    <div class="field-wrap"><textarea data-ctx="C218763" class="fb cond" rows="3" placeholder="Enter Permitted Concomitant Therapy" @bind="Model.C218763" @bind:event="oninput"></textarea></div>
+    <div class="field-wrap"><textarea data-ctx="C218763" class="fb cond" rows="3" placeholder="Enter Permitted Concomitant Therapy" @bind="Model.C218763" @bind:event="oninput" @bind:after="AutoSave"></textarea></div>
 
     <div class="toolbar">
         <button class="btn btn-secondary" @onclick="ClearAll">Clear All</button>
@@ -209,7 +209,7 @@
     <div class="dbox">
         <h3>Save Data to File</h3>
         <label style="display:block;font-weight:700;margin-bottom:6px;">File name</label>
-        <input type="text" @bind="SaveFileName" @bind:event="oninput" />
+        <input type="text" @bind="SaveFileName" @bind:event="oninput" @bind:after="AutoSave" />
         <label style="display:block;font-weight:700;margin:10px 0 6px;">Format</label>
         <div class="fmt-row">
             <label><input type="radio" name="s6fmt" checked="@IsPipeline" @onchange="SetFmtPipeline" /> FHIR</label>
@@ -237,8 +237,20 @@
     </div>
 </div>
 
+<!-- ── Clear confirmation modal ──────────────────────────────────────────── -->
+<div class="overlay @(_showClearConfirm ? "show" : "")">
+    <div class="dbox">
+        <h3>Clear All Data</h3>
+        <p>This will remove all entered data for Section 6. Are you sure?</p>
+        <div class="dbr">
+            <button class="btn btn-secondary" @onclick="() => _showClearConfirm = false">Cancel</button>
+            <button class="btn btn-danger"    @onclick="DoClearAll">Clear All</button>
+        </div>
+    </div>
+</div>
+
 <div class="sbar">
-    <span>Section 6 – Data Entry &nbsp;|&nbsp; Grey = data entry &nbsp;|&nbsp; Red = required &nbsp;|&nbsp; Dashed = conditional</span>
+    <span>Section 6 – Data Entry &nbsp;|&nbsp; <span style='color:#c8a0e8'>Purple</span> = placeholder &nbsp;|&nbsp; <span style='color:#6dbf6d'>Green</span> = user entry &nbsp;|&nbsp; <span style='background:#f5d0d0;padding:0 3px'>Pink</span> = required &nbsp;|&nbsp; Right-click field for info</span>
     <span>@StatusMessage</span>
 </div>
 
@@ -250,6 +262,7 @@
     private bool   ShowValidation = false;
     private bool   ShowSaveDialog = false;
     private bool   ShowReqDialog  = false;
+    private bool   _showClearConfirm = false;
     private bool   _showPopout    = false;
     private bool   _reinitCtxMenus = false;
     private string SaveFileName   = "section6_data";
@@ -343,6 +356,15 @@
         },
     };
 
+    private static readonly Dictionary<string, string> TblPlaceholders = new()
+    {
+        ["C93729"]  = "Enter arm name",
+        ["C177930"] = "Enter nonproprietary name or sponsor code",
+        ["C142517"] = "Enter dosage strength(s)",
+        ["C94394"]  = "Enter dosage level(s)",
+        ["C15697"]  = "Describe regimen / treatment period / vaccination regimen",
+    };
+
     private RenderFragment TblRow(int row) => __builder =>
     {
         <tr>
@@ -365,7 +387,7 @@
                     else
                     {
                         <textarea data-ctx="@fid" class="fb" rows="2"
-                            placeholder="@col"
+                            placeholder="@(TblPlaceholders.TryGetValue(col, out var ph) ? ph : col)"
                             value="@GetTbl(fid)"
                             @oninput="@(e => SetTbl(fid, e.Value?.ToString()))"></textarea>
                     }
@@ -374,8 +396,8 @@
         </tr>;
     };
 
-    private string SaveDialogCss => ShowSaveDialog ? "overlay show" : "overlay";
-    private string ReqDialogCss  => ShowReqDialog  ? "overlay show" : "overlay";
+    private string SaveDialogCss => ShowSaveDialog ? "show" : "";
+    private string ReqDialogCss  => ShowReqDialog  ? "show" : "";
     private bool IsPipeline => SaveFormat == "fhir-pipeline";
     private bool IsFhir => SaveFormat == "fsh";
     private bool IsJson => SaveFormat == "json";
@@ -388,7 +410,7 @@
     private void SetFmtFhir(ChangeEventArgs e) => SaveFormat = "fsh";
 
     private string ReqClass(string? val) =>
-        ShowValidation && string.IsNullOrWhiteSpace(val) ? "fb req-empty" : "fb";
+        string.IsNullOrWhiteSpace(val) ? "fb req-empty" : "fb";
 
     private string GetTbl(string key) =>
         Model.TblData.TryGetValue(key, out var v) ? v : string.Empty;
@@ -426,8 +448,11 @@
         Model.C218759, Model.C53630
     }.Count(string.IsNullOrWhiteSpace);
 
-    private void ClearAll()
+    private void ClearAll() => _showClearConfirm = true;
+
+    private void DoClearAll()
     {
+        _showClearConfirm = false;
         Model = new Section06Model(); TblRows = new List<int>{1}; NextRow = 2;
         ShowValidation = false; ErrorMessage = string.Empty;
         _ = JS.InvokeVoidAsync("localStorage.removeItem", "s6data");
@@ -443,7 +468,7 @@
             TblRows = Enumerable.Range(1, Math.Max(1, s.TblRows)).ToList();
             NextRow = TblRows.Count + 1;
             ShowValidation = false; _reinitCtxMenus = true;
-            SetStatus("Sample data loaded");
+            SetStatus("Sample data loaded"); AutoSave();
         }
         else ErrorMessage = "Could not load sample file.";
     }
@@ -454,6 +479,9 @@
         if (HasRequiredEmpty()) { ReqDialogMsg = $"{RequiredEmptyCount()} required field(s) empty. Save anyway?"; PendingAction = "browser"; ShowReqDialog = true; return; }
         await DoBrowserSave();
     }
+
+    private void AutoSave() =>
+        _ = JS.InvokeVoidAsync("localStorage.setItem", "s6data", DataSvc.ToJson(Model));
 
     private async Task DoBrowserSave()
     {
@@ -514,7 +542,7 @@
             Model = loaded;
             TblRows = Enumerable.Range(1, Math.Max(1, loaded.TblRows)).ToList();
             NextRow = TblRows.Count + 1;
-            ShowValidation = false; SetStatus("⬆ Loaded from file");
+            ShowValidation = false; SetStatus("⬆ Loaded from file"); AutoSave();
             InvokeAsync(StateHasChanged);
         }
     }
@@ -536,9 +564,6 @@
 
     [JSInvokable] public void OnCtxMenuClosed() { }
     private void CloseCtxMenu() => _ = JS.InvokeVoidAsync("udpHideCtxMenu", "s6-ctx-menu");
-
-    private void AutoSave() =>
-        _ = JS.InvokeVoidAsync("localStorage.setItem", "s6data", DataSvc.ToJson(Model));
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

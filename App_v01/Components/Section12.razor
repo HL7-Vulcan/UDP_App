@@ -411,8 +411,20 @@
     </div>
 </div>
 
+<!-- ── Clear confirmation modal ──────────────────────────────────────────── -->
+<div class="overlay @(_showClearConfirm ? "show" : "")">
+    <div class="dbox">
+        <h3>Clear All Data</h3>
+        <p>This will remove all entered data for Section 12. Are you sure?</p>
+        <div class="dbr">
+            <button class="btn btn-secondary" @onclick="() => _showClearConfirm = false">Cancel</button>
+            <button class="btn btn-danger"    @onclick="DoClearAll">Clear All</button>
+        </div>
+    </div>
+</div>
+
 <div class="sbar">
-    <span>Section 12 – Appendix: Supporting Detail &nbsp;|&nbsp; Grey = data entry &nbsp;|&nbsp; Red border = required &nbsp;|&nbsp; Dashed = conditional</span>
+    <span>Section 12 – Appendix: Supporting Detail &nbsp;|&nbsp; <span style='color:#c8a0e8'>Purple</span> = placeholder &nbsp;|&nbsp; <span style='color:#6dbf6d'>Green</span> = user entry &nbsp;|&nbsp; <span style='background:#f5d0d0;padding:0 3px'>Pink</span> = required &nbsp;|&nbsp; Right-click field for info</span>
     <span>@StatusMessage</span>
 </div>
 
@@ -422,6 +434,7 @@
     private bool   ShowValidation  = false;
     private bool   ShowSaveDialog  = false;
     private bool   ShowReqDialog   = false;
+    private bool   _showClearConfirm = false;
     private bool   ShowAmendPicker = false;
     private int    ImportTargetRow = 1;
     private string SaveFileName    = "section12_data";
@@ -441,9 +454,9 @@
     private DotNetObjectReference<Section12>? _objRef;
 
     // ── CSS helpers ───────────────────────────────────────────────
-    private string SaveDialogCss   => ShowSaveDialog   ? "overlay show" : "overlay";
-    private string ReqDialogCss    => ShowReqDialog    ? "overlay show" : "overlay";
-    private string AmendPickerCss  => ShowAmendPicker  ? "overlay show" : "overlay";
+    private string SaveDialogCss   => ShowSaveDialog   ? "show" : "";
+    private string ReqDialogCss    => ShowReqDialog    ? "show" : "";
+    private string AmendPickerCss  => ShowAmendPicker  ? "show" : "";
     private bool IsPipeline => SaveFormat == "fhir-pipeline";
     private bool IsFhir     => SaveFormat == "fsh";
     private bool IsJson     => SaveFormat == "json";
@@ -456,7 +469,7 @@
     private void SetFmtTxt(ChangeEventArgs e)      => SaveFormat = "txt";
 
     private string ReqClass(string? val) =>
-        ShowValidation && string.IsNullOrWhiteSpace(val) ? "fb req-empty" : "fb";
+        string.IsNullOrWhiteSpace(val) ? "fb req-empty" : "fb";
 
     private static string FormatDate(string? raw)
     {
@@ -689,8 +702,11 @@
     }
 
     // ── Clear ─────────────────────────────────────────────────────
-    private void ClearAll()
+    private void ClearAll() => _showClearConfirm = true;
+
+    private void DoClearAll()
     {
+        _showClearConfirm = false;
         Model          = new Section12Model();
         ShowValidation = false;
         ErrorMessage   = string.Empty;

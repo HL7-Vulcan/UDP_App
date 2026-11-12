@@ -1,4 +1,14 @@
 ﻿@inherits LayoutComponentBase
+@inject IJSRuntime JS
+
+<style>
+    .overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:9999; align-items:center; justify-content:center; }
+    .overlay.show { display:flex; }
+    .gl-dbox { background:#fff; border-radius:6px; padding:28px 32px; width:440px; box-shadow:0 8px 40px rgba(0,0,0,0.25); }
+    .gl-dbox h3 { font-size:13pt; font-weight:700; color:#1f3864; margin-bottom:12px; }
+    .gl-dbox p  { font-size:10.5pt; margin-bottom:16px; line-height:1.5; }
+    .gl-dbr { display:flex; justify-content:flex-end; gap:10px; }
+</style>
 
 <div class="page">
     <div class="sidebar">
@@ -6,7 +16,8 @@
     </div>
 
     <main>
-        <div class="top-row px-4">
+        <div class="top-row px-4" style="display:flex; align-items:center; justify-content:space-between;">
+            <button class="btn btn-sm btn-outline-danger" @onclick="ShowClearAll">Clear All Data</button>
             <a href="https://hl7vulcan.org/projects/udp/" target="_blank">About</a>
         </div>
 
@@ -16,8 +27,37 @@
     </main>
 </div>
 
+<div class="overlay @(_showClearConfirm ? "show" : "")">
+    <div class="gl-dbox">
+        <h3>Clear All Data</h3>
+        <p>This will permanently remove all user-entered data from every section of the protocol. This action cannot be undone.</p>
+        <p>Are you sure you want to continue?</p>
+        <div class="gl-dbr">
+            <button class="btn btn-secondary" @onclick="() => _showClearConfirm = false">Cancel</button>
+            <button class="btn btn-danger"    @onclick="DoClearAll">OK — Clear Everything</button>
+        </div>
+    </div>
+</div>
+
 <div id="blazor-error-ui" data-nosnippet>
     An unhandled error has occurred.
     <a href="." class="reload">Reload</a>
     <span class="dismiss">🗙</span>
 </div>
+
+@code {
+    private bool _showClearConfirm = false;
+
+    private void ShowClearAll() => _showClearConfirm = true;
+
+    private async Task DoClearAll()
+    {
+        _showClearConfirm = false;
+        string[] keys = { "tpdata", "s1data", "s2data", "s3data", "s4data", "s5data",
+                          "s6data", "s7data", "s8data", "s9data", "s10data", "s11data",
+                          "s12data", "s13data", "s14data" };
+        foreach (var key in keys)
+            await JS.InvokeVoidAsync("localStorage.removeItem", key);
+        await JS.InvokeVoidAsync("eval", "location.reload()");
+    }
+}

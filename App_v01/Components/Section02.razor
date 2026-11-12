@@ -98,7 +98,7 @@
     <div class="field-wrap">
         <textarea title="C146997" data-ctx="C146997" class="@C146997Class" rows="4"
             placeholder="Enter an explanation of why the trial is needed, and why the research questions being asked are important."
-            @bind="Model.C146997" @bind:event="oninput"></textarea>
+            @bind="Model.C146997" @bind:event="oninput" @bind:after="AutoSave"></textarea>
     </div>
 
     <div class="h2">2.2&nbsp;&nbsp;Assessment of Risks and Benefits</div>
@@ -108,35 +108,35 @@
     <div class="field-wrap">
         <textarea title="C218721" data-ctx="C218721" class="fb" rows="4"
             placeholder="Describe risks related to trial-specific treatments and interventions."
-            @bind="Model.C218721" @bind:event="oninput"></textarea>
+            @bind="Model.C218721" @bind:event="oninput" @bind:after="AutoSave"></textarea>
     </div>
 
     <div class="h4">Trial Procedures</div>
     <div class="field-wrap">
         <textarea title="C218722" data-ctx="C218722" class="fb" rows="4"
             placeholder="Describe risks associated with the design (e.g., placebo arm) and procedures specific to this trial (e.g., biopsies), and any measures to control or mitigate the risks."
-            @bind="Model.C218722" @bind:event="oninput"></textarea>
+            @bind="Model.C218722" @bind:event="oninput" @bind:after="AutoSave"></textarea>
     </div>
 
     <div class="h4">Other</div>
     <div class="field-wrap">
         <textarea title="C218723" data-ctx="C218723" class="fb" rows="4"
             placeholder="Describe any risks associated with other items."
-            @bind="Model.C218723" @bind:event="oninput"></textarea>
+            @bind="Model.C218723" @bind:event="oninput" @bind:after="AutoSave"></textarea>
     </div>
 
     <div class="h3">2.2.2&nbsp;&nbsp;Benefit Summary</div>
     <div class="field-wrap">
         <textarea title="C218724" data-ctx="C218724" class="fb" rows="4"
             placeholder="Describe any physical, psychological, social, or other potential benefits to individual participants as a result of participating in the trial."
-            @bind="Model.C218724" @bind:event="oninput"></textarea>
+            @bind="Model.C218724" @bind:event="oninput" @bind:after="AutoSave"></textarea>
     </div>
 
     <div class="h3">2.2.3&nbsp;&nbsp;Overall Risk-Benefit Assessment</div>
     <div class="field-wrap">
         <textarea title="C218725" data-ctx="C218725" class="fb" rows="4"
             placeholder="Describe the perceived balance between risks and anticipated efficacy/benefits of the trial."
-            @bind="Model.C218725" @bind:event="oninput"></textarea>
+            @bind="Model.C218725" @bind:event="oninput" @bind:after="AutoSave"></textarea>
     </div>
 
     <div class="toolbar">
@@ -154,7 +154,7 @@
     <div class="dbox">
         <h3>Save Data to File</h3>
         <label style="display:block;font-weight:700;margin-bottom:6px;">File name</label>
-        <input type="text" @bind="SaveFileName" @bind:event="oninput" />
+        <input type="text" @bind="SaveFileName" @bind:event="oninput" @bind:after="AutoSave" />
         <label style="display:block;font-weight:700;margin:10px 0 6px;">Format</label>
         <div class="fmt-row">
             <label><input type="radio" name="s2fmt" checked="@IsPipeline"  @onchange="SetFmtPipeline"  /> FHIR</label>
@@ -205,8 +205,20 @@
     </div>
 </div>
 
+<!-- ── Clear confirmation modal ──────────────────────────────────────────── -->
+<div class="overlay @(_showClearConfirm ? "show" : "")">
+    <div class="dbox">
+        <h3>Clear All Data</h3>
+        <p>This will remove all entered data for Section 2. Are you sure?</p>
+        <div class="dbr">
+            <button class="btn btn-secondary" @onclick="() => _showClearConfirm = false">Cancel</button>
+            <button class="btn btn-danger"    @onclick="DoClearAll">Clear All</button>
+        </div>
+    </div>
+</div>
+
 <div class="sbar">
-    <span>Section 2 – Introduction &nbsp;|&nbsp; Hover a field to see its ID</span>
+    <span>Section 2 – Introduction &nbsp;|&nbsp; <span style='color:#c8a0e8'>Purple</span> = placeholder &nbsp;|&nbsp; <span style='color:#6dbf6d'>Green</span> = user entry &nbsp;|&nbsp; <span style='background:#f5d0d0;padding:0 3px'>Pink</span> = required &nbsp;|&nbsp; Right-click field for info</span>
     <span>@StatusMessage</span>
 </div>
 
@@ -251,9 +263,10 @@
         _         => (code,                   FieldGuidance.For(code))
     };
 
-    private bool   ShowValidation  = false;
-    private bool   ShowSaveDialog  = false;
-    private bool   ShowReqDialog   = false;
+    private bool   ShowValidation    = false;
+    private bool   ShowSaveDialog    = false;
+    private bool   ShowReqDialog     = false;
+    private bool   _showClearConfirm = false;
     private string SaveFileName    = "section2_data";
     private string SaveFormat      = "fhir-pipeline";
     private FhirPipelineDialog _pipeline = default!;
@@ -268,7 +281,7 @@
     // ── CSS helpers ───────────────────────────────────────────────
     private string SaveDialogCss => ShowSaveDialog ? "show" : string.Empty;
     private string ReqDialogCss  => ShowReqDialog  ? "show" : string.Empty;
-    private string C146997Class  => ShowValidation && string.IsNullOrWhiteSpace(Model.C146997)
+    private string C146997Class  => string.IsNullOrWhiteSpace(Model.C146997)
                                     ? "fb req-empty" : "fb";
 
     // ── Radio helpers ─────────────────────────────────────────────
@@ -287,8 +300,11 @@
     private bool HasRequiredEmpty() => string.IsNullOrWhiteSpace(Model.C146997);
 
     // ── Clear ─────────────────────────────────────────────────────
-    private void ClearAll()
+    private void ClearAll() => _showClearConfirm = true;
+
+    private void DoClearAll()
     {
+        _showClearConfirm = false;
         Model          = new Section02Model();
         ShowValidation = false;
         ErrorMessage   = string.Empty;
@@ -304,7 +320,7 @@
         {
             Model          = sample;
             ShowValidation = false;
-            SetStatus("Sample data loaded");
+            SetStatus("Sample data loaded"); AutoSave();
         }
         else
         {
@@ -328,6 +344,9 @@
         }
         catch (Exception ex) { ErrorMessage = "SaveToBrowser error: " + ex.Message; }
     }
+
+    private void AutoSave() =>
+        _ = JS.InvokeVoidAsync("localStorage.setItem", "s2data", DataSvc.ToJson(Model));
 
     private async Task DoBrowserSave()
     {
@@ -415,7 +434,7 @@
         {
             Model          = loaded;
             ShowValidation = false;
-            SetStatus("⬆ Loaded from file");
+            SetStatus("⬆ Loaded from file"); AutoSave();
             InvokeAsync(StateHasChanged);
         }
     }

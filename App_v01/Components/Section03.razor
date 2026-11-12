@@ -137,10 +137,10 @@
 
     <!-- ── Toolbar ────────────────────────────────────────────────────────── -->
     <div class="toolbar">
-        <button class="btn btn-danger"     @onclick="ClearAll">Clear All</button>
-        <button class="btn btn-secondary"  @onclick="LoadSample">Fill with Sample Data</button>
-        <button class="btn btn-secondary"  @onclick="OpenImport">⬆ Load from File</button>
+        <button class="btn btn-secondary"  @onclick="ClearAll">Clear All</button>
+        <button class="btn btn-secondary"  @onclick="LoadSample">Load Sample</button>
         <button class="btn btn-secondary"  @onclick="() => _showExport = true">⬇ Save to File…</button>
+        <button class="btn btn-secondary"  @onclick="OpenImport">⬆ Load from File</button>
     </div>
 </div>
 
@@ -177,6 +177,18 @@
     </div>
 </div>
 
+<!-- ── Clear confirmation modal ──────────────────────────────────────────── -->
+<div class="overlay @(_showClearConfirm ? "show" : "")">
+    <div class="dbox">
+        <h3>Clear All Data</h3>
+        <p>This will remove all entered data for Section 3. Are you sure?</p>
+        <div class="dbr">
+            <button class="btn btn-secondary" @onclick="() => _showClearConfirm = false">Cancel</button>
+            <button class="btn btn-danger"    @onclick="DoClearAll">Clear All</button>
+        </div>
+    </div>
+</div>
+
 <!-- ── Required fields modal ─────────────────────────────────────────────── -->
 <div class="overlay @(_showReq ? "show" : "")">
     <div class="dbox">
@@ -190,7 +202,7 @@
 </div>
 
 <div class="sbar">
-    <span>Section 3 – Trial Objectives &nbsp;|&nbsp; Right-click field for info &nbsp;|&nbsp; Grey = data entry &nbsp;|&nbsp; Red border = required</span>
+    <span>Section 3 – Trial Objectives &nbsp;|&nbsp; <span style='color:#c8a0e8'>Purple</span> = placeholder &nbsp;|&nbsp; <span style='color:#6dbf6d'>Green</span> = user entry &nbsp;|&nbsp; <span style='background:#f5d0d0;padding:0 3px'>Pink</span> = required &nbsp;|&nbsp; Right-click field for info</span>
     <span id="sstat">@_statusMsg</span>
 </div>
 
@@ -200,6 +212,7 @@
     // UI state
     private bool   _showExport = false;
     private bool   _showReq    = false;
+    private bool   _showClearConfirm = false;
     private string _exportName = "section3_data";
     private string _exportFmt  = "fhir-pipeline";
     private FhirPipelineDialog _pipeline = default!;
@@ -318,10 +331,14 @@
         SetStatus("Sample data loaded", 3000);
     }
 
-    private async Task ClearAll()
+    private void ClearAll()
     {
-        bool confirmed = await JS.InvokeAsync<bool>("confirm", "Clear all entered data?");
-        if (!confirmed) return;
+        _showClearConfirm = true;
+    }
+
+    private async Task DoClearAll()
+    {
+        _showClearConfirm = false;
         _model = new Section03Model();
         await JS.InvokeVoidAsync("localStorage.removeItem", "s3data");
         SetStatus("Cleared", 2000);

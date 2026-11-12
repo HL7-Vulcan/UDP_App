@@ -102,25 +102,25 @@
             <td class="lbl">Sponsor Confidentiality Statement:</td>
             <td><div class="type-badge">optional string</div>
                 <textarea data-ctx="C181236" class="fb" rows="2" placeholder="Enter Sponsor Confidentiality Statement"
-                    @bind="Model.C181236" @bind:event="oninput"></textarea></td>
+                    @bind="Model.C181236" @bind:event="oninput" @bind:after="AutoSave"></textarea></td>
         </tr>
         <tr>
             <td class="lbl req">Full Title</td>
             <td><div class="type-badge">required string</div>
                 <textarea data-ctx="C132346" class="@ReqClass(Model.C132346)" rows="3" placeholder="Enter Full Title"
-                    @bind="Model.C132346" @bind:event="oninput"></textarea></td>
+                    @bind="Model.C132346" @bind:event="oninput" @bind:after="AutoSave"></textarea></td>
         </tr>
         <tr>
             <td class="lbl">Trial Acronym</td>
             <td><div class="type-badge">optional string</div>
                 <input data-ctx="C94108" class="fb" type="text" placeholder="Enter Trial Acronym"
-                    @bind="Model.C94108" @bind:event="oninput" /></td>
+                    @bind="Model.C94108" @bind:event="oninput" @bind:after="AutoSave" /></td>
         </tr>
         <tr>
             <td class="lbl req">Sponsor Protocol Identifier:</td>
             <td><div class="type-badge">required string</div>
                 <input data-ctx="C132351" class="@ReqInputClass(Model.C132351)" type="text" placeholder="Enter Sponsor Protocol Identifier"
-                    @bind="Model.C132351" @bind:event="oninput" /></td>
+                    @bind="Model.C132351" @bind:event="oninput" @bind:after="AutoSave" /></td>
         </tr>
         <tr>
             <td class="lbl req">Original Protocol:</td>
@@ -134,7 +134,7 @@
             <td><div class="type-badge">@(AmendFromStore ? "read-only" : "optional string")</div>
                 <div data-ctx-wrap="C181232" style="position:relative">
                 <input data-ctx="C181232" class="fb @(AmendFromStore ? "ro-inp" : "")" type="text" placeholder="Enter Version Number"
-                    @bind="Model.C181232" @bind:event="oninput" disabled="@AmendFromStore" />
+                    @bind="Model.C181232" @bind:event="oninput" @bind:after="AutoSave" disabled="@AmendFromStore" />
                 </div>
             </td>
         </tr>
@@ -143,7 +143,7 @@
             <td><div class="type-badge">@(AmendFromStore ? "read-only" : "optional date")</div>
                 <div data-ctx-wrap="C93813" style="position:relative">
                 <input data-ctx="C93813" class="fb @(AmendFromStore ? "ro-inp" : "")" type="text" placeholder="yyyy-mm-dd"
-                    @bind="Model.C93813" @bind:event="oninput" disabled="@AmendFromStore" />
+                    @bind="Model.C93813" @bind:event="oninput" @bind:after="AutoSave" disabled="@AmendFromStore" />
                 </div>
             </td>
         </tr>
@@ -152,7 +152,7 @@
             <td><div class="type-badge">@(AmendFromStore ? "read-only" : "conditional string")</div>
                 <div data-ctx-wrap="C218477" style="position:relative">
                 <input data-ctx="C218477" class="fb @(AmendFromStore ? "ro-inp" : "")" type="text" placeholder="Enter Amendment Identifier"
-                    @bind="Model.C218477" @bind:event="oninput" disabled="@(AmendFromStore || !IsAmendment)" />
+                    @bind="Model.C218477" @bind:event="oninput" @bind:after="AutoSave" disabled="@(AmendFromStore || !IsAmendment)" />
                 </div>
             </td>
         </tr>
@@ -161,27 +161,27 @@
             <td><div class="type-badge">@(AmendFromStore ? "read-only" : "conditional picklist")</div>
                 <div data-ctx-wrap="C218673" style="position:relative">
                 <PicklistSelect ValueSetId="m11-study-amendment-scope-vs" CssClass="@("fb-sel" + (AmendFromStore ? " ro-sel" : ""))"
-                    DataCtx="C218673" @bind-Value="Model.C218673" />
+                    DataCtx="C218673" @bind-Value="Model.C218673" @bind-Value:after="AutoSave" />
                 </div>
                 <div style="margin-top:6px;">
                     <div class="type-badge">Country (@(AmendFromStore ? "read-only" : "conditional picklist"))</div>
                     <div data-ctx-wrap="C20108" style="position:relative">
                     <PicklistSelect ValueSetId="udp-country-vs" CssClass="@("fb-sel" + (AmendFromStore ? " ro-sel" : ""))"
-                        DataCtx="C20108" @bind-Value="Model.C20108" />
+                        DataCtx="C20108" @bind-Value="Model.C20108" @bind-Value:after="AutoSave" />
                     </div>
                 </div>
                 <div style="margin-top:6px;">
                     <div class="type-badge">Region (@(AmendFromStore ? "read-only" : "conditional picklist"))</div>
                     <div data-ctx-wrap="C218674" style="position:relative">
                     <PicklistSelect ValueSetId="udp-region-vs" CssClass="@("fb-sel" + (AmendFromStore ? " ro-sel" : ""))"
-                        DataCtx="C218674" @bind-Value="Model.C218674" />
+                        DataCtx="C218674" @bind-Value="Model.C218674" @bind-Value:after="AutoSave" />
                     </div>
                 </div>
                 <div style="margin-top:6px;">
                     <div class="type-badge">Site Identifier (@(AmendFromStore ? "read-only" : "conditional string"))</div>
                     <div data-ctx-wrap="C83081" style="position:relative">
                     <input data-ctx="C83081" class="fb @(AmendFromStore ? "ro-inp" : "")" type="text" placeholder="Enter Site Identifier"
-                        @bind="Model.C83081" @bind:event="oninput" disabled="@AmendFromStore" />
+                        @bind="Model.C83081" @bind:event="oninput" @bind:after="AutoSave" disabled="@AmendFromStore" />
                     </div>
                 </div>
             </td>
@@ -190,98 +190,98 @@
             <td class="lbl">Sponsor's Investigational Product Code(s):</td>
             <td><div class="type-badge">optional string</div>
                 <input data-ctx="C218675" class="fb" type="text" placeholder="Enter Sponsor IP Code(s)"
-                    @bind="Model.C218675" @bind:event="oninput" /></td>
+                    @bind="Model.C218675" @bind:event="oninput" @bind:after="AutoSave" /></td>
         </tr>
         <tr>
             <td class="lbl">Investigational Product Name(s):</td>
             <td>
                 <div class="type-badge">Nonproprietary Name (optional string)</div>
                 <input data-ctx="C97054" class="fb" type="text" placeholder="Enter Nonproprietary Name(s)"
-                    @bind="Model.C97054" @bind:event="oninput" />
+                    @bind="Model.C97054" @bind:event="oninput" @bind:after="AutoSave" />
                 <div class="type-badge" style="margin-top:6px;">Proprietary Name (optional string)</div>
                 <input data-ctx="C71898" class="fb" type="text" placeholder="Enter Proprietary Name(s)"
-                    @bind="Model.C71898" @bind:event="oninput" /></td>
+                    @bind="Model.C71898" @bind:event="oninput" @bind:after="AutoSave" /></td>
         </tr>
         <tr>
             <td class="lbl req">Trial Phase</td>
             <td><div class="type-badge">required picklist</div>
                 <PicklistSelect ValueSetId="m11-phase-vs" CssClass="@SelReqClass(Model.C48281)"
-                    DataCtx="C48281" @bind-Value="Model.C48281" /></td>
+                    DataCtx="C48281" @bind-Value="Model.C48281" @bind-Value:after="AutoSave" /></td>
         </tr>
         <tr>
             <td class="lbl">Short Title</td>
             <td><div class="type-badge">optional string</div>
                 <textarea data-ctx="C94105" class="fb" rows="2" placeholder="Enter Short Title"
-                    @bind="Model.C94105" @bind:event="oninput"></textarea></td>
+                    @bind="Model.C94105" @bind:event="oninput" @bind:after="AutoSave"></textarea></td>
         </tr>
         <tr>
             <td class="lbl req">Sponsor Name and Address:</td>
             <td>
                 <div class="type-badge">Sponsor Name (required string)</div>
                 <input data-ctx="C222495" class="@ReqInputClass(Model.C222495)" type="text" placeholder="Enter Sponsor Name"
-                    @bind="Model.C222495" @bind:event="oninput" />
+                    @bind="Model.C222495" @bind:event="oninput" @bind:after="AutoSave" />
                 <div class="type-badge" style="margin-top:6px;">Sponsor Legal Address (required string)</div>
                 <textarea data-ctx="C218677" class="@ReqClass(Model.C218677)" rows="2" placeholder="Enter Sponsor Legal Address"
-                    @bind="Model.C218677" @bind:event="oninput"></textarea></td>
+                    @bind="Model.C218677" @bind:event="oninput" @bind:after="AutoSave"></textarea></td>
         </tr>
         <tr>
             <td class="lbl">Co-Sponsor Name and Address:</td>
             <td>
                 <div class="type-badge">Co-Sponsor Name (optional string)</div>
                 <input data-ctx="C218678" class="fb" type="text" placeholder="Enter Co-Sponsor Name"
-                    @bind="Model.C218678" @bind:event="oninput" />
+                    @bind="Model.C218678" @bind:event="oninput" @bind:after="AutoSave" />
                 <div class="type-badge" style="margin-top:6px;">Co-Sponsor Legal Address (optional string)</div>
                 <textarea data-ctx="C218679" class="fb" rows="2" placeholder="Enter Co-Sponsor Legal Address"
-                    @bind="Model.C218679" @bind:event="oninput"></textarea></td>
+                    @bind="Model.C218679" @bind:event="oninput" @bind:after="AutoSave"></textarea></td>
         </tr>
         <tr>
             <td class="lbl">Local Sponsor Name and Address:</td>
             <td>
                 <div class="type-badge">Local Sponsor Name (optional string)</div>
                 <input data-ctx="C218680" class="fb" type="text" placeholder="Enter Local Sponsor Name"
-                    @bind="Model.C218680" @bind:event="oninput" />
+                    @bind="Model.C218680" @bind:event="oninput" @bind:after="AutoSave" />
                 <div class="type-badge" style="margin-top:6px;">Local Sponsor Legal Address (optional string)</div>
                 <textarea data-ctx="C218681" class="fb" rows="2" placeholder="Enter Local Sponsor Legal Address"
-                    @bind="Model.C218681" @bind:event="oninput"></textarea></td>
+                    @bind="Model.C218681" @bind:event="oninput" @bind:after="AutoSave"></textarea></td>
         </tr>
         <tr>
             <td class="lbl">Device Manufacturer Name and Address:</td>
             <td>
                 <div class="type-badge">Device Manufacturer Name (optional string)</div>
                 <input data-ctx="C218682" class="fb" type="text" placeholder="Enter Device Manufacturer Name"
-                    @bind="Model.C218682" @bind:event="oninput" />
+                    @bind="Model.C218682" @bind:event="oninput" @bind:after="AutoSave" />
                 <div class="type-badge" style="margin-top:6px;">Device Manufacturer Address (optional string)</div>
                 <textarea data-ctx="C218683" class="fb" rows="2" placeholder="Enter Device Manufacturer Address"
-                    @bind="Model.C218683" @bind:event="oninput"></textarea></td>
+                    @bind="Model.C218683" @bind:event="oninput" @bind:after="AutoSave"></textarea></td>
         </tr>
         <tr>
             <td class="lbl">Regulatory or Clinical Trial Identifier(s):</td>
             <td>
                 <div class="type-badge">EU CT Number (optional string)</div>
-                <input data-ctx="C218684" class="fb" type="text" placeholder="EU CT Number"   @bind="Model.C218684" @bind:event="oninput" />
+                <input data-ctx="C218684" class="fb" type="text" placeholder="EU CT Number"   @bind="Model.C218684" @bind:event="oninput" @bind:after="AutoSave" />
                 <div class="type-badge" style="margin-top:4px;">FDA IND Number (optional string)</div>
-                <input data-ctx="C218685" class="fb" type="text" placeholder="FDA IND Number" @bind="Model.C218685" @bind:event="oninput" />
+                <input data-ctx="C218685" class="fb" type="text" placeholder="FDA IND Number" @bind="Model.C218685" @bind:event="oninput" @bind:after="AutoSave" />
                 <div class="type-badge" style="margin-top:4px;">IDE Number (optional string)</div>
-                <input data-ctx="C218686" class="fb" type="text" placeholder="IDE Number"     @bind="Model.C218686" @bind:event="oninput" />
+                <input data-ctx="C218686" class="fb" type="text" placeholder="IDE Number"     @bind="Model.C218686" @bind:event="oninput" @bind:after="AutoSave" />
                 <div class="type-badge" style="margin-top:4px;">jRCT Number (optional string)</div>
-                <input data-ctx="C218687" class="fb" type="text" placeholder="jRCT Number"    @bind="Model.C218687" @bind:event="oninput" />
+                <input data-ctx="C218687" class="fb" type="text" placeholder="jRCT Number"    @bind="Model.C218687" @bind:event="oninput" @bind:after="AutoSave" />
                 <div class="type-badge" style="margin-top:4px;">NCT Number (optional string)</div>
-                <input data-ctx="C172240" class="fb" type="text" placeholder="NCT Number"     @bind="Model.C172240" @bind:event="oninput" />
+                <input data-ctx="C172240" class="fb" type="text" placeholder="NCT Number"     @bind="Model.C172240" @bind:event="oninput" @bind:after="AutoSave" />
                 <div class="type-badge" style="margin-top:4px;">NMPA IND Number (optional string)</div>
-                <input data-ctx="C218688" class="fb" type="text" placeholder="NMPA IND Number" @bind="Model.C218688" @bind:event="oninput" />
+                <input data-ctx="C218688" class="fb" type="text" placeholder="NMPA IND Number" @bind="Model.C218688" @bind:event="oninput" @bind:after="AutoSave" />
                 <div class="type-badge" style="margin-top:4px;">WHO/UTN Number (optional string)</div>
-                <input data-ctx="C218689" class="fb" type="text" placeholder="WHO/UTN Number"  @bind="Model.C218689" @bind:event="oninput" />
+                <input data-ctx="C218689" class="fb" type="text" placeholder="WHO/UTN Number"  @bind="Model.C218689" @bind:event="oninput" @bind:after="AutoSave" />
                 <div class="type-badge" style="margin-top:4px;">Other Regulatory Identifier (optional string)</div>
-                <input data-ctx="C218690" class="fb" type="text" placeholder="Other Identifier" @bind="Model.C218690" @bind:event="oninput" /></td>
+                <input data-ctx="C218690" class="fb" type="text" placeholder="Other Identifier" @bind="Model.C218690" @bind:event="oninput" @bind:after="AutoSave" /></td>
         </tr>
         <tr>
             <td class="lbl cond">Sponsor Approval:</td>
             <td>
                 <div class="type-badge">Approval Date (conditional date)</div>
-                <input data-ctx="C132352" class="fb" type="text" placeholder="yyyy-mm-dd" @bind="Model.C132352" @bind:event="oninput" />
+                <input data-ctx="C132352" class="fb" type="text" placeholder="yyyy-mm-dd" @bind="Model.C132352" @bind:event="oninput" @bind:after="AutoSave" />
                 <div class="type-badge" style="margin-top:6px;">Signature Location (conditional string)</div>
                 <input data-ctx="C218484" class="fb" type="text" placeholder="State location of sponsor approval information"
-                    @bind="Model.C218484" @bind:event="oninput" /></td>
+                    @bind="Model.C218484" @bind:event="oninput" @bind:after="AutoSave" /></td>
         </tr>
     </table>
 
@@ -292,10 +292,10 @@
             <td>
                 <div class="type-badge">optional string</div>
                 <textarea data-ctx="C222014" class="fb" rows="2" placeholder="Enter sponsor signatory (name, title, signature and date)"
-                    @bind="Model.C222014" @bind:event="oninput"></textarea>
+                    @bind="Model.C222014" @bind:event="oninput" @bind:after="AutoSave"></textarea>
                 <div class="type-badge" style="margin-top:6px;">Location (optional string)</div>
                 <input data-ctx="C222064" class="fb" type="text" placeholder="State location where signatory information can be found"
-                    @bind="Model.C222064" @bind:event="oninput" /></td>
+                    @bind="Model.C222064" @bind:event="oninput" @bind:after="AutoSave" /></td>
         </tr>
     </table>
 
@@ -306,10 +306,10 @@
             <td>
                 <div class="type-badge">optional string</div>
                 <textarea data-ctx="C218693" class="fb" rows="2" placeholder="Enter Medical Expert contact information"
-                    @bind="Model.C218693" @bind:event="oninput"></textarea>
+                    @bind="Model.C218693" @bind:event="oninput" @bind:after="AutoSave"></textarea>
                 <div class="type-badge" style="margin-top:6px;">Location (optional string)</div>
                 <input data-ctx="C222063" class="fb" type="text" placeholder="State location where Medical Expert contact information can be found"
-                    @bind="Model.C222063" @bind:event="oninput" /></td>
+                    @bind="Model.C222063" @bind:event="oninput" @bind:after="AutoSave" /></td>
         </tr>
     </table>
 
@@ -321,7 +321,7 @@
             <td><div class="type-badge">@(AmendFromStore ? "read-only" : "conditional picklist")</div>
                 <div data-ctx-wrap="C218694" style="position:relative">
                 <PicklistSelect ValueSetId="m11-amendment-status-vs" CssClass="@("fb-sel" + (AmendFromStore ? " ro-sel" : ""))"
-                    DataCtx="C218694" @bind-Value="Model.C218694" />
+                    DataCtx="C218694" @bind-Value="Model.C218694" @bind-Value:after="AutoSave" />
                 </div>
             </td>
         </tr>
@@ -349,12 +349,12 @@
                 <div class="type-badge">@(AmendFromStore ? "read-only" : "conditional quantity")</div>
                 <div data-ctx-wrap="C218478" style="position:relative">
                 <input data-ctx="C218478" class="fb @(AmendFromStore ? "ro-inp" : "")" type="text" placeholder="Approximately #/% enrolled"
-                    @bind="Model.C218478" @bind:event="oninput" disabled="@AmendFromStore" />
+                    @bind="Model.C218478" @bind:event="oninput" @bind:after="AutoSave" disabled="@AmendFromStore" />
                 </div>
                 <div class="type-badge" style="margin-top:6px;">Amendment Scope Enrollment Definition (@(AmendFromStore ? "read-only" : "conditional picklist"))</div>
                 <div data-ctx-wrap="C218695" style="position:relative">
                 <PicklistSelect ValueSetId="m11-amendment-scope-enrollment-vs" CssClass="@("fb-sel" + (AmendFromStore ? " ro-sel" : ""))"
-                    DataCtx="C218695" @bind-Value="Model.C218695" />
+                    DataCtx="C218695" @bind-Value="Model.C218695" @bind-Value:after="AutoSave" />
                 </div>
             </td>
         </tr>
@@ -369,7 +369,7 @@
                 <input data-ctx="C17649" class="fb @(AmendFromStore ? "ro-inp" : "")" type="text" placeholder="Enter other reason"
                     disabled="@(AmendFromStore || !PrimaryOtherActive)"
                     style="@((!AmendFromStore && !PrimaryOtherActive) ? "opacity:0.4;cursor:not-allowed;" : "")"
-                    @bind="Model.C17649" @bind:event="oninput" />
+                    @bind="Model.C17649" @bind:event="oninput" @bind:after="AutoSave" />
                 </div>
             </td>
         </tr>
@@ -384,7 +384,7 @@
                 <input data-ctx="C17649_2" class="fb @(AmendFromStore ? "ro-inp" : "")" type="text" placeholder="Enter other reason"
                     disabled="@(AmendFromStore || !SecondaryOtherActive)"
                     style="@((!AmendFromStore && !SecondaryOtherActive) ? "opacity:0.4;cursor:not-allowed;" : "")"
-                    @bind="Model.C17649_2" @bind:event="oninput" />
+                    @bind="Model.C17649_2" @bind:event="oninput" @bind:after="AutoSave" />
                 </div>
             </td>
         </tr>
@@ -393,7 +393,7 @@
             <td><div class="type-badge">@(AmendFromStore ? "read-only" : "conditional string")</div>
                 <div data-ctx-wrap="C42581" style="position:relative">
                 <textarea data-ctx="C42581" class="fb @(AmendFromStore ? "ro-ta" : "")" rows="3" placeholder="Briefly describe key changes"
-                    @bind="Model.C42581" @bind:event="oninput" disabled="@AmendFromStore"></textarea>
+                    @bind="Model.C42581" @bind:event="oninput" @bind:after="AutoSave" disabled="@AmendFromStore"></textarea>
                 </div>
             </td>
         </tr>
@@ -403,12 +403,12 @@
                 <div class="type-badge">@(AmendFromStore ? "read-only" : "conditional picklist")</div>
                 <div data-ctx-wrap="C218698" style="position:relative">
                 <PicklistSelect ValueSetId="m11-yes-no-vs" CssClass="@("fb-sel" + (AmendFromStore ? " ro-sel" : ""))"
-                    DataCtx="C218698" @bind-Value="Model.C218698" />
+                    DataCtx="C218698" @bind-Value="Model.C218698" @bind-Value:after="AutoSave" />
                 </div>
                 <div class="type-badge" style="margin-top:6px;">If yes, briefly explain (@(AmendFromStore ? "read-only" : "conditional string"))</div>
                 <div data-ctx-wrap="C218699" style="position:relative">
                 <textarea data-ctx="C218699" class="fb @(AmendFromStore ? "ro-ta" : "")" rows="2" placeholder="If yes, briefly explain"
-                    @bind="Model.C218699" @bind:event="oninput" disabled="@AmendFromStore"></textarea>
+                    @bind="Model.C218699" @bind:event="oninput" @bind:after="AutoSave" disabled="@AmendFromStore"></textarea>
                 </div>
             </td>
         </tr>
@@ -418,12 +418,12 @@
                 <div class="type-badge">@(AmendFromStore ? "read-only" : "conditional picklist")</div>
                 <div data-ctx-wrap="C218700" style="position:relative">
                 <PicklistSelect ValueSetId="m11-yes-no-vs" CssClass="@("fb-sel" + (AmendFromStore ? " ro-sel" : ""))"
-                    DataCtx="C218700" @bind-Value="Model.C218700" />
+                    DataCtx="C218700" @bind-Value="Model.C218700" @bind-Value:after="AutoSave" />
                 </div>
                 <div class="type-badge" style="margin-top:6px;">If yes, briefly explain (@(AmendFromStore ? "read-only" : "conditional string"))</div>
                 <div data-ctx-wrap="C218701" style="position:relative">
                 <textarea data-ctx="C218701" class="fb @(AmendFromStore ? "ro-ta" : "")" rows="2" placeholder="If yes, briefly explain"
-                    @bind="Model.C218701" @bind:event="oninput" disabled="@AmendFromStore"></textarea>
+                    @bind="Model.C218701" @bind:event="oninput" @bind:after="AutoSave" disabled="@AmendFromStore"></textarea>
                 </div>
             </td>
         </tr>
@@ -542,7 +542,7 @@
     <div class="dbox">
         <h3>Save Data to File</h3>
         <label style="display:block;font-weight:700;margin-bottom:6px;">File name</label>
-        <input type="text" @bind="SaveFileName" @bind:event="oninput" />
+        <input type="text" @bind="SaveFileName" @bind:event="oninput" @bind:after="AutoSave" />
         <label style="display:block;font-weight:700;margin:10px 0 6px;">Format</label>
         <div class="fmt-row">
             <label><input type="radio" name="tpfmt" checked="@IsPipeline" @onchange="SetFmtPipeline" /> FHIR</label>
@@ -569,8 +569,20 @@
     </div>
 </div>
 
+<!-- ── Clear confirmation modal ──────────────────────────────────────────── -->
+<div class="overlay @(_showClearConfirm ? "show" : "")">
+    <div class="dbox">
+        <h3>Clear All Data</h3>
+        <p>This will remove all entered data for the Title Page. Are you sure?</p>
+        <div class="dbr">
+            <button class="btn btn-secondary" @onclick="() => _showClearConfirm = false">Cancel</button>
+            <button class="btn btn-danger"    @onclick="DoClearAll">Clear All</button>
+        </div>
+    </div>
+</div>
+
 <div class="sbar">
-    <span>Title Page – Data Entry &nbsp;|&nbsp; Grey = data entry &nbsp;|&nbsp; Blue label = required &nbsp;|&nbsp; Purple label = conditional</span>
+    <span>Title Page – Data Entry &nbsp;|&nbsp; <span style='color:#c8a0e8'>Purple</span> = placeholder &nbsp;|&nbsp; <span style='color:#6dbf6d'>Green</span> = user entry &nbsp;|&nbsp; <span style='background:#f5d0d0;padding:0 3px'>Pink</span> = required &nbsp;|&nbsp; Right-click field for info</span>
     <span>@StatusMessage</span>
 </div>
 
@@ -578,9 +590,10 @@
     private TitlePageModel Model = new();
     private List<int> ChgRows = new() { 1 };
     private int _nextChgRow = 2;
-    private bool   ShowValidation = false;
-    private bool   ShowSaveDialog = false;
-    private bool   ShowReqDialog  = false;
+    private bool   ShowValidation    = false;
+    private bool   ShowSaveDialog    = false;
+    private bool   ShowReqDialog     = false;
+    private bool   _showClearConfirm = false;
     private string SaveFileName   = "title_page_data";
     private string SaveFormat     = "fhir-pipeline";
     private FhirPipelineDialog _pipeline = default!;
@@ -609,9 +622,9 @@
     private DotNetObjectReference<TitlePage>? _objRef;
 
     private bool ShowAmendPicker = false;
-    private string SaveDialogCss    => ShowSaveDialog  ? "overlay show" : "overlay";
-    private string ReqDialogCss     => ShowReqDialog   ? "overlay show" : "overlay";
-    private string AmendPickerCss   => ShowAmendPicker ? "overlay show" : "overlay";
+    private string SaveDialogCss    => ShowSaveDialog  ? "show" : "";
+    private string ReqDialogCss     => ShowReqDialog   ? "show" : "";
+    private string AmendPickerCss   => ShowAmendPicker ? "show" : "";
 
     /// <summary>True when C218672 is "No" — i.e. this document IS an amendment (not the original protocol).</summary>
     private bool IsAmendment =>
@@ -638,6 +651,7 @@
             Model.C218699 = null; Model.C218700 = null; Model.C218701 = null;
             Model.ChgData.Clear(); ChgRows = new() { 1 }; _nextChgRow = 2;
         }
+        AutoSave();
     }
 
     private void ApplyAmendment(UDP_App.Models.AmendmentRecord rec)
@@ -692,9 +706,9 @@
     private void SetFmtTxt(ChangeEventArgs e)  => SaveFormat = "txt";
     private void SetFmtFhir(ChangeEventArgs e) => SaveFormat = "fsh";
 
-    private string ReqClass(string? v)      => ShowValidation && string.IsNullOrWhiteSpace(v) ? "fb req-empty" : "fb";
-    private string ReqInputClass(string? v) => ShowValidation && string.IsNullOrWhiteSpace(v) ? "fb req-empty" : "fb";
-    private string SelReqClass(string? v)   => ShowValidation && string.IsNullOrWhiteSpace(v) ? "fb-sel req-empty" : "fb-sel";
+    private string ReqClass(string? v)      => string.IsNullOrWhiteSpace(v) ? "fb req-empty" : "fb";
+    private string ReqInputClass(string? v) => string.IsNullOrWhiteSpace(v) ? "fb req-empty" : "fb";
+    private string SelReqClass(string? v)   => string.IsNullOrWhiteSpace(v) ? "fb-sel req-empty" : "fb-sel";
 
     private string GetChg(string key) => Model.ChgData.TryGetValue(key, out var v) ? v : string.Empty;
     private void SetChg(string key, string? val) { Model.ChgData[key] = val ?? string.Empty; }
@@ -819,8 +833,11 @@
         new[] { Model.C132346, Model.C132351, Model.C218672, Model.C48281, Model.C222495, Model.C218677 }
             .Count(string.IsNullOrWhiteSpace);
 
-    private void ClearAll()
+    private void ClearAll() => _showClearConfirm = true;
+
+    private void DoClearAll()
     {
+        _showClearConfirm = false;
         Model = new(); ChgRows = new List<int> { 1 }; _nextChgRow = 2;
         ShowValidation = false; ErrorMessage = string.Empty;
         _ = JS.InvokeVoidAsync("localStorage.removeItem", "tpdata");
@@ -835,7 +852,7 @@
             Model = s;
             ChgRows = Enumerable.Range(1, Math.Max(1, s.ChgRows)).ToList();
             _nextChgRow = ChgRows.Max() + 1;
-            ShowValidation = false; SetStatus("Sample data loaded");
+            ShowValidation = false; SetStatus("Sample data loaded"); AutoSave();
         }
         else ErrorMessage = "Could not load sample file.";
     }
@@ -846,6 +863,9 @@
         if (HasRequiredEmpty()) { ReqDialogMsg = $"{RequiredEmptyCount()} required field(s) empty."; PendingAction = "browser"; ShowReqDialog = true; return; }
         await DoBrowserSave();
     }
+
+    private void AutoSave() =>
+        _ = JS.InvokeVoidAsync("localStorage.setItem", "tpdata", DataSvc.ToJson(Model));
 
     private async Task DoBrowserSave()
     {
@@ -905,7 +925,7 @@
             Model = l;
             ChgRows = Enumerable.Range(1, Math.Max(1, l.ChgRows)).ToList();
             _nextChgRow = ChgRows.Max() + 1;
-            ShowValidation = false; SetStatus("⬆ Loaded from file"); InvokeAsync(StateHasChanged);
+            ShowValidation = false; SetStatus("⬆ Loaded from file"); AutoSave(); InvokeAsync(StateHasChanged);
         }
     }
 

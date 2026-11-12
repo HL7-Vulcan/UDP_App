@@ -113,8 +113,20 @@
     </div>
 </div>
 
+<!-- ── Clear confirmation modal ──────────────────────────────────────────── -->
+<div class="overlay @(_showClearConfirm ? "show" : "")">
+    <div class="dbox">
+        <h3>Clear All Data</h3>
+        <p>This will remove all entered data for Section 14. Are you sure?</p>
+        <div class="dbr">
+            <button class="btn btn-secondary" @onclick="() => _showClearConfirm = false">Cancel</button>
+            <button class="btn btn-danger"    @onclick="DoClearAll">Clear All</button>
+        </div>
+    </div>
+</div>
+
 <div class="sbar">
-    <span>Section 14 – References &nbsp;|&nbsp; Grey = data entry &nbsp;|&nbsp; Red border = required</span>
+    <span>Section 14 – References &nbsp;|&nbsp; <span style='color:#c8a0e8'>Purple</span> = placeholder &nbsp;|&nbsp; <span style='color:#6dbf6d'>Green</span> = user entry &nbsp;|&nbsp; <span style='background:#f5d0d0;padding:0 3px'>Pink</span> = required &nbsp;|&nbsp; Right-click field for info</span>
     <span>@StatusMessage</span>
 </div>
 
@@ -123,6 +135,7 @@
     private bool   ShowValidation = false;
     private bool   ShowSaveDialog = false;
     private bool   ShowReqDialog  = false;
+    private bool   _showClearConfirm = false;
     private string SaveFileName   = "section14_data";
     private string SaveFormat     = "fhir-pipeline";
     private string StatusMessage  = string.Empty;
@@ -134,8 +147,8 @@
     private string CtxFieldName = string.Empty, CtxOriginalName = string.Empty, CtxGuidance = string.Empty;
     private DotNetObjectReference<Section14>? _objRef;
 
-    private string SaveDialogCss => ShowSaveDialog ? "overlay show" : "overlay";
-    private string ReqDialogCss  => ShowReqDialog  ? "overlay show" : "overlay";
+    private string SaveDialogCss => ShowSaveDialog ? "show" : "";
+    private string ReqDialogCss  => ShowReqDialog  ? "show" : "";
     private bool IsPipeline => SaveFormat == "fhir-pipeline";
     private bool IsFhir => SaveFormat == "fsh";
     private bool IsJson => SaveFormat == "json";
@@ -148,15 +161,18 @@
     private void SetFmtTxt(ChangeEventArgs e)      => SaveFormat = "txt";
 
     private string ReqClass(string? val) =>
-        ShowValidation && string.IsNullOrWhiteSpace(val) ? "fb req-empty" : "fb";
+        string.IsNullOrWhiteSpace(val) ? "fb req-empty" : "fb";
 
     private void AutoSave() =>
         _ = JS.InvokeVoidAsync("localStorage.setItem", "s14data", DataSvc.ToJson(Model));
 
     private bool HasRequiredEmpty() => string.IsNullOrWhiteSpace(Model.C184397);
 
-    private void ClearAll()
+    private void ClearAll() => _showClearConfirm = true;
+
+    private void DoClearAll()
     {
+        _showClearConfirm = false;
         Model = new Section14Model(); ShowValidation = false; ErrorMessage = string.Empty;
         _ = JS.InvokeVoidAsync("localStorage.removeItem", "s14data");
         SetStatus("Cleared");

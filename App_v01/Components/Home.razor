@@ -2,6 +2,17 @@
 
 <PageTitle>Home</PageTitle>
 
+<style>
+    .home-page { font-family:'Calibri',Arial,sans-serif; font-size:11pt; color:#000; margin:30px 0 80px; padding:0 24px; }
+    .home-page h1 { font-family:'Times New Roman',Times,serif; font-size:14pt; font-weight:700; margin:0 0 4px; }
+    .home-page h2 { font-family:'Times New Roman',Times,serif; font-size:12pt; font-weight:700; margin:20px 0 6px; }
+    .home-page h3 { font-family:'Times New Roman',Times,serif; font-size:11pt; font-weight:700; margin:14px 0 5px; }
+    .home-page p, .home-page ul { font-size:11pt; margin:6px 0 10px; line-height:1.5; }
+    .home-page li { margin-bottom:3px; }
+</style>
+
+<div class="home-page">
+
 <h1>UDP_App</h1>
 
 <h2>UDP Implementation Guide Reference Application.</h2>
@@ -12,22 +23,33 @@
 
 <h2>Using UDP_App</h2>
 <p>
-    The pages in the navigation menu labeled Title Page through to Section 14 are a representation of the M11 template with a mix of data entry fields 
+    The pages in the navigation menu labeled Title Page through to Section 14 are a representation of the M11 template with a mix of data entry fields
     and fixed text.
-
+    <br />
     tbd ...
 </p>
+
+<h2>Change History</h2>
+<h3>12 November</h3>
+<ul>
+    <li>Added Save and Load to Amendment Details</li>
+    <li>Fixed File load issue under Azure</li>
+    <li>Fixed Azure Sushi install issues</li>
+    <li>Made page appearance and behaviour consistent</li>
+</ul>
 
 <h2>Installation Notes</h2>
 
 <p>
     There is little "installation" actually required except for enabling Sushi.</p>
 <p>
-    Installing Sushi requires both node and npm to be functioning.  Under local windows node and npm can be installed if absent and under Azure/Windows they are already available though it may be necessary to set an environment variable to specify the version of node to use.  
-    Under Azure/Unix it is difficult to make node available to a WebApp.  Whatever system the app try to find sushi and provide a suitable message if it cannot. 
+    Installing Sushi requires both node and npm to be functioning.  Under local windows node and npm can be installed if absent and under Azure/Windows they are already available though it may be necessary to set an environment variable to specify the version of node to use.
+    Under Azure/Unix it is difficult to make node available to a WebApp.  Whatever system the app try to find sushi and provide a suitable message if it cannot.
     Generally you can install sushi manually using the usual <br /> <i>npm install -g fsh-sushi</i><br />  you can specify a location for the install by adding <i>"--prefix D:\home"</i>.
 </p>
 
 <p> Once sushi is installed the path can be specified on the Settup page though if left blank the app will search for sushi before giving up.
 
 </p>
+
+</div>

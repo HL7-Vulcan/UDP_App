@@ -50,17 +50,17 @@
 
     <div class="h2">7.1&nbsp;&nbsp;Discontinuation of Trial Intervention for Individual Participants</div>
     <div class="h3">7.1.1&nbsp;&nbsp;Permanent Discontinuation of Trial Intervention</div>
-    <div class="field-wrap"><textarea data-ctx="C218764" class="@ReqClass(Model.C218764)" rows="3" placeholder="Enter Permanent Discontinuation" @bind="Model.C218764" @bind:event="oninput"></textarea></div>
+    <div class="field-wrap"><textarea data-ctx="C218764" class="@ReqClass(Model.C218764)" rows="3" placeholder="Enter Permanent Discontinuation" @bind="Model.C218764" @bind:event="oninput" @bind:after="AutoSave"></textarea></div>
     <div class="h3">7.1.2&nbsp;&nbsp;Temporary Discontinuation of Trial Intervention</div>
-    <div class="field-wrap"><textarea data-ctx="C218765" class="@ReqClass(Model.C218765)" rows="3" placeholder="Enter Temporary Discontinuation" @bind="Model.C218765" @bind:event="oninput"></textarea></div>
+    <div class="field-wrap"><textarea data-ctx="C218765" class="@ReqClass(Model.C218765)" rows="3" placeholder="Enter Temporary Discontinuation" @bind="Model.C218765" @bind:event="oninput" @bind:after="AutoSave"></textarea></div>
     <div class="h3">7.1.3&nbsp;&nbsp;Rechallenge</div>
-    <div class="field-wrap"><textarea data-ctx="C218766" class="@ReqClass(Model.C218766)" rows="3" placeholder="Enter Rechallenge" @bind="Model.C218766" @bind:event="oninput"></textarea></div>
+    <div class="field-wrap"><textarea data-ctx="C218766" class="@ReqClass(Model.C218766)" rows="3" placeholder="Enter Rechallenge" @bind="Model.C218766" @bind:event="oninput" @bind:after="AutoSave"></textarea></div>
 
     <div class="h2">7.2&nbsp;&nbsp;Participant Discontinuation or Withdrawal from the Trial</div>
-    <div class="field-wrap"><textarea data-ctx="C218767" class="@ReqClass(Model.C218767)" rows="3" placeholder="Enter Participant Discontinuation or Withdrawal" @bind="Model.C218767" @bind:event="oninput"></textarea></div>
+    <div class="field-wrap"><textarea data-ctx="C218767" class="@ReqClass(Model.C218767)" rows="3" placeholder="Enter Participant Discontinuation or Withdrawal" @bind="Model.C218767" @bind:event="oninput" @bind:after="AutoSave"></textarea></div>
 
     <div class="h2">7.3&nbsp;&nbsp;Management of Loss to Follow-Up</div>
-    <div class="field-wrap"><textarea data-ctx="C218768" class="@ReqClass(Model.C218768)" rows="3" placeholder="Enter Management of Loss to Follow-Up" @bind="Model.C218768" @bind:event="oninput"></textarea></div>
+    <div class="field-wrap"><textarea data-ctx="C218768" class="@ReqClass(Model.C218768)" rows="3" placeholder="Enter Management of Loss to Follow-Up" @bind="Model.C218768" @bind:event="oninput" @bind:after="AutoSave"></textarea></div>
 
     <div class="toolbar">
         <button class="btn btn-secondary" @onclick="ClearAll">Clear All</button>
@@ -86,7 +86,7 @@
     <div class="dbox">
         <h3>Save Data to File</h3>
         <label style="display:block;font-weight:700;margin-bottom:6px;">File name</label>
-        <input type="text" @bind="SaveFileName" @bind:event="oninput" />
+        <input type="text" @bind="SaveFileName" @bind:event="oninput" @bind:after="AutoSave" />
         <label style="display:block;font-weight:700;margin:10px 0 6px;">Format</label>
         <div class="fmt-row">
             <label><input type="radio" name="s7fmt" checked="@IsPipeline" @onchange="SetFmtPipeline" /> FHIR</label>
@@ -113,8 +113,20 @@
     </div>
 </div>
 
+<!-- ── Clear confirmation modal ──────────────────────────────────────────── -->
+<div class="overlay @(_showClearConfirm ? "show" : "")">
+    <div class="dbox">
+        <h3>Clear All Data</h3>
+        <p>This will remove all entered data for Section 7. Are you sure?</p>
+        <div class="dbr">
+            <button class="btn btn-secondary" @onclick="() => _showClearConfirm = false">Cancel</button>
+            <button class="btn btn-danger"    @onclick="DoClearAll">Clear All</button>
+        </div>
+    </div>
+</div>
+
 <div class="sbar">
-    <span>Section 7 – Data Entry &nbsp;|&nbsp; Grey = data entry &nbsp;|&nbsp; Red border = required</span>
+    <span>Section 7 – Data Entry &nbsp;|&nbsp; <span style='color:#c8a0e8'>Purple</span> = placeholder &nbsp;|&nbsp; <span style='color:#6dbf6d'>Green</span> = user entry &nbsp;|&nbsp; <span style='background:#f5d0d0;padding:0 3px'>Pink</span> = required &nbsp;|&nbsp; Right-click field for info</span>
     <span>@StatusMessage</span>
 </div>
 
@@ -123,6 +135,7 @@
     private bool   ShowValidation = false;
     private bool   ShowSaveDialog = false;
     private bool   ShowReqDialog  = false;
+    private bool   _showClearConfirm = false;
     private string SaveFileName   = "section7_data";
     private string SaveFormat     = "fhir-pipeline";
     private FhirPipelineDialog _pipeline = default!;
@@ -134,8 +147,8 @@
     private System.Threading.Timer? _statusTimer;
     private DotNetObjectReference<Section07>? _objRef;
 
-    private string SaveDialogCss => ShowSaveDialog ? "overlay show" : "overlay";
-    private string ReqDialogCss  => ShowReqDialog  ? "overlay show" : "overlay";
+    private string SaveDialogCss => ShowSaveDialog ? "show" : "";
+    private string ReqDialogCss  => ShowReqDialog  ? "show" : "";
     private bool IsPipeline => SaveFormat == "fhir-pipeline";
     private bool IsFhir => SaveFormat == "fsh";
     private bool IsJson => SaveFormat == "json"; private bool IsCsv  => SaveFormat == "csv";
@@ -145,16 +158,22 @@
     private void SetFmtCsv(ChangeEventArgs e)  => SaveFormat = "csv";
     private void SetFmtTxt(ChangeEventArgs e)  => SaveFormat = "txt";
     private void SetFmtFhir(ChangeEventArgs e) => SaveFormat = "fsh";
-    private string ReqClass(string? v) => ShowValidation && string.IsNullOrWhiteSpace(v) ? "fb req-empty" : "fb";
+    private string ReqClass(string? v) => string.IsNullOrWhiteSpace(v) ? "fb req-empty" : "fb";
     private bool HasRequiredEmpty() => new[]{ Model.C218764, Model.C218765, Model.C218766, Model.C218767, Model.C218768 }.Any(string.IsNullOrWhiteSpace);
     private int  RequiredEmptyCount() => new[]{ Model.C218764, Model.C218765, Model.C218766, Model.C218767, Model.C218768 }.Count(string.IsNullOrWhiteSpace);
 
-    private void ClearAll() { Model = new(); ShowValidation = false; ErrorMessage = string.Empty; _ = JS.InvokeVoidAsync("localStorage.removeItem", "s7data"); SetStatus("Cleared"); }
+    private void ClearAll() => _showClearConfirm = true;
+
+    private void DoClearAll()
+    {
+        _showClearConfirm = false;
+        Model = new(); ShowValidation = false; ErrorMessage = string.Empty; _ = JS.InvokeVoidAsync("localStorage.removeItem", "s7data"); SetStatus("Cleared");
+    }
 
     private void LoadSample()
     {
         var s = DataSvc.LoadSample();
-        if (s != null) { Model = s; ShowValidation = false; SetStatus("Sample data loaded"); }
+        if (s != null) { Model = s; ShowValidation = false; SetStatus("Sample data loaded"); AutoSave(); }
         else ErrorMessage = "Could not load sample file.";
     }
 
@@ -164,6 +183,9 @@
         if (HasRequiredEmpty()) { ReqDialogMsg = $"{RequiredEmptyCount()} required field(s) empty."; PendingAction = "browser"; ShowReqDialog = true; return; }
         await DoBrowserSave();
     }
+    private void AutoSave() =>
+        _ = JS.InvokeVoidAsync("localStorage.setItem", "s7data", DataSvc.ToJson(Model));
+
     private async Task DoBrowserSave()
     {
         try { await JS.InvokeVoidAsync("localStorage.setItem", "s7data", DataSvc.ToJson(Model)); SetStatus("✓ Saved " + DateTime.Now.ToShortTimeString()); }
@@ -211,7 +233,7 @@
     [JSInvokable] public void ReceiveFileContent(string json)
     {
         var l = DataSvc.FromJson(json);
-        if (l != null) { Model = l; ShowValidation = false; SetStatus("⬆ Loaded from file"); InvokeAsync(StateHasChanged); }
+        if (l != null) { Model = l; ShowValidation = false; SetStatus("⬆ Loaded from file"); AutoSave(); InvokeAsync(StateHasChanged); }
     }
     [JSInvokable] public async Task OnContextMenuJS(string code, double x, double y)
     {
