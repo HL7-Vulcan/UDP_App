@@ -9,64 +9,46 @@ Description: """
 
 //---------------------------------------------------------------
 // Title Page
-* extension[confidentialityStatement][+].valueString =  "{{C181236}}" //"All data is confidential"
+* extension[confidentialityStatement].valueString =  "{{C181236}}" //"All data is confidential"
 
 * identifier[+].type.coding[+] = $NCIT#C132351 "Sponsor Protocol Identifier"
 * identifier[=].system = $SpID
 * identifier[=].value = "{{C132351}}" // "ABC-Exemplar"
 
-* identifier[+].type.text = "EU CT Number"
-* identifier[=].type.coding[+].system = $NCIT
-* identifier[=].type.coding[=].code = #C218684
+* identifier[=].type.coding[+] = $NCIT#C218684 "EU CT Number"
 * identifier[=].system = $EMA_CTREG
 * identifier[=].value = "{{C218684}}" //"EU-1234"
 
-* identifier[+].type.text = "FDA IND Number"
-* identifier[=].type.coding[+].system = $NCIT
-* identifier[=].type.coding[=].code = #C218685
+* identifier[=].type.coding[+] = $NCIT#C218685 "FDA IND Number"
 * identifier[=].system = $FDA_REG
 * identifier[=].value = "{{C218685}}"  //"FDA-1234"
 
-* identifier[+].type.text = "IDE Number"
-* identifier[=].type.coding[+].system = $NCIT
-* identifier[=].type.coding[=].code = #C218686
+* identifier[=].type.coding[+] = $NCIT#C218686 "IDE Number"
 * identifier[=].system = $IDE_REG
 * identifier[=].value = "{{C218686}}" //"IDE-1234"
 
-* identifier[+].type.text = "jRCT Number"
-* identifier[=].type.coding[+].system = $NCIT
-* identifier[=].type.coding[=].code = #C218687
+* identifier[=].type.coding[+] = $NCIT#C218687 "jRCT Number"
 * identifier[=].system = $jRCT_REG
 * identifier[=].value = "{{C218687}}" //"jRCT-1234"
 
-* identifier[+].type.text = "NCT Number"
-* identifier[=].type.coding[+].system = $NCIT
-* identifier[=].type.coding[=].code = #C172240
+* identifier[=].type.coding[+] = $NCIT#C172240 "NCT Number"
 * identifier[=].system = $NCT_REG
 * identifier[=].value = "{{C172240}}"  //"NCT-1234"
 
-* identifier[+].type.text = "NMPA IND Number"
-* identifier[=].type.coding[+].system = $NCIT
-* identifier[=].type.coding[=].code = #C218688
+* identifier[=].type.coding[+] = $NCIT#C218688 "NMPA IND Number"
 * identifier[=].system = $NPMA_REG
 * identifier[=].value = "{{C218688}}" //"NMPA-1234"
 
-* identifier[+].type.text = "WHO/UTN Number"
-* identifier[=].type.coding[+].system = $NCIT
-* identifier[=].type.coding[=].code = #C218689
+* identifier[=].type.coding[+] = $NCIT#C218689 "WHO/UTN Number"
 * identifier[=].system = $WHO_REG
 * identifier[=].value = "{{C218689}}" //"WHO-1234"
 
-* identifier[+].type.text = "Other Regulatory or Clinical Trial Identifier"
-* identifier[=].type.coding[+].system = $NCIT
-* identifier[=].type.coding[=].code = #C218690
+* identifier[=].type.coding[+] = $NCIT#C218690 "Other Regulatory or Clinical Trial Identifier"
 * identifier[=].system = $ERA_REG
 * identifier[=].value = "{{C218690}}" //"ERA1234"
 * identifier[=].assigner = Reference(Organization/Exemplar-Regulator-Organization)
  
-* identifier[+].type.text = "Amendment Identifier"
-* identifier[=].type.coding[+].system = $NCIT
-* identifier[=].type.coding[=].code = #C218477
+* identifier[=].type.coding[+] = $NCIT#C218477 "Amendment Identifier"
 * identifier[=].system = $AmdID
 * identifier[=].value = "{{C218477}}" //"ABC-Exemplar(a)"
 // for rendition if there is an amendment at this level need to go and find the amendment with this ID and display the scope
