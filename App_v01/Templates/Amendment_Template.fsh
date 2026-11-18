@@ -29,9 +29,7 @@ xxx
 // Title Page Amemndment Summary
 //
 
-* extension[m11-protocol-amendment][+].extension[identifier][+].valueIdentifier.type.text = "Amendment Identifier"
-* extension[m11-protocol-amendment][=].extension[identifier][=].valueIdentifier.type.coding[+].system = $NCIT
-* extension[m11-protocol-amendment][=].extension[identifier][=].valueIdentifier.type.coding[=].code = #C218477
+* extension[m11-protocol-amendment][=].extension[identifier][=].valueIdentifier.type.coding[+] = $NCIT#C218477 "Amendment Identifier"
 * extension[m11-protocol-amendment][=].extension[identifier][=].valueIdentifier.system = $AmdID
 * extension[m11-protocol-amendment][=].extension[identifier][=].valueIdentifier.value = "{{C218477}}" //"ABC-Exemplar(a)"
 

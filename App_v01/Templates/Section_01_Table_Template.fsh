@@ -14,7 +14,7 @@ This desceribes an entirely ficticious protocol for an imaginary product with Br
 // Section 1.1.2	Overall Design
 
 // C218675 (+ C97054) Intervention
-* focus = Reference(Exemplar-MedicinalProduct)
+* focus = Reference({{InvestigationalMedicinalProduct}})
 
 // XC217277 C98746 Intervention Model
 * extension[design].extension[interventionModel].valueCodeableConcept = {{C98746}}
@@ -97,9 +97,11 @@ This desceribes an entirely ficticious protocol for an imaginary product with Br
 
 // C218717 alternate description of planned duration of trial participation if duration will vary
 // * [alternateDescriptionOfPlannedDurationOfTrialParticipation].
+* extension[design].extension[alternateDescriptionOfPlannedDurationOfTrialParticipation].valueString = "{{C218717}}"
 
 // C218838 Additional Description of Duration
 // * extension[design].extension[additionalDescriptionofDuration].
+* extension[design].extension[additionalDescriptionofDuration].valueString = "{{C218838}}"
 
 // XC217282 C218718 Independent Committees
 {{REPEAT
