@@ -46,7 +46,7 @@ Severity: #warning */
 //--------------------------------------------------------------------------------------
 //
 Profile: M11-reporting-Table
-Parent: Basic
+Parent: Composition
 Id: m11-reporting-table
 Description: """Profile of Basic resource to be used as Reporting details  according to M11 Table of reportings """
 * insert rs-copyright-structure

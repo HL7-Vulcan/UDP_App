@@ -6,8 +6,13 @@ Usage: #example
 
 Description: "Table defining the trial reporting of adverse events etc"
 * id = "{{TABLE_ROW_X}}" // This is specified ONLY to allow documentatation of examples - it is not normally specified
+* status = #final
+* type = $NCIT#C207508 // Narrative
+* date = "2025-06-30T12:46:00Z"
+* author = Reference(Narrative-Organization) // Reference to Organization: Marketing 
+* title = "Example Narrative with Section per Section - (this is the Composition Title}"
 
-* code = http://terminology.hl7.org/CodeSystem/basic-resource-type#adminact
+// * code = http://terminology.hl7.org/CodeSystem/basic-resource-type#adminact
 
 // TODO Work out how to distinguish Event Type and Other Event Type
 * extension[reporting].extension[eventType][+].valueCodeableConcept = {{C28784}}
