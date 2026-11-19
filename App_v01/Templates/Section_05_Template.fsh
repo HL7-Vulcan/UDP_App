@@ -61,6 +61,7 @@ Description: """Example Narrative Single Composition with a contained section fo
 {{C25370}}
     </div>
     """
+//  * extension[order].valueInteger = {{n}}
 
 * section[+]
   * title = "Section 5.4.1"
@@ -100,7 +101,7 @@ Description: """Example Narrative Single Composition with a contained section fo
 
 * section[+]
   * title = "Section 5.5.2"
-  * code = $NCIT#C218559  "ICH M11 Protocol Section 5.5.2 Caffeine, Alcohol, Tobacco, and Other Restrictions"
+  * code = $NCIT#C218556  "ICH M11 Protocol Section 5.5.2 Caffeine, Alcohol, Tobacco, and Other Restrictions"
   * text.status = #additional
   * text.div = """<div xmlns='http://www.w3.org/1999/xhtml' xml:lang="en" lang="en"> 
 {{C218744}}
