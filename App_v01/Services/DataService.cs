@@ -82,24 +82,19 @@ public class DataService
 
         foreach (var (key, value) in fieldValues)
         {
-            template = template.Replace("{{" + key + "}}", value ?? string.Empty);
+            template = template.Replace("{{" + key + "}}", TokenParser.FhirEscape(value));
         }
 
         return template;
     }
 
-    public Section02Model? LoadSample()
+    public (Section02Model? Model, string? Error) LoadSample()
     {
-        var samplePath = Path.Combine(_env.ContentRootPath, "Data", "section_02_sample.json");
-        try
-        {
-            var json = File.ReadAllText(samplePath);
-            return FromJson(json);
-        }
-        catch
-        {
-            return null;
-        }
+        var path = Path.Combine(_env.ContentRootPath, "Data", "section_02_sample.json");
+        if (!File.Exists(path))
+            return (null, "Sample data file not found: Data/section_02_sample.json");
+        try { return (FromJson(File.ReadAllText(path)), null); }
+        catch (Exception ex) { return (null, $"Failed to load sample data: {ex.Message}"); }
     }
 
     public Section02Model? FromJson(string json)
@@ -109,6 +104,15 @@ public class DataService
     }
 
     // ─── Section 03 ──────────────────────────────────────────────────────────────
+
+    public (Section03Model? Model, string? Error) LoadSection03Sample()
+    {
+        var path = Path.Combine(_env.ContentRootPath, "Data", "section_03_sample.json");
+        if (!File.Exists(path))
+            return (null, "Sample data file not found: Data/section_03_sample.json");
+        try { return (FromJsonSection03(File.ReadAllText(path)), null); }
+        catch (Exception ex) { return (null, $"Failed to load sample data: {ex.Message}"); }
+    }
 
     public string ToJson(Section03Model model) =>
         JsonSerializer.Serialize(model, JsonOpts);

@@ -12,17 +12,32 @@
 
 <style>
     .doc-page { background:#fff; width:794px; min-height:1123px; margin:30px auto 80px; padding:72px; box-shadow:0 4px 24px rgba(0,0,0,0.18); font-family:'Calibri',Arial,sans-serif; font-size:11pt; color:#000; }
-    .h1 { font-family:'Times New Roman',Times,serif; font-size:14pt; font-weight:700; margin:0 0 18px; }
-    .h2 { font-family:'Times New Roman',Times,serif; font-size:14pt; font-weight:700; margin:24px 0 10px; }
+    .h1  { font-family:'Times New Roman',Times,serif; font-size:14pt; font-weight:700; margin:0 0 18px; }
+    .h2  { font-family:'Times New Roman',Times,serif; font-size:14pt; font-weight:700; margin:24px 0 10px; }
+    .h3  { font-family:'Times New Roman',Times,serif; font-size:12pt; font-weight:700; margin:18px 0 8px; }
+    .h4  { font-family:'Times New Roman',Times,serif; font-size:12pt; font-weight:700; margin:14px 0 6px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+    .h4p { font-family:'Times New Roman',Times,serif; font-size:12pt; font-weight:700; margin:14px 0 6px; }
     .field-wrap { position:relative; margin-bottom:10px; }
-    textarea.fb { display:block; width:100%; background:#d0cece; color:#1a7a1a; border:none; border-bottom:1.5px solid #999; font-family:'Calibri',Arial,sans-serif; font-size:11pt; line-height:1.4; padding:4px 6px; outline:none; resize:vertical; min-height:120px; }
+    textarea.fb { display:block; width:100%; background:#d0cece; color:#1a7a1a; border:none; border-bottom:1.5px solid #999; font-family:'Calibri',Arial,sans-serif; font-size:11pt; line-height:1.4; padding:4px 6px; outline:none; resize:vertical; min-height:52px; }
     textarea.fb:focus { background:#bfbcbc; }
     textarea.fb::placeholder { color:#9a7ab5; font-style:italic; }
     textarea.fb.req-empty { border-bottom:2px solid #c00; background:#f5d0d0; }
+    textarea.fb.cond { border-bottom-style:dashed; }
+    /* Objective blocks */
+    .obj-block { border:1px solid #c0c0d0; border-radius:4px; padding:12px 16px; margin:12px 0; background:#f9f9fc; }
+    .obj-block-hdr { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+    .obj-title { font-family:'Times New Roman',Times,serif; font-size:12pt; font-weight:700; color:#1f3864; }
+    .obj-remove { background:#c00; color:#fff; border:none; border-radius:3px; padding:3px 10px; font-size:9.5pt; cursor:pointer; }
+    .obj-remove:hover { background:#a00; }
+    .add-btn    { background:#00B050; color:#fff; border:none; border-radius:3px; padding:4px 12px; font-size:10pt; cursor:pointer; font-family:'Calibri',Arial,sans-serif; white-space:nowrap; }
+    .add-btn:hover { background:#008a3e; }
+    /* Toolbar */
     .toolbar { display:flex; justify-content:flex-end; gap:10px; margin-top:32px; flex-wrap:wrap; }
     .btn { padding:7px 20px; border:none; border-radius:3px; font-size:10pt; font-family:inherit; cursor:pointer; }
     .btn-primary   { background:#1f3864; color:#fff; } .btn-primary:hover { background:#162a4e; }
     .btn-secondary { background:#eee; color:#333; border:1px solid #ccc; } .btn-secondary:hover { background:#ddd; }
+    .btn-danger    { background:#c00;  color:#fff; } .btn-danger:hover  { background:#a00; }
+    /* Dialogs */
     .overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:200; align-items:center; justify-content:center; }
     .overlay.show { display:flex; }
     .dbox { background:#fff; border-radius:6px; padding:28px 32px; width:400px; box-shadow:0 8px 40px rgba(0,0,0,0.25); }
@@ -32,8 +47,9 @@
     .fmt-row { display:flex; gap:14px; margin-bottom:20px; flex-wrap:wrap; }
     .fmt-row label { display:flex; align-items:center; gap:5px; font-size:10pt; cursor:pointer; }
     .dbr { display:flex; justify-content:flex-end; gap:10px; }
+    /* Status bar */
     .sbar { position:fixed; bottom:0; left:0; right:0; background:#1f3864; color:#fff; font-size:9pt; padding:5px 18px; display:flex; justify-content:space-between; align-items:center; z-index:100; }
-    .err  { background:#fff3cd; color:#856404; border:1px solid #ffc107; padding:10px; margin-bottom:10px; border-radius:4px; font-size:10pt; }
+    /* Context menu */
     .ctx-menu { display:none; position:fixed; background:#fff; border:1px solid #ccc; border-radius:4px; box-shadow:0 4px 16px rgba(0,0,0,0.18); z-index:1000; min-width:300px; max-width:400px; font-family:'Calibri',Arial,sans-serif; font-size:10pt; }
     .ctx-hdr  { background:#1f3864; color:#fff; padding:8px 12px; font-weight:700; font-size:10pt; border-radius:4px 4px 0 0; display:flex; justify-content:space-between; align-items:center; }
     .ctx-close { background:none; border:none; color:#fff; font-size:14px; cursor:pointer; padding:0 2px; }
@@ -46,19 +62,217 @@
     .ctx-guide strong { color:#1f3864; }
 </style>
 
-@if (!string.IsNullOrEmpty(ErrorMessage))
-{
-    <div class="err">⚠ @ErrorMessage</div>
-}
-
 <div class="doc-page">
+
     <div class="h1">10.&nbsp;&nbsp;STATISTICAL CONSIDERATIONS</div>
-    <div class="h2">10.1&nbsp;&nbsp;General Considerations</div>
+
+    <!-- 10 General Considerations -->
+    <div class="h2">10.&nbsp;&nbsp;Statistical Considerations</div>
     <div class="field-wrap">
-        <textarea data-ctx="C164387" class="@ReqClass(Model.C164387)" rows="12"
-            placeholder="Describe general statistical considerations (required)"
+        <textarea data-ctx="C164387" class="@ReqClass(Model.C164387)" rows="6"
+            placeholder="Provide a brief overview of the statistical considerations for this study (required)"
             @bind="Model.C164387" @bind:event="oninput" @bind:after="AutoSave"></textarea>
     </div>
+
+    <!-- 10.1 Analysis Sets -->
+    <div class="h2">10.1&nbsp;&nbsp;Analysis Sets</div>
+    <div class="field-wrap">
+        <textarea data-ctx="C218801" class="@ReqClass(Model.C218801)" rows="5"
+            placeholder="Describe the analysis sets (populations) to be used in the statistical analyses (required)"
+            @bind="Model.C218801" @bind:event="oninput" @bind:after="AutoSave"></textarea>
+    </div>
+
+    <!-- 10.2 Statistical Analyses -->
+    <div class="h2">10.2&nbsp;&nbsp;Statistical Analyses</div>
+
+    <!-- 10.2 Primary Efficacy Analysis -->
+    <div class="h3">Primary Efficacy Analysis</div>
+    <div class="field-wrap">
+        <textarea data-ctx="C218802" class="@ReqClass(Model.C218802)" rows="5"
+            placeholder="Describe the primary efficacy analysis method (required)"
+            @bind="Model.C218802" @bind:event="oninput" @bind:after="AutoSave"></textarea>
+    </div>
+
+    <!-- Primary Objectives Table -->
+    <div class="h4">
+        <span>Primary Objectives</span>
+        <button class="add-btn" @onclick="AddPriRow">+ Add Objective</button>
+    </div>
+
+    @for (int r = 1; r <= Model.PriRows; r++)
+    {
+        var row = r;
+        <div class="obj-block">
+            <div class="obj-block-hdr">
+                <span class="obj-title">Primary Objective @row</span>
+                @if (Model.PriRows > 1)
+                {
+                    <button class="obj-remove" @onclick="() => RemovePriRow(row)">Remove</button>
+                }
+            </div>
+            <div class="h4p">Estimand</div>
+            <div class="field-wrap">
+                <textarea data-ctx="C218482" class="@ReqClass(Model.PriData.GetValueOrDefault($"C218482_p{row}", string.Empty))" rows="3"
+                    placeholder="Specify the estimand for this primary objective (required)"
+                    value="@Model.PriData.GetValueOrDefault($"C218482_p{row}", string.Empty)"
+                    @oninput="@(e => SetPri($"C218482_p{row}", e.Value?.ToString() ?? string.Empty))"></textarea>
+            </div>
+            <div class="h4p">Statistical Analysis Method</div>
+            <div class="field-wrap">
+                <textarea data-ctx="C218803" class="@ReqClass(Model.PriData.GetValueOrDefault($"C218803_p{row}", string.Empty))" rows="3"
+                    placeholder="Describe the statistical analysis method (required)"
+                    value="@Model.PriData.GetValueOrDefault($"C218803_p{row}", string.Empty)"
+                    @oninput="@(e => SetPri($"C218803_p{row}", e.Value?.ToString() ?? string.Empty))"></textarea>
+            </div>
+            <div class="h4p">Handling of Data</div>
+            <div class="field-wrap">
+                <textarea data-ctx="C218804" class="@ReqClass(Model.PriData.GetValueOrDefault($"C218804_p{row}", string.Empty))" rows="3"
+                    placeholder="Describe how data will be handled (required)"
+                    value="@Model.PriData.GetValueOrDefault($"C218804_p{row}", string.Empty)"
+                    @oninput="@(e => SetPri($"C218804_p{row}", e.Value?.ToString() ?? string.Empty))"></textarea>
+            </div>
+            <div class="h4p">Handling of Missing Data</div>
+            <div class="field-wrap">
+                <textarea data-ctx="C218804" class="fb" rows="3"
+                    placeholder="Describe handling of missing data (optional)"
+                    value="@Model.PriData.GetValueOrDefault($"missingdata_p{row}", string.Empty)"
+                    @oninput="@(e => SetPri($"missingdata_p{row}", e.Value?.ToString() ?? string.Empty))"></textarea>
+            </div>
+            <div class="h4p">Sensitivity Analysis</div>
+            <div class="field-wrap">
+                <textarea data-ctx="C218480" class="fb" rows="3"
+                    placeholder="Describe sensitivity analysis (optional)"
+                    value="@Model.PriData.GetValueOrDefault($"C218480_p{row}", string.Empty)"
+                    @oninput="@(e => SetPri($"C218480_p{row}", e.Value?.ToString() ?? string.Empty))"></textarea>
+            </div>
+            <div class="h4p">Supplementary Analysis</div>
+            <div class="field-wrap">
+                <textarea data-ctx="C218481" class="fb" rows="3"
+                    placeholder="Describe supplementary analysis (optional)"
+                    value="@Model.PriData.GetValueOrDefault($"C218481_p{row}", string.Empty)"
+                    @oninput="@(e => SetPri($"C218481_p{row}", e.Value?.ToString() ?? string.Empty))"></textarea>
+            </div>
+        </div>
+    }
+
+    <!-- 10.2 Multiple Comparisons/Multiplicity -->
+    <div class="h3">Multiple Comparisons/Multiplicity</div>
+    <div class="field-wrap">
+        <textarea data-ctx="C218807" class="@ReqClass(Model.C218807)" rows="4"
+            placeholder="Describe approach to multiple comparisons and multiplicity adjustments (required)"
+            @bind="Model.C218807" @bind:event="oninput" @bind:after="AutoSave"></textarea>
+    </div>
+
+    <!-- 10.2 Additional Analysis -->
+    <div class="h3">Additional Analysis</div>
+    <div class="field-wrap">
+        <textarea data-ctx="C218808" class="@ReqClass(Model.C218808)" rows="4"
+            placeholder="Describe any additional analyses (required)"
+            @bind="Model.C218808" @bind:event="oninput" @bind:after="AutoSave"></textarea>
+    </div>
+
+    <!-- 10.2 Safety Analysis -->
+    <div class="h3">Safety Analysis</div>
+    <div class="field-wrap">
+        <textarea data-ctx="C218809" class="@ReqClass(Model.C218809)" rows="4"
+            placeholder="Describe the safety analyses (required)"
+            @bind="Model.C218809" @bind:event="oninput" @bind:after="AutoSave"></textarea>
+    </div>
+
+    <!-- Secondary Objectives Table -->
+    <div class="h3">Secondary Efficacy Analysis</div>
+    <div class="h4">
+        <span>Secondary Objectives</span>
+        <button class="add-btn" @onclick="AddSecRow">+ Add Objective</button>
+    </div>
+
+    @for (int r = 1; r <= Model.SecRows; r++)
+    {
+        var row = r;
+        <div class="obj-block">
+            <div class="obj-block-hdr">
+                <span class="obj-title">Secondary Objective @row</span>
+                @if (Model.SecRows > 1)
+                {
+                    <button class="obj-remove" @onclick="() => RemoveSecRow(row)">Remove</button>
+                }
+            </div>
+            <div class="h4p">Estimand</div>
+            <div class="field-wrap">
+                <textarea data-ctx="C218482" class="fb cond" rows="3"
+                    placeholder="Specify the estimand for this secondary objective (conditional)"
+                    value="@Model.SecData.GetValueOrDefault($"C218482_s{row}", string.Empty)"
+                    @oninput="@(e => SetSec($"C218482_s{row}", e.Value?.ToString() ?? string.Empty))"></textarea>
+            </div>
+            <div class="h4p">Statistical Analysis Method</div>
+            <div class="field-wrap">
+                <textarea data-ctx="C218805" class="fb cond" rows="3"
+                    placeholder="Describe the statistical analysis method (conditional)"
+                    value="@Model.SecData.GetValueOrDefault($"C218805_s{row}", string.Empty)"
+                    @oninput="@(e => SetSec($"C218805_s{row}", e.Value?.ToString() ?? string.Empty))"></textarea>
+            </div>
+            <div class="h4p">Handling of Data</div>
+            <div class="field-wrap">
+                <textarea data-ctx="C218806" class="fb cond" rows="3"
+                    placeholder="Describe how data will be handled (conditional)"
+                    value="@Model.SecData.GetValueOrDefault($"C218806_s{row}", string.Empty)"
+                    @oninput="@(e => SetSec($"C218806_s{row}", e.Value?.ToString() ?? string.Empty))"></textarea>
+            </div>
+            <div class="h4p">Handling of Missing Data</div>
+            <div class="field-wrap">
+                <textarea data-ctx="C218806" class="fb cond" rows="3"
+                    placeholder="Describe handling of missing data (conditional)"
+                    value="@Model.SecData.GetValueOrDefault($"missingdata_s{row}", string.Empty)"
+                    @oninput="@(e => SetSec($"missingdata_s{row}", e.Value?.ToString() ?? string.Empty))"></textarea>
+            </div>
+            <div class="h4p">Sensitivity Analysis</div>
+            <div class="field-wrap">
+                <textarea data-ctx="C218480" class="fb cond" rows="3"
+                    placeholder="Describe sensitivity analysis (conditional)"
+                    value="@Model.SecData.GetValueOrDefault($"C218480_s{row}", string.Empty)"
+                    @oninput="@(e => SetSec($"C218480_s{row}", e.Value?.ToString() ?? string.Empty))"></textarea>
+            </div>
+            <div class="h4p">Supplementary Analysis</div>
+            <div class="field-wrap">
+                <textarea data-ctx="C218481" class="fb cond" rows="3"
+                    placeholder="Describe supplementary analysis (conditional)"
+                    value="@Model.SecData.GetValueOrDefault($"C218481_s{row}", string.Empty)"
+                    @oninput="@(e => SetSec($"C218481_s{row}", e.Value?.ToString() ?? string.Empty))"></textarea>
+            </div>
+            <div class="h4p">Additional Analysis</div>
+            <div class="field-wrap">
+                <textarea data-ctx="C218481" class="fb cond" rows="3"
+                    placeholder="Describe additional analysis (conditional)"
+                    value="@Model.SecData.GetValueOrDefault($"C218481_s{row}", string.Empty)"
+                    @oninput="@(e => SetSec($"C218481_s{row}", e.Value?.ToString() ?? string.Empty))"></textarea>
+            </div>
+        </div>
+    }
+
+    <!-- 10.3 Interim Analysis -->
+    <div class="h2">10.3&nbsp;&nbsp;Interim Analysis</div>
+    <div class="field-wrap">
+        <textarea data-ctx="C142582" class="@ReqClass(Model.C142582)" rows="5"
+            placeholder="Describe any planned interim analyses (required)"
+            @bind="Model.C142582" @bind:event="oninput" @bind:after="AutoSave"></textarea>
+    </div>
+
+    <!-- 10.4 Sample Size -->
+    <div class="h2">10.4&nbsp;&nbsp;Sample Size</div>
+    <div class="field-wrap">
+        <textarea data-ctx="C218810" class="@ReqClass(Model.C218810)" rows="5"
+            placeholder="Describe the sample size and justification (required)"
+            @bind="Model.C218810" @bind:event="oninput" @bind:after="AutoSave"></textarea>
+    </div>
+
+    <!-- 10.5 Additional Statistical Considerations -->
+    <div class="h2">10.5&nbsp;&nbsp;Additional Statistical Considerations</div>
+    <div class="field-wrap">
+        <textarea data-ctx="C115467" class="@ReqClass(Model.C115467)" rows="5"
+            placeholder="Describe any additional statistical considerations (required)"
+            @bind="Model.C115467" @bind:event="oninput" @bind:after="AutoSave"></textarea>
+    </div>
+
     <div class="toolbar">
         <button class="btn btn-secondary" @onclick="ClearAll">Clear All</button>
         <button class="btn btn-secondary" @onclick="LoadSample">Load Sample</button>
@@ -69,6 +283,7 @@
 
 <FhirPipelineDialog @ref="_pipeline" />
 
+<!-- ── Save dialog ───────────────────────────────────────────────────────── -->
 <div class="overlay @SaveDialogCss">
     <div class="dbox">
         <h3>Save Data to File</h3>
@@ -89,6 +304,7 @@
     </div>
 </div>
 
+<!-- ── Required fields dialog ────────────────────────────────────────────── -->
 <div class="overlay @ReqDialogCss">
     <div class="dbox">
         <h3 style="color:#c00;">Incomplete Required Fields</h3>
@@ -100,6 +316,30 @@
     </div>
 </div>
 
+<!-- ── Clear confirmation dialog ─────────────────────────────────────────── -->
+<div class="overlay @(_showClearConfirm ? "show" : "")">
+    <div class="dbox">
+        <h3>Clear All Data</h3>
+        <p>This will remove all entered data for Section 10. Are you sure?</p>
+        <div class="dbr">
+            <button class="btn btn-secondary" @onclick="() => _showClearConfirm = false">Cancel</button>
+            <button class="btn btn-danger"    @onclick="DoClearAll">Clear All</button>
+        </div>
+    </div>
+</div>
+
+<!-- ── Error dialog ───────────────────────────────────────────────────────── -->
+<div class="overlay @ErrorDialogCss">
+    <div class="dbox">
+        <h3 style="color:#c00;">Error</h3>
+        <p>@_errorDialog</p>
+        <div class="dbr">
+            <button class="btn btn-primary" @onclick="DismissError">OK</button>
+        </div>
+    </div>
+</div>
+
+<!-- ── Context menu ──────────────────────────────────────────────────────── -->
 <div id="s10-ctx-menu" class="ctx-menu">
     <div class="ctx-hdr">
         <span>Field Information</span>
@@ -113,40 +353,30 @@
     </div>
 </div>
 
-<!-- ── Clear confirmation modal ──────────────────────────────────────────── -->
-<div class="overlay @(_showClearConfirm ? "show" : "")">
-    <div class="dbox">
-        <h3>Clear All Data</h3>
-        <p>This will remove all entered data for Section 10. Are you sure?</p>
-        <div class="dbr">
-            <button class="btn btn-secondary" @onclick="() => _showClearConfirm = false">Cancel</button>
-            <button class="btn btn-danger"    @onclick="DoClearAll">Clear All</button>
-        </div>
-    </div>
-</div>
-
 <div class="sbar">
-    <span>Section 10 – Statistical Considerations &nbsp;|&nbsp; <span style='color:#c8a0e8'>Purple</span> = placeholder &nbsp;|&nbsp; <span style='color:#6dbf6d'>Green</span> = user entry &nbsp;|&nbsp; <span style='background:#f5d0d0;padding:0 3px'>Pink</span> = required &nbsp;|&nbsp; Right-click field for info</span>
+    <span>Section 10 – Statistical Considerations &nbsp;|&nbsp; <span style='color:#c8a0e8'>Purple</span> = placeholder &nbsp;|&nbsp; <span style='color:#6dbf6d'>Green</span> = user entry &nbsp;|&nbsp; <span style='background:#f5d0d0;padding:0 3px'>Pink</span> = required &nbsp;|&nbsp; Dashed border = conditional &nbsp;|&nbsp; Right-click field for info</span>
     <span>@StatusMessage</span>
 </div>
 
 @code {
     private Section10Model Model = new();
-    private bool   ShowValidation = false;
-    private bool   ShowSaveDialog = false;
-    private bool   ShowReqDialog  = false;
+    private bool   ShowValidation    = false;
+    private bool   ShowSaveDialog    = false;
+    private bool   ShowReqDialog     = false;
     private bool   _showClearConfirm = false;
-    private string SaveFileName   = "section10_data";
-    private string SaveFormat     = "fhir-pipeline";
-    private string StatusMessage  = string.Empty;
-    private string ReqDialogMsg   = string.Empty;
-    private string ErrorMessage   = string.Empty;
-    private string? PendingAction = null;
+    private string SaveFileName      = "section10_data";
+    private string SaveFormat        = "fhir-pipeline";
+    private string StatusMessage     = string.Empty;
+    private string ReqDialogMsg      = string.Empty;
+    private string _errorDialog      = string.Empty;
+    private string? PendingAction    = null;
     private FhirPipelineDialog _pipeline = default!;
     private System.Threading.Timer? _statusTimer;
     private string CtxFieldName = string.Empty, CtxOriginalName = string.Empty, CtxGuidance = string.Empty;
     private DotNetObjectReference<Section10>? _objRef;
 
+    private string ErrorDialogCss => string.IsNullOrEmpty(_errorDialog) ? "" : "show";
+    private void DismissError() => _errorDialog = string.Empty;
     private string SaveDialogCss => ShowSaveDialog ? "show" : "";
     private string ReqDialogCss  => ShowReqDialog  ? "show" : "";
     private bool IsPipeline => SaveFormat == "fhir-pipeline";
@@ -163,26 +393,97 @@
     private string ReqClass(string? val) =>
         string.IsNullOrWhiteSpace(val) ? "fb req-empty" : "fb";
 
+    private void SetPri(string key, string value)
+    {
+        Model.PriData[key] = value;
+        AutoSave();
+    }
+
+    private void SetSec(string key, string value)
+    {
+        Model.SecData[key] = value;
+        AutoSave();
+    }
+
+    private void AddPriRow()
+    {
+        Model.PriRows++;
+        AutoSave();
+    }
+
+    private void RemovePriRow(int row)
+    {
+        // Remove keys for this row
+        var priCodes = new[] { "C218482", "C218803", "C218804", "missingdata", "C218480", "C218481" };
+        foreach (var c in priCodes) Model.PriData.Remove($"{c}_p{row}");
+        // Shift rows above down
+        for (int r = row; r < Model.PriRows; r++)
+            foreach (var c in priCodes)
+            {
+                var nextKey = $"{c}_p{r + 1}";
+                var thisKey = $"{c}_p{r}";
+                if (Model.PriData.TryGetValue(nextKey, out var v)) Model.PriData[thisKey] = v;
+                else Model.PriData.Remove(thisKey);
+                Model.PriData.Remove(nextKey);
+            }
+        Model.PriRows--;
+        AutoSave();
+    }
+
+    private void AddSecRow()
+    {
+        Model.SecRows++;
+        AutoSave();
+    }
+
+    private void RemoveSecRow(int row)
+    {
+        var secCodes = new[] { "C218482", "C218805", "C218806", "missingdata", "C218480", "C218481" };
+        foreach (var c in secCodes) Model.SecData.Remove($"{c}_s{row}");
+        for (int r = row; r < Model.SecRows; r++)
+            foreach (var c in secCodes)
+            {
+                var nextKey = $"{c}_s{r + 1}";
+                var thisKey = $"{c}_s{r}";
+                if (Model.SecData.TryGetValue(nextKey, out var v)) Model.SecData[thisKey] = v;
+                else Model.SecData.Remove(thisKey);
+                Model.SecData.Remove(nextKey);
+            }
+        Model.SecRows--;
+        AutoSave();
+    }
+
     private void AutoSave() =>
         _ = JS.InvokeVoidAsync("localStorage.setItem", "s10data", DataSvc.ToJson(Model));
 
-    private bool HasRequiredEmpty() => string.IsNullOrWhiteSpace(Model.C164387);
+    private bool HasRequiredEmpty() =>
+        string.IsNullOrWhiteSpace(Model.C164387)  ||
+        string.IsNullOrWhiteSpace(Model.C218801)  ||
+        string.IsNullOrWhiteSpace(Model.C218802)  ||
+        string.IsNullOrWhiteSpace(Model.C218807)  ||
+        string.IsNullOrWhiteSpace(Model.C218808)  ||
+        string.IsNullOrWhiteSpace(Model.C218809)  ||
+        string.IsNullOrWhiteSpace(Model.C142582)  ||
+        string.IsNullOrWhiteSpace(Model.C218810)  ||
+        string.IsNullOrWhiteSpace(Model.C115467);
 
     private void ClearAll() => _showClearConfirm = true;
 
     private void DoClearAll()
     {
         _showClearConfirm = false;
-        Model = new Section10Model(); ShowValidation = false; ErrorMessage = string.Empty;
+        Model = new Section10Model();
+        ShowValidation = false;
+        _errorDialog = string.Empty;
         _ = JS.InvokeVoidAsync("localStorage.removeItem", "s10data");
         SetStatus("Cleared");
     }
 
     private void LoadSample()
     {
-        var s = DataSvc.LoadSample();
-        if (s != null) { Model = s; ShowValidation = false; AutoSave(); SetStatus("Sample data loaded"); }
-        else ErrorMessage = "Could not load sample data.";
+        var (model, error) = DataSvc.LoadSample();
+        if (error != null) { _errorDialog = error; return; }
+        if (model != null) { Model = model; ShowValidation = false; AutoSave(); SetStatus("✓ Sample data loaded"); }
     }
 
     private void OpenSaveDialog()
@@ -190,7 +491,7 @@
         ShowValidation = true;
         if (HasRequiredEmpty())
         {
-            ReqDialogMsg  = "Required field General Considerations is empty. Do you still want to save?";
+            ReqDialogMsg  = "One or more required fields are empty. Do you still want to save?";
             PendingAction = "file"; ShowReqDialog = true; return;
         }
         SaveFileName = "section10_data_" + DateTime.Now.ToString("yyyy-MM-dd");
@@ -212,10 +513,10 @@
         }
         var (content, mime, ext) = SaveFormat switch
         {
-            "csv"  => (DataSvc.ToCsv(Model),      "text/csv",         ".csv"),
-            "txt"  => (DataSvc.ToPlainText(Model), "text/plain",       ".txt"),
-            "fsh"  => (DataSvc.ToFsh(Model),       "text/plain",       ".fsh"),
-            _      => (DataSvc.ToJson(Model),      "application/json", ".json"),
+            "csv"  => (DataSvc.ToCsv(Model),       "text/csv",         ".csv"),
+            "txt"  => (DataSvc.ToPlainText(Model),  "text/plain",       ".txt"),
+            "fsh"  => (DataSvc.ToFsh(Model),        "text/plain",       ".fsh"),
+            _      => (DataSvc.ToJson(Model),       "application/json", ".json"),
         };
         var fn = (SaveFileName.Trim().Length > 0 ? SaveFileName.Trim() : "section10_data") + ext;
         if (SaveFormat == "fsh") SushiSvc.SaveToExamples(fn, content);
@@ -229,7 +530,10 @@
     public void ReceiveFileContent(string json)
     {
         var loaded = DataSvc.FromJson(json);
-        if (loaded != null) { Model = loaded; ShowValidation = false; SetStatus("⬆ Loaded from file"); InvokeAsync(StateHasChanged); }
+        if (loaded == null) { _errorDialog = "Could not read file — the JSON may be malformed."; InvokeAsync(StateHasChanged); return; }
+        Model = loaded; ShowValidation = false;
+        SetStatus("⬆ Loaded from file");
+        InvokeAsync(StateHasChanged);
     }
 
     [JSInvokable]
@@ -257,7 +561,7 @@
         }
         catch (JSDisconnectedException) { }
         catch (TaskCanceledException)   { }
-        catch (Exception ex) { ErrorMessage = "Init error: " + ex.Message; StateHasChanged(); }
+        catch (Exception ex) { _errorDialog = "Init error: " + ex.Message; StateHasChanged(); }
     }
 
     private void SetStatus(string msg)

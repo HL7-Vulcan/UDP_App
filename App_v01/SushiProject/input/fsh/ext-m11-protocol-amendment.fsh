@@ -91,6 +91,7 @@ Context: M11_ResearchStudyProfile
   substantialImpactReliability 0..1 and 
   substantialImpactReliabilityComment 0..1 and
   M11_AmendmentDetails named details 0..* MS and 
+  detailsLocation 0..1 and
   rationale 0..1 and
   description 0..1
 
@@ -101,7 +102,7 @@ Context: M11_ResearchStudyProfile
 * extension[previous].value[x] only CodeableConcept 
 * extension[previous].value[x] from M11AmendmentDetailsStatementVS (required)
 
-* extension[scope].value[x] only CodeableConcept // Changed from code in EBM
+* extension[scope].value[x] only CodeableConcept 
 * extension[scope].value[x] from M11AmendmentScopeVS (extensible)
   * ^short = "Global, Not Global"
   * ^definition = "C218673 Global, Country, Region, or Site."
@@ -110,15 +111,15 @@ Context: M11_ResearchStudyProfile
   If the amendment does not apply to all sites in the trial, select Not Global and utilize one of the identifiers based on amendment scope. 
   Use the ISO-3166 region or country identifier (for example, DE or EU)."
 
-* extension[country].value[x] only CodeableConcept // Changed from code in EBM
+* extension[country].value[x] only CodeableConcept 
 * extension[country].value[x] from M11CountryRegionVS (extensible)
   * ^definition = "C20108"
 
-* extension[region].value[x] only CodeableConcept // Changed from code in EBM
+* extension[region].value[x] only CodeableConcept 
 * extension[region].value[x] from M11CountryRegionVS (extensible)
   * ^definition = "C218674"
 
-* extension[site].value[x] only Identifier or Reference // Changed from code in EBM
+* extension[site].value[x] only Identifier or Reference 
   * ^definition = "C83081"
 
 * extension[approvalDate].value[x] only date
@@ -126,8 +127,6 @@ Context: M11_ResearchStudyProfile
 * extension[signature].value[x] only Signature
 * extension[signatureUrl].value[x] only string or url
 * extension[signatureMethod].value[x] only string
-
-//* extension[scopeImpact].value[x] only M11_AmendmentScopeImpact
 
 * extension[primaryReason].value[x] only CodeableConcept
 * extension[primaryReason].value[x] from M11StudyAmendmentReasonVS (extensible)
@@ -143,7 +142,7 @@ Context: M11_ResearchStudyProfile
   * ^short = "summary of changes"
   * ^definition = "Summary of amendmets."
 
-* extension[substantialImpactSafety].value[x] only CodeableConcept // Changed from code in EBM
+* extension[substantialImpactSafety].value[x] only CodeableConcept 
 * extension[substantialImpactSafety].value[x] from $YesNoUnknownVS (required)
   * ^short = "Substantial impact on safety"
   * ^definition = "Substantial impact on safety."
@@ -152,10 +151,12 @@ Context: M11_ResearchStudyProfile
   * ^short = "Comment on substantial impact on safety"
   * ^definition = "Comment on substantial impact on safety."
 
-* extension[substantialImpactReliability].value[x] only CodeableConcept // Changed from code in EBM
+* extension[substantialImpactReliability].value[x] only CodeableConcept 
 * extension[substantialImpactReliability].value[x] from $YesNoUnknownVS (required)
   * ^short = "Substantial impact on reliability"
   * ^definition = "Substantial impact on reliability."
+
+* extension[detailsLocation].value[x] only string
 
 * extension[substantialImpactReliabilityComment].value[x] only string
   * ^short = "Comment on substantial impact on reliability"
@@ -163,23 +164,3 @@ Context: M11_ResearchStudyProfile
 
 * extension[rationale].value[x] only string
 * extension[description].value[x] only string or markdown
-
-// Invariant: scope-required
-// Description: "At least one of country, region and site SHALL be populated"
-// Expression: "country.exists() or region.exists() or site.exists()"
-// Severity: #error
-
-// Invariant: scopeImpact-required  // TODO make sure this doesn't conflict if there are no amendments
-// Description: "If protocol has been amended at least one of country, region and site SHALL be populated and the number affected provided"
-// Expression: "(country.exists() or region.exists() or site.exists()) and number.exists()"
-// Severity: #error
-
-// Invariant: safetyComment-required
-// Description: "If substantialImpactSafety is TRUE there SHALL be an explanatory comment"
-// Expression: "substantialImpactSafety.exists() and substantialImpactSafety.value = true and substantialImpactSafetyComment.exists()"
-// Severity: #error
-
-// Invariant: reliabilityComment-required
-// Description: "If substantialImpactReliability is TRUE there SHALL be an explanatory comment"
-// Expression: "substantialImpactReliability.exists() and substantialImpactReliability.value = true and substantialImpactReliabilityComment.exists()"
-// Severity: #error

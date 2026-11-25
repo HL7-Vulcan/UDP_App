@@ -1,0 +1,43 @@
+{
+  "C164387": "This section describes the statistical methods that will be used to analyse the data from this Phase 3 randomised controlled trial of Exoticillin versus placebo in adults with uncomplicated urinary tract infections. All analyses will be conducted using SAS version 9.4. A statistical analysis plan (SAP) will be finalised and approved prior to database lock.",
+  "C218801": "Three analysis sets are defined for this study:\n\n• Full Analysis Set (FAS): all randomised participants who received at least one dose of study treatment and have at least one post-baseline efficacy assessment. This is the primary analysis set.\n• Per-Protocol Set (PPS): a subset of the FAS comprising participants who completed the treatment period without any major protocol deviations affecting efficacy assessments.\n• Safety Analysis Set (SAS): all randomised participants who received at least one dose of study treatment.",
+  "C218802": "The primary efficacy analysis will compare the clinical cure rate at the Test-of-Cure (TOC) visit (Day 10–14) between the Exoticillin and placebo arms in the FAS. The cure rate difference and its 95% confidence interval will be computed using the Miettinen–Nurminen method. A two-sided Z-test will be used to assess statistical significance at the α = 0.05 level.",
+  "C218807": "No multiplicity adjustment is required for the primary endpoint. For the two key secondary endpoints (microbiological cure rate and time to symptom resolution), a hierarchical testing procedure will be applied in the order listed: the second endpoint will be tested only if the first achieves statistical significance at α = 0.05.",
+  "C218808": "Sensitivity analyses for the primary endpoint will be conducted in the PPS population and using multiple imputation for missing outcome data under a missing-not-at-random assumption. Subgroup analyses by age group (18–64, ≥65 years), infection causative pathogen, and geographic region will be performed as exploratory analyses.",
+  "C218809": "Safety analyses will be conducted on the Safety Analysis Set. Treatment-emergent adverse events (TEAEs), serious adverse events (SAEs), discontinuations due to adverse events, and deaths will be summarised using descriptive statistics. Laboratory data, vital signs, and ECG parameters will be listed and summarised by visit.",
+  "C142582": "No formal interim analysis for efficacy is planned. An Independent Data Monitoring Committee (IDMC) will review accumulating unblinded safety data at approximately 25% and 50% enrolment and may recommend study modifications or early termination for safety reasons. No alpha spending is therefore required.",
+  "C218810": "Assuming a clinical cure rate of 85% in the Exoticillin arm and 65% in the placebo arm, 148 participants per arm (296 total) are required to achieve 90% power with a two-sided α = 0.05. Accounting for an estimated 10% dropout rate, 165 participants per arm (330 total) will be randomised.",
+  "C115467": "Descriptive statistics (mean, standard deviation, median, range) will be used for continuous variables; frequencies and percentages for categorical variables. No formal statistical testing will be performed for exploratory endpoints. All confidence intervals will be two-sided at the 95% level unless otherwise specified.",
+  "PriRows": 2,
+  "PriData": {
+    "C218482_p1": "Clinical cure rate at the Test-of-Cure (TOC) visit (Day 10–14), defined as complete resolution of all signs and symptoms of UTI present at baseline, in the Full Analysis Set.",
+    "C218803_p1": "The primary analysis will use a Miettinen–Nurminen approach to compute the risk difference and 95% confidence interval for clinical cure rate between Exoticillin and placebo. A two-sided Z-test will assess statistical significance at α = 0.05.",
+    "C218804_p1": "Data will be collected at the TOC visit by the investigator using the Clinical Cure Assessment Form. Assessments will be recorded in the eCRF and adjudicated by the Clinical Adjudication Committee (CAC) for borderline cases.",
+    "missingdata_p1": "Participants who withdraw before the TOC visit will be classified as treatment failures (non-cures) in the primary analysis (non-responder imputation). A sensitivity analysis using multiple imputation under a missing-at-random assumption will be conducted.",
+    "C218480_p1": "Sensitivity analyses: (1) per-protocol population; (2) multiple imputation under MNAR assumption using a pattern-mixture model with a tipping-point analysis; (3) excluding participants with baseline non-susceptible pathogens.",
+    "C218481_p1": "Subgroup analyses by age (18–64 vs ≥65 years), sex, geographic region, causative pathogen, and baseline symptom severity will be conducted as supplementary exploratory analyses using the same estimand with no adjustment for multiplicity.",
+    "C218482_p2": "Microbiological cure rate at the TOC visit, defined as eradication or presumed eradication of the baseline causative uropathogen (urine culture < 103 CFU/mL), in participants with a positive baseline culture (Microbiological FAS).",
+    "C218803_p2": "The microbiological cure rate difference will be computed using the same Miettinen–Nurminen method as for the primary endpoint. This endpoint will be tested only if the primary endpoint achieves statistical significance (hierarchical testing).",
+    "C218804_p2": "Urine cultures will be collected at baseline and at the TOC visit by standard midstream clean-catch technique. Culture results will be reported by the central microbiology laboratory.",
+    "missingdata_p2": "Participants with a positive baseline culture who withdraw prior to the TOC visit culture will be classified as microbiological failures.",
+    "C218480_p2": "Sensitivity analysis restricted to participants infected with Escherichia coli as the sole causative pathogen.",
+    "C218481_p2": "Microbiological cure rates by species and susceptibility profile will be reported as supplementary analyses."
+  },
+  "SecRows": 2,
+  "SecData": {
+    "C218482_s1": "Time to resolution of acute dysuria and urinary frequency, defined as the first day on which both symptoms are rated as absent or mild on the participant-reported symptom diary, measured from first dose in the FAS.",
+    "C218805_s1": "Time to symptom resolution will be analysed using Kaplan–Meier survival estimates and a log-rank test stratified by geographic region. A Cox proportional-hazards model will be used to estimate the hazard ratio and 95% CI.",
+    "C218806_s1": "Symptom diary data will be collected daily via the eDiary application. Missing diary days within the first 14 days will be imputed using the last-observation-carried-forward method for the supportive analysis.",
+    "missingdata_s1": "Participants who withdraw without achieving symptom resolution will be censored at the date of last diary entry. A sensitivity analysis will treat withdrawals as non-resolvers.",
+    "C218480_s1": "Sensitivity analysis restricted to the per-protocol population; additional analysis censoring at the time of initiation of rescue antibiotic therapy.",
+    "C218481_s1": "Mean change from baseline in total symptom score (sum of four individual symptom ratings) will be summarised descriptively by visit.",
+    "C218481_s1": "Participant global impression of change at the TOC visit will be tabulated by treatment arm.",
+    "C218482_s2": "Recurrence of symptomatic UTI within 30 days of the TOC visit, defined as re-emergence of UTI symptoms together with a positive urine culture ≥ 103 CFU/mL, in the FAS.",
+    "C218805_s2": "The recurrence rate will be compared between treatment arms using a Miettinen–Nurminen risk difference with 95% CI.",
+    "C218806_s2": "Symptom and culture data will be collected at the Late Follow-up (LFU) visit (Day 28–32). Participants who do not return for the LFU visit will be contacted by phone for symptom assessment.",
+    "missingdata_s2": "Participants lost to follow-up before the LFU visit will be excluded from the recurrence analysis. A sensitivity analysis applying non-responder imputation will be conducted.",
+    "C218480_s2": "Sensitivity analysis excluding recurrences due to a different pathogen from the baseline isolate (re-infection vs relapse).",
+    "C218481_s2": "Recurrence rates stratified by causative pathogen at the original TOC visit will be presented as supplementary data.",
+    "C218481_s2": "Antibiotic usage between TOC and LFU visits will be summarised as an exploratory endpoint."
+  }
+}

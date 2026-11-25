@@ -104,7 +104,7 @@ public class DataService09
         };
 
         foreach (var (key, value) in fields)
-            mainTemplate = mainTemplate.Replace("{{" + key + "}}", Unescape(value ?? string.Empty));
+            mainTemplate = mainTemplate.Replace("{{" + key + "}}", TokenParser.FhirEscape(Unescape(value ?? string.Empty)));
 
         // ── Table row substitutions ────────────────────────────────
         // Build one table instance per row, collect entry references
@@ -123,10 +123,10 @@ public class DataService09
             foreach (var code in rowCodes)
             {
                 var key = $"{code}_r{r}";
-                var val = Unescape(model.RptTableData.TryGetValue(key, out var v) ? v : string.Empty);
+                var val = TokenParser.FhirEscape(Unescape(model.RptTableData.TryGetValue(key, out var v) ? v : string.Empty));
                 rowBlock = rowBlock.Replace("{{" + code + "}}", val);
                 // Table template uses C28784 (typo in template) - also replace that
-                rowBlock = rowBlock.Replace("{{C28784}}", Unescape(model.RptTableData.TryGetValue($"C218784_r{r}", out var v2) ? v2 : string.Empty));
+                rowBlock = rowBlock.Replace("{{C28784}}", TokenParser.FhirEscape(Unescape(model.RptTableData.TryGetValue($"C218784_r{r}", out var v2) ? v2 : string.Empty)));
             }
 
             sb.AppendLine();
@@ -146,18 +146,13 @@ public class DataService09
         return mainTemplate + sb.ToString();
     }
 
-    public Section09Model? LoadSample()
+    public (Section09Model? Model, string? Error) LoadSample()
     {
-        var samplePath = Path.Combine(_env.ContentRootPath, "Data", "section_09_sample.json");
-        try
-        {
-            var json = File.ReadAllText(samplePath);
-            return FromJson(json);
-        }
-        catch
-        {
-            return null;
-        }
+        var path = Path.Combine(_env.ContentRootPath, "Data", "section_09_sample.json");
+        if (!File.Exists(path))
+            return (null, "Sample data file not found: Data/section_09_sample.json");
+        try { return (FromJson(File.ReadAllText(path)), null); }
+        catch (Exception ex) { return (null, $"Failed to load sample data: {ex.Message}"); }
     }
 
     public Section09Model? FromJson(string json)

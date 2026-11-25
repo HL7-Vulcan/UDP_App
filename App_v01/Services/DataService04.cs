@@ -88,25 +88,20 @@ public class DataService04
         catch { return "// Section 4 FSH template not found."; }
     }
 
-    public Section04Model? LoadSample()
+    public (Section04Model? Model, string? Error) LoadSample()
     {
         var path = Path.Combine(_env.ContentRootPath, "Data", "section_04_sample.json");
+        if (!File.Exists(path))
+            return (null, $"Sample data file not found: Data/section_04_sample.json");
         try
         {
-            if (File.Exists(path)) return JsonSerializer.Deserialize<Section04Model>(File.ReadAllText(path), JsonOpts);
+            var model = JsonSerializer.Deserialize<Section04Model>(File.ReadAllText(path), JsonOpts);
+            return (model, null);
         }
-        catch { }
-        return new Section04Model
+        catch (Exception ex)
         {
-            C147139 = "This is a Phase 3, randomised, double-blind, placebo-controlled, parallel-group study. Participants will be randomised 1:1 to receive either inhaled Exoticillin or matching placebo.",
-            C218726 = "The total duration of trial participation for each participant is approximately 52 weeks, comprising a 4-week screening period, a 48-week treatment period, and a 4-week follow-up period.",
-            C219658 = "Participants will be randomised using a centralised interactive web response system (IWRS). Randomisation will be stratified by region (Japan vs. rest of world) and disease severity (mild vs. moderate).",
-            C218727 = "The trial is double-blind. Participants, investigators, and the sponsor's clinical team will be blinded to treatment assignment. Only the IWRS and an independent data safety monitoring board (DSMB) will have access to unblinded data.",
-            C142698 = "The trial will be stopped if the DSMB determines that there is clear evidence of an unacceptable safety signal, or if futility criteria are met at the pre-specified interim analysis.",
-            C218736 = "The start of trial is defined as the date of first participant first visit (FPFV).",
-            C218737 = "The end of trial is defined as the date of last participant last visit (LPLV), or earlier if the trial is terminated.",
-            C218738 = "No access to trial intervention will be provided after the end of the trial. Participants requiring continued treatment will be referred to standard of care.",
-        };
+            return (null, $"Failed to load sample data: {ex.Message}");
+        }
     }
 
     private static string CsvEscape(string v) =>

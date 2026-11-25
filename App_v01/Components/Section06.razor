@@ -61,11 +61,6 @@
     .tbl-sel { width:100%; box-sizing:border-box; min-width:0; }
 </style>
 
-@if (!string.IsNullOrEmpty(ErrorMessage))
-{
-    <div class="err">⚠ @ErrorMessage</div>
-}
-
 <div class="doc-page">
     <div class="h1">6.&nbsp;&nbsp;Trial Intervention and Concomitant Therapy</div>
 
@@ -237,6 +232,18 @@
     </div>
 </div>
 
+
+<!-- ── Sample data error modal ──────────────────────────────────────────── -->
+<div class="overlay @ErrorDialogCss">
+    <div class="dbox">
+        <h3 style="color:#c00;">Error</h3>
+        <p>@_errorDialog</p>
+        <div class="dbr">
+            <button class="btn btn-primary" @onclick="DismissError">OK</button>
+        </div>
+    </div>
+</div>
+
 <!-- ── Clear confirmation modal ──────────────────────────────────────────── -->
 <div class="overlay @(_showClearConfirm ? "show" : "")">
     <div class="dbox">
@@ -270,7 +277,9 @@
     private FhirPipelineDialog _pipeline = default!;
     private string StatusMessage  = string.Empty;
     private string ReqDialogMsg   = string.Empty;
-    private string ErrorMessage   = string.Empty;
+    private string _errorDialog = string.Empty;
+    private string ErrorDialogCss => string.IsNullOrEmpty(_errorDialog) ? "" : "show";
+    private void DismissError() => _errorDialog = string.Empty;
     private string? PendingAction = null;
     private string CtxFieldName    = string.Empty;
     private string CtxOriginalName = string.Empty;
@@ -454,23 +463,23 @@
     {
         _showClearConfirm = false;
         Model = new Section06Model(); TblRows = new List<int>{1}; NextRow = 2;
-        ShowValidation = false; ErrorMessage = string.Empty;
+        ShowValidation = false; _errorDialog = string.Empty;
         _ = JS.InvokeVoidAsync("localStorage.removeItem", "s6data");
         SetStatus("Cleared");
     }
 
     private void LoadSample()
     {
-        var s = DataSvc.LoadSample();
-        if (s != null)
+        var (model, error) = DataSvc.LoadSample();
+        if (error != null) { _errorDialog = error; return; }
+        if (model != null)
         {
-            Model = s;
-            TblRows = Enumerable.Range(1, Math.Max(1, s.TblRows)).ToList();
+            Model = model;
+            TblRows = Enumerable.Range(1, Math.Max(1, model.TblRows)).ToList();
             NextRow = TblRows.Count + 1;
             ShowValidation = false; _reinitCtxMenus = true;
             SetStatus("Sample data loaded"); AutoSave();
         }
-        else ErrorMessage = "Could not load sample file.";
     }
 
     private async Task SaveToBrowser()
@@ -486,7 +495,7 @@
     private async Task DoBrowserSave()
     {
         try { await JS.InvokeVoidAsync("localStorage.setItem", "s6data", DataSvc.ToJson(Model)); SetStatus("✓ Saved " + DateTime.Now.ToShortTimeString()); }
-        catch (Exception ex) { ErrorMessage = "Save error: " + ex.Message; }
+        catch (Exception ex) { _errorDialog = "Save error: " + ex.Message; }
     }
 
     private void OpenSaveDialog()
@@ -586,7 +595,7 @@
         }
         catch (JSDisconnectedException) { }
         catch (TaskCanceledException)   { }
-        catch (Exception ex) { ErrorMessage = "Init error: " + ex.Message; StateHasChanged(); }
+        catch (Exception ex) { _errorDialog = "Init error: " + ex.Message; StateHasChanged(); }
     }
 
     private void SetStatus(string msg)

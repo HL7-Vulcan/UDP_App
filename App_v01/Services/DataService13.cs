@@ -36,15 +36,20 @@ public class DataService13
         try { return File.ReadAllText(path).Replace("{{C218837}}", m.C218837 ?? string.Empty); }
         catch { return "// Section 13 FSH template not found."; }
     }
-    public Section13Model? LoadSample()
+    public (Section13Model? Model, string? Error) LoadSample()
     {
         var path = Path.Combine(_env.ContentRootPath, "Data", "section_13_sample.json");
-        try { if (File.Exists(path)) return JsonSerializer.Deserialize<Section13Model>(File.ReadAllText(path), JsonOpts); }
-        catch { }
-        return new Section13Model
+        if (!File.Exists(path))
+            return (null, "Sample data file not found: Data/section_13_sample.json");
+        try
         {
-            C218837 = "AE\tAdverse Event\nCRF\tCase Report Form\nDSMB\tData Safety Monitoring Board\nFPFV\tFirst Participant First Visit\nGCP\tGood Clinical Practice\nIEC\tIndependent Ethics Committee\nIRB\tInstitutional Review Board\nIWRS\tInteractive Web Response System\nLPLV\tLast Participant Last Visit\nSAE\tSerious Adverse Event\nSAP\tStatistical Analysis Plan\nULN\tUpper Limit of Normal"
-        };
+            var model = JsonSerializer.Deserialize<Section13Model>(File.ReadAllText(path), JsonOpts);
+            return (model, null);
+        }
+        catch (Exception ex)
+        {
+            return (null, $"Failed to load sample data: {ex.Message}");
+        }
     }
     private static string CsvEscape(string v) =>
         (v.Contains(',') || v.Contains('"') || v.Contains('\n')) ? "\"" + v.Replace("\"", "\"\"") + "\"" : v;

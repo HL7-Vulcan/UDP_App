@@ -85,11 +85,6 @@
     .err { background:#fff3cd; color:#856404; border:1px solid #ffc107; padding:10px; margin-bottom:10px; border-radius:4px; font-size:10pt; }
 </style>
 
-@if (!string.IsNullOrEmpty(ErrorMessage))
-{
-    <div class="err">⚠ @ErrorMessage</div>
-}
-
 <div class="doc-page">
 
     <div class="h1">2.&nbsp;&nbsp;Introduction</div>
@@ -205,6 +200,18 @@
     </div>
 </div>
 
+
+<!-- ── Sample data error modal ──────────────────────────────────────────── -->
+<div class="overlay @ErrorDialogCss">
+    <div class="dbox">
+        <h3 style="color:#c00;">Error</h3>
+        <p>@_errorDialog</p>
+        <div class="dbr">
+            <button class="btn btn-primary" @onclick="DismissError">OK</button>
+        </div>
+    </div>
+</div>
+
 <!-- ── Clear confirmation modal ──────────────────────────────────────────── -->
 <div class="overlay @(_showClearConfirm ? "show" : "")">
     <div class="dbox">
@@ -272,7 +279,9 @@
     private FhirPipelineDialog _pipeline = default!;
     private string StatusMessage   = string.Empty;
     private string ReqDialogMessage = string.Empty;
-    private string ErrorMessage    = string.Empty;
+    private string _errorDialog = string.Empty;
+    private string ErrorDialogCss => string.IsNullOrEmpty(_errorDialog) ? "" : "show";
+    private void DismissError() => _errorDialog = string.Empty;
     private string? PendingAction  = null;
 
     private System.Threading.Timer?        _statusTimer;
@@ -307,7 +316,7 @@
         _showClearConfirm = false;
         Model          = new Section02Model();
         ShowValidation = false;
-        ErrorMessage   = string.Empty;
+        _errorDialog = string.Empty;
         _ = JS.InvokeVoidAsync("localStorage.removeItem", "s2data");
         SetStatus("Cleared");
     }
@@ -315,17 +324,9 @@
     // ── Load Sample ───────────────────────────────────────────────
     private void LoadSample()
     {
-        var sample = DataSvc.LoadSample();
-        if (sample != null)
-        {
-            Model          = sample;
-            ShowValidation = false;
-            SetStatus("Sample data loaded"); AutoSave();
-        }
-        else
-        {
-            ErrorMessage = "Could not load sample file.";
-        }
+        var (model, error) = DataSvc.LoadSample();
+        if (error != null) { _errorDialog = error; return; }
+        if (model != null) { Model = model; ShowValidation = false; SetStatus("Sample data loaded"); AutoSave(); }
     }
 
     private async Task SaveToBrowser()
@@ -342,7 +343,7 @@
             }
             await DoBrowserSave();
         }
-        catch (Exception ex) { ErrorMessage = "SaveToBrowser error: " + ex.Message; }
+        catch (Exception ex) { _errorDialog = "SaveToBrowser error: " + ex.Message; }
     }
 
     private void AutoSave() =>
@@ -355,7 +356,7 @@
             await JS.InvokeVoidAsync("localStorage.setItem", "s2data", DataSvc.ToJson(Model));
             SetStatus("✓ Saved " + DateTime.Now.ToShortTimeString());
         }
-        catch (Exception ex) { ErrorMessage = "DoBrowserSave error: " + ex.Message; }
+        catch (Exception ex) { _errorDialog = "DoBrowserSave error: " + ex.Message; }
     }
 
     // ── Open Save Dialog ──────────────────────────────────────────
@@ -416,14 +417,14 @@
             await JS.InvokeVoidAsync("udpDownload", fn, content, mime);
             SetStatus("⬇ Downloaded " + fn);
         }
-        catch (Exception ex) { ErrorMessage = "DoSaveToFile error: " + ex.Message; }
+        catch (Exception ex) { _errorDialog = "DoSaveToFile error: " + ex.Message; }
     }
 
     // ── Load from file ────────────────────────────────────────────
     private async Task OpenLoadDialog()
     {
         try { await JS.InvokeVoidAsync("udpOpenFilePicker"); }
-        catch (Exception ex) { ErrorMessage = "OpenLoadDialog error: " + ex.Message; }
+        catch (Exception ex) { _errorDialog = "OpenLoadDialog error: " + ex.Message; }
     }
 
     [JSInvokable]
@@ -455,7 +456,7 @@
                 if (loaded != null) { Model = loaded; StateHasChanged(); }
             }
         }
-        catch (Exception ex) { ErrorMessage = "Init error: " + ex.Message; StateHasChanged(); }
+        catch (Exception ex) { _errorDialog = "Init error: " + ex.Message; StateHasChanged(); }
     }
 
     // ── Status ────────────────────────────────────────────────────

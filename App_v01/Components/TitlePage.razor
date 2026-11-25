@@ -89,8 +89,6 @@
     .ap-create-link { display:block; text-align:center; margin-top:8px; color:#1f3864; font-size:10pt; cursor:pointer; text-decoration:underline; }
 </style>
 
-@if (!string.IsNullOrEmpty(ErrorMessage)) { <div class="err">⚠ @ErrorMessage</div> }
-
 <div class="doc-page">
     <div style="display:flex;align-items:center;gap:14px;margin-bottom:10px;">
         <div class="h1" style="margin-bottom:0;">Title Page</div>
@@ -569,6 +567,18 @@
     </div>
 </div>
 
+
+<!-- ── Sample data error modal ──────────────────────────────────────────── -->
+<div class="overlay @ErrorDialogCss">
+    <div class="dbox">
+        <h3 style="color:#c00;">Error</h3>
+        <p>@_errorDialog</p>
+        <div class="dbr">
+            <button class="btn btn-primary" @onclick="DismissError">OK</button>
+        </div>
+    </div>
+</div>
+
 <!-- ── Clear confirmation modal ──────────────────────────────────────────── -->
 <div class="overlay @(_showClearConfirm ? "show" : "")">
     <div class="dbox">
@@ -599,7 +609,9 @@
     private FhirPipelineDialog _pipeline = default!;
     private string StatusMessage  = string.Empty;
     private string ReqDialogMsg   = string.Empty;
-    private string ErrorMessage   = string.Empty;
+    private string _errorDialog = string.Empty;
+    private string ErrorDialogCss => string.IsNullOrEmpty(_errorDialog) ? "" : "show";
+    private void DismissError() => _errorDialog = string.Empty;
     private string? PendingAction = null;
     private string CtxFieldName = string.Empty, CtxM11Name = string.Empty, CtxGuidance = string.Empty, CtxValueSetId = string.Empty, CtxValueSetName = string.Empty, CtxValueSetCCode = string.Empty;
 
@@ -839,22 +851,22 @@
     {
         _showClearConfirm = false;
         Model = new(); ChgRows = new List<int> { 1 }; _nextChgRow = 2;
-        ShowValidation = false; ErrorMessage = string.Empty;
+        ShowValidation = false; _errorDialog = string.Empty;
         _ = JS.InvokeVoidAsync("localStorage.removeItem", "tpdata");
         SetStatus("Cleared");
     }
 
     private void LoadSample()
     {
-        var s = DataSvc.LoadSample();
-        if (s != null)
+        var (model, error) = DataSvc.LoadSample();
+        if (error != null) { _errorDialog = error; return; }
+        if (model != null)
         {
-            Model = s;
-            ChgRows = Enumerable.Range(1, Math.Max(1, s.ChgRows)).ToList();
+            Model = model;
+            ChgRows = Enumerable.Range(1, Math.Max(1, model.ChgRows)).ToList();
             _nextChgRow = ChgRows.Max() + 1;
             ShowValidation = false; SetStatus("Sample data loaded"); AutoSave();
         }
-        else ErrorMessage = "Could not load sample file.";
     }
 
     private async Task SaveToBrowser()
@@ -870,7 +882,7 @@
     private async Task DoBrowserSave()
     {
         try { await JS.InvokeVoidAsync("localStorage.setItem", "tpdata", DataSvc.ToJson(Model)); SetStatus("✓ Saved " + DateTime.Now.ToShortTimeString()); }
-        catch (Exception ex) { ErrorMessage = ex.Message; }
+        catch (Exception ex) { _errorDialog = ex.Message; }
     }
 
     private void OpenSaveDialog()
@@ -971,7 +983,7 @@
             }
         }
         catch (JSDisconnectedException) { } catch (TaskCanceledException) { }
-        catch (Exception ex) { ErrorMessage = "Init error: " + ex.Message; StateHasChanged(); }
+        catch (Exception ex) { _errorDialog = "Init error: " + ex.Message; StateHasChanged(); }
     }
 
     private void SetStatus(string msg)

@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Microsoft.AspNetCore.Hosting;
 using UDP_App.Models;
 
 namespace UDP_App.Services;
@@ -12,6 +13,7 @@ namespace UDP_App.Services;
 public class AmendmentStore
 {
     private readonly string _filePath;
+    private readonly string _samplePath;
     private readonly ILogger<AmendmentStore> _logger;
     private List<AmendmentRecord> _records = new();
 
@@ -21,12 +23,13 @@ public class AmendmentStore
         PropertyNameCaseInsensitive = true
     };
 
-    public AmendmentStore(SessionWorkspace workspace, ILogger<AmendmentStore> logger)
+    public AmendmentStore(SessionWorkspace workspace, IWebHostEnvironment env, ILogger<AmendmentStore> logger)
     {
-        _logger   = logger;
-        _filePath = Path.Combine(
+        _logger     = logger;
+        _filePath   = Path.Combine(
             Path.GetDirectoryName(workspace.ProjectRoot)!,
             "amendments.json");
+        _samplePath = Path.Combine(env.ContentRootPath, "Data", "amendment_sample.json");
 
         Load();
     }
@@ -68,67 +71,38 @@ public class AmendmentStore
         _records.FirstOrDefault(r => r.Id == id);
 
     /// <summary>
-    /// Creates two sample amendment sets for demonstration purposes.
-    /// Returns the first of the two created records.
+    /// Loads sample amendment sets from Data/amendment_sample.json.
+    /// Returns (firstRecord, null) on success, or (null, errorMessage) on failure.
     /// </summary>
-    public AmendmentRecord LoadSample()
+    public (AmendmentRecord? First, string? Error) LoadSample()
     {
-        var a1 = new AmendmentRecord
-        {
-            Name     = "Amendment 1 — Safety Update",
-            C218694  = "$NCIT#C218486 \"This is the first protocol amendment.\"",
-            C181232  = "2.0",
-            C93813   = "2025-03-14",
-            C218477  = "AMD-001",
-            C218673  = "$NCIT#C68846 \"Global\"",
-            C218478  = "120",
-            C218695  = "$NCIT#C68846 \"Globally\"",
-            C218696  = "$NCIT#C218493 \"New Safety Information Available\"",
-            C42581   = "Amendment to update inclusion/exclusion criteria following a new safety signal identified in interim data review.",
-            C218698  = "$NCIT#C49488 \"Yes\"",
-            C218699  = "New laboratory finding requires additional monitoring visits for enrolled participants.",
-            C218700  = "$NCIT#C49487 \"No\"",
-            ChgRows  = 2,
-            ChgData  = new Dictionary<string, string>
-            {
-                ["C218483_r1"] = "Updated exclusion criterion 4 to exclude patients with elevated liver enzymes (>3× ULN).",
-                ["C181233_r1"] = "New safety signal identified in interim data review.",
-                ["C218479_r1"] = "$NCIT#C217345 \"Section 4\"",
-                ["C218483_r2"] = "Added additional safety monitoring visit at Week 12.",
-                ["C181233_r2"] = "Required by updated safety monitoring plan.",
-                ["C218479_r2"] = "$NCIT#C217346 \"Section 5\"",
-            }
-        };
+        if (!File.Exists(_samplePath))
+            return (null, "Sample data file not found: Data/amendment_sample.json");
 
-        var a2 = new AmendmentRecord
+        try
         {
-            Name     = "Amendment 2 — Recruitment Change",
-            C218694  = "$NCIT#C218487 \"This protocol has been amended previously. Details of prior amendments are presented in Section 12.3 Prior Protocol Amendment(s).\"",
-            C181232  = "3.0",
-            C93813   = "2025-09-01",
-            C218477  = "AMD-002",
-            C218673  = "$NCIT#C217026 \"Not Global\"",
-            C20108   = "$iso3166#GB \"UK\"",
-            C218478  = "187",
-            C218695  = "$NCIT#C41065 \"Locally\"",
-            C218696  = "$NCIT#C218500 \"Recruitment Difficulty\"",
-            C218697  = "$NCIT#C218496 \"Change In Strategy\"",
-            C42581   = "Expansion of eligible sites and relaxation of age criterion to address below-target recruitment.",
-            C218698  = "$NCIT#C49487 \"No\"",
-            C218700  = "$NCIT#C49487 \"No\"",
-            ChgRows  = 1,
-            ChgData  = new Dictionary<string, string>
-            {
-                ["C218483_r1"] = "Widened age eligibility from 18–65 to 18–75 years.",
-                ["C181233_r1"] = "Recruitment modelling indicates insufficient eligible participants under current criterion.",
-                ["C218479_r1"] = "$NCIT#C217344 \"Section 3\"",
-            }
-        };
+            var json    = File.ReadAllText(_samplePath);
+            var samples = JsonSerializer.Deserialize<List<AmendmentRecord>>(json, _jsonOpts);
+            if (samples == null || samples.Count == 0)
+                return (null, "Sample data file is empty or invalid.");
 
-        _records.Add(a1);
-        _records.Add(a2);
-        Save();
-        return a1;
+            foreach (var rec in samples)
+            {
+                // Assign fresh Ids and timestamps so they behave like new records
+                rec.Id        = Guid.NewGuid().ToString();
+                rec.CreatedAt = DateTime.UtcNow;
+                rec.UpdatedAt = DateTime.UtcNow;
+                _records.Add(rec);
+            }
+
+            Save();
+            return (_records[^samples.Count], null);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Could not load amendment sample from {Path}", _samplePath);
+            return (null, "Could not read sample data file: " + ex.Message);
+        }
     }
 
     // ── Persistence ───────────────────────────────────────────────────

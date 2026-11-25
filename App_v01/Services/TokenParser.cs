@@ -295,6 +295,16 @@ public static class TokenParser
     /// and that token's value (from <paramref name="getValue"/>) is empty or whitespace.
     /// Line endings are preserved exactly.
     /// </summary>
+    /// <summary>
+    /// Escape a user-entered string for placement inside FHIR text.div XHTML.
+    /// Must be applied to every field value before template substitution.
+    /// </summary>
+    public static string FhirEscape(string? value) =>
+        (value ?? string.Empty)
+            .Replace("&", "&amp;")   // must be first
+            .Replace("<", "&lt;")
+            .Replace(">", "&gt;");
+
     public static string DropEmptyTokenLines(string block, Func<string, string?> getValue)
     {
         // Split preserving line endings by scanning character by character

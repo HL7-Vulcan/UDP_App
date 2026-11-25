@@ -53,10 +53,13 @@ public class DataService07
         return template;
     }
 
-    public Section07Model? LoadSample()
+    public (Section07Model? Model, string? Error) LoadSample()
     {
-        try { return FromJson(File.ReadAllText(Path.Combine(_env.ContentRootPath, "Data", "section_07_sample.json"))); }
-        catch { return null; }
+        var path = Path.Combine(_env.ContentRootPath, "Data", "section_07_sample.json");
+        if (!File.Exists(path))
+            return (null, "Sample data file not found: Data/section_07_sample.json");
+        try { return (FromJson(File.ReadAllText(path)), null); }
+        catch (Exception ex) { return (null, $"Failed to load sample data: {ex.Message}"); }
     }
 
     public Section07Model? FromJson(string json)

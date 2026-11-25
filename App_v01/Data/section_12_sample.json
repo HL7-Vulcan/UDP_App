@@ -1,0 +1,16 @@
+{
+  "OrigProtocolDate": "2024-11-01",
+  "AmendData": {
+    "C218672": "$NCIT#C49487 \"No\""
+  },
+  "C25294": "Standard haematology (full blood count with differential, platelets), biochemistry (sodium, potassium, urea, creatinine, eGFR, ALT, AST, alkaline phosphatase, total bilirubin, albumin, HbA1c, fasting glucose), and urinalysis (dipstick; microscopy if indicated) will be performed at a central laboratory at screening, Day 1 (pre-dose), Day 5, Day 10, and Day 24. All laboratory assays will be conducted in accordance with the central laboratory manual. Normal reference ranges will be provided by the central laboratory and will be used for clinical significance assessments.",
+  "CrRows": 2,
+  "CrData": {
+    "C218832_r1": "$iso3166#JP \"Japan\"",
+    "C218833_r1": "Additional pharmacokinetic (PK) blood sampling required to fulfil Japanese regulatory guidelines (MHLW) for anti-infective bridging studies.",
+    "C218834_r1": "PK samples to be collected at 0.5, 1, 2, 4, 6, and 8 hours post-dose on Day 5 at Japanese sites, in addition to the standard schedule.",
+    "C218832_r2": "$iso3166#DE \"Germany\"",
+    "C218833_r2": "Additional liver-function monitoring required at German sites following BfArM guidance on hepatotoxicity surveillance for the Exoticillin class.",
+    "C218834_r2": "ALT, AST, and total bilirubin to be measured at Weeks 2, 4, and 8 at German sites (DE-001 through DE-007), in addition to the standard schedule."
+  }
+}

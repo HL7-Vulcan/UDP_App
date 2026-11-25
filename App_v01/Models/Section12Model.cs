@@ -14,10 +14,11 @@ public class Section12Model
 
     // 12.3 Prior Protocol Amendment(s)
     // Amendment rows (one row per prior amendment + Original Protocol)
-    [JsonPropertyName("AmendRows")] public int    AmendRows { get; set; } = 1;
-    [JsonPropertyName("AmendData")] public Dictionary<string, string> AmendData { get; set; } = new();
+    [JsonPropertyName("AmendRows")]        public int    AmendRows        { get; set; } = 1;
+    [JsonPropertyName("AmendData")]        public Dictionary<string, string> AmendData { get; set; } = new();
     // Per-row keys: C218477_r{n} = Identifier, C132352_r{n} = Approval Date, C218695_r{n} = Enrollment, C218695e_r{n} = Enrollment Description
     // Row 0 is always "Original Protocol" (identifier fixed, date + enrollment editable)
+    [JsonPropertyName("OrigProtocolDate")] public string? OrigProtocolDate { get; set; }  // Original Protocol sponsor approval date (local field, no CDISC code)
 
     // Alternate location for overview of changes (optional)
     [JsonPropertyName("C218836")] public string? C218836 { get; set; }

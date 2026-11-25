@@ -1,0 +1,37 @@
+{
+  "C147139": "This is a Phase 3, randomised, observer-blind, parallel-group study comparing inhaled Exoticillin dry powder for inhalation (DPI) with intramuscular Exoticillin solution for injection in Japanese patients with iatrogenic diabetes mellitus and acute bronchitis. Participants are randomised 1:1 to one of two treatment arms and receive study treatment for 10 days, followed by a 14-day safety follow-up period.",
+
+  "C218726": "The total duration of trial intervention is 10 days. The total duration of trial participation, including screening, intervention and follow-up, is approximately 6 weeks.",
+
+  "C219658": "Participants will be assigned to trial intervention by central randomisation using an interactive response technology (IRT) system. Randomisation will be stratified by disease severity (mild vs moderate bronchitis) and study site, using permuted blocks of varying size to maintain allocation concealment.",
+
+  "C218727": "The trial uses an observer-blind design. Participants and site staff administering study treatment are not blinded to treatment allocation, as the route of administration (inhaled vs intramuscular) is inherently different. However, the clinical assessors who evaluate efficacy endpoints are blinded to treatment assignment throughout the trial. The sponsor, data management team and biostatisticians remain blinded until database lock.",
+
+  "C218728": "All participants will receive standard supportive care in accordance with local clinical practice guidelines. No placebo inhalation or placebo injection will be used. Blinding of assessors will be maintained by ensuring that assessors do not administer or observe treatment, and by instructing participants not to disclose their treatment assignment to the assessor.",
+
+  "C218729": "The trial design was reviewed by the Exemplar Patient Advisory Panel, whose input informed the choice of study duration, the acceptability of both routes of administration, and the selection of patient-reported outcome measures. Feedback from Japanese Key Opinion Leaders was incorporated into the stratification criteria and site selection strategy.",
+
+  "C142705": "",
+
+  "C218730": "The primary estimand targets the difference in clinical cure rate at Day 10 (end of treatment) between inhaled and intramuscular Exoticillin, using a treatment policy strategy for all intercurrent events. This estimand reflects the public health question of whether inhaled Exoticillin is as effective as intramuscular Exoticillin regardless of compliance or early discontinuation, and aligns with regulatory guidance for anti-infective trials.",
+
+  "C215629": "A parallel-group design was selected as the most appropriate model for comparing two distinct routes of administration of the same active substance. A crossover design was considered but rejected due to the acute and potentially self-limiting nature of bronchitis, which would confound within-patient comparisons.",
+
+  "C218731": "An active-controlled design was chosen rather than a placebo-controlled design because: (i) effective antibiotic treatment exists for the target indication; (ii) withholding active treatment would be unethical in patients with confirmed acute bacterial bronchitis; and (iii) regulatory guidance for antibacterial drug development recommends non-inferiority comparisons against an established active comparator in this indication. Intramuscular Exoticillin was selected as the comparator based on its established efficacy and safety profile in this patient population.",
+
+  "C218732": "A 10-day treatment duration was selected based on established antibiotic treatment guidelines for acute bronchitis and the pharmacokinetic/pharmacodynamic profile of Exoticillin. The 14-day follow-up period is sufficient to capture late adverse events and confirm sustained clinical response.",
+
+  "C218733": "No adaptive or novel design elements are incorporated in this trial.",
+
+  "C218734": "No interim analysis for efficacy is planned. An unblinded safety review will be conducted by the Independent Data Safety Monitoring Board (DSMB) after approximately 50% of participants have completed the Day 10 assessment, to assess whether the trial should continue in the light of accumulating safety data.",
+
+  "C218735": "The non-inferiority margin of 10 percentage points for the primary endpoint (clinical cure rate) was pre-specified based on a meta-analysis of historical active-controlled antibiotic trials in acute bronchitis and endorsed by regulatory agencies in pre-submission scientific advice. This margin preserves a clinically meaningful proportion of the established effect of intramuscular Exoticillin versus placebo.",
+
+  "C142698": "The trial will be stopped, in whole or in part, if any of the following criteria are met:\n\n1. A DSMB recommendation to stop the trial on safety grounds following a scheduled or ad hoc safety review.\n\n2. Emergence of new clinical or non-clinical safety findings that, in the opinion of the Sponsor, materially alter the benefit-risk profile of either study treatment.\n\n3. A Regulatory Authority request or clinical hold that prevents continuation of the trial in one or more countries.\n\n4. The Sponsor determines that continuation is no longer scientifically justified, for example if new standard-of-care treatments render the comparator arm inadequate.\n\n5. Enrolment falls materially below projections such that the target sample size cannot be achieved within the operational timelines, and no feasible remediation is available.\n\nIn the event of a full or partial stop, all ongoing participants will complete safety follow-up assessments and be transitioned to appropriate care per the procedures described in the Protocol.",
+
+  "C218736": "The start of the trial is defined as the date of first participant first visit (screening). The anticipated first participant first visit date is Q2 2025.",
+
+  "C218737": "The end of the trial is defined as the date of the last participant last visit (Day 24 follow-up visit or early termination visit). The anticipated end of trial date is Q4 2026.",
+
+  "C218738": "Exoticillin (inhaled and intramuscular formulations) is not approved for routine clinical use at the time of this trial. Following completion of the trial, participants will not have access to study treatment through the trial. Participants who complete the trial and experience an unresolved treatment-emergent adverse event will be followed until resolution or stabilisation at the discretion of the Investigator and in consultation with the Sponsor Medical Expert. If Exoticillin receives regulatory approval during or after the trial, participants may seek access through normal prescribing channels."
+}

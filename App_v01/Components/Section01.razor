@@ -86,8 +86,6 @@
     select.fb.wfull { display:block; width:100%; }
 </style>
 
-@if (!string.IsNullOrEmpty(ErrorMessage)) { <div class="err">⚠ @ErrorMessage</div> }
-
 <div class="doc-page">
     <div class="h1">1.&nbsp;&nbsp;Protocol Summary</div>
     <div class="h2">1.1&nbsp;&nbsp;Protocol Synopsis</div>
@@ -498,6 +496,18 @@
     </div>
 </div>
 
+
+<!-- ── Sample data error modal ──────────────────────────────────────────── -->
+<div class="overlay @ErrorDialogCss">
+    <div class="dbox">
+        <h3 style="color:#c00;">Error</h3>
+        <p>@_errorDialog</p>
+        <div class="dbr">
+            <button class="btn btn-primary" @onclick="DismissError">OK</button>
+        </div>
+    </div>
+</div>
+
 <!-- ── Clear confirmation modal ──────────────────────────────────────────── -->
 <div class="overlay @(_showClearConfirm ? "show" : "")">
     <div class="dbox">
@@ -526,7 +536,9 @@
     private FhirPipelineDialog _pipeline = default!;
     private string StatusMessage  = string.Empty;
     private string ReqDialogMsg   = string.Empty;
-    private string ErrorMessage   = string.Empty;
+    private string _errorDialog = string.Empty;
+    private string ErrorDialogCss => string.IsNullOrEmpty(_errorDialog) ? "" : "show";
+    private void DismissError() => _errorDialog = string.Empty;
     private string? PendingAction = null;
     private string CtxFieldName = string.Empty, CtxOriginalName = string.Empty, CtxGuidance = string.Empty, CtxValueSetId = string.Empty, CtxValueSetName = string.Empty, CtxValueSetCCode = string.Empty;
 
@@ -639,16 +651,16 @@
     private void DoClearAll()
     {
         _showClearConfirm = false;
-        Model = new(); ShowValidation = false; ErrorMessage = string.Empty;
+        Model = new(); ShowValidation = false; _errorDialog = string.Empty;
         _ = JS.InvokeVoidAsync("localStorage.removeItem", "s1data");
         SetStatus("Cleared");
     }
 
     private void LoadSample()
     {
-        var s = DataSvc.LoadSample();
-        if (s != null) { Model = s; DecomposeAgeFields(); ShowValidation = false; SetStatus("Sample data loaded"); AutoSave(); }
-        else ErrorMessage = "Could not load sample file.";
+        var (model, error) = DataSvc.LoadSample();
+        if (error != null) { _errorDialog = error; return; }
+        if (model != null) { Model = model; DecomposeAgeFields(); ShowValidation = false; SetStatus("Sample data loaded"); AutoSave(); }
     }
 
     private async Task SaveToBrowser()
@@ -664,7 +676,7 @@
     private async Task DoBrowserSave()
     {
         try { await JS.InvokeVoidAsync("localStorage.setItem", "s1data", DataSvc.ToJson(Model)); SetStatus("✓ Saved " + DateTime.Now.ToShortTimeString()); }
-        catch (Exception ex) { ErrorMessage = ex.Message; }
+        catch (Exception ex) { _errorDialog = ex.Message; }
     }
 
     private void OpenSaveDialog()
@@ -748,7 +760,7 @@
             }
         }
         catch (JSDisconnectedException) { } catch (TaskCanceledException) { }
-        catch (Exception ex) { ErrorMessage = "Init error: " + ex.Message; StateHasChanged(); }
+        catch (Exception ex) { _errorDialog = "Init error: " + ex.Message; StateHasChanged(); }
     }
 
     private void SetStatus(string msg)

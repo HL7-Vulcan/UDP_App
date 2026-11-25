@@ -99,7 +99,7 @@ public class DataService01
             {"C218839", model.C218839}, {"TABLE_X", tableId},
             {"C218720", model.C218720}, {"C132349", model.C132349},
         })
-            main = main.Replace("{{" + k + "}}", v ?? string.Empty);
+            main = main.Replace("{{" + k + "}}", TokenParser.FhirEscape(v));
 
         // Design table template — expand multi-value list fields first, then scalar substitution
         tbl = ExpandListRepeat(tbl, "C218709", model.C218709);
@@ -129,7 +129,7 @@ public class DataService01
             {"C218715_C218716", durationParticipation},
             {"C218719",    model.C218719},
         })
-            tbl = tbl.Replace("{{" + k + "}}", v ?? string.Empty);
+            tbl = tbl.Replace("{{" + k + "}}", TokenParser.FhirEscape(v));
 
         // Comparator product template
         foreach (var (k, v) in new Dictionary<string, string?>
@@ -138,7 +138,7 @@ public class DataService01
             {"C218675", model.C218675},
             {"C97054",  model.C97054},
         })
-            comp = comp.Replace("{{" + k + "}}", v ?? string.Empty);
+            comp = comp.Replace("{{" + k + "}}", TokenParser.FhirEscape(v));
 
         main = _qty.StripEmptyLines(main);
         tbl  = _qty.StripEmptyLines(tbl);
@@ -231,10 +231,13 @@ public class DataService01
         return sb.ToString();
     }
 
-    public Section01Model? LoadSample()
+    public (Section01Model? Model, string? Error) LoadSample()
     {
-        try { return FromJson(File.ReadAllText(Path.Combine(_env.ContentRootPath, "Data", "section_01_sample.json"))); }
-        catch { return null; }
+        var path = Path.Combine(_env.ContentRootPath, "Data", "section_01_sample.json");
+        if (!File.Exists(path))
+            return (null, "Sample data file not found: Data/section_01_sample.json");
+        try { return (FromJson(File.ReadAllText(path)), null); }
+        catch (Exception ex) { return (null, $"Failed to load sample data: {ex.Message}"); }
     }
 
     public Section01Model? FromJson(string json)

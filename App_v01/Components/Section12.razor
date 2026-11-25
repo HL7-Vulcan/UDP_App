@@ -112,11 +112,6 @@
     .ctx-guide strong { color:#1f3864; }
 </style>
 
-@if (!string.IsNullOrEmpty(ErrorMessage))
-{
-    <div class="err">⚠ @ErrorMessage</div>
-}
-
 <div class="doc-page">
 
     <div class="h1">12.&nbsp;&nbsp;APPENDIX: SUPPORTING DETAIL</div>
@@ -154,10 +149,10 @@
                     <tr>
                         <td>
                             <div class="field-wrap">
-                                <input type="text" data-ctx="@($"C218832_r{row}")" class="fb-text"
-                                    placeholder="Enter Country/Region Identifier"
-                                    value="@GetCr($"C218832_r{row}")"
-                                    @oninput="@(e => SetCr($"C218832_r{row}", e.Value?.ToString()))" />
+                                <PicklistSelect ValueSetId="m11-country-region-vs" CssClass="fb wfull"
+                                    DataCtx="@($"C218832_r{row}")"
+                                    Value="@GetCr($"C218832_r{row}")"
+                                    ValueChanged="@(v => { SetCr($"C218832_r{row}", v); AutoSave(); })" />
                             </div>
                         </td>
                         <td>
@@ -189,77 +184,89 @@
     <!-- ── 12.3 Prior Protocol Amendments ───────────────────────── -->
     <div class="h2">12.3&nbsp;&nbsp;Prior Protocol Amendment(s)</div>
 
-    <div style="margin-bottom:12px;">
-        <button class="add-btn" @onclick="GoToAmendments">Edit Amendments</button>
+    <!-- Alternate location field — always shown first; if populated the rest of 12.3 is hidden -->
+    <div class="h4p">Alternate Location for Overview of Changes</div>
+    <p style="font-size:9.5pt;color:#666;margin:0 0 6px;">If the Overview of Changes is provided at an alternate location rather than below, enter it here and the detail tables will be omitted.</p>
+    <div class="field-wrap" style="margin-bottom:16px;">
+        <input type="text" data-ctx="C218836" class="fb-text"
+            placeholder="Specify Alternate Location (optional)"
+            value="@(Model.C218836 ?? string.Empty)"
+            @oninput="@(e => { Model.C218836 = e.Value?.ToString(); AutoSave(); })" />
     </div>
 
-    @if (AmendStore.All.Count == 0)
+    @if (string.IsNullOrWhiteSpace(Model.C218836))
     {
-        <p><strong>This protocol has not been amended.</strong></p>
-    }
-    else
-    {
-        @if (AmendStore.All.Count == 1)
+        <div style="margin-bottom:12px;">
+            <button class="add-btn" @onclick="GoToAmendments">Edit Amendments</button>
+        </div>
+
+        @if (AmendStore.All.Count == 0)
         {
-            <p>This is the first protocol amendment.</p>
+            <p><strong>This protocol has not been amended.</strong></p>
         }
         else
         {
-            <p>This protocol has been amended previously. The Protocol Amendment Summary of Changes for the current amendment is located directly before the Table of Contents. Prior amendment(s) to this protocol are listed in the table below, beginning with the most recent.</p>
-        }
-
-        <!-- Amendment summary table — rows populated from AmendStore, most recent first -->
-        <table class="s12-tbl" style="margin-bottom:18px;">
-            <thead>
-                <tr>
-                    <th style="width:30%">Document</th>
-                    <th style="width:25%">Sponsor Approval Date</th>
-                    <th style="width:25%">Approx. Enrollment when Approved</th>
-                    <th style="width:15%">Enrollment Scope</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var rec in Enumerable.Reverse(AmendStore.All))
-                {
-                    var scopeDisplay = rec.C218695 switch {
-                        string s when s.Contains("Globally") => "Globally",
-                        string s when s.Contains("Locally")  => "Locally",
-                        _ => rec.C218695 ?? string.Empty
-                    };
-                    var dateDisplay = FormatDate(rec.C93813);
-                    <tr>
-                        <td><div data-ctx-wrap="C218477" style="position:relative;min-height:1em;">@(rec.C218477 ?? rec.Name)</div></td>
-                        <td><div data-ctx-wrap="C93813"  style="position:relative;min-height:1em;">@dateDisplay</div></td>
-                        <td><div data-ctx-wrap="C218478" style="position:relative;min-height:1em;">@(rec.C218478 ?? string.Empty)</div></td>
-                        <td><div data-ctx-wrap="C218695" style="position:relative;min-height:1em;">@scopeDisplay</div></td>
-                    </tr>
-                }
-                <!-- Original Protocol is oldest — always last -->
-                <tr>
-                    <td class="fixed-cell">Original Protocol</td>
-                    <td class="fixed-cell">@FormatDate(GetAmd("C132352_r0"))</td>
-                    <td class="fixed-cell"></td>
-                    <td class="fixed-cell"></td>
-                </tr>
-            </tbody>
-        </table>
-
-        <!-- Overview of Changes — one table per amendment, most recent first -->
-        @foreach (var rec in Enumerable.Reverse(AmendStore.All))
-        {
-            var aLabel = rec.C218477 ?? rec.Name;
-            var aDate2 = FormatDate(rec.C93813);
-
-            <div class="h3">Overview of Changes — @aLabel
-                @if (!string.IsNullOrWhiteSpace(aDate2)) { <span style="font-weight:400;font-size:10pt;"> &nbsp;(Sponsor approval date: @aDate2)</span> }
-            </div>
-
-            @if (!string.IsNullOrWhiteSpace(Model.C218836))
+            @if (AmendStore.All.Count == 1)
             {
-                <p style="font-style:italic;color:#555;margin:0 0 8px;">Provided at alternate location: @Model.C218836</p>
+                <p>This is the first protocol amendment.</p>
             }
             else
             {
+                <p>This protocol has been amended previously. The Protocol Amendment Summary of Changes for the current amendment is located directly before the Table of Contents. Prior amendment(s) to this protocol are listed in the table below, beginning with the most recent.</p>
+            }
+
+            <!-- Amendment summary table — rows populated from AmendStore, most recent first -->
+            <table class="s12-tbl" style="margin-bottom:18px;">
+                <thead>
+                    <tr>
+                        <th style="width:30%">Document</th>
+                        <th style="width:25%">Sponsor Approval Date</th>
+                        <th style="width:25%">Approx. Enrollment when Approved</th>
+                        <th style="width:15%">Enrollment Scope</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var rec in Enumerable.Reverse(AmendStore.All))
+                    {
+                        var scopeDisplay = rec.C218695 switch {
+                            string s when s.Contains("Globally") => "Globally",
+                            string s when s.Contains("Locally")  => "Locally",
+                            _ => rec.C218695 ?? string.Empty
+                        };
+                        var dateDisplay = FormatDate(rec.C93813);
+                        <tr>
+                            <td><div data-ctx-wrap="C218477" style="position:relative;min-height:1em;">@(rec.C218477 ?? rec.Name)</div></td>
+                            <td><div data-ctx-wrap="C93813"  style="position:relative;min-height:1em;">@dateDisplay</div></td>
+                            <td><div data-ctx-wrap="C218478" style="position:relative;min-height:1em;">@(rec.C218478 ?? string.Empty)</div></td>
+                            <td><div data-ctx-wrap="C218695" style="position:relative;min-height:1em;">@scopeDisplay</div></td>
+                        </tr>
+                    }
+                    <!-- Original Protocol is oldest — always last -->
+                    <tr>
+                        <td class="fixed-cell">Original Protocol</td>
+                        <td>
+                            <div data-ctx-wrap="OrigProtocolDate" style="position:relative;min-height:1em;">
+                                <input type="date" class="fb-date" style="width:100%"
+                                       value="@Model.OrigProtocolDate"
+                                       @onchange="@(e => { Model.OrigProtocolDate = e.Value?.ToString(); AutoSave(); })" />
+                            </div>
+                        </td>
+                        <td class="fixed-cell"></td>
+                        <td class="fixed-cell"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Overview of Changes — one table per amendment, most recent first -->
+            @foreach (var rec in Enumerable.Reverse(AmendStore.All))
+            {
+                var aLabel = rec.C218477 ?? rec.Name;
+                var aDate2 = FormatDate(rec.C93813);
+
+                <div class="h3">Overview of Changes — @aLabel
+                    @if (!string.IsNullOrWhiteSpace(aDate2)) { <span style="font-weight:400;font-size:10pt;"> &nbsp;(Sponsor approval date: @aDate2)</span> }
+                </div>
+
                 <table class="s12-tbl" style="margin-bottom:14px;">
                     <thead>
                         <tr>
@@ -286,16 +293,6 @@
                 </table>
             }
         }
-
-        <!-- Alternate location field -->
-        <div class="h4p" style="margin-top:18px;">Alternate Location for Overview of Changes</div>
-        <p style="font-size:9.5pt;color:#666;margin:0 0 6px;">If the Overview of Changes is not provided above, specify where it can be found.</p>
-        <div class="field-wrap">
-            <input type="text" data-ctx="C218836" class="fb-text"
-                placeholder="Specify Alternate Location (optional)"
-                value="@(Model.C218836 ?? string.Empty)"
-                @oninput="@(e => { Model.C218836 = e.Value?.ToString(); AutoSave(); })" />
-        </div>
     }
 
     <div class="toolbar">
@@ -411,6 +408,18 @@
     </div>
 </div>
 
+
+<!-- ── Sample data error modal ──────────────────────────────────────────── -->
+<div class="overlay @ErrorDialogCss">
+    <div class="dbox">
+        <h3 style="color:#c00;">Error</h3>
+        <p>@_errorDialog</p>
+        <div class="dbr">
+            <button class="btn btn-primary" @onclick="DismissError">OK</button>
+        </div>
+    </div>
+</div>
+
 <!-- ── Clear confirmation modal ──────────────────────────────────────────── -->
 <div class="overlay @(_showClearConfirm ? "show" : "")">
     <div class="dbox">
@@ -441,7 +450,9 @@
     private string SaveFormat      = "fhir-pipeline";
     private string StatusMessage   = string.Empty;
     private string ReqDialogMsg    = string.Empty;
-    private string ErrorMessage    = string.Empty;
+    private string _errorDialog = string.Empty;
+    private string ErrorDialogCss => string.IsNullOrEmpty(_errorDialog) ? "" : "show";
+    private void DismissError() => _errorDialog = string.Empty;
     private string? PendingAction  = null;
 
     private FhirPipelineDialog _pipeline = default!;
@@ -709,7 +720,7 @@
         _showClearConfirm = false;
         Model          = new Section12Model();
         ShowValidation = false;
-        ErrorMessage   = string.Empty;
+        _errorDialog = string.Empty;
         _ = JS.InvokeVoidAsync("localStorage.removeItem", "s12data");
         SetStatus("Cleared");
     }
@@ -717,18 +728,15 @@
     // ── Load Sample ───────────────────────────────────────────────
     private void LoadSample()
     {
-        var sample = DataSvc.LoadSample();
-        if (sample != null)
+        var (model, error) = DataSvc.LoadSample();
+        if (error != null) { _errorDialog = error; return; }
+        if (model != null)
         {
-            Model          = sample;
+            Model          = model;
             ShowValidation = false;
             _reinitCtxMenus = true;
             AutoSave();
             SetStatus("Sample data loaded");
-        }
-        else
-        {
-            ErrorMessage = "Could not load sample data.";
         }
     }
 
@@ -841,6 +849,7 @@
             "C218478" => ("ApproxEnrollment",         FieldGuidance.For("C218478")),
             "C218695" => ("EnrollmentScope",          FieldGuidance.For("C218695")),
             "C218695e"=> ("EnrollmentScopeDescription",FieldGuidance.For("C218695")),
+            "OrigProtocolDate" => ("OriginalProtocolApprovalDate", "The sponsor approval date of the original (unamended) protocol."),
             "C218836" => ("AlternateLocation",        FieldGuidance.For("C218836")),
             "C218483" => ("DescriptionOfChange",      FieldGuidance.For("C218483")),
             "C181233" => ("RationaleForChange",       FieldGuidance.For("C181233")),
@@ -878,7 +887,7 @@
         }
         catch (JSDisconnectedException) { }
         catch (TaskCanceledException)   { }
-        catch (Exception ex) { ErrorMessage = "Init error: " + ex.Message; StateHasChanged(); }
+        catch (Exception ex) { _errorDialog = "Init error: " + ex.Message; StateHasChanged(); }
     }
 
     // ── Status ────────────────────────────────────────────────────

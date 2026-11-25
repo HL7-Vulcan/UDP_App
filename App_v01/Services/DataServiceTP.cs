@@ -97,19 +97,19 @@ public class DataServiceTP
         // Build a lookup of all scalar tokens (including trimmed-key variants in the template)
         var fields = new Dictionary<string, string?>(StringComparer.OrdinalIgnoreCase)
         {
-            {"C181236",model.C181236}, {"C132346",model.C132346}, {"C94108", model.C94108},
-            {"C132351",model.C132351}, {"C218672",model.C218672}, {"C181232",model.C181232},
-            {"C93813", model.C93813},  {"C218477",model.C218477}, {"C218673",model.C218673},
-            {"C20108", model.C20108},  {"C218674",model.C218674}, {"C83081", model.C83081},
-            {"C218675",model.C218675}, {"C97054", model.C97054},  {"C71898", model.C71898},
-            {"C48281", model.C48281},  {"C94105", model.C94105},  {"C222495",model.C222495},
-            {"C218677",model.C218677}, {"C218678",model.C218678}, {"C218679",model.C218679},
-            {"C218680",model.C218680}, {"C218681",model.C218681}, {"C218682",model.C218682},
-            {"C218683",model.C218683}, {"C218684",model.C218684}, {"C218685",model.C218685},
-            {"C218686",model.C218686}, {"C218687",model.C218687}, {"C172240",model.C172240},
-            {"C218688",model.C218688}, {"C218689",model.C218689}, {"C218690",model.C218690},
-            {"C132352",model.C132352}, {"C218484",model.C218484}, {"C222014",model.C222014},
-            {"C222064",model.C222064}, {"C218693",model.C218693}, {"C222063",model.C222063},
+            {"C181236",TokenParser.FhirEscape(model.C181236)}, {"C132346",TokenParser.FhirEscape(model.C132346)}, {"C94108", TokenParser.FhirEscape(model.C94108)},
+            {"C132351",TokenParser.FhirEscape(model.C132351)}, {"C218672",TokenParser.FhirEscape(model.C218672)}, {"C181232",TokenParser.FhirEscape(model.C181232)},
+            {"C93813", TokenParser.FhirEscape(model.C93813)},  {"C218477",TokenParser.FhirEscape(model.C218477)}, {"C218673",TokenParser.FhirEscape(model.C218673)},
+            {"C20108", TokenParser.FhirEscape(model.C20108)},  {"C218674",TokenParser.FhirEscape(model.C218674)}, {"C83081", TokenParser.FhirEscape(model.C83081)},
+            {"C218675",TokenParser.FhirEscape(model.C218675)}, {"C97054", TokenParser.FhirEscape(model.C97054)},  {"C71898", TokenParser.FhirEscape(model.C71898)},
+            {"C48281", TokenParser.FhirEscape(model.C48281)},  {"C94105", TokenParser.FhirEscape(model.C94105)},  {"C222495",TokenParser.FhirEscape(model.C222495)},
+            {"C218677",TokenParser.FhirEscape(model.C218677)}, {"C218678",TokenParser.FhirEscape(model.C218678)}, {"C218679",TokenParser.FhirEscape(model.C218679)},
+            {"C218680",TokenParser.FhirEscape(model.C218680)}, {"C218681",TokenParser.FhirEscape(model.C218681)}, {"C218682",TokenParser.FhirEscape(model.C218682)},
+            {"C218683",TokenParser.FhirEscape(model.C218683)}, {"C218684",TokenParser.FhirEscape(model.C218684)}, {"C218685",TokenParser.FhirEscape(model.C218685)},
+            {"C218686",TokenParser.FhirEscape(model.C218686)}, {"C218687",TokenParser.FhirEscape(model.C218687)}, {"C172240",TokenParser.FhirEscape(model.C172240)},
+            {"C218688",TokenParser.FhirEscape(model.C218688)}, {"C218689",TokenParser.FhirEscape(model.C218689)}, {"C218690",TokenParser.FhirEscape(model.C218690)},
+            {"C132352",TokenParser.FhirEscape(model.C132352)}, {"C218484",TokenParser.FhirEscape(model.C218484)}, {"C222014",model.C222014},
+            {"C222064",TokenParser.FhirEscape(model.C222064)}, {"C218693",TokenParser.FhirEscape(model.C218693)}, {"C222063",TokenParser.FhirEscape(model.C222063)},
             // Named references — return empty when defining field is blank
             // so DropEmptyTokenLines suppresses the Reference(...) line
             {"SponsorOrganization",      !string.IsNullOrWhiteSpace(model.C222495) ? "SponsorOrganization" : null},
@@ -204,16 +204,16 @@ public class DataServiceTP
         var baseFields = new Dictionary<string, string?>(StringComparer.OrdinalIgnoreCase)
         {
             {"Protocol-Amendment", "Amendment-001"},
-            {"C132351", model.C132351}, {"C218477", model.C218477}, {"C218672", model.C218672},
-            {"C181232", model.C181232}, {"C93813",  model.C93813},
-            {"C218673", model.C218673}, {"C218674", model.C218674},
-            {"C83081",  model.C83081},  {"C218694", model.C218694},
-            {"C218695", model.C218695},
-            {"C218478", model.C218478}, {"C218696", model.C218696},
-            {"C218697", model.C218697}, {"C17649",  model.C17649}, {"C17649_2", model.C17649_2},
-            {"C42581",  model.C42581},  {"C218698", model.C218698},
-            {"C218699", model.C218699}, {"C218700", model.C218700},
-            {"C218701", model.C218701},
+            {"C132351", TokenParser.FhirEscape(model.C132351)}, {"C218477", TokenParser.FhirEscape(model.C218477)}, {"C218672", TokenParser.FhirEscape(model.C218672)},
+            {"C181232", TokenParser.FhirEscape(model.C181232)}, {"C93813",  TokenParser.FhirEscape(model.C93813)},
+            {"C218673", TokenParser.FhirEscape(model.C218673)}, {"C218674", TokenParser.FhirEscape(model.C218674)},
+            {"C83081",  TokenParser.FhirEscape(model.C83081)},  {"C218694", TokenParser.FhirEscape(model.C218694)},
+            {"C218695", TokenParser.FhirEscape(model.C218695)},
+            {"C218478", TokenParser.FhirEscape(model.C218478)}, {"C218696", TokenParser.FhirEscape(model.C218696)},
+            {"C218697", TokenParser.FhirEscape(model.C218697)}, {"C17649",  TokenParser.FhirEscape(model.C17649)}, {"C17649_2", TokenParser.FhirEscape(model.C17649_2)},
+            {"C42581",  TokenParser.FhirEscape(model.C42581)},  {"C218698", TokenParser.FhirEscape(model.C218698)},
+            {"C218699", TokenParser.FhirEscape(model.C218699)}, {"C218700", TokenParser.FhirEscape(model.C218700)},
+            {"C218701", TokenParser.FhirEscape(model.C218701)},
         };
 
         // ── REPEAT block 1: Secondary Reason (C218697 multi-select) ──────────────
@@ -226,11 +226,11 @@ public class DataServiceTP
             {
                 bool isOther = selectedValue.Contains("C17649", StringComparison.OrdinalIgnoreCase);
                 string? otherText = (isOther && !string.IsNullOrWhiteSpace(model.C17649_2))
-                                    ? model.C17649_2
+                                    ? TokenParser.FhirEscape(model.C17649_2)
                                     : null;   // null → DropEmptyTokenLines will remove the .text line
                 var rf = new Dictionary<string, string?>(baseFields, StringComparer.OrdinalIgnoreCase)
                 {
-                    ["C218697"]  = selectedValue,
+                    ["C218697"]  = TokenParser.FhirEscape(selectedValue),
                     ["C17649_2"] = otherText,
                 };
                 string? getR(string key) => rf.TryGetValue(key.Trim(), out var v) ? v : null;
@@ -251,9 +251,9 @@ public class DataServiceTP
                 int r = int.Parse(rowStr);
                 var rowFields = new Dictionary<string, string?>(baseFields, StringComparer.OrdinalIgnoreCase)
                 {
-                    ["C218483"] = GetChg(model, $"C218483_r{r}"),
-                    ["C181233"] = GetChg(model, $"C181233_r{r}"),
-                    ["C218479"] = GetChg(model, $"C218479_r{r}"),
+                    ["C218483"] = TokenParser.FhirEscape(GetChg(model, $"C218483_r{r}")),
+                    ["C181233"] = TokenParser.FhirEscape(GetChg(model, $"C181233_r{r}")),
+                    ["C218479"] = TokenParser.FhirEscape(GetChg(model, $"C218479_r{r}")),
                 };
                 string? getRow(string key) =>
                     rowFields.TryGetValue(key.Trim(), out var v) ? v : null;
@@ -276,9 +276,9 @@ public class DataServiceTP
         var fields = new Dictionary<string, string?>(StringComparer.OrdinalIgnoreCase)
         {
             {"MedicinalProductDefinition", "MedicinalProductDefinition"},
-            {"C218675", model.C218675},
-            {"C97054",  model.C97054},
-            {"C71898",  model.C71898},
+            {"C218675", TokenParser.FhirEscape(model.C218675)},
+            {"C97054",  TokenParser.FhirEscape(model.C97054)},
+            {"C71898",  TokenParser.FhirEscape(model.C71898)},
         };
 
         string? get(string key) =>
@@ -568,10 +568,13 @@ public class DataServiceTP
         return tpl;
     }
 
-    public TitlePageModel? LoadSample()
+    public (TitlePageModel? Model, string? Error) LoadSample()
     {
-        try { return FromJson(File.ReadAllText(Path.Combine(_env.ContentRootPath, "Data", "title_page_sample.json"))); }
-        catch { return null; }
+        var path = Path.Combine(_env.ContentRootPath, "Data", "title_page_sample.json");
+        if (!File.Exists(path))
+            return (null, "Sample data file not found: Data/title_page_sample.json");
+        try { return (FromJson(File.ReadAllText(path)), null); }
+        catch (Exception ex) { return (null, $"Failed to load sample data: {ex.Message}"); }
     }
 
     public TitlePageModel? FromJson(string json)

@@ -1,0 +1,64 @@
+{
+  "primaryObjectives": [
+    {
+      "objectiveText": "To demonstrate the non-inferiority of inhaled Exoticillin dry powder for inhalation compared with intramuscular Exoticillin solution for injection in achieving clinical cure in Japanese patients with iatrogenic diabetes mellitus and acute bronchitis.",
+      "C70833": "Full Analysis Set (FAS): all randomised participants who received at least one dose of study treatment.",
+      "C49236": "Inhaled Exoticillin DPI versus intramuscular Exoticillin solution for injection.",
+      "C25212": "Clinical cure rate at Day 10 (Test of Cure visit), defined as resolution or improvement of all signs and symptoms of bronchitis to the extent that no further antibiotic therapy is required.",
+      "C188853": "Difference in clinical cure rates between treatment arms, with a non-inferiority margin of 10 percentage points. The 95% confidence interval for the difference will be calculated using the Miettinen-Nurminen method.",
+      "iceRows": [
+        {
+          "C188856": "Premature discontinuation of randomised treatment",
+          "C188857": "Treatment policy strategy: data collected after discontinuation are included in the analysis regardless of reason for stopping."
+        },
+        {
+          "C188856": "Receipt of non-protocol antibiotic rescue medication",
+          "C188857": "Treatment policy strategy: participants who receive rescue medication are included in the analysis and classified as treatment failures."
+        }
+      ]
+    }
+  ],
+  "secondaryObjectives": [
+    {
+      "objectiveText": "To evaluate the microbiological response to inhaled versus intramuscular Exoticillin at Day 10 in participants with a confirmed bacterial pathogen at baseline.",
+      "C70833": "Microbiologically Evaluable Set (MES): participants in the FAS with a qualifying pathogen identified at baseline sputum culture.",
+      "C49236": "Inhaled Exoticillin DPI versus intramuscular Exoticillin solution for injection.",
+      "C25212": "Microbiological eradication rate at Day 10, defined as absence of the baseline pathogen on repeat sputum culture or presumed eradication based on clinical cure in the absence of a sputum sample.",
+      "C188853": "Difference in microbiological eradication rates between treatment arms, with 95% confidence interval using the Miettinen-Nurminen method.",
+      "iceRows": [
+        {
+          "C188856": "Premature discontinuation of randomised treatment",
+          "C188857": "Treatment policy strategy: participants are classified as microbiological failures if they discontinue early and have a positive culture at the last available assessment."
+        }
+      ]
+    },
+    {
+      "objectiveText": "To evaluate the safety and tolerability of inhaled versus intramuscular Exoticillin over the treatment and follow-up period.",
+      "C70833": "Safety Set: all participants who received at least one dose of study treatment.",
+      "C49236": "Inhaled Exoticillin DPI versus intramuscular Exoticillin solution for injection.",
+      "C25212": "Incidence and severity of treatment-emergent adverse events (TEAEs), serious adverse events (SAEs), and adverse events leading to discontinuation, assessed from first dose to Day 24 (end of follow-up).",
+      "C188853": "Summary statistics and 95% confidence intervals for event rates in each treatment arm. No formal hypothesis test is pre-specified for safety endpoints.",
+      "iceRows": [
+        {
+          "C188856": "Death",
+          "C188857": "Treatment policy strategy: all events up to and including the date of death are included."
+        }
+      ]
+    }
+  ],
+  "exploratoryObjectives": [
+    {
+      "objectiveText": "To explore the relationship between systemic Exoticillin pharmacokinetic (PK) exposure and clinical cure rate in each treatment arm.",
+      "C70833": "PK-evaluable subset: participants in the Safety Set with at least one valid PK sample collected at the specified timepoints.",
+      "C49236": "Inhaled Exoticillin DPI and intramuscular Exoticillin (each arm analysed separately for PK/PD modelling).",
+      "C25212": "Area under the plasma concentration-time curve (AUC0-24) and maximum observed plasma concentration (Cmax) at steady state (Day 5), correlated with clinical cure at Day 10.",
+      "C188853": "Descriptive PK/PD analysis; no formal hypothesis test. Exposure-response relationships will be explored using logistic regression.",
+      "iceRows": [
+        {
+          "C188856": "Missing PK samples",
+          "C188857": "Participants with insufficient PK data to estimate AUC will be excluded from the PK/PD analysis but retained in the clinical and safety analyses."
+        }
+      ]
+    }
+  ]
+}

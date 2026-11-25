@@ -198,6 +198,7 @@ These codes are present in UDP to allow granularity in narrative compositions.
 * $NCIT#C218646  "ICH M11 Protocol Section 10.9 Interim Analyses"
 * $NCIT#C218647  "ICH M11 Protocol Section 10.10 Multiplicity Adjustments"
 * $NCIT#C218648  "ICH M11 Protocol Section 10.11 Sample Size Determination"
+
 * $NCIT#C218649  "ICH M11 Protocol Section 11 TRIAL OVERSIGHT AND OTHER GENERAL CONSIDERATIONS"
 * $NCIT#C218650  "ICH M11 Protocol Section 11.1 Regulatory and Ethical Considerations"
 * $NCIT#C218651  "ICH M11 Protocol Section 11.2 Trial Oversight"
@@ -215,10 +216,12 @@ These codes are present in UDP to allow granularity in narrative compositions.
 * $NCIT#C218663  "ICH M11 Protocol Section 11.10 Protocol Deviations"
 * $NCIT#C218664  "ICH M11 Protocol Section 11.11 Early Site Closure"
 * $NCIT#C218665  "ICH M11 Protocol Section 11.12 Data Dissemination"
+
 * $NCIT#C218666  "ICH M11 Protocol Section 12 APPENDIX: SUPPORTING DETAILS"
 * $NCIT#C218667  "ICH M11 Protocol Section 12.1 Clinical Laboratory Tests"
 * $NCIT#C218668  "ICH M11 Protocol Section 12.2 Country/Region-Specific Differences"
 * $NCIT#C218669  "ICH M11 Protocol Section 12.3 Prior Protocol Amendment(s)"
+
 * $NCIT#C218670  "ICH M11 Protocol Section 13 APPENDIX: GLOSSARY OF TERMS AND ABBREVIATIONS"
 * $NCIT#C218671  "ICH M11 Protocol Section 14 APPENDIX: REFERENCES"
 

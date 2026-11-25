@@ -36,15 +36,20 @@ public class DataService11
         try { return File.ReadAllText(path).Replace("{{C218811}}", m.C218811 ?? string.Empty); }
         catch { return "// Section 11 FSH template not found."; }
     }
-    public Section11Model? LoadSample()
+    public (Section11Model? Model, string? Error) LoadSample()
     {
         var path = Path.Combine(_env.ContentRootPath, "Data", "section_11_sample.json");
-        try { if (File.Exists(path)) return JsonSerializer.Deserialize<Section11Model>(File.ReadAllText(path), JsonOpts); }
-        catch { }
-        return new Section11Model
+        if (!File.Exists(path))
+            return (null, "Sample data file not found: Data/section_11_sample.json");
+        try
         {
-            C218811 = "This trial will be conducted in accordance with the ethical principles of the Declaration of Helsinki, ICH E6(R2) Good Clinical Practice (GCP), and applicable regulatory requirements. Independent ethics committee (IEC) or institutional review board (IRB) approval will be obtained before the trial commences at each site. Written informed consent will be obtained from all participants prior to any trial-specific procedures."
-        };
+            var model = JsonSerializer.Deserialize<Section11Model>(File.ReadAllText(path), JsonOpts);
+            return (model, null);
+        }
+        catch (Exception ex)
+        {
+            return (null, $"Failed to load sample data: {ex.Message}");
+        }
     }
     private static string CsvEscape(string v) =>
         (v.Contains(',') || v.Contains('"') || v.Contains('\n')) ? "\"" + v.Replace("\"", "\"\"") + "\"" : v;

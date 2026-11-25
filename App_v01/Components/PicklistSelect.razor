@@ -11,7 +11,7 @@
     <option value="">— select —</option>
     @foreach (var opt in TermSvc.OptionsFor(ValueSetId))
     {
-        <option value="@opt.FshValue">@opt.Display</option>
+        <option value="@opt.FshValue" selected="@(opt.FshValue == Value)">@opt.Display</option>
     }
 </select>
 

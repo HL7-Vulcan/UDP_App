@@ -91,11 +91,6 @@
     .ctx-guide strong { color:#1f3864; }
 </style>
 
-@if (!string.IsNullOrEmpty(ErrorMessage))
-{
-    <div class="err">⚠ @ErrorMessage</div>
-}
-
 <div class="doc-page">
 
     <div class="h1">9.&nbsp;&nbsp;Adverse Events, Serious Adverse Events, Product Complaints, Pregnancy and Postpartum Information, and Special Safety Situations</div>
@@ -328,6 +323,18 @@
     </div>
 </div>
 
+
+<!-- ── Sample data error modal ──────────────────────────────────────────── -->
+<div class="overlay @ErrorDialogCss">
+    <div class="dbox">
+        <h3 style="color:#c00;">Error</h3>
+        <p>@_errorDialog</p>
+        <div class="dbr">
+            <button class="btn btn-primary" @onclick="DismissError">OK</button>
+        </div>
+    </div>
+</div>
+
 <!-- ── Clear confirmation modal ──────────────────────────────────────────── -->
 <div class="overlay @(_showClearConfirm ? "show" : "")">
     <div class="dbox">
@@ -360,7 +367,9 @@
     private FhirPipelineDialog _pipeline = default!;
     private string StatusMessage  = string.Empty;
     private string ReqDialogMsg   = string.Empty;
-    private string ErrorMessage   = string.Empty;
+    private string _errorDialog = string.Empty;
+    private string ErrorDialogCss => string.IsNullOrEmpty(_errorDialog) ? "" : "show";
+    private void DismissError() => _errorDialog = string.Empty;
     private string? PendingAction = null;
 
     private System.Threading.Timer?           _statusTimer;
@@ -564,7 +573,7 @@
         RptRows        = new List<int> { 1 };
         NextRow        = 2;
         ShowValidation = false;
-        ErrorMessage   = string.Empty;
+        _errorDialog = string.Empty;
         _ = JS.InvokeVoidAsync("localStorage.removeItem", "s9data");
         SetStatus("Cleared");
     }
@@ -572,11 +581,12 @@
     // ── Load Sample ───────────────────────────────────────────────
     private void LoadSample()
     {
-        var sample = DataSvc.LoadSample();
-        if (sample != null)
+        var (model, error) = DataSvc.LoadSample();
+        if (error != null) { _errorDialog = error; return; }
+        if (model != null)
         {
-            Model          = sample;
-            RptRows        = Enumerable.Range(1, Math.Max(1, sample.RptRows)).ToList();
+            Model          = model;
+            RptRows        = Enumerable.Range(1, Math.Max(1, model.RptRows)).ToList();
             NextRow        = RptRows.Count + 1;
             ShowValidation = false;
             _reinitCtxMenus = true;
@@ -584,7 +594,7 @@
         }
         else
         {
-            ErrorMessage = "Could not load sample file.";
+            _errorDialog = "Could not load sample file.";
         }
     }
 
@@ -609,7 +619,7 @@
             await JS.InvokeVoidAsync("localStorage.setItem", "s9data", DataSvc.ToJson(Model));
             SetStatus("✓ Saved " + DateTime.Now.ToShortTimeString());
         }
-        catch (Exception ex) { ErrorMessage = "Save error: " + ex.Message; }
+        catch (Exception ex) { _errorDialog = "Save error: " + ex.Message; }
     }
 
     // ── Save dialog ───────────────────────────────────────────────
@@ -763,7 +773,7 @@
         }
         catch (JSDisconnectedException) { }
         catch (TaskCanceledException)   { }
-        catch (Exception ex) { ErrorMessage = "Init error: " + ex.Message; StateHasChanged(); }
+        catch (Exception ex) { _errorDialog = "Init error: " + ex.Message; StateHasChanged(); }
     }
 
     // ── Status ────────────────────────────────────────────────────

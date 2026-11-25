@@ -85,7 +85,7 @@ public class DataService06
             {"C53630",model.C53630},  {"C218762",model.C218762},{"C218763",model.C218763},
         };
         foreach (var (k, v) in fields)
-            main = main.Replace("{{" + k + "}}", v ?? string.Empty);
+            main = main.Replace("{{" + k + "}}", TokenParser.FhirEscape(v));
 
         var rowCount   = Math.Max(1, model.TblRows);
         var rowBlocks  = new StringBuilder();
@@ -98,7 +98,7 @@ public class DataService06
             foreach (var code in tblCodes)
             {
                 var val = model.TblData.TryGetValue($"{code}_r{r}", out var v) ? v : string.Empty;
-                rowBlock = rowBlock.Replace("{{" + code + "}}", val);
+                rowBlock = rowBlock.Replace("{{" + code + "}}", TokenParser.FhirEscape(val));
             }
             rowBlocks.AppendLine(); rowBlocks.Append(rowBlock);
         }
@@ -113,10 +113,13 @@ public class DataService06
         return main + rowBlocks.ToString();
     }
 
-    public Section06Model? LoadSample()
+    public (Section06Model? Model, string? Error) LoadSample()
     {
-        try { return FromJson(File.ReadAllText(Path.Combine(_env.ContentRootPath, "Data", "section_06_sample.json"))); }
-        catch { return null; }
+        var path = Path.Combine(_env.ContentRootPath, "Data", "section_06_sample.json");
+        if (!File.Exists(path))
+            return (null, "Sample data file not found: Data/section_06_sample.json");
+        try { return (FromJson(File.ReadAllText(path)), null); }
+        catch (Exception ex) { return (null, $"Failed to load sample data: {ex.Message}"); }
     }
 
     public Section06Model? FromJson(string json)

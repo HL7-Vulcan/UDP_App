@@ -177,6 +177,18 @@
     </div>
 </div>
 
+
+<!-- ── Sample data error modal ──────────────────────────────────────────── -->
+<div class="overlay @ErrorDialogCss">
+    <div class="dbox">
+        <h3 style="color:#c00;">Error</h3>
+        <p>@_errorDialog</p>
+        <div class="dbr">
+            <button class="btn btn-primary" @onclick="DismissError">OK</button>
+        </div>
+    </div>
+</div>
+
 <!-- ── Clear confirmation modal ──────────────────────────────────────────── -->
 <div class="overlay @(_showClearConfirm ? "show" : "")">
     <div class="dbox">
@@ -218,6 +230,9 @@
     private FhirPipelineDialog _pipeline = default!;
     private string _statusMsg  = string.Empty;
     private string _reqMsg     = string.Empty;
+    private string _errorDialog  = string.Empty;
+    private string ErrorDialogCss => string.IsNullOrEmpty(_errorDialog) ? "" : "show";
+    private void DismissError() => _errorDialog = string.Empty;
     private bool   _pendingExport = false;
 
     // Context menu
@@ -284,51 +299,9 @@
 
     private void LoadSample()
     {
-        _model = new Section03Model
-        {
-            PrimaryObjectives = new()
-            {
-                new ObjectiveBlock
-                {
-                    ObjectiveText = "To evaluate the efficacy of [treatment] compared to [control] in reducing [primary endpoint] at [timepoint].",
-                    C70833  = "Adult patients aged 18–75 with a diagnosis of [condition]",
-                    C49236  = "[Treatment A] vs [Control/Placebo]",
-                    C25212  = "Change from baseline to Week 24 in [primary outcome measure]",
-                    C188853 = "Difference in mean changes between treatment conditions",
-                    IceRows = new()
-                    {
-                        new IceRow { C188856 = "Premature discontinuation of randomised treatment", C188857 = "Hypothetical strategy: assume patient had remained on treatment" },
-                        new IceRow { C188856 = "Use of rescue medication", C188857 = "While on treatment strategy: data collected while on rescue medication are included" },
-                    }
-                }
-            },
-            SecondaryObjectives = new()
-            {
-                new ObjectiveBlock
-                {
-                    ObjectiveText = "To assess the effect of [treatment] on [secondary endpoint] over [timeframe].",
-                    C70833  = "Same as primary analysis population",
-                    C49236  = "[Treatment A] vs [Control/Placebo]",
-                    C25212  = "Change from baseline to Week 52 in [secondary outcome measure]",
-                    C188853 = string.Empty,
-                    IceRows = new() { new IceRow { C188856 = "Premature discontinuation", C188857 = "Hypothetical strategy" } }
-                }
-            },
-            ExploratoryObjectives = new()
-            {
-                new ObjectiveBlock
-                {
-                    ObjectiveText = "To explore biomarkers that may predict response to [treatment].",
-                    C70833  = "Biomarker-evaluable sub-population",
-                    C49236  = "[Treatment A]",
-                    C25212  = "Correlation of [biomarker] with response at Week 24",
-                    C188853 = string.Empty,
-                    IceRows = new() { new IceRow() }
-                }
-            }
-        };
-        AutoSave();
-        SetStatus("Sample data loaded", 3000);
+        var (model, error) = DataSvc.LoadSection03Sample();
+        if (error != null) { _errorDialog = error; return; }
+        if (model != null) { _model = model; AutoSave(); SetStatus("Sample data loaded", 3000); }
     }
 
     private void ClearAll()
@@ -362,7 +335,7 @@
     private async Task OpenImport()
     {
         try { await JS.InvokeVoidAsync("udpOpenFilePicker"); }
-        catch (Exception ex) { SetStatus("Open file error: " + ex.Message, 4000); }
+        catch (Exception ex) { _errorDialog = "Open file error: " + ex.Message; }
     }
 
 
@@ -383,7 +356,7 @@
             {
                 "csv"  => (DataSvc.ToCsv(_model),       "text/csv",         ".csv"),
                 "txt"  => (DataSvc.ToPlainText(_model),  "text/plain",       ".txt"),
-                "fsh"  => (DataSvc.ToFsh(_model),        "text/fsh",         ".fsh"),
+                "fhir" => (DataSvc.ToFsh(_model),        "text/plain",       ".fsh"),
                 _      => (DataSvc.ToJson(_model),       "application/json", ".json"),
             };
             var fn = (_exportName.Trim().Length > 0 ? _exportName.Trim() : "section3_data") + ext;
@@ -391,7 +364,7 @@
             await JS.InvokeVoidAsync("udpDownload", fn, content, mime);
             SetStatus($"⬇ Downloaded {fn}", 4000);
         }
-        catch (Exception ex) { SetStatus($"Export error: {ex.Message}", 5000); }
+        catch (Exception ex) { _errorDialog = $"Export error: {ex.Message}"; StateHasChanged(); }
     }
 
     private void ForceSave()

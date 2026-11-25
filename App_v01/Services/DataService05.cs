@@ -152,7 +152,7 @@ public class DataService05
             {"C218746",model.C218746},{"C49628",model.C49628},  {"C179373",model.C179373},
         };
         foreach (var (k, v) in fields)
-            main = main.Replace("{{" + k + "}}", v ?? string.Empty);
+            main = main.Replace("{{" + k + "}}", TokenParser.FhirEscape(v));
 
         // Collect row ids
         var inclRowIds = Enumerable.Range(1, Math.Max(1, model.InclRows)).Select(r =>
@@ -202,7 +202,7 @@ public class DataService05
             {"C218746",model.C218746},{"C49628",model.C49628},  {"C179373",model.C179373},
         };
         foreach (var (k, v) in fields)
-            main = main.Replace("{{" + k + "}}", v ?? string.Empty);
+            main = main.Replace("{{" + k + "}}", TokenParser.FhirEscape(v));
 
         var inclRowIds = Enumerable.Range(1, Math.Max(1, model.InclRows)).Select(r =>
         {
@@ -259,7 +259,7 @@ public class DataService05
 
             block = TokenParser.Substitute(block, key =>
                 key == "TABLE_ROW_X" ? rowId :
-                RowFields.Contains(key) ? Get(data, $"{key}_r{r}") :
+                RowFields.Contains(key) ? TokenParser.FhirEscape(Get(data, $"{key}_r{r}")) :
                 null);
 
             blocks.AppendLine(); blocks.Append(block);
@@ -267,10 +267,13 @@ public class DataService05
         return blocks.ToString();
     }
 
-    public Section05Model? LoadSample()
+    public (Section05Model? Model, string? Error) LoadSample()
     {
-        try { return FromJson(File.ReadAllText(Path.Combine(_env.ContentRootPath, "Data", "section_05_sample.json"))); }
-        catch { return null; }
+        var path = Path.Combine(_env.ContentRootPath, "Data", "section_05_sample.json");
+        if (!File.Exists(path))
+            return (null, "Sample data file not found: Data/section_05_sample.json");
+        try { return (FromJson(File.ReadAllText(path)), null); }
+        catch (Exception ex) { return (null, $"Failed to load sample data: {ex.Message}"); }
     }
 
     public Section05Model? FromJson(string json)

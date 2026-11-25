@@ -632,6 +632,53 @@ public class TerminologyService
             }
         });
 
+        // ── Section 12 — Country/Region for country-specific differences ─────────
+        Add(new ValueSet
+        {
+            Id = "m11-country-region-vs",
+            CCode = "C218832",
+            Name = "Country / Region",
+            Description = "ISO 3166-1 alpha-2 country codes used in Section 12.2 country/region-specific differences (M11CountryRegionVS).",
+            Options = new List<PicklistOption>
+            {
+                new() { System = "$iso3166", Code = "AR", Display = "Argentina"       },
+                new() { System = "$iso3166", Code = "AU", Display = "Australia"       },
+                new() { System = "$iso3166", Code = "AT", Display = "Austria"         },
+                new() { System = "$iso3166", Code = "BE", Display = "Belgium"         },
+                new() { System = "$iso3166", Code = "BR", Display = "Brazil"          },
+                new() { System = "$iso3166", Code = "CA", Display = "Canada"          },
+                new() { System = "$iso3166", Code = "CN", Display = "China"           },
+                new() { System = "$iso3166", Code = "CZ", Display = "Czech Republic"  },
+                new() { System = "$iso3166", Code = "DK", Display = "Denmark"         },
+                new() { System = "$iso3166", Code = "FI", Display = "Finland"         },
+                new() { System = "$iso3166", Code = "FR", Display = "France"          },
+                new() { System = "$iso3166", Code = "DE", Display = "Germany"         },
+                new() { System = "$iso3166", Code = "HU", Display = "Hungary"         },
+                new() { System = "$iso3166", Code = "IN", Display = "India"           },
+                new() { System = "$iso3166", Code = "IE", Display = "Ireland"         },
+                new() { System = "$iso3166", Code = "IL", Display = "Israel"          },
+                new() { System = "$iso3166", Code = "IT", Display = "Italy"           },
+                new() { System = "$iso3166", Code = "JP", Display = "Japan"           },
+                new() { System = "$iso3166", Code = "KR", Display = "Korea, Republic" },
+                new() { System = "$iso3166", Code = "MX", Display = "Mexico"          },
+                new() { System = "$iso3166", Code = "NL", Display = "Netherlands"     },
+                new() { System = "$iso3166", Code = "NZ", Display = "New Zealand"     },
+                new() { System = "$iso3166", Code = "NO", Display = "Norway"          },
+                new() { System = "$iso3166", Code = "PL", Display = "Poland"          },
+                new() { System = "$iso3166", Code = "PT", Display = "Portugal"        },
+                new() { System = "$iso3166", Code = "RU", Display = "Russia"          },
+                new() { System = "$iso3166", Code = "ZA", Display = "South Africa"    },
+                new() { System = "$iso3166", Code = "ES", Display = "Spain"           },
+                new() { System = "$iso3166", Code = "SE", Display = "Sweden"          },
+                new() { System = "$iso3166", Code = "CH", Display = "Switzerland"     },
+                new() { System = "$iso3166", Code = "TW", Display = "Taiwan"          },
+                new() { System = "$iso3166", Code = "TR", Display = "Turkey"          },
+                new() { System = "$iso3166", Code = "UA", Display = "Ukraine"         },
+                new() { System = "$iso3166", Code = "GB", Display = "United Kingdom"  },
+                new() { System = "$iso3166", Code = "US", Display = "United States"   },
+            }
+        });
+
         // ── Additional value sets will be added here as the app grows ─────────
     }
 

@@ -349,6 +349,17 @@
     </div>
 </div>
 
+<!-- ── Error dialog modal ── -->
+<div class="overlay @ErrorDialogCss">
+    <div class="dbox">
+        <h3 style="color:#c00;">Error</h3>
+        <p>@_errorDialog</p>
+        <div class="dbr">
+            <button class="btn btn-primary" @onclick="DismissError">OK</button>
+        </div>
+    </div>
+</div>
+
 <div class="sbar">
     <span>Amendment Details &nbsp;|&nbsp; <span style='color:#c8a0e8'>Purple</span> = placeholder &nbsp;|&nbsp; <span style='color:#6dbf6d'>Green</span> = user entry &nbsp;|&nbsp; <span style='background:#f5d0d0;padding:0 3px'>Pink</span> = required &nbsp;|&nbsp; Right-click field for info</span>
     <span>@_status</span>
@@ -364,6 +375,9 @@
     private bool   _showSaveDialog = false;
     private string _saveFileName   = "amendment_data";
     private string _saveFormat     = "json";
+    private string _errorDialog    = string.Empty;
+    private string ErrorDialogCss  => string.IsNullOrEmpty(_errorDialog) ? "" : "show";
+    private void DismissError()    => _errorDialog = string.Empty;
     private string _ctxFieldName     = string.Empty;
     private string _ctxM11Name       = string.Empty;
     private string _ctxGuidance      = string.Empty;
@@ -483,9 +497,10 @@
 
     private void LoadSample()
     {
-        var first = Store.LoadSample();
-        SelectRecord(first.Id);
-        SetStatus("✓ Sample data loaded — 2 amendments created");
+        var (first, error) = Store.LoadSample();
+        if (error != null) { _errorDialog = error; return; }
+        SelectRecord(first!.Id);
+        SetStatus("✓ Sample data loaded — 3 amendments created");
     }
 
     private void RenameAndSave(string? name)
@@ -615,7 +630,7 @@
         {
             var opts = new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true };
             var rec  = System.Text.Json.JsonSerializer.Deserialize<AmendmentRecord>(json, opts);
-            if (rec == null) { SetStatus("⚠ Could not read file"); return; }
+            if (rec == null) { _errorDialog = "Could not read file — the JSON may be malformed."; return; }
             // Add as a new amendment or replace current if names match
             var existing = Store.GetById(rec.Id);
             if (existing != null)
@@ -631,7 +646,7 @@
             SetStatus("⬆ Loaded from file");
             InvokeAsync(StateHasChanged);
         }
-        catch { SetStatus("⚠ Invalid file format"); }
+        catch { _errorDialog = "Invalid file format — could not parse the uploaded file."; }
     }
 
     // Add a loaded record: Store.Add() generates a fresh Id, so we override the

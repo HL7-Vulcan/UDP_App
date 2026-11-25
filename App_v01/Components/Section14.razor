@@ -46,11 +46,6 @@
     .ctx-guide strong { color:#1f3864; }
 </style>
 
-@if (!string.IsNullOrEmpty(ErrorMessage))
-{
-    <div class="err">⚠ @ErrorMessage</div>
-}
-
 <div class="doc-page">
     <div class="h1">14.&nbsp;&nbsp;APPENDIX: REFERENCES</div>
     <div class="h2">References</div>
@@ -113,6 +108,18 @@
     </div>
 </div>
 
+
+<!-- ── Sample data error modal ──────────────────────────────────────────── -->
+<div class="overlay @ErrorDialogCss">
+    <div class="dbox">
+        <h3 style="color:#c00;">Error</h3>
+        <p>@_errorDialog</p>
+        <div class="dbr">
+            <button class="btn btn-primary" @onclick="DismissError">OK</button>
+        </div>
+    </div>
+</div>
+
 <!-- ── Clear confirmation modal ──────────────────────────────────────────── -->
 <div class="overlay @(_showClearConfirm ? "show" : "")">
     <div class="dbox">
@@ -140,7 +147,9 @@
     private string SaveFormat     = "fhir-pipeline";
     private string StatusMessage  = string.Empty;
     private string ReqDialogMsg   = string.Empty;
-    private string ErrorMessage   = string.Empty;
+    private string _errorDialog = string.Empty;
+    private string ErrorDialogCss => string.IsNullOrEmpty(_errorDialog) ? "" : "show";
+    private void DismissError() => _errorDialog = string.Empty;
     private string? PendingAction = null;
     private FhirPipelineDialog _pipeline = default!;
     private System.Threading.Timer? _statusTimer;
@@ -173,16 +182,16 @@
     private void DoClearAll()
     {
         _showClearConfirm = false;
-        Model = new Section14Model(); ShowValidation = false; ErrorMessage = string.Empty;
+        Model = new Section14Model(); ShowValidation = false; _errorDialog = string.Empty;
         _ = JS.InvokeVoidAsync("localStorage.removeItem", "s14data");
         SetStatus("Cleared");
     }
 
     private void LoadSample()
     {
-        var s = DataSvc.LoadSample();
-        if (s != null) { Model = s; ShowValidation = false; AutoSave(); SetStatus("Sample data loaded"); }
-        else ErrorMessage = "Could not load sample data.";
+        var (model, error) = DataSvc.LoadSample();
+        if (error != null) { _errorDialog = error; return; }
+        if (model != null) { Model = model; ShowValidation = false; AutoSave(); SetStatus("Sample data loaded"); }
     }
 
     private void OpenSaveDialog()
@@ -257,7 +266,7 @@
         }
         catch (JSDisconnectedException) { }
         catch (TaskCanceledException)   { }
-        catch (Exception ex) { ErrorMessage = "Init error: " + ex.Message; StateHasChanged(); }
+        catch (Exception ex) { _errorDialog = "Init error: " + ex.Message; StateHasChanged(); }
     }
 
     private void SetStatus(string msg)

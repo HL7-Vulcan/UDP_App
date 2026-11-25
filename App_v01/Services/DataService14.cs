@@ -36,15 +36,20 @@ public class DataService14
         try { return File.ReadAllText(path).Replace("{{C184397}}", m.C184397 ?? string.Empty); }
         catch { return "// Section 14 FSH template not found."; }
     }
-    public Section14Model? LoadSample()
+    public (Section14Model? Model, string? Error) LoadSample()
     {
         var path = Path.Combine(_env.ContentRootPath, "Data", "section_14_sample.json");
-        try { if (File.Exists(path)) return JsonSerializer.Deserialize<Section14Model>(File.ReadAllText(path), JsonOpts); }
-        catch { }
-        return new Section14Model
+        if (!File.Exists(path))
+            return (null, "Sample data file not found: Data/section_14_sample.json");
+        try
         {
-            C184397 = "1. ICH E6(R2) Good Clinical Practice: Integrated Addendum. International Council for Harmonisation of Technical Requirements for Pharmaceuticals for Human Use; 2016.\n2. World Medical Association. Declaration of Helsinki: Ethical Principles for Medical Research Involving Human Subjects. JAMA. 2013;310(20):2191–2194.\n3. ICH E9(R1) Statistical Principles for Clinical Trials: Addendum on Estimands and Sensitivity Analysis. International Council for Harmonisation; 2019."
-        };
+            var model = JsonSerializer.Deserialize<Section14Model>(File.ReadAllText(path), JsonOpts);
+            return (model, null);
+        }
+        catch (Exception ex)
+        {
+            return (null, $"Failed to load sample data: {ex.Message}");
+        }
     }
     private static string CsvEscape(string v) =>
         (v.Contains(',') || v.Contains('"') || v.Contains('\n')) ? "\"" + v.Replace("\"", "\"\"") + "\"" : v;
