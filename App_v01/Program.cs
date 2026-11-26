@@ -30,6 +30,7 @@ builder.Services.AddScoped<UDP_App.Services.BuildService>();
 builder.Services.AddScoped<UDP_App.Services.FhirPipelineService>();
 builder.Services.AddScoped<UDP_App.Services.AmendmentStore>();
 builder.Services.AddSingleton<UDP_App.Services.FhirQuantityService>();
+builder.Services.AddScoped<UDP_App.Services.WordDocService>();
 
 var app = builder.Build();
 

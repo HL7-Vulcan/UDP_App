@@ -1,0 +1,9 @@
+{
+  "name": "udp-docx-scripts",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Server-side Word document generation scripts for UDP App",
+  "dependencies": {
+    "docx": "9.16.1"
+  }
+}

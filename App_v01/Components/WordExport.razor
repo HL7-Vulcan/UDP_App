@@ -1,0 +1,400 @@
+@page "/word-export"
+@rendermode InteractiveServer
+@using UDP_App.Services
+@inject WordDocService WordSvc
+@inject IJSRuntime JS
+
+<PageTitle>Word Export – UDP App</PageTitle>
+
+<style>
+    .we-page { max-width: 860px; margin: 0 auto; padding: 32px 24px 80px; font-family: 'Calibri', Arial, sans-serif; }
+    .we-page h1 { font-family: 'Times New Roman', serif; font-size: 20pt; font-weight: 700; margin-bottom: 8px; color: #1f3864; }
+    .we-page .subtitle { font-size: 10.5pt; color: #555; margin-bottom: 32px; }
+
+    .we-btn { padding: 6px 14px; border: none; border-radius: 4px; font-size: 9pt; font-family: inherit; cursor: pointer; white-space: nowrap; }
+    .we-btn-primary   { background: #1f3864; color: #fff; }
+    .we-btn-primary:hover   { background: #162a4e; }
+    .we-btn-secondary { background: #e9ecef; color: #333; border: 1px solid #ccc; }
+    .we-btn-secondary:hover { background: #dee2e6; }
+    .we-btn-success   { background: #198754; color: #fff; }
+    .we-btn-success:hover   { background: #157347; }
+    .we-btn-amend     { background: #4a235a; color: #fff; }
+    .we-btn-amend:hover     { background: #371844; }
+    .we-btn:disabled  { opacity: 0.5; cursor: default; }
+
+    /* Export list */
+    .we-list { list-style: none; margin: 0; padding: 0; }
+    .we-list-item { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 10px 14px; border-radius: 5px; }
+    .we-list-item:hover { background: #f0f4fa; }
+    .we-list-item.we-item-featured { background: #eaf1fb; border: 1px solid #c3d4ee; padding: 14px 18px; }
+    .we-list-item.we-item-amend   { background: #f5edf9; border: 1px solid #d8bfe8; padding: 14px 18px; }
+    .we-item-label { font-size: 10.5pt; font-weight: 600; color: #1f3864; }
+    .we-item-featured .we-item-label { font-size: 11.5pt; font-weight: 700; }
+    .we-item-amend .we-item-label   { font-size: 11.5pt; font-weight: 700; color: #4a235a; }
+    .we-divider { border: none; border-top: 1px dashed #bbb; margin: 10px 0; }
+
+    .alert-info { background: #cff4fc; border: 1px solid #b6effb; color: #055160; padding: 12px 16px; border-radius: 6px; font-size: 9.5pt; margin-bottom: 20px; }
+    .alert-warn { background: #fff3cd; border: 1px solid #ffc107; color: #856404; padding: 12px 16px; border-radius: 6px; font-size: 9.5pt; margin-bottom: 20px; }
+    .alert-err  { background: #f8d7da; border: 1px solid #f5c2c7; color: #842029; padding: 12px 16px; border-radius: 6px; font-size: 9.5pt; margin-bottom: 20px; }
+
+    /* Modal overlay */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 500; align-items: center; justify-content: center; }
+    .modal-overlay.show { display: flex; }
+    .modal-box { background: #fff; border-radius: 8px; box-shadow: 0 8px 48px rgba(0,0,0,0.3); width: 90vw; max-width: 900px; max-height: 90vh; display: flex; flex-direction: column; overflow: hidden; }
+    .modal-header { background: #1f3864; color: #fff; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+    .modal-header h3 { margin: 0; font-size: 12pt; font-weight: 700; }
+    .modal-close { background: none; border: none; color: #fff; font-size: 18px; cursor: pointer; padding: 0 4px; line-height: 1; }
+    .modal-body { flex: 1; overflow-y: auto; padding: 24px; min-height: 200px; }
+    .modal-footer { padding: 14px 20px; border-top: 1px solid #e0e0e0; display: flex; justify-content: flex-end; gap: 10px; flex-shrink: 0; }
+
+    /* Document preview styles inside modal */
+    .doc-preview { font-family: 'Calibri', Arial, sans-serif; font-size: 11pt; color: #000; max-width: 700px; margin: 0 auto; }
+    .doc-preview h1 { font-family: 'Times New Roman', serif; font-size: 14pt; font-weight: 700; margin: 0 0 18px; border-bottom: 2px solid #1f3864; padding-bottom: 8px; }
+    .doc-preview h2 { font-family: 'Times New Roman', serif; font-size: 14pt; font-weight: 700; margin: 28px 0 10px; color: #1f3864; }
+    .doc-preview h3 { font-family: 'Times New Roman', serif; font-size: 12pt; font-weight: 700; margin: 18px 0 8px; }
+    .doc-preview p  { margin: 0 0 8px; line-height: 1.5; }
+    .doc-preview .lbl { font-size: 10pt; font-weight: 700; color: #444; margin: 12px 0 2px; }
+    .doc-preview .page-sep { border: none; border-top: 2px dashed #ccc; margin: 32px 0; }
+
+    .spinner { display: inline-block; width: 18px; height: 18px; border: 3px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; margin-right: 6px; }
+    .spinner-dark { border-color: rgba(31,56,100,0.3); border-top-color: #1f3864; }
+    @@keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Preview table styles — mirror Word document table layout */
+    .prev-tbl2, .prev-tbl2e, .prev-tbl3, .prev-tbl4 { width: 100%; border-collapse: collapse; margin: 6px 0 14px; font-size: 10.5pt; }
+    .prev-tbl2 td, .prev-tbl2e td, .prev-tbl2e th, .prev-tbl3 td, .prev-tbl3 th, .prev-tbl4 td { border: 1px solid #bbb; padding: 4px 8px; vertical-align: top; }
+    .prev-tbl2 td.prev-lbl, .prev-tbl4 td.prev-lbl { background: #eef2fa; font-weight: 700; color: #333; }
+    .prev-tbl2e th { background: #eef2fa; font-weight: 700; text-align: left; width: 50%; }
+    .prev-tbl2e td { width: 50%; }
+    .prev-tbl2 td.prev-lbl { width: 36%; }
+    .prev-tbl4 td.prev-lbl { width: 18%; }
+    .prev-tbl4 td:not(.prev-lbl) { width: 32%; }
+    .prev-tbl3 th { background: #eef2fa; font-weight: 700; text-align: left; }
+    .prev-tbl3 td:first-child { width: 38%; }
+    .prev-tbl3 td:nth-child(2) { width: 32%; }
+    .prev-tbl3 td:nth-child(3) { width: 30%; }
+</style>
+
+@if (_error != null)
+{
+    <div class="alert-err"><strong>Error:</strong> @_error</div>
+}
+
+<div class="we-page">
+    <h1>Word Document Export</h1>
+    <p class="subtitle">Generate a Word (.docx) file for each protocol section. Use the section buttons to export a single section, or export the whole protocol in one document.</p>
+
+    <ul class="we-list">
+        <!-- Complete protocol -->
+        <li class="we-list-item we-item-featured">
+            <span class="we-item-label">Complete Protocol Document</span>
+            <button class="we-btn we-btn-success" @onclick="GenerateAll" disabled="@_busy">
+                @if (_busy && _activeKey == "all") { <span class="spinner spinner-dark" style="border-top-color:#fff"></span> }
+                Export All
+            </button>
+        </li>
+
+        <li><hr class="we-divider" /></li>
+
+        <!-- Per-section list -->
+        @foreach (var s in _sections)
+        {
+            <li class="we-list-item">
+                <span class="we-item-label">@s.Label</span>
+                <button class="we-btn we-btn-primary" @onclick="() => GenerateDoc(s.Key)" disabled="@_busy">
+                    @if (_busy && _activeKey == s.Key) { <span class="spinner"></span> }
+                    Export
+                </button>
+            </li>
+        }
+
+        <li><hr class="we-divider" /></li>
+
+        <!-- Amendment details -->
+        <li class="we-list-item we-item-amend">
+            <span class="we-item-label">Amendment Details</span>
+            <button class="we-btn we-btn-amend" @onclick="GenerateAmendments" disabled="@_busy">
+                @if (_busy && _activeKey == "amendments") { <span class="spinner"></span> }
+                Export
+            </button>
+        </li>
+    </ul>
+</div>
+
+<!-- Preview / download modal -->
+<div class="modal-overlay @(_showModal ? "show" : "")">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3>@_modalTitle</h3>
+            <button class="modal-close" @onclick="CloseModal">✕</button>
+        </div>
+        <div class="modal-body">
+            @if (_previewBlocks.Count > 0)
+            {
+                <div class="doc-preview">
+                    @{
+                        int pi = 0;
+                        while (pi < _previewBlocks.Count)
+                        {
+                            var b = _previewBlocks[pi];
+                            if (b.Type == "tableRow")
+                            {
+                                // Collect consecutive tableRow blocks into one HTML table
+                                <table class="prev-tbl2">
+                                @while (pi < _previewBlocks.Count && _previewBlocks[pi].Type == "tableRow")
+                                {
+                                    var r = _previewBlocks[pi];
+                                    <tr><td class="prev-lbl">@r.Label</td><td>@r.Text</td></tr>
+                                    pi++;
+                                }
+                                </table>
+                            }
+                            else if (b.Type == "tableRow4" || b.Type == "tableRow4span")
+                            {
+                                <table class="prev-tbl4">
+                                @while (pi < _previewBlocks.Count && (_previewBlocks[pi].Type == "tableRow4" || _previewBlocks[pi].Type == "tableRow4span"))
+                                {
+                                    var r = _previewBlocks[pi];
+                                    if (r.Type == "tableRow4span")
+                                    {
+                                        <tr><td class="prev-lbl">@r.Label</td><td colspan="3">@r.Text</td></tr>
+                                    }
+                                    else
+                                    {
+                                        <tr><td class="prev-lbl">@r.Label</td><td>@r.Text</td><td class="prev-lbl">@r.Col3</td><td>@r.Col4</td></tr>
+                                    }
+                                    pi++;
+                                }
+                                </table>
+                            }
+                            else if (b.Type == "tableRow2h" || b.Type == "tableRow2")
+                            {
+                                // 2-col equal-width table (e.g. ICE table)
+                                <table class="prev-tbl2e">
+                                @while (pi < _previewBlocks.Count && (_previewBlocks[pi].Type == "tableRow2" || _previewBlocks[pi].Type == "tableRow2h"))
+                                {
+                                    var r = _previewBlocks[pi];
+                                    if (r.Type == "tableRow2h")
+                                    {
+                                        <tr><th>@r.Col1</th><th>@r.Col2</th></tr>
+                                    }
+                                    else
+                                    {
+                                        <tr><td>@r.Col1</td><td>@r.Col2</td></tr>
+                                    }
+                                    pi++;
+                                }
+                                </table>
+                            }
+                            else if (b.Type == "tableRow3h" || b.Type == "tableRow3")
+                            {
+                                // Collect consecutive tableRow3/tableRow3h blocks into one HTML table
+                                <table class="prev-tbl3">
+                                @while (pi < _previewBlocks.Count && (_previewBlocks[pi].Type == "tableRow3" || _previewBlocks[pi].Type == "tableRow3h"))
+                                {
+                                    var r = _previewBlocks[pi];
+                                    if (r.Type == "tableRow3h")
+                                    {
+                                        <tr class="prev-th"><th>@r.Col1</th><th>@r.Col2</th><th>@r.Col3</th></tr>
+                                    }
+                                    else
+                                    {
+                                        <tr><td>@r.Col1</td><td>@r.Col2</td><td>@r.Col3</td></tr>
+                                    }
+                                    pi++;
+                                }
+                                </table>
+                            }
+                            else
+                            {
+                                if (b.Type == "h1") { <h1>@b.Text</h1> }
+                                else if (b.Type == "h2") { <h2>@b.Text</h2> }
+                                else if (b.Type == "h3") { <h3>@b.Text</h3> }
+                                else if (b.Type == "label") { <div class="lbl">@b.Text</div> }
+                                else if (b.Type == "pageBreak") { <hr class="page-sep" /> }
+                                else { <p>@b.Text</p> }
+                                pi++;
+                            }
+                        }
+                    }
+                </div>
+            }
+        </div>
+        <div class="modal-footer">
+            <button class="we-btn we-btn-secondary" @onclick="CloseModal">Close</button>
+            <button class="we-btn we-btn-primary" @onclick="DownloadCurrentDoc" disabled="@(_docBytes == null)">
+                ⬇ Download .docx
+            </button>
+        </div>
+    </div>
+</div>
+
+@code {
+    // ── Section registry ─────────────────────────────────────────────────────
+    private record SectionDef(string Key, string Label);
+
+    private static readonly SectionDef[] _sections =
+    [
+        new("tp",  "Title Page"),
+        new("s1",  "Section 01"),
+        new("s2",  "Section 02"),
+        new("s3",  "Section 03"),
+        new("s4",  "Section 04"),
+        new("s5",  "Section 05"),
+        new("s6",  "Section 06"),
+        new("s7",  "Section 07"),
+        new("s8",  "Section 08"),
+        new("s9",  "Section 09"),
+        new("s10", "Section 10"),
+        new("s11", "Section 11"),
+        new("s12", "Section 12"),
+        new("s13", "Section 13"),
+        new("s14", "Section 14"),
+    ];
+
+    // ── State ────────────────────────────────────────────────────────────────
+    private Dictionary<string, string> _jsonByKey    = new();
+    private bool   _busy        = false;
+    private string _activeKey   = string.Empty;
+    private string? _error;
+    private bool   _showModal   = false;
+    private string _modalTitle  = string.Empty;
+    private byte[]? _docBytes   = null;
+    private string  _docFilename = "protocol.docx";
+
+    // Preview model — typed blocks shown in the modal; mirrors DocBlockPreview from WordDocService
+    private List<WordDocService.DocBlockPreview> _previewBlocks = new();
+
+    // ── Lifecycle ────────────────────────────────────────────────────────────
+    protected override void OnInitialized()
+    {
+        // Load all sample JSON from server-side Data/ files — no browser storage needed
+        _jsonByKey = WordSvc.GetAllSampleJson();
+    }
+
+    // ── Generate ─────────────────────────────────────────────────────────────
+    private Task GenerateAll()       => GenerateDoc("all");
+    private Task GenerateAmendments() => GenerateDoc("amendments");
+
+    private async Task GenerateDoc(string key)
+    {
+        _busy = true; _activeKey = key; _error = null;
+        StateHasChanged();
+
+        try
+        {
+            byte[]? bytes = null;
+            string? error = null;
+            string title;
+            string filename;
+
+            if (key == "all")
+            {
+                (bytes, error) = await WordSvc.GenerateAll(_jsonByKey);
+                title    = "Complete Protocol";
+                filename = "Protocol_AllSections.docx";
+            }
+            else if (key == "amendments")
+            {
+                (bytes, error) = await WordSvc.GenerateAmendments();
+                title    = "Amendment Details";
+                filename = "Amendment_Details.docx";
+            }
+            else
+            {
+                if (!_jsonByKey.TryGetValue(key, out var json) || string.IsNullOrWhiteSpace(json))
+                { _error = "No sample data available for this section."; return; }
+
+                (bytes, error) = await WordSvc.GenerateSection(key, json);
+                var label = _sections.First(s => s.Key == key).Label;
+                title    = label;
+                filename = $"{label.Replace(" ", "_")}.docx";
+            }
+
+            if (error != null) { _error = error; return; }
+
+            _docBytes      = bytes;
+            _docFilename   = filename;
+            _modalTitle    = title;
+            _previewBlocks = BuildPreview(key);
+            _showModal     = true;
+        }
+        finally
+        {
+            _busy = false; _activeKey = string.Empty;
+            StateHasChanged();
+        }
+    }
+
+    // ── Preview builder ───────────────────────────────────────────────────────
+    // Shows a styled preview of what the Word document will contain.
+    // Reuses the same block-building logic as the service (via WordDocService's
+    // GetPreviewBlocks), keeping the preview and document in sync.
+    private List<WordDocService.DocBlockPreview> BuildPreview(string key)
+    {
+        var items = new List<WordDocService.DocBlockPreview>();
+        try
+        {
+            if (key == "all")
+            {
+                items.Add(new("h1", "Complete Protocol Document"));
+                foreach (var s in _sections)
+                {
+                    if (!_jsonByKey.TryGetValue(s.Key, out var json)) continue;
+                    var blocks = WordSvc.GetPreviewBlocks(s.Key, json);
+                    if (blocks != null)
+                    {
+                        if (items.Count > 1) items.Add(new("pageBreak", null));
+                        items.AddRange(blocks);
+                    }
+                }
+            }
+            else if (key == "amendments")
+            {
+                var blocks = WordSvc.GetAmendmentPreviewBlocks();
+                items.AddRange(blocks);
+                if (items.Count == 0)
+                {
+                    items.Add(new("h1", "Amendment Details"));
+                    items.Add(new("para", "No amendment data found."));
+                }
+            }
+            else
+            {
+                if (_jsonByKey.TryGetValue(key, out var json))
+                {
+                    var blocks = WordSvc.GetPreviewBlocks(key, json);
+                    if (blocks != null)
+                        items.AddRange(blocks);
+                }
+                if (items.Count == 0)
+                {
+                    var label = _sections.First(s => s.Key == key).Label;
+                    items.Add(new("h2", label));
+                    items.Add(new("para", "Document generated successfully. Click Download to save the Word document."));
+                }
+            }
+        }
+        catch
+        {
+            items.Add(new("para", "Preview unavailable. Click Download to save the Word document."));
+        }
+        return items;
+    }
+
+    // ── Download ─────────────────────────────────────────────────────────────
+    private async Task DownloadCurrentDoc()
+    {
+        if (_docBytes == null) return;
+        var base64 = Convert.ToBase64String(_docBytes);
+        await JS.InvokeVoidAsync("downloadBase64File", _docFilename,
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document", base64);
+    }
+
+    private void CloseModal()
+    {
+        _showModal = false;
+        _docBytes  = null;
+        _previewBlocks.Clear();
+    }
+}

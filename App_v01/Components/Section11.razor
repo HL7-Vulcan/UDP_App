@@ -12,10 +12,12 @@
 
 <style>
     .doc-page { background:#fff; width:794px; min-height:1123px; margin:30px auto 80px; padding:72px; box-shadow:0 4px 24px rgba(0,0,0,0.18); font-family:'Calibri',Arial,sans-serif; font-size:11pt; color:#000; }
-    .h1 { font-family:'Times New Roman',Times,serif; font-size:14pt; font-weight:700; margin:0 0 18px; }
-    .h2 { font-family:'Times New Roman',Times,serif; font-size:14pt; font-weight:700; margin:24px 0 10px; }
+    .h1  { font-family:'Times New Roman',Times,serif; font-size:14pt; font-weight:700; margin:0 0 18px; }
+    .h2  { font-family:'Times New Roman',Times,serif; font-size:14pt; font-weight:700; margin:28px 0 10px; }
+    .h3  { font-family:'Times New Roman',Times,serif; font-size:12pt; font-weight:700; margin:18px 0 8px; }
+    .guidance { font-size:10pt; color:#555; font-style:italic; margin-bottom:6px; }
     .field-wrap { position:relative; margin-bottom:10px; }
-    textarea.fb { display:block; width:100%; background:#d0cece; color:#1a7a1a; border:none; border-bottom:1.5px solid #999; font-family:'Calibri',Arial,sans-serif; font-size:11pt; line-height:1.4; padding:4px 6px; outline:none; resize:vertical; min-height:120px; }
+    textarea.fb { display:block; width:100%; background:#d0cece; color:#1a7a1a; border:none; border-bottom:1.5px solid #999; font-family:'Calibri',Arial,sans-serif; font-size:11pt; line-height:1.4; padding:4px 6px; outline:none; resize:vertical; min-height:80px; }
     textarea.fb:focus { background:#bfbcbc; }
     textarea.fb::placeholder { color:#9a7ab5; font-style:italic; }
     textarea.fb.req-empty { border-bottom:2px solid #c00; background:#f5d0d0; }
@@ -23,6 +25,7 @@
     .btn { padding:7px 20px; border:none; border-radius:3px; font-size:10pt; font-family:inherit; cursor:pointer; }
     .btn-primary   { background:#1f3864; color:#fff; } .btn-primary:hover { background:#162a4e; }
     .btn-secondary { background:#eee; color:#333; border:1px solid #ccc; } .btn-secondary:hover { background:#ddd; }
+    .btn-danger    { background:#c00; color:#fff; } .btn-danger:hover { background:#a00; }
     .overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:200; align-items:center; justify-content:center; }
     .overlay.show { display:flex; }
     .dbox { background:#fff; border-radius:6px; padding:28px 32px; width:400px; box-shadow:0 8px 40px rgba(0,0,0,0.25); }
@@ -48,12 +51,205 @@
 
 <div class="doc-page">
     <div class="h1">11.&nbsp;&nbsp;TRIAL OVERSIGHT AND OTHER GENERAL CONSIDERATIONS</div>
+
+    <!-- 11.1 Regulatory and Ethical Considerations -->
     <div class="h2">11.1&nbsp;&nbsp;Regulatory and Ethical Considerations</div>
+    <div class="guidance">Provide a high-level statement on the prevailing ethical, legal, and regulatory guidelines that will be applied throughout the trial.</div>
     <div class="field-wrap">
-        <textarea data-ctx="C218811" class="@ReqClass(Model.C218811)" rows="12"
+        <textarea data-ctx="C218811" class="@ReqClass(Model.C218811)" rows="8"
             placeholder="Describe regulatory and ethical considerations (required)"
             @bind="Model.C218811" @bind:event="oninput" @bind:after="AutoSave"></textarea>
     </div>
+
+    <!-- 11.2 Trial Oversight -->
+    <div class="h2">11.2&nbsp;&nbsp;Trial Oversight</div>
+    <div class="guidance">Concisely summarise the trial oversight. Use this field OR the 11.2.1/11.2.2 subheadings below, not both.</div>
+    <div class="field-wrap">
+        <textarea data-ctx="C218812" class="fb" rows="5"
+            placeholder="Enter trial oversight summary (optional — use instead of 11.2.1/11.2.2 if preferred)"
+            @bind="Model.C218812" @bind:event="oninput" @bind:after="AutoSave"></textarea>
+    </div>
+
+    <div class="h3">11.2.1&nbsp;&nbsp;Investigator Responsibilities</div>
+    <div class="guidance">Describe the investigator responsibilities, including oversight of delegated activities.</div>
+    <div class="field-wrap">
+        <textarea data-ctx="C218813" class="fb" rows="5"
+            placeholder="Enter investigator responsibilities (optional)"
+            @bind="Model.C218813" @bind:event="oninput" @bind:after="AutoSave"></textarea>
+    </div>
+
+    <div class="h3">11.2.2&nbsp;&nbsp;Sponsor Responsibilities</div>
+    <div class="guidance">Describe the sponsor responsibilities, including activities transferred to a third party.</div>
+    <div class="field-wrap">
+        <textarea data-ctx="C218814" class="fb" rows="5"
+            placeholder="Enter sponsor responsibilities (optional)"
+            @bind="Model.C218814" @bind:event="oninput" @bind:after="AutoSave"></textarea>
+    </div>
+
+    <!-- 11.3 Informed Consent Process -->
+    <div class="h2">11.3&nbsp;&nbsp;Informed Consent Process</div>
+    <div class="guidance">Specify the key elements of the informed consent process, including any special needs.</div>
+
+    <div class="h3">Informed Consent</div>
+    <div class="field-wrap">
+        <textarea data-ctx="C184390" class="@ReqClass(Model.C184390)" rows="6"
+            placeholder="Describe the informed consent process (required)"
+            @bind="Model.C184390" @bind:event="oninput" @bind:after="AutoSave"></textarea>
+    </div>
+
+    <div class="h3">Assent</div>
+    <div class="field-wrap">
+        <textarea data-ctx="C218815" class="fb" rows="4"
+            placeholder="Describe the assent process (optional)"
+            @bind="Model.C218815" @bind:event="oninput" @bind:after="AutoSave"></textarea>
+    </div>
+
+    <div class="h3">Emergency Consent</div>
+    <div class="guidance">If enrollment may occur during an emergency, describe the consent process.</div>
+    <div class="field-wrap">
+        <textarea data-ctx="C218816" class="fb" rows="4"
+            placeholder="Describe the emergency consent process (optional)"
+            @bind="Model.C218816" @bind:event="oninput" @bind:after="AutoSave"></textarea>
+    </div>
+
+    <!-- 11.3.1 Informed Consent for Rescreening -->
+    <div class="h2">11.3.1&nbsp;&nbsp;Informed Consent for Rescreening</div>
+    <div class="guidance">If participants can be rescreened, state whether a new ICF is required.</div>
+    <div class="field-wrap">
+        <textarea data-ctx="C218817" class="fb" rows="4"
+            placeholder="Enter informed consent for rescreening (optional)"
+            @bind="Model.C218817" @bind:event="oninput" @bind:after="AutoSave"></textarea>
+    </div>
+
+    <!-- 11.3.2 Informed Consent for Use of Remaining Samples -->
+    <div class="h2">11.3.2&nbsp;&nbsp;Informed Consent for Use of Remaining Samples in Exploratory Research</div>
+    <div class="guidance">If participants will be asked to consent to optional exploratory research, describe the consent process.</div>
+    <div class="field-wrap">
+        <textarea data-ctx="C218818" class="fb" rows="4"
+            placeholder="Enter informed consent for use of remaining samples (optional)"
+            @bind="Model.C218818" @bind:event="oninput" @bind:after="AutoSave"></textarea>
+    </div>
+
+    <!-- 11.4 Committees -->
+    <div class="h2">11.4&nbsp;&nbsp;Committees</div>
+    <div class="guidance">Briefly describe the administrative structure of committees reviewing data while the trial is ongoing.</div>
+    <div class="field-wrap">
+        <textarea data-ctx="C218819" class="@ReqClass(Model.C218819)" rows="5"
+            placeholder="Describe committees (required)"
+            @bind="Model.C218819" @bind:event="oninput" @bind:after="AutoSave"></textarea>
+    </div>
+
+    <!-- 11.5 Insurance and Indemnity -->
+    <div class="h2">11.5&nbsp;&nbsp;Insurance and Indemnity</div>
+    <div class="guidance">Concisely summarise the arrangements for participant insurance and indemnity.</div>
+    <div class="field-wrap">
+        <textarea data-ctx="C218820" class="@ReqClass(Model.C218820)" rows="4"
+            placeholder="Describe insurance and indemnity arrangements (required)"
+            @bind="Model.C218820" @bind:event="oninput" @bind:after="AutoSave"></textarea>
+    </div>
+
+    <!-- 11.6 Risk-Based Quality Management -->
+    <div class="h2">11.6&nbsp;&nbsp;Risk-Based Quality Management</div>
+    <div class="guidance">Describe critical-to-quality factors, associated risks, and risk mitigation strategies.</div>
+    <div class="field-wrap">
+        <textarea data-ctx="C218821" class="@ReqClass(Model.C218821)" rows="6"
+            placeholder="Describe risk-based quality management (required)"
+            @bind="Model.C218821" @bind:event="oninput" @bind:after="AutoSave"></textarea>
+    </div>
+
+    <!-- 11.7 Data Governance -->
+    <div class="h2">11.7&nbsp;&nbsp;Data Governance</div>
+    <div class="guidance">Describe the key systems and processes for critical trial integrity, traceability and security.</div>
+    <div class="field-wrap">
+        <textarea data-ctx="C218822" class="@ReqClass(Model.C218822)" rows="6"
+            placeholder="Describe data governance (required)"
+            @bind="Model.C218822" @bind:event="oninput" @bind:after="AutoSave"></textarea>
+    </div>
+
+    <!-- 11.8 Data Protection -->
+    <div class="h2">11.8&nbsp;&nbsp;Data Protection</div>
+    <div class="guidance">Describe measures to protect the privacy and confidentiality of personal information.</div>
+    <div class="field-wrap">
+        <textarea data-ctx="C218823" class="@ReqClass(Model.C218823)" rows="5"
+            placeholder="Describe data protection measures (required)"
+            @bind="Model.C218823" @bind:event="oninput" @bind:after="AutoSave"></textarea>
+    </div>
+
+    <!-- 11.9 Source Records -->
+    <div class="h2">11.9&nbsp;&nbsp;Source Records</div>
+    <div class="guidance">State the importance of source records and expectations for traceability and direct access.</div>
+    <div class="field-wrap">
+        <textarea data-ctx="C218824" class="@ReqClass(Model.C218824)" rows="5"
+            placeholder="Enter source records introduction (required)"
+            @bind="Model.C218824" @bind:event="oninput" @bind:after="AutoSave"></textarea>
+    </div>
+
+    <div class="h3">Investigator Expectations</div>
+    <div class="field-wrap">
+        <textarea data-ctx="C218825" class="@ReqClass(Model.C218825)" rows="4"
+            placeholder="Enter investigator expectations for source records (required)"
+            @bind="Model.C218825" @bind:event="oninput" @bind:after="AutoSave"></textarea>
+    </div>
+
+    <div class="h3">Trial Monitor Expectations</div>
+    <div class="field-wrap">
+        <textarea data-ctx="C218826" class="@ReqClass(Model.C218826)" rows="4"
+            placeholder="Enter trial monitor expectations for source records (required)"
+            @bind="Model.C218826" @bind:event="oninput" @bind:after="AutoSave"></textarea>
+    </div>
+
+    <div class="h3">Record Identification</div>
+    <div class="field-wrap">
+        <textarea data-ctx="C222675" class="@ReqClass(Model.C222675)" rows="4"
+            placeholder="Enter identification of source records (required)"
+            @bind="Model.C222675" @bind:event="oninput" @bind:after="AutoSave"></textarea>
+    </div>
+
+    <!-- 11.10 Protocol Deviations -->
+    <div class="h2">11.10&nbsp;&nbsp;Protocol Deviations</div>
+    <div class="guidance">Describe plans for detecting, reviewing, and reporting any deviations from the protocol.</div>
+    <div class="field-wrap">
+        <textarea data-ctx="C218827" class="@ReqClass(Model.C218827)" rows="5"
+            placeholder="Describe protocol deviations plan (required)"
+            @bind="Model.C218827" @bind:event="oninput" @bind:after="AutoSave"></textarea>
+    </div>
+
+    <!-- 11.11 Early Site Closure -->
+    <div class="h2">11.11&nbsp;&nbsp;Early Site Closure</div>
+
+    <div class="h3">Decision Rights</div>
+    <div class="guidance">List the sponsor's rights and the investigator's rights to initiate early site closure.</div>
+    <div class="field-wrap">
+        <textarea data-ctx="C218828" class="@ReqClass(Model.C218828)" rows="4"
+            placeholder="Enter decision rights for early site closure (required)"
+            @bind="Model.C218828" @bind:event="oninput" @bind:after="AutoSave"></textarea>
+    </div>
+
+    <div class="h3">Investigator Criteria</div>
+    <div class="guidance">List the criteria for early closure of a site by the sponsor or investigator.</div>
+    <div class="field-wrap">
+        <textarea data-ctx="C218829" class="@ReqClass(Model.C218829)" rows="4"
+            placeholder="Enter criteria for early closure (required)"
+            @bind="Model.C218829" @bind:event="oninput" @bind:after="AutoSave"></textarea>
+    </div>
+
+    <div class="h3">Responsibilities</div>
+    <div class="guidance">List responsibilities following early site closure.</div>
+    <div class="field-wrap">
+        <textarea data-ctx="C218830" class="@ReqClass(Model.C218830)" rows="4"
+            placeholder="Enter responsibilities following early site closure (required)"
+            @bind="Model.C218830" @bind:event="oninput" @bind:after="AutoSave"></textarea>
+    </div>
+
+    <!-- 11.12 Data Dissemination -->
+    <div class="h2">11.12&nbsp;&nbsp;Data Dissemination</div>
+    <div class="guidance">Describe whether the clinical trial will be registered in public databases, including reporting of results.</div>
+    <div class="field-wrap">
+        <textarea data-ctx="C218831" class="@ReqClass(Model.C218831)" rows="4"
+            placeholder="Describe data dissemination plans (required)"
+            @bind="Model.C218831" @bind:event="oninput" @bind:after="AutoSave"></textarea>
+    </div>
+
     <div class="toolbar">
         <button class="btn btn-secondary" @onclick="ClearAll">Clear All</button>
         <button class="btn btn-secondary" @onclick="LoadSample">Load Sample</button>
@@ -107,7 +303,6 @@
         <div class="ctx-guide"><strong>Guidance:</strong><br />@CtxGuidance</div>
     </div>
 </div>
-
 
 <!-- ── Sample data error modal ──────────────────────────────────────────── -->
 <div class="overlay @ErrorDialogCss">
@@ -175,7 +370,45 @@
     private void AutoSave() =>
         _ = JS.InvokeVoidAsync("localStorage.setItem", "s11data", DataSvc.ToJson(Model));
 
-    private bool HasRequiredEmpty() => string.IsNullOrWhiteSpace(Model.C218811);
+    private bool HasRequiredEmpty() =>
+        string.IsNullOrWhiteSpace(Model.C218811) ||
+        string.IsNullOrWhiteSpace(Model.C184390) ||
+        string.IsNullOrWhiteSpace(Model.C218819) ||
+        string.IsNullOrWhiteSpace(Model.C218820) ||
+        string.IsNullOrWhiteSpace(Model.C218821) ||
+        string.IsNullOrWhiteSpace(Model.C218822) ||
+        string.IsNullOrWhiteSpace(Model.C218823) ||
+        string.IsNullOrWhiteSpace(Model.C218824) ||
+        string.IsNullOrWhiteSpace(Model.C218825) ||
+        string.IsNullOrWhiteSpace(Model.C218826) ||
+        string.IsNullOrWhiteSpace(Model.C222675) ||
+        string.IsNullOrWhiteSpace(Model.C218827) ||
+        string.IsNullOrWhiteSpace(Model.C218828) ||
+        string.IsNullOrWhiteSpace(Model.C218829) ||
+        string.IsNullOrWhiteSpace(Model.C218830) ||
+        string.IsNullOrWhiteSpace(Model.C218831);
+
+    private string RequiredEmptyList()
+    {
+        var missing = new List<string>();
+        if (string.IsNullOrWhiteSpace(Model.C218811)) missing.Add("11.1 Regulatory and Ethical Considerations");
+        if (string.IsNullOrWhiteSpace(Model.C184390)) missing.Add("11.3 Informed Consent");
+        if (string.IsNullOrWhiteSpace(Model.C218819)) missing.Add("11.4 Committees");
+        if (string.IsNullOrWhiteSpace(Model.C218820)) missing.Add("11.5 Insurance and Indemnity");
+        if (string.IsNullOrWhiteSpace(Model.C218821)) missing.Add("11.6 Risk-Based Quality Management");
+        if (string.IsNullOrWhiteSpace(Model.C218822)) missing.Add("11.7 Data Governance");
+        if (string.IsNullOrWhiteSpace(Model.C218823)) missing.Add("11.8 Data Protection");
+        if (string.IsNullOrWhiteSpace(Model.C218824)) missing.Add("11.9 Source Records");
+        if (string.IsNullOrWhiteSpace(Model.C218825)) missing.Add("11.9 Investigator Expectations");
+        if (string.IsNullOrWhiteSpace(Model.C218826)) missing.Add("11.9 Trial Monitor Expectations");
+        if (string.IsNullOrWhiteSpace(Model.C222675)) missing.Add("11.9 Record Identification");
+        if (string.IsNullOrWhiteSpace(Model.C218827)) missing.Add("11.10 Protocol Deviations");
+        if (string.IsNullOrWhiteSpace(Model.C218828)) missing.Add("11.11 Decision Rights");
+        if (string.IsNullOrWhiteSpace(Model.C218829)) missing.Add("11.11 Investigator Criteria");
+        if (string.IsNullOrWhiteSpace(Model.C218830)) missing.Add("11.11 Responsibilities");
+        if (string.IsNullOrWhiteSpace(Model.C218831)) missing.Add("11.12 Data Dissemination");
+        return string.Join(", ", missing);
+    }
 
     private void ClearAll() => _showClearConfirm = true;
 
@@ -199,7 +432,7 @@
         ShowValidation = true;
         if (HasRequiredEmpty())
         {
-            ReqDialogMsg  = "Required field Regulatory and Ethical Considerations is empty. Do you still want to save?";
+            ReqDialogMsg  = $"Required fields are empty: {RequiredEmptyList()}. Do you still want to save?";
             PendingAction = "file"; ShowReqDialog = true; return;
         }
         SaveFileName = "section11_data_" + DateTime.Now.ToString("yyyy-MM-dd");
